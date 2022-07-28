@@ -39,7 +39,7 @@ class sith_viewer:
 
         indexes = [atom1index, atom2index]
         indexes.sort()
-        name = ''.join(str(i) for i in indexes)
+        name = ''.join(str(i).zfill(3) for i in indexes)
 
         self.remove_bond(atom1index, atom2index)
         b = self.shape.add_cylinder(self.atoms[atom1index].position,
@@ -117,7 +117,7 @@ class sith_viewer:
         '''
         indexes = [atom1index, atom2index]
         indexes.sort()
-        name = ''.join(str(i) for i in indexes)
+        name = ''.join(str(i).zfill(3) for i in indexes)
 
         if name in self.bonds.keys():
             self.viewer.view.remove_component(self.bonds[name])
@@ -216,7 +216,7 @@ class sith_viewer:
 
         indexes = [atom1index, atom2index, atom3index]
         indexes.sort()
-        name = ''.join(str(i) for i in indexes)
+        name = ''.join(str(i).zfill(3) for i in indexes)
         self.remove_angle(atom1index, atom2index, atom3index)
         self.angles[name] = []
 
@@ -226,8 +226,8 @@ class sith_viewer:
         lenside1 = np.linalg.norm(side1)
         lenside2 = np.linalg.norm(side2)
         lensides = min(lenside1, lenside2)
-        side1 = 0.5 * lensides * side1/lenside1
-        side2 = 0.5 * lensides * side2/lenside2
+        side1 = 0.7 * lensides * side1/lenside1
+        side2 = 0.7 * lensides * side2/lenside2
 
         arcdots = [side1, side2]
         color = color * 3
@@ -298,7 +298,7 @@ class sith_viewer:
         '''
         indexes = [atom1index, atom2index, atom3index]
         indexes.sort()
-        name = ''.join(str(i) for i in indexes)
+        name = ''.join(str(i).zfill(3) for i in indexes)
 
         if name in self.angles.keys():
             for triangle in self.angles[name]:
@@ -339,7 +339,7 @@ class sith_viewer:
         '''
         indexes = [atom1index, atom2index, atom3index, atom4index]
         indexes.sort()
-        name = ''.join(str(i) for i in indexes)
+        name = ''.join(str(i).zfill(3) for i in indexes)
 
         axis = (self.atoms[atom3index].position -
                 self.atoms[atom2index].position)
@@ -352,6 +352,12 @@ class sith_viewer:
 
         side1 = axis1 - axis * (np.dot(axis, axis1)/np.dot(axis, axis))
         side2 = axis2 - axis * (np.dot(axis, axis2)/np.dot(axis, axis))
+
+        lenside1 = np.linalg.norm(side1)
+        lenside2 = np.linalg.norm(side2)
+        lensides = min(lenside1, lenside2)
+        side1 = 0.7 * lensides * side1/lenside1
+        side2 = 0.7 * lensides * side2/lenside2
 
         arcdots = [side1, side2]
         color = color * 3
@@ -385,7 +391,7 @@ class sith_viewer:
         '''
         indexes = [atom1index, atom2index, atom3index, atom4index]
         indexes.sort()
-        name = ''.join(str(i) for i in indexes)
+        name = ''.join(str(i).zfill(3) for i in indexes)
 
         if name in self.dihedrals.keys():
             for triangle in self.dihedrals[name]:
