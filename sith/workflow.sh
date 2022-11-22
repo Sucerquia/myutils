@@ -111,17 +111,16 @@ do
     # Creation and pulling
     if $cascade
     then
-    module purge
-    module use /hits/sw/mcm/modules
-    module load mcm/molbio/plumed/2.7.2-cascade
-    export GMX_NO_MPI_BIN="/hits/fast/mcm/app/plumed/plumed-2.7.2/gromacs-2020.5/bin" 
-    export OMP_NUM_THREADS=2
-    $GMXBIN/gmx_mpi -h &> /dev/null && echo "++++ TEST Actually, it is working" || fail "
-    +++++ TEEST: ERROR - this code needs gromacs ($gmx failed) +++++"
-    $utils/gromacs/peptide_pulling.sh -p $pep -g $GMXBIN/gmx_mpi || fail "
+        module purge
+        module use /hits/sw/mcm/modules
+        module load mcm/molbio/plumed/2.7.2-cascade
+        export GMX_NO_MPI_BIN="/hits/fast/mcm/app/plumed/plumed-2.7.2/gromacs-2020.5/bin" 
+        export OMP_NUM_THREADS=2
+        
+        $utils/gromacs/peptide_pulling.sh -p $pep -g $GMXBIN/gmx_mpi || fail "
     +++++ WorkFlow_MSG: ERROR - pulling of $pep failed. +++++"
     else
-    $utils/gromacs/peptide_pulling.sh -p $pep -g $gmx || fail "
+        $utils/gromacs/peptide_pulling.sh -p $pep -g $gmx || fail "
     +++++ WorkFlow_MSG: ERROR - pulling of $pep failed. +++++"
     fi
     
@@ -136,10 +135,10 @@ do
     # Optimization
     if $cascade
     then
-    module purge
-    source $HOME/.bashrc
-    source /etc/profile.d/modules.sh
-    source /hits/basement/mbm/sucerquia/exec/load_g09.sh
+        module purge
+        source $HOME/.bashrc
+        source /etc/profile.d/modules.sh
+        source /hits/basement/mbm/sucerquia/exec/load_g09.sh
     fi
     $utils/sith/optimization.sh -p $pep || fail "
     +++++ WorkFlow_MSG: ERROR - optimization of $pep failed. +++++"

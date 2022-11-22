@@ -62,14 +62,14 @@ do
     ++++++++ STRETCHING_MSG: VERBOSE - Streched ${nameiplusone} starts ++++++++"
     if [ $((i + 1)) -ne 0 ]
     then
-        python $mydir/utils/ase_increase_distance.py \
+        python $mydir/utils/sith/ase_increase_distance.py \
             $pep-streched$namei.log $pep-streched${nameiplusone} $index1 \
             $index2 $size
         sed -i '$d' $pep-streched${nameiplusone}.com
         sed -i '$a $(($index1 + 1)) $(($index2 + 1)) F' \
             $pep-streched${nameiplusone}.com
     else
-        python $mydir/utils/ase_increase_distance.py \
+        python $mydir/utils/sith/ase_increase_distance.py \
             ../optimization/optimized.pdb $pep-streched${nameiplusone} 0 1 0
     fi
     sed -i "1a %NProcShared=8" $pep-streched${nameiplusone}.com
@@ -83,7 +83,7 @@ do
             echo "
     ++++++++ STRETCHING_MSG: VERBOSE - Optimization did not converged with dista-
     nce $(($i + 1))*0.2 . Then, a new trial will start now. ++++++++"
-            python $mydir/utils/ase_increase_distance.py \
+            python $mydir/utils/sith/ase_increase_distance.py \
                 $pep-streched${nameiplusone}.log \
                 $pep-streched${nameiplustwo} 0 1 0
             # save the failed files in ...-streched<number>a.*
