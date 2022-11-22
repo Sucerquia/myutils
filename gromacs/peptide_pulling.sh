@@ -5,7 +5,7 @@ echo "
 This tool creates the trajectory of a given peptide pulled by an external force.
 Consider the next options:
    
-    -a    properties you want to analyse. For example \"-d -r\". Default \"-a\".
+    -a    properties you want to analyse. For example \"-d -r\". Default \"-d -l\".
           For more information, check: utils/gromacs/analysis.sh -h
     -f    forces to stretch the peptide in [kJ mol^-1 nm^-2]. Default 200
     -g    gromacs binary. For example gmx or gmx_mpi. Default gmx.
@@ -28,7 +28,7 @@ mine='/hits/basement/mbm/sucerquia/'
 gromacs_tools='/hits/basement/mbm/sucerquia/utils/gromacs/'
 gmx='gmx'
 forces=()
-analysis="-a"
+analysis="-d -l"
 
 while getopts 'a:f:g:p:h' flag; do
     case "${flag}" in
