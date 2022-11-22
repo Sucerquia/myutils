@@ -1,36 +1,68 @@
 #!/bin/bash
 
 
-# This code executes the pulling adding an external force in the x axis
-# between CH3 carbon atoms of the NME and ACE caps 
-# To run:
-# $mine/utils/gromacs/pulling.sh <gmx_executable> <cores> <force>
-# it returns all files regarding to gromacs simulation and creates a file
-# called distance.dat with the distance between the carbon atoms that are
-# pulled.
+print_help() {
+echo "
+This code executes the pulling adding an external force along the x axis to the
+carbon atoms of the NME and ACE caps. Consider the next options:
 
-mine="/hits/basement/mbm/sucerquia/"
-gmx=$1
-cores=$2
-force=$3
+    -g    gromacs binary. For example gmx or gmx_mpi. Default gmx.
+    -f    forces to stretch the peptide in [kJ mol^-1 nm^-2].
 
+To run:
+ utils/gromacs/pulling.sh -f <force> -g <gmx_executable> 
+"
+exit 0
+}
+
+
+# set up starts
 function fail {
     printf '%s\n' "$1" >&2
     exit "${2-1}" 
 }
 
-echo "ooo creates index file of force $force"
+# General variables
+mine="/hits/basement/mbm/sucerquia/"
+gmx="gmx"
+
+while getopts 'f:g:h' flag; do
+    case "${flag}" in
+      f) force=${OPTARG} ;;
+      g) gmx=${OPTARG} ;;
+
+      h) print_help
+    esac
+done
+
+# check dependencies
+if [ ! -d equilibrate ]
+then 
+    fail "
+    ++++++ PULL_MSG: ERROR - equilibrate directory does not exist ++++++"
+fi
+$gmx -h &> /dev/null || fail "
+    +++++ PULL_MSG: ERROR - this code needs gromacs ($gmx failed) +++++"
+# set up finished
+
+
+echo "
+    ++++++ PULL_MSG: VERBOSE - creates index file of force $force ++++++"
 
 echo -e "r ACE & a CH3 \n r NME & a CH3 \n \"ACE_&_CH3\" | \"NME_&_CH3\" \n q\n " \
     | $gmx make_ndx -f ./equilibrate/npt.gro || \
-    fail "ooo ERROR in the creation of index file the pulling for force $force" && \
+    fail "
+    ++++++ PULL_MSG: ERROR - creation of index file the pulling for force
+    $force ++++++"
+
 sed -i "s/ACE_&_CH3_NME_&_CH3/distance/g" index.ndx && \
-
 cp $mine/utils/gromacs/pulling.mdp ./pulling.mdp && \
-sed -i "s/<force>/$3/g" pulling.mdp && \
+sed -i "s/<force>/$force/g" pulling.mdp || fail "
+    ++++++ PULL_MSG: ERROR - setting the file pulling.mdp ++++++"
 
-echo "ooo Creates MD executable of force $force" && \
-forcename=$(printf "%04d" $force) && \
+echo "
+    ++++++ PULL_MSG: VERBOSE - Creates MD executable of force $force ++++++"
+forcename=$(printf "%04d" $force)
 
 $gmx grompp -f pulling.mdp \
             -c ./equilibrate/npt.gro \
@@ -38,11 +70,19 @@ $gmx grompp -f pulling.mdp \
             -p ./equilibrate/pep_out.top \
             -n index.ndx \
             -maxwarn 5 \
-            -o md_0_$forcename.tpr || fail "ooo ERROR in the grompp step of the pulling for force $force" &&\
+            -o md_0_$forcename.tpr || fail "
+    ++++++ PULL_MSG: ERROR in the grompp step of the pulling for force
+    $force ++++++"
 
-echo "ooo MD run of force $force" && \
-$gmx mdrun -deffnm md_0_$forcename || fail "ooo ERROR in the ejecution step of the pulling for force $force"
 
-echo "ooo pulling finished correctly of force $force"
+echo "++++++ PULL_MSG: VERBOSE - MD run for force $force ++++++" && \
+$gmx mdrun -deffnm md_0_$forcename || fail "
+    ++++++ PULL_MSG: ERROR - in the execution step of the pulling for force
+    $force ++++++"
+
+echo "
+    ++++++ PULL_MSG: VERBOSE - pulling finished correctly of $force ++++++"
 
 rm -f \#*
+
+exit 0
