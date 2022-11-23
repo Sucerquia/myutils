@@ -1,197 +1,45 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import subprocess
 import cmocean as cmo
 import matplotlib as mpl
-from ase.units import Bohr
 from matplotlib.transforms import Bbox
+from ase.io import read
+import sys
+import matplotlib.pyplot as plt
 
 
-
-def min_profile(file, indexes=[3 , 2, 0], num_ranges=20):
+def distance(file, index1, index2):
     """
-    This function returns the profile of minimum potential energy respect to
-    one variable.
-
-    Parameters
-    ----------
-
-    file: string
-        file that contains the data.
-
-    indexes: list of ints
-        indexes of the columns that contains the data of variable, energy and
-        time. Default indexes are 3, 2, 0 that corresponds to the distance
-        variable, pot energy and time in the file analysis_merged_table.dat
-
-    num_ranges: int
-        number of blocks to divide the variable range. Default 20
-
-    Note: The idea of this function is to split the variable in ranges and to 
-    take the minimum energy in each range.
-
-    Return
-    ------
-        Duple with de data time, variable, energy
-    """
-
-    variables, energies, times = np.loadtxt(file,
-                                            usecols=[3, 2, 0],
-                                            unpack=True)
-    subranges = np.linspace(min(variables),
-                            max(variables),
-                            num_ranges)
-
-    split_var = []
-    split_ener = []
-    split_time = []
-
-    for index in range(len(subranges[:-1])):
-        split_var.append(variables[np.logical_and(variables >= subranges[index],
-                                                variables < subranges[index+1])])
-        split_ener.append(energies[np.logical_and(variables >= subranges[index],
-                                                variables < subranges[index+1])])
-        split_time.append(times[np.logical_and(variables >= subranges[index],
-                                            variables < subranges[index+1])])
-
-    var = [variables[0]]
-    ener = [energies[0]]
-    time = [times[0]]
-
-    for i in range(len(split_var)):
-        try:
-            index = np.where(split_ener[i] == min(split_ener[i]))[0][0]
-            var.append(split_var[i][index])
-            ener.append(split_ener[i][index])
-            time.append(split_time[i][index])
-        except:
-            continue
-
-    return time, var, ener
-
-def min_profile_from_several(files, indexes=[3 , 2, 0], num_ranges=20):
-    """
-    This function returns the profile of minimum potential energy respect to
-    one variable.
-
-    Parameters
-    ----------
-
-    files: list of strings
-        files that contain the data.
-
-    indexes: list of ints
-        indexes of the columns that contains the data of variable, energy and
-        time. Default indexes are 3, 2, 0 that corresponds to the distance
-        variable, pot energy and time in the file analysis_merged_table.dat
-
-    num_ranges: int
-        number of blocks to divide the variable range. Default 20
-
-    Note: The idea of this function is to split the variable in ranges and to 
-    take the minimum energy in each range.
-
-    Return
-    ------
-        Duple with de data time, variable, energy
-    """
-
-    variables = []
-    energies = []
-    times = []
-    for file in files:
-        variable, energy, time = np.loadtxt(file,
-                                            usecols=[3, 2, 0],
-                                            unpack=True)
-        variables = np.append(variable, variables)
-        energies = np.append(energy, energies)
-        times = np.append(time, times)
-
-    subranges = np.linspace(min(variables),
-                            max(variables),
-                            num_ranges)
-
-    split_var = []
-    split_ener = []
-    split_time = []
-
-    for index in range(len(subranges[:-1])):
-        split_var.append(variables[np.logical_and(variables >= subranges[index],
-                                                variables < subranges[index+1])])
-        split_ener.append(energies[np.logical_and(variables >= subranges[index],
-                                                variables < subranges[index+1])])
-        split_time.append(times[np.logical_and(variables >= subranges[index],
-                                            variables < subranges[index+1])])
-
-    var = [variables[0]]
-    ener = [energies[0]]
-    time = [times[0]]
-
-    for i in range(len(split_var)):
-        try:
-            index = np.where(split_ener[i] == min(split_ener[i]))[0][0]
-            var.append(split_var[i][index])
-            ener.append(split_ener[i][index])
-            time.append(split_time[i][index])
-        except:
-            continue
-
-    return time, var, ener
-
-
-def plot_sith(dofs, xlabel, energy_units='a.u', fig=None, ax=None, cbar=True,
-              cmap=cmo.cm.algae, orientation='vertical', labelsize=15,
-              axes=None, aspect=25):
-    """
-    This function plots the energies per degrees of freedom from
-    sith_object.energies
+    This code checks the distances between two atoms in the last configuration
+    of a trajectory file (e.g. *.log file from gaussian)
 
     Parameters
     ==========
 
-    dofs: array
-        energies per degree of freedom. Usually a matrix where each component
-        contains the energies for each DOF for each deformed config
+    file: str
+        name of the file that contains the trajectory.
+    index1: int
+        index of the first atom to compute distances
+    arg2: int
+        index of the second atom to compute distances
 
-        dof\\ deformed     0 1  2  3 ...
-          0             [[              ]]
-          1             [[              ]]
-          2             [[              ]]
-          .
-          .
-          .
+    Return
+    ======
+    (float)  Distance between atoms corresponding with atom with index1 and
+    index2.
 
-    xlabel: str
-        label of the xlabel indicating the represented DOFS
+    Execute from terminal using:
+    python miscellaneous.py distance arg1 arg2 arg3
+    
+    E.g.
+    python miscellaneous.py distance optimization.log 1 20
     """
-    if ax is None:
-        fig, ax = plt.subplots(1, 1)
-    if axes is None:
-        axes = np.array([ax])
-    ax.tick_params(axis='both', labelsize=15)
+    index1 = int(index1)
+    index2 = int(index2)
+    atoms = read(file)
+    d = atoms.get_distance(index1, index2)
 
-    if orientation == 'v' or orientation == 'vertical':
-        rotation = 0
-    else:
-        rotation = 90
-
-    boundaries = np.arange(1, len(dofs[0])+2, 1)
-    normalize = mpl.colors.BoundaryNorm(boundaries-0.5, cmap.N)
-    if cbar:
-        cbar = fig.colorbar(mpl.cm.ScalarMappable(norm=normalize,
-                                                  cmap=cmap),
-                            aspect=aspect,
-                            ax=axes.ravel().tolist(),
-                            orientation='vertical',)
-        cbar.set_ticks(boundaries[:-1])
-        cbar.set_label(label="Stretched", fontsize=labelsize)
-        cbar.ax.tick_params(labelsize=labelsize, rotation=rotation, length=0)
-
-    [ax.plot(dofs.T[i], '.-', markersize=10, color=cmap(normalize(i))[:3])
-     for i in range(len(dofs[0]))]
-    ax.set_xlabel(xlabel, fontsize=20)
-    ax.set_ylabel('energy [a.u]', fontsize=20)
-
+    return d
 
 def output_terminal(cmd, **kwargs):
     """
@@ -202,6 +50,10 @@ def output_terminal(cmd, **kwargs):
     ==========
     cmd: str
         bash command to be executed in the terminal.
+    
+    Return
+    ======
+    out = list[str] output of the executed command.
     """
     p = subprocess.Popen(cmd,
                          shell=True,
@@ -209,53 +61,11 @@ def output_terminal(cmd, **kwargs):
                          stderr=subprocess.PIPE,
                          **kwargs)
 
-    out, err = p.communicate()
-    out, err = out.decode('ascii'), err.decode('ascii')
-    #assert err != "", err
-    return out, err
+    out1, err1 = p.communicate()
+    out, err = out1.decode('ascii'), err1.decode('ascii')
 
-
-def optimized_e(file):
-    """
-    Find the energy in a log file of gaussian computed using RBMK functional
-
-    Parameters
-    ==========
-
-    file: str
-        log gaussian file.
-    """
-    out, _ = output_terminal('grep "E(RBMK) =" '+file)
-    energy = float(out.split()[-5])
-    return energy * 27.21  # energy in eV
-
-
-def distance(file, index1, index2):
-    """
-    Find the distance between atom a and b in a configuration saved in a
-    ase-redable format
-
-    Parameters
-    ==========
-    file: str
-        name of the file with ase-redable format
-    index1 and index2: int
-        index of the atoms a and b respectively
-    """
-
-    out, _ = output_terminal('python /hits/basement/mbm/sucerquia/utils/' +
-                             f'distance.py {file} {index1} {index2}')
-    return float(out)
-
-
-def gpaw_e(file):
-    """
-    Difference in the gpaw output
-    """
-    out, _ = output_terminal('grep Difference '+file)
-    energy = float(out.split()[-1])
-    return energy
-
+    assert not p.returncode, "MISCELLANEOUS ERROR: executing the function output_terminal\m" + err
+    return out
 
 def plot_changes(dq, dims):
     """
@@ -269,9 +79,16 @@ def plot_changes(dq, dims):
 
     dims: list
         dimensions usually saved in sith._reference.dims
+
+
+    Return
+    ======
+    (Axes) matplotlib.Axes object with the plot of the changes.
+
+    NOTE: this function cannot be run from the terminal
     """
     nstreched = len(dq[0])
-    fig, axes = plt.subplots(3, 1, figsize=(8, 10))
+    _, axes = plt.subplots(3, 1, figsize=(8, 10))
     ylabels = [r'$\Delta$ Bonds', r'$\Delta$ Angles', r'$\Delta$ Dihedrals']
     borders = [0, dims[1], dims[1]+dims[2], dims[0]]
     scales = [1, 180/np.pi, 180/np.pi]
@@ -288,8 +105,153 @@ def plot_changes(dq, dims):
 
     plt.tight_layout()
 
+    return axes
+
+
+def _time(keyword, logfile):
+    """
+    
+    
+    Parameters
+    ==========
+    """
+    out = output_terminal("grep '"+keyword+"' "+logfile)
+    out = out.split()
+    start = out.index('at')
+
+    month = out[start+2]
+    day = int(out[start+3])
+    time = out[start+4].split(':')
+    hour = int(time[0])
+    minu = int(time[1])
+    seco = int(time[2])
+
+    return month, day, hour, minu, seco
+
+def time_g09(logfile):
+    """
+    Function that extracts the time spend for one gaussian simulation from a
+    .log file.
+    
+    Parameters
+    ==========
+    logfile: string
+        .log file obtained during a gaussian simulation.
+    
+    Return
+    ======
+    Time in seconds although the time in minutes, seconds and hours are printed.
+    """
+    t_i = _time('Leave Link    1', logfile)
+    t_f = _time('Normal termination of Gaussian', logfile)
+
+    if t_i[0] == t_f[0]:
+        days = (t_f[1]-t_i[1])*24*3600
+        hours = (t_f[2]-t_i[2])*3600
+        minus = (t_f[3]-t_i[3])*60
+        secos = t_f[4]-t_i[4]
+        total = days + hours + minus + secos
+
+        print("Time in seconds= ", total)
+        print("Time in minutes= ", total/60)
+        print("Time in hours= ", total/3600)
+        
+        return total/60
+
+    else:
+        print('sorry, I cannot help you, modify me to compute \
+            changes of months')
+            
+
+def format_to_pdb(name_input, name_output=None):
+    """"
+    This function takes the last configuration of one file (e.g. one gaussian
+    *.log file) and saves the last configuration in a pdb file.
+
+    Parameters
+    ==========
+    name_input: string
+        Name of files to be modified (e.g. './*.log' ). 
+
+    name_output: string
+        Output name. Default: same name as input but with pdb extension.
+
+    Return
+    ======
+    List of output names of pdb files.
+    """
+
+    to_modify = glob.glob(name_input)
+    to_modify.sort()
+    n_files_to_modify = len(to_modify)
+
+
+    if name_output is not None > 1:  # there is an output name
+        if n_files_to_modify > 1:  # there are several files to be modified
+            output = [name_output+str(i)+'.pdb' for i in range(len(to_modify))]
+        else:
+            output = [name_output+'.pdb']
+    else:
+        output = list()
+        for name in to_modify:
+            index_rename = name.rfind('.')
+            rename = name[:index_rename]
+            output.append(rename+'.pdb')
+
+    for i in range(n_files_to_modify):
+        a = read(to_modify[i], index=-1)
+        write(output[i], a)
+        print(f" {to_modify[i]} ---> {output[i]} ")
+    
+    return output
+
+
+def optimized_e(file):
+    """
+    This code finds the last energy in a log file of gaussian computed using 
+    RBMK functional. The output is given in eV.
+
+    Parameters
+    ==========
+
+    file: str
+        log gaussian file.
+    
+    Return
+    ======
+    Potential energy in eV units.
+    """
+    out, _ = output_terminal('grep "E(RBMK) =" '+file)
+    energy = float(out.split()[-5])
+    return energy * 27.21  # energy in eV
+
+
 def plot_hessian(hessian, ax=None, deci=2, orientation='vertical', cbar=True,
                  ticks=15):
+    """
+    Function that plots the a matrix using a divergent colormap to separate the
+    negative from the positive values.
+    
+    Parameters
+    ==========
+    hessian: NxN numpy.array
+        matrix to be ploted
+    ax: plt.Axes
+        Axis to add the plot. Default: None, in this case, the function creates
+        a new Axis.
+    deci: int
+        number of decimals in the colorbar.
+    orientation: str
+        orientation of the colorbar. Default: 'vertical'.
+    cbar: Bool
+        True to show the colorbar. Default: True
+    ticks: float
+        ticks size.
+    
+    Return
+    ======
+    PathCollection
+    """
 
     if orientation[0] == 'v':
         pad = 0.02
@@ -301,7 +263,7 @@ def plot_hessian(hessian, ax=None, deci=2, orientation='vertical', cbar=True,
         rotation = 90
 
     if ax is None:
-        fig, ax = plt.subplots(1,1, figsize=(10,10))
+        _, ax = plt.subplots(1,1, figsize=(10,10))
     if orientation[0] == 'v':
         pad = 0.02
         shrink = 0.85
@@ -330,10 +292,36 @@ def plot_hessian(hessian, ax=None, deci=2, orientation='vertical', cbar=True,
         cbar.ax.tick_params(labelsize=ticks, rotation=rotation)
     return im
 
-def hessian_blocks(hessian, dims, ax=None, deci=2, orientation='vertical',
-                   cbar=True, ticks=15, deltas = [1, 1, 1, 1], decis=[2, 2, 2, 2]):
-    fig, ax = plt.subplots(4, 3, figsize=(10,12))
-    if orientation[0] == 'v':
+def hessian_blocks(hessian, dims, decis=[2, 2, 2, 2], orientation='vertical',
+                   cbar=True, ticks=15,
+                   deltas = [1, 1, 1, 1]):
+    fig, ax = plt.subplots(4, 3, figsize=(10, 12))
+    """
+    Plots the hessian matrix of the sith object separating it in blocks
+    corresponding to the different degrees of freedom
+    
+    Parameters
+    ==========
+    hessian: NxN numpy.array
+        matrix to be ploted.
+    dims: numpy.array
+        dimentions of the degrees of freedom subblocks.
+    decis: list[ints]
+        number of decimals in each colorbar.
+    orientation: str
+        orientation of the colorbar. Default: 'vertical'.
+    cbar: Bool
+        True to show the colorbar. Default: True
+    ticks: float
+        ticks size. Default: 15.
+    deltas: list[float]
+        deltas in the labels of the degrees of freedom. Default: [1, 1, 1, 1]
+
+    Return
+    ======
+    PathCollection
+    """
+    if orientation[0] == 'v': 
         pad = 0.02
         shrink = 1
         rotation = 0
@@ -419,20 +407,274 @@ def hessian_blocks(hessian, dims, ax=None, deci=2, orientation='vertical',
 
     return im
 
-def CAP_hydrogen_atoms(pdb_file):
-    output, error = output_terminal(f'grep ATOM {pdb_file} | grep -n ATOM | grep -e ACE -e NME | grep HH')
-    assert error == '', "the searcher of Hydrogens atoms didn't work. Are you sure the pdb file exists?"
+
+def cap_hydrogen_atoms(pdb_file):
+    """"
+    find the indexes of the hydrogen atoms of the caps parts in the peptide.
+    
+    Parameters
+    ==========
+    pdb_file: string
+        name of the pdb file with the molecule of interest.
+    
+    Return
+    ======
+    list of indexes.
+    """
+    output = output_terminal(f'grep ATOM {pdb_file} | grep -n ATOM | grep -e \
+                               ACE -e NME | grep HH')
+    output = output.split('\n')[:-1]
+    
+    indexes = [int(line.split(':')[0]) for line in output]
+    return indexes
+
+
+def all_hydrogen_atoms(pdb_file):
+    """"
+    find the indexes of all the hydrogen atoms in the peptide.
+    
+    Parameters
+    ==========
+    pdb_file: string
+        name of the pdb file with the molecule of interest.
+    
+    Return
+    ======
+    list of indexes.
+    """
+    output = output_terminal(f"grep ATOM {pdb_file} | grep -n ATOM |" + 
+                              " awk '{if ($(NF)==\"H\") print $1}'")
+
     
     output = output.split('\n')[:-1]
     
     indexes = [int(line.split(':')[0]) for line in output]
     return indexes
 
-def all_hydrogen_atoms(pdb_file):    
-    output, error = output_terminal(f"grep ATOM {pdb_file} | grep -n ATOM |"+" awk '{if ($(NF)==\"H\") print $1}'")
-    assert error == '', "the searcher of Hydrogens atoms didn't work. Are you sure the pdb file exists?"
-    
-    output = output.split('\n')[:-1]
-    
-    indexes = [int(line.split(':')[0]) for line in output]
-    return indexes
+def plot_sith(dofs, xlabel, energy_units='a.u', fig=None, ax=None, cbar=True,
+              cmap=None, orientation='vertical', labelsize=15,
+              axes=None, aspect=25):
+    """
+    This function plots the energies per degrees of freedom from
+    sith_object.energies
+
+    Parameters
+    ==========
+
+    dofs: array
+        energies per degree of freedom. Usually a matrix where each component
+        contains the energies for each DOF for each deformed config
+
+        dof\\ deformed     0 1  2  3 ...
+          0             [[              ]]
+          1             [[              ]]
+          2             [[              ]]
+          .
+          .
+          .
+
+    xlabel: str
+        label of the xlabel indicating the represented DOFS
+    """
+
+    if cmap is None:
+        try:
+            import cmocean as cmo
+            cmap = cmo.cm.algae
+        except ImportError as e:
+            cmap = mpl.colormaps['viridis']
+
+    if ax is None:
+        fig, ax = plt.subplots(1, 1)
+    if axes is None:
+        axes = np.array([ax])
+    ax.tick_params(axis='both', labelsize=15)
+
+    if orientation == 'v' or orientation == 'vertical':
+        rotation = 0
+    else:
+        rotation = 90
+
+    boundaries = np.arange(1, len(dofs[0])+2, 1)
+    normalize = mpl.colors.BoundaryNorm(boundaries-0.5, cmap.N)
+    if cbar:
+        cbar = fig.colorbar(mpl.cm.ScalarMappable(norm=normalize,
+                                                  cmap=cmap),
+                            aspect=aspect,
+                            ax=axes.ravel().tolist(),
+                            orientation='vertical',)
+        cbar.set_ticks(boundaries[:-1])
+        cbar.set_label(label="Stretched", fontsize=labelsize)
+        cbar.ax.tick_params(labelsize=labelsize, rotation=rotation, length=0)
+
+    [ax.plot(dofs.T[i], '.-', markersize=10, color=cmap(normalize(i))[:3])
+     for i in range(len(dofs[0]))]
+    ax.set_xlabel(xlabel, fontsize=20)
+    ax.set_ylabel('energy [a.u]', fontsize=20)
+
+
+def min_profile(file, indexes=[3 , 2, 0], num_ranges=20):
+    """
+    This function returns the profile of minimum potential energy respect to
+    one variable.
+
+    Parameters
+    ==========
+
+    file: string
+        file that contains the data.
+
+    indexes: list of ints
+        indexes of the columns that contains the data of variable, energy and
+        time. Default indexes are 3, 2, 0 that corresponds to the distance
+        variable, pot energy and time in the file analysis_merged_table.dat
+
+    num_ranges: int
+        number of blocks to divide the variable range. Default 20
+
+    Note: The idea of this function is to split the variable in ranges and to 
+    take the minimum energy in each range.
+
+    Return
+    ======
+        Duple with de data time, variable, energy
+    """
+
+    variables, energies, times = np.loadtxt(file,
+                                            usecols=[3, 2, 0],
+                                            unpack=True)
+    subranges = np.linspace(min(variables),
+                            max(variables),
+                            num_ranges)
+
+    split_var = []
+    split_ener = []
+    split_time = []
+
+    for index in range(len(subranges[:-1])):
+        split_var.append(variables[np.logical_and(variables >= subranges[index],
+                                                variables < subranges[index+1])])
+        split_ener.append(energies[np.logical_and(variables >= subranges[index],
+                                                variables < subranges[index+1])])
+        split_time.append(times[np.logical_and(variables >= subranges[index],
+                                            variables < subranges[index+1])])
+
+    var = [variables[0]]
+    ener = [energies[0]]
+    time = [times[0]]
+
+    for i in range(len(split_var)):
+        try:
+            index = np.where(split_ener[i] == min(split_ener[i]))[0][0]
+            var.append(split_var[i][index])
+            ener.append(split_ener[i][index])
+            time.append(split_time[i][index])
+        except:
+            continue
+
+    return time, var, ener
+
+
+def min_profile_from_several(files, indexes=[3 , 2, 0], num_ranges=20):
+    """
+    This function returns the profile of minimum potential energy respect to
+    one variable.
+
+    Parameters
+    ==========
+
+    files: list of strings
+        files that contain the data.
+
+    indexes: list of ints
+        indexes of the columns that contains the data of variable, energy and
+        time. Default indexes are 3, 2, 0 that corresponds to the distance
+        variable, pot energy and time in the file analysis_merged_table.dat
+
+    num_ranges: int
+        number of blocks to divide the variable range. Default 20
+
+    Note: The idea of this function is to split the variable in ranges and to 
+    take the minimum energy in each range.
+
+    Return
+    ======
+        Duple with de data time, variable, energy
+    """
+
+    variables = []
+    energies = []
+    times = []
+    for file in files:
+        variable, energy, time = np.loadtxt(file,
+                                            usecols=[3, 2, 0],
+                                            unpack=True)
+        variables = np.append(variable, variables)
+        energies = np.append(energy, energies)
+        times = np.append(time, times)
+
+    subranges = np.linspace(min(variables),
+                            max(variables),
+                            num_ranges)
+
+    split_var = []
+    split_ener = []
+    split_time = []
+
+    for index in range(len(subranges[:-1])):
+        split_var.append(variables[np.logical_and(variables >= subranges[index],
+                                                variables < subranges[index+1])])
+        split_ener.append(energies[np.logical_and(variables >= subranges[index],
+                                                variables < subranges[index+1])])
+        split_time.append(times[np.logical_and(variables >= subranges[index],
+                                            variables < subranges[index+1])])
+
+    var = [variables[0]]
+    ener = [energies[0]]
+    time = [times[0]]
+
+    for i in range(len(split_var)):
+        try:
+            index = np.where(split_ener[i] == min(split_ener[i]))[0][0]
+            var.append(split_var[i][index])
+            ener.append(split_ener[i][index])
+            time.append(split_time[i][index])
+        except:
+            continue
+
+    return time, var, ener
+
+
+
+if __name__ == '__main__':
+    if sys.argv[1] == '-h':
+        functions = ['distance',
+                     'plot_sith',
+                     'output_terminal',
+                     'plot_changes',
+                     'time_g09',
+                     'format_to_pdb',
+                     'optimized_e',
+                     'plot_hessian',
+                     'hessian_blocks',
+                     'cap_hydrogen_atoms',
+                     'all_hydrogen_atoms',
+                     'min_profile',
+                     'min_profile_from_several']
+
+        functions.sort()
+
+        print("\nThis code contains a set of tools you can use for different\n" +
+              "functions. To execute from terminal use \n python miscellane" +
+              "ous.py <function> <arg1> <arg2> ...\n\n where function is an" +
+              "y of the next options: \n")
+        for function in functions:
+            if function[0] != '_' and function[0] != '.':
+                print("-   "+function)
+        print("\nFor detailed information of each function action, use\n" +
+              "python miscellaneous.py <function> -h\n")
+
+    elif '-h' in sys.argv:
+        print(globals()[sys.argv[1]].__doc__)
+    else:
+        print(globals()[sys.argv[1]](*sys.argv[2:]))
