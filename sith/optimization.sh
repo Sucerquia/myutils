@@ -31,9 +31,10 @@ function fail {
 
 # set up starts
 pre_dir='../force*'
+index_name='index.ndx'
+
 while getopts 'd:f:i:p:h' flag; do
     case "${flag}" in
-      c) configuration=${OPTARG} ;;
       d) pre_dir=${OPTARG} ;;
       f) file=${OPTARG} ;;
       i) index_name=${OPTARG} ;;
@@ -64,7 +65,7 @@ do
     ++++++++ SYS_OPT_MSG: VERBOSE - $pep optimization from last configuration
     of $name ++++++++"
     label=${name#*e}
-    python $mine/utils/sith/ase_increase_distance.py \
+    python $mine/utils/ase_increase_distance.py \
         $forcedir/analysis_largestconfig-md_0_$label.pdb $name  0 1 0 &&\
     sed -i "1a %NProcShared=8" $name.com && \
     sed -i "3a opt(modredun,calcfc)" $name.com &&\
@@ -73,13 +74,20 @@ do
     g09 $name.com $name.log && \
     echo "
     ++++++++ SYS_OPT_MSG: VERBOSE - $forcedir converged ++++++++" || \
-    fail "++++++++ SYS_OPT_MSG: ERROR - optimization of $name failed ++++++++"
-    dist=$(python $mine/utils/distance.py $name.log $((${indexes[0]} - 1)) \
-         $((${indexes[1]} - 1)) )
+    fail "
+    ++++++++ SYS_OPT_MSG: ERROR - Optimization of $name failed ++++++++"
+    python $mine/utils/gromacs/trans_xyz.py $name.log xyz
+    dist=$(python $mine/utils/distance.py ${name}_optimized_out.xyz \
+           $((${indexes[0]} - 1)) $((${indexes[1]} - 1)) ) || fail "
+    ++++++++ SYS_OPT_MSG: ERROR - Computing distance for $name with indexes
+    $((${indexes[0]} - 1))  $((${indexes[1]} - 1)) ++++++++"
     if (( $(echo "$dist > $max_dist" |bc -l) ))
     then
         max_dist=$dist
-        python $mine/utils/trans_to_pdb.py $name.log optimized
+        cp $name.log optimized.log &&
+        cp $name.com optimized.com &&
+        cp $name.chk optimized.chk || fail "
+    ++++++++ SYS_OPT_MSG: ERROR - Copying files ++++++++"
         index1=$((${indexes[0]} - 1))
         index2=$((${indexes[1]} - 1))
     fi 
@@ -88,5 +96,4 @@ cd ..
 echo "$index1 $index2" > tmp_indexes.txt
 echo "
     ++++++++ SYS_OPT_MSG: VERBOSE - $pep optimization finishes ++++++++"
-
 exit 0

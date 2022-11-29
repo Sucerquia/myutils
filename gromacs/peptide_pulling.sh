@@ -9,6 +9,7 @@ Consider the next options:
           For more information, check: utils/gromacs/analysis.sh -h
     -f    forces to stretch the peptide in [kJ mol^-1 nm^-2]. Default 200
     -g    gromacs binary. For example gmx or gmx_mpi. Default gmx.
+    -o    pepgen flags
     -p    peptide.
 
     -h    prints this message.
@@ -30,43 +31,43 @@ gmx='gmx'
 forces=()
 analysis="-d -l"
 
-while getopts 'a:f:g:p:h' flag; do
+while getopts 'oa:f:g:p:h' flag; do
     case "${flag}" in
       a) analysis=${OPTARG} ;;
       f) forces=${OPTARG} ;;
       g) gmx=${OPTARG} ;;
       p) pep=${OPTARG} ;;
-      
+      o) pep_options=${OPTARG} ;;
+
       h) print_help
     esac
 done
 
 # check dependencies
 pepgen -h &> /dev/null || fail "
-    +++++ SYS_PULL_MSG: ERROR - this code needs pepgen +++++"
+    ++++++++ SYS_PULL_MSG: ERROR - This code needs pepgen ++++++++"
 $gmx -h &> /dev/null || fail "
-    +++++ SYS_PULL_MSG: ERROR - this code needs gromacs ($gmx failed) +++++"
+    ++++++++ SYS_PULL_MSG: ERROR - This code needs gromacs ($gmx failed) ++++++++"
 # set up finished
 
 
 echo "
-    +++++ SYS_PULL_MSG: VERBOSE - creation and equilibration of $pep starts +++++"
-/hits/fast/mbm/sucerquia/software/conda/envs/pepgen/bin/pepgen $pep \
-    equilibrate -gmx $gmx || fail "
-    +++++ SYS_PULL_MSG: ERROR - creating peptide $pep +++++"
+    ++++++++ SYS_PULL_MSG: VERBOSE - Creation and equilibration of $pep starts ++++++++"
+pepgen $pep equilibrate -gmx $gmx $pep_options || fail "
+    ++++++++ SYS_PULL_MSG: ERROR - Creating peptide $pep ++++++++"
 echo "
-    +++++ SYS_PULL_MSG: VERBOSE - equilibration step finishes +++++"
+    ++++++++ SYS_PULL_MSG: VERBOSE - Equilibration step finishes ++++++++"
 
 
 echo "
-    +++++ SYS_PULL_MSG: VERBOSE - pulling of $pep starts +++++"
+    ++++++++ SYS_PULL_MSG: VERBOSE - Pulling of $pep starts ++++++++"
 
 if [ ${#forces[@]} -eq 0 ]
 then
     echo "
-    +++++ SYS_PULL_MSG: WARNING - You didn't specify which forces you want to
+    ++++++++ SYS_PULL_MSG: WARNING - You didn't specify which forces you want to
     use. Then the pulling will be done using the values by default (10 30 50
-    100 300 500) [kJ mol^-1 nm^-2] +++++"
+    100 300 500) [kJ mol^-1 nm^-2] ++++++++"
     forces="200"
 fi
 
@@ -74,31 +75,32 @@ for force in $forces
 do
     forcename=$(printf "%04d" $force)
     echo "
-    +++++++ SYS_PULL_MSG: VERBOSE - force $force acting $pep  starts +++++++"
+    ++++++++ SYS_PULL_MSG: VERBOSE - Force $force acting $pep  starts ++++++++"
     $gromacs_tools/pulling.sh -g $gmx -f $force || fail "
-    +++++++ SYS_PULL_MSG: ERROR - pulling $pep with $force failed +++++++"
+    ++++++++ SYS_PULL_MSG: ERROR - Pulling $pep with $force failed ++++++++"
     mkdir force$forcename && \
     mv md_0_* force$forcename && \
     mv *.ndx force$forcename && \
     mv *.mdp force$forcename || fail "
-    +++++++ SYS_PULL_MSG: ERROR - moving gromacs files to the ditectory 
-    force$forcename +++++++"
+    ++++++++ SYS_PULL_MSG: ERROR - Moving gromacs files to the ditectory 
+    force$forcename ++++++++"
     echo "
-    +++++++ SYS_PULL_MSG: VERBOSE - force $force acting $pep finished +++++++"
+    ++++++++ SYS_PULL_MSG: VERBOSE - Force $force acting $pep finished ++++++++"
 
     echo "
-    +++++++ SYS_PULL_MSG: VERBOSE - analysis of $pep and $force starts +++++++"
+    ++++++++ SYS_PULL_MSG: VERBOSE - Analysis of $pep and $force starts ++++++++"
     cd force$forcename
     file=$( ls md_*.gro)
     name=${file%%.*}
     $gromacs_tools/analysis.sh -f $name -g $gmx $analysis || \
-    fail "+++++ SYS_PULL_MSG: ERROR - Equilibration Analysis. +++++"
+    fail "
+    ++++++++ SYS_PULL_MSG: ERROR - Equilibration Analysis. ++++++++"
     cd ..
     echo "
-    +++++++ SYS_PULL_MSG: VERBOSE - analysis of $pep and $force finishes +++++++"
+    ++++++++ SYS_PULL_MSG: VERBOSE - Analysis of $pep and $force finishes ++++++++"
 done
 
 echo "
-    ++++++++ SYS_PULL_MSG: VERBOSE - $pep pulling finishes +++++++++"
+    ++++++++ SYS_PULL_MSG: VERBOSE - $pep pulling finishes ++++++++"
 
 exit 0

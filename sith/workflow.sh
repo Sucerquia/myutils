@@ -23,8 +23,10 @@ locally. Consider the next options:
     -f   forces to be used in the pulling step in [kJ mol^-1 nm^-2]. 
          Default 300. The argument \"10 300 200\" define several forces.
     -g   gromacs binary. For example gmx or gmx_mpi. Default gmx.
+    -n   pepgen options.
     -p   follow the workflow until pulling classicaly and generating analysis.
     -o   follow the workflow until optimization of the stretched configuration.
+    -r   restart. the code starts looking for the directories of each step.
     -s   follow the workflow until stretching by constrains.
 
 
@@ -51,10 +53,11 @@ stretch='false'
 peptides=$(echo $@ | sed "s/-.*//")
 cascade='false'
 gmx='gmx'
+restart='true'
 forces="300" # [kJ mol^-1 nm^-2].
 
 
-while getopts 'a:cg:opsf:h' flag; 
+while getopts 'a:cg:noprsf:h' flag; 
 do
     case "${flag}" in
       a) peptides=${OPTARG} ;;
@@ -64,6 +67,8 @@ do
       p) pulling='true' ;;
       s) stretch='true' ;;
       f) forces=${OPTARG} ;;
+      n) pep_options=${OPTARG} ;;
+      r) restart='true' ;;
 
       h) print_help
     esac
@@ -81,8 +86,8 @@ fi
 if [ ${#peptides} -eq 0 ]
 then 
     fail "
-    +++++ WorkFlow_MSG: ERROR - this code needs one peptide. Please, define at
-    least one before flags +++++"
+    ++++++++ WorkFlow_MSG: ERROR - This code needs one peptide. Please, define it
+    using the flag -a. For more info, use \"../workflow -h\" ++++++++"
 fi
 # set up finished
 
@@ -101,8 +106,8 @@ do
             bck_i=$(( $bck_i + 1 ))
         done
         echo "
-    +++++ WorkFlow_MSG: WARNING - pep directory arealdy exist. This directory
-    will be backed up in $bck. +++++"
+    ++++++++ WorkFlow_MSG: WARNING - pep directory arealdy exist. This directory
+    will be backed up in $bck. ++++++++"
         mv $pep $bck
     fi
     mkdir $pep
@@ -117,18 +122,18 @@ do
         export GMX_NO_MPI_BIN="/hits/fast/mcm/app/plumed/plumed-2.7.2/gromacs-2020.5/bin" 
         export OMP_NUM_THREADS=2
         
-        $utils/gromacs/peptide_pulling.sh -p $pep -g $GMXBIN/gmx_mpi || fail "
-    +++++ WorkFlow_MSG: ERROR - pulling of $pep failed. +++++"
+        $utils/gromacs/peptide_pulling.sh -p $pep -g $GMXBIN/gmx_mpi -o $pep_options || fail "
+    ++++++++ WorkFlow_MSG: ERROR - Pulling of $pep failed. ++++++++"
     else
         $utils/gromacs/peptide_pulling.sh -p $pep -g $gmx || fail "
-    +++++ WorkFlow_MSG: ERROR - pulling of $pep failed. +++++"
+    ++++++++ WorkFlow_MSG: ERROR - Pulling of $pep failed. ++++++++"
     fi
     
     if $pulling
     then 
         cd .. 
         echo "
-    +++++ WorkFlow_MSG: WARNING - workflow stopped after pulling +++++"
+    ++++++++ WorkFlow_MSG: WARNING - Workflow stopped after pulling ++++++++"
         continue
     fi
 
@@ -141,28 +146,34 @@ do
         source /hits/basement/mbm/sucerquia/exec/load_g09.sh
     fi
     $utils/sith/optimization.sh -p $pep || fail "
-    +++++ WorkFlow_MSG: ERROR - optimization of $pep failed. +++++"
+    ++++++++ WorkFlow_MSG: ERROR - Optimization of $pep failed. ++++++++"
     
     if $opt
     then 
         cd ..
         echo "
-    +++++ WorkFlow_MSG: WARNING - workflow stopped after optimization +++++"
+    ++++++++ WorkFlow_MSG: WARNING - Workflow stopped after optimization ++++++++"
         continue
     fi
 
     # Stretching
     $utils/sith/stretching.sh -p $pep || fail "
-    +++++ WorkFlow_MSG: ERROR - optimization of $pep failed. +++++"
+    ++++++++ WorkFlow_MSG: ERROR - Stretching of $pep failed. ++++++++"
     
     if $stretch
     then
         cd ..
         echo "
-    +++++ WorkFlow_MSG: WARNING - workflow stopped after stretching +++++"
+    ++++++++ WorkFlow_MSG: WARNING - Workflow stopped after stretching ++++++++"
         continue
     fi
+
+    python $utils/sith/sith_analysis.py ./stretching/$pep-stretched00.fchk \
+           ./stretching/ || fail "
+    ++++++++ WorkFlow_MSG: ERROR - Sith analysis of $pep failed. ++++++++"
 
     # Going back to initial directory
     cd ..
 done
+
+exit 0

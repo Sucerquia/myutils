@@ -40,6 +40,7 @@ keep='false'
 merge='false'
 rama='false'
 sub='false'
+largest='false'
 
 header=()
 new_files=()
@@ -75,39 +76,42 @@ fi
 
 # check dependencies
 $gmx -h &> /dev/null || fail "
-    +++++ ANALYSIS_MSG: ERROR - this code needs gromacs ($gmx failed) +++++"
+    ++++++++ ANALYSIS_MSG: ERROR - This code needs gromacs ($gmx failed) ++++++++"
 #set up finished
 
 
 # potential energy all the box
 if $pot_energy
 then
-    echo "++++++ ANALYSIS_MSG: Compute energies ++++++"
+    echo "
+    ++++++++ ANALYSIS_MSG: VERBOSE - Compute energies ++++++++"
     echo "12 0 \n" | \
     $gmx energy -f $name.edr \
                 -o analysis_potential-$name.xvg && \
     sed "s/@/#/g" analysis_potential-$name.xvg > \
                   analysis_potential-$name.dat && \
     rm analysis_potential-$name.xvg || fail "
-    +++++ ANALYSIS_MSG: ERROR - obtaining energy +++++"
+    ++++++++ ANALYSIS_MSG: ERROR - Obtaining energy ++++++++"
     grep -v "\#" analysis_potential-$name.dat > tmp_analyzer_potential.dat
     awk 'BEGIN{print "time"}{print $1}' tmp_analyzer_potential.dat > \
                                         tmp_analyzer_time.dat && \
     awk 'BEGIN{print "e_potential"}{print $2}' tmp_analyzer_potential.dat > \
                                                tmp_remove.dat && \
     [ $(cat tmp_remove.dat | wc -l) -gt 2 ] || fail "
-    +++++ ANALYSIS_MSG: ERROR - extracting energy data +++++"
+    ++++++++ ANALYSIS_MSG: ERROR - Extracting energy data ++++++++"
     mv tmp_remove.dat tmp_analyzer_potential.dat
     new_files+=("analysis_potential-$name.dat")
     header+=('time')
     header+=('potential')
-    echo "++++++ ANALYSIS_MSG: Finished compute energies ++++++"
+    echo "
+    ++++++++ ANALYSIS_MSG: VERBOSE - Finished compute energies ++++++++"
 fi
 
 # potential energy of the protein
 if $sub
 then
-    echo "++++++ ANALYSIS_MSG: Compute energies of the protein ++++++"
+    echo "
+    ++++++++ ANALYSIS_MSG: VERBOSE - Compute energies of the protein ++++++++"
     cp pulling.mdp tmp.mdp
     sed -i "s/= non-Water/= Protein/g" tmp.mdp
     sed -i "s/= V-rescale/= no/g" tmp.mdp
@@ -125,21 +129,23 @@ then
     $gmx mdrun -v -nt 1 -s tmp.tpr -rerun $name.trr -e tmp.edr && \
     echo -e "12 13 14 15 0\n" | $gmx energy -f tmp.edr -s tmp.tpr -o tmp_energies.xvg || \
     fail "
-    ++++++++ ANALYSIS_MSG: ERROR - extracting protein energies ++++++++"
+    ++++++++ ANALYSIS_MSG: ERROR - Extracting protein energies ++++++++"
     sed "s/@/#/g" tmp_energies.xvg > analysis_protein_energies-$name.dat && \
     grep -v "#" analysis_protein_energies-$name.dat > tmp2_energies.dat && \
     awk 'BEGIN{print "e_pot_pep"}{print $2+$3+$4+$5}' tmp2_energies.dat > \
         tmp_analyzer_pep_potential.dat && \
     [ $(cat tmp_analyzer_pep_potential.dat | wc -l) -gt 2 ] || fail "
-    ++++++++ ANALYSIS_MSG: ERROR - summing potential energies ++++++++"
+    ++++++++ ANALYSIS_MSG: ERROR - Summing potential energies ++++++++"
     header+=('pep_potential')
-    new_files+=('analysis_protein_energies-$name.dat')
-    echo "++++++ ANALYSIS_MSG: Finished compute energies of the protein ++++++"
+    new_files+=("analysis_protein_energies-$name.dat")
+    echo "
+    ++++++++ ANALYSIS_MSG: VERBOSE - Finished compute energies of the protein ++++++++"
 fi
 
 if $distance
 then
-    echo "++++++ ANALYSIS_MSG: Compute distances ++++++"
+    echo "
+    ++++++++ ANALYSIS_MSG: VERBOSE - Compute distances ++++++++"
     echo ""
     echo -e '"distance"\n' | \
     $gmx distance -f $name.trr \
@@ -148,35 +154,37 @@ then
                   -oall analysis_distance-$name.xvg && \
     sed "s/@/#/g" analysis_distance-$name.xvg > analysis_distance-$name.dat && \
     rm analysis_distance-$name.xvg || fail "
-    ++++++++ ANALYSIS_MSG: ERROR - computing distances ++++++++"
+    ++++++++ ANALYSIS_MSG: ERROR - Computing distances ++++++++"
     grep -v "\#" analysis_distance-$name.dat > tmp_analyzer_distance.dat &&
     awk 'BEGIN{print "time"}{print $1}' tmp_analyzer_distance.dat > \
                                         tmp_analyzer_time.dat && \
     [ $(cat tmp_analyzer_time.dat | wc -l) -gt 2 ] || fail "
-    ++++++++ ANALYSIS_MSG: ERROR - extracting time ++++++++"
+    ++++++++ ANALYSIS_MSG: ERROR - Extracting time ++++++++"
     awk 'BEGIN{print "distance"}{print $2}' tmp_analyzer_distance.dat > \
                                             tmp_remove.dat && \
     [ $(cat tmp_analyzer_distance.dat | wc -l) -gt 2 ] || fail "
-    ++++++++ ANALYSIS_MSG: ERROR - extracting distance ++++++++"
+    ++++++++ ANALYSIS_MSG: ERROR - Extracting distance ++++++++"
 
     mv tmp_remove.dat tmp_analyzer_distance.dat
-    new_files+=('analysis_distance-$name.dat')
+    new_files+=("analysis_distance-$name.dat")
     if [ ! $pot_energy ]
     then
         header+=('time')
     fi
     header+=('distance')
-    echo "++++++ ANALYSIS_MSG: Finished compute distances ++++++"
+    echo "
+    ++++++++ ANALYSIS_MSG: VERBOSE - Finished compute distances ++++++++"
 fi
 
 if $rama
 then
-    echo "++++++ ANALYSIS_MSG: Compute raman ++++++"
+    echo "
+    ++++++++ ANALYSIS_MSG: VERBOSE - Compute raman ++++++++"
     $gmx rama -f $name.trr -s $name.tpr -o analysis_ramal-$name.xvg && \
     sed "s/@/#/g" analysis_ramal-$name.xvg > analysis_ramal-$name.dat && \
     rm analysis_ramal-$name.xvg || fail "
-    ++++++++ ANALYSIS_MSG: ERROR - extracting raman data ++++++++"
-    new_files+=(analysis_ramal-$name.dat)
+    ++++++++ ANALYSIS_MSG: ERROR - Extracting raman data ++++++++"
+    new_files+=("analysis_ramal-$name.dat")
     grep -v "\#" analysis_ramal-$name.dat > tmp_analyzer_rama0.dat
     angles=$(awk '{print $3}' tmp_analyzer_rama0.dat | awk '!seen[$1]++')
     for angle in $angles
@@ -185,24 +193,24 @@ then
         awk -v angle=$angle 'BEGIN{print angle"1"}
             {print $1}' > tmp_analyzer_angle-1$angle.dat && \
         [ $(cat tmp_analyzer_angle-1$angle.dat | wc -l) -gt 2 ] || fail "
-    ++++++++ ANALYSIS_MSG: ERROR - extracting angle ++++++++"
+    ++++++++ ANALYSIS_MSG: ERROR - Extracting angle ++++++++"
         header+=("angle-1$angle")
         grep $angle tmp_analyzer_rama0.dat | \
         awk -v angle=$angle 'BEGIN{print angle"2"}
             {print $2}' > tmp_analyzer_angle-2$angle.dat &&\
         [ $(cat tmp_analyzer_angle-2$angle.dat | wc -l) -gt 2 ] || fail "
-    ++++++++ ANALYSIS_MSG: ERROR - extracting angle ++++++++"
+    ++++++++ ANALYSIS_MSG: ERROR - Extracting angle ++++++++"
         header+=("angle-2$angle")
     done
     rm tmp_analyzer_rama0.dat
     echo "
-    ++++++ ANALYSIS_MSG: Finished compute raman ++++++"
+    ++++++++ ANALYSIS_MSG: VERBOSE - Finished compute raman ++++++++"
 fi
 
 if $merge
 then
     echo "
-    ++++++ ANALYSIS_MSG:  Creating merged file"
+    ++++++++ ANALYSIS_MSG: VERBOSE - Creating merged file ++++++++"
     if [ -f analysis_merged_table-$name.dat ]; then rm analysis_merged_table-$name.dat ; fi
     touch analysis_merged_table-$name.dat
     for field in ${header[@]}
@@ -214,14 +222,14 @@ then
         echo "    - $field included "
     done
     sed -i '1 s_^_# _' analysis_merged_table-$name.dat
-    new_files+=('analysis_merged_table-$name.dat')
+    new_files+=("analysis_merged_table-$name.dat")
 fi
 
 if $config
 then
     echo -e "1\n" | $gmx trjconv -s $name.tpr -f $name.trr -dump 500 -o \
         analysis_lastconfig-$name.pdb -pbc mol
-    new_files+=('analysis_lastconfig.pdb')
+    new_files+=("analysis_lastconfig.pdb")
 fi
 
 if $largest
@@ -229,7 +237,7 @@ then
     if [ ! -f analysis_distance-$name.dat ]
     then
         fail "
-    ++++++++ ANALYSIS_MSG: ERROR - to extract the largest config, you have to
+    ++++++++ ANALYSIS_MSG: ERROR - To extract the largest config, you have to
     compute the distances in the trajectory ++++++++"
     fi
     time_largest=$(grep -v '#' analysis_distance-$name.dat | \
@@ -241,14 +249,14 @@ then
                                  -o analysis_largestconfig-$name.pdb \
                                  -pbc mol || \
     fail "
-    ++++++++ ANALYSIS_MSG: ERROR - extracting largest configuration ++++++++"
-    new_files+=('analysis_largestconfig-$name.pdb')
+    ++++++++ ANALYSIS_MSG: ERROR - Extracting largest configuration ++++++++"
+    new_files+=("analysis_largestconfig-$name.pdb")
 fi
 
 if [ ${#new_files[@]} -ne 0 ]
 then
     echo "
-    +++++++++++++++ ANALYSIS_MSG:  The next files were created +++++++++++++++"
+    +++++++++++++++ ANALYSIS_MSG: VERBOSE - The next files were created +++++++++++++++"
     for file in ${new_files[@]};
     do
         echo " - $file"
@@ -272,11 +280,13 @@ then
     count=$( ls -1 \#* 2>/dev/null | wc -l )
     if [ $count -ne 0 ];
     then
-        echo -e "\n++++++ ANALYSIS_MSG: Remove files ++++++"
-        echo "Next files will be removed"
+        echo "
+    ++++++++ ANALYSIS_MSG: WARNING - Remove files ++++++++"
+        echo "
+    Next files will be removed:"
         for file in \#*
         do
-            echo $file
+            echo "    - $file"
             rm $file
         done
     fi

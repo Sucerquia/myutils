@@ -39,29 +39,29 @@ done
 if [ ! -d equilibrate ]
 then 
     fail "
-    ++++++ PULL_MSG: ERROR - equilibrate directory does not exist ++++++"
+    ++++++++ PULL_MSG: ERROR - Equilibrate directory does not exist ++++++++"
 fi
 $gmx -h &> /dev/null || fail "
-    +++++ PULL_MSG: ERROR - this code needs gromacs ($gmx failed) +++++"
+    ++++++++ PULL_MSG: ERROR - This code needs gromacs ($gmx failed) ++++++++"
 # set up finished
 
 
 echo "
-    ++++++ PULL_MSG: VERBOSE - creates index file of force $force ++++++"
+    ++++++++ PULL_MSG: VERBOSE - Creates index file of force $force ++++++++"
 
 echo -e "r ACE & a CH3 \n r NME & a CH3 \n \"ACE_&_CH3\" | \"NME_&_CH3\" \n q\n " \
     | $gmx make_ndx -f ./equilibrate/npt.gro || \
     fail "
-    ++++++ PULL_MSG: ERROR - creation of index file the pulling for force
-    $force ++++++"
+    ++++++++ PULL_MSG: ERROR - Creation of index file the pulling for force
+    $force ++++++++"
 
 sed -i "s/ACE_&_CH3_NME_&_CH3/distance/g" index.ndx && \
 cp $mine/utils/gromacs/pulling.mdp ./pulling.mdp && \
 sed -i "s/<force>/$force/g" pulling.mdp || fail "
-    ++++++ PULL_MSG: ERROR - setting the file pulling.mdp ++++++"
+    ++++++++ PULL_MSG: ERROR - setting the file pulling.mdp ++++++++"
 
 echo "
-    ++++++ PULL_MSG: VERBOSE - Creates MD executable of force $force ++++++"
+    ++++++++ PULL_MSG: VERBOSE - Creates MD executable of force $force ++++++++"
 forcename=$(printf "%04d" $force)
 
 $gmx grompp -f pulling.mdp \
@@ -71,17 +71,18 @@ $gmx grompp -f pulling.mdp \
             -n index.ndx \
             -maxwarn 5 \
             -o md_0_$forcename.tpr || fail "
-    ++++++ PULL_MSG: ERROR in the grompp step of the pulling for force
-    $force ++++++"
+    ++++++++ PULL_MSG: ERROR - grompp step of the pulling for force
+    $force ++++++++"
 
-
-echo "++++++ PULL_MSG: VERBOSE - MD run for force $force ++++++" && \
-$gmx mdrun -deffnm md_0_$forcename || fail "
-    ++++++ PULL_MSG: ERROR - in the execution step of the pulling for force
-    $force ++++++"
 
 echo "
-    ++++++ PULL_MSG: VERBOSE - pulling finished correctly of $force ++++++"
+    ++++++++ PULL_MSG: VERBOSE - MD run for force $force ++++++++" && \
+$gmx mdrun -deffnm md_0_$forcename || fail "
+    ++++++++ PULL_MSG: ERROR - Execution step of the pulling for force
+    $force ++++++++"
+
+echo "
+    ++++++++ PULL_MSG: VERBOSE - Pulling finished correctly of $force ++++++++"
 
 rm -f \#*
 
