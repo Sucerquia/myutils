@@ -1,5 +1,6 @@
 """
-- I could add specific message of error in case the command doesn't work in output-terminal
+- I could add specific message of error in case the command doesn't
+work in output-terminal
 """
 import numpy as np
 import subprocess
@@ -515,6 +516,34 @@ def plot_sith(dofs, xlabel, energy_units='a.u', fig=None, ax=None, cbar=True,
     ax.set_ylabel('energy [a.u]', fontsize=20)
 
     return ax
+
+
+def plot_energies_in_DOFs(sith):
+    fig, axes = plt.subplots(2, 2, figsize=(18, 15))
+
+    energies_per_DOF = sith.energies
+    dims = sith._reference.dims
+
+    emin = min(energies_per_DOF.flatten())
+    emax = max(energies_per_DOF.flatten())
+    axes[0][0].plot([dims[1]-0.5, dims[1]-0.5], [emin, emax], '--',
+                    color='gray')
+    axes[0][0].plot([dims[1]+dims[2]-0.5, dims[1]+dims[2]-0.5], [emin, emax],
+                    '--', color='gray')
+    plot_sith(energies_per_DOF, 'all DOF', fig=fig, ax=axes[0][0], cbar=False)
+    plot_sith(energies_per_DOF[:dims[1]], 'Lengths DOF', fig=fig,
+              ax=axes[0][1], cbar=False)
+    plot_sith(energies_per_DOF[dims[1]:dims[1]+dims[2]], 'Angles DOF', fig=fig,
+              ax=axes[1][0], cbar=False)
+    plot_sith(energies_per_DOF[dims[1]+dims[2]:], 'Dihedral DOF', fig=fig,
+              ax=axes[1][1], cbar=True, axes=axes, aspect=40)
+    plt.subplots_adjust(left=0.1,
+                        bottom=0.1,
+                        right=0.76,
+                        top=0.9,
+                        wspace=0.28,
+                        hspace=0.2)
+    return fig, axes
 
 
 def min_profile(file, indexes=[3, 2, 0], num_ranges=20):
