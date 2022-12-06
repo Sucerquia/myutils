@@ -1,11 +1,14 @@
+"""
+- I could add specific message of error in case the command doesn't work in output-terminal
+"""
 import numpy as np
 import subprocess
-import cmocean as cmo
 import matplotlib as mpl
 from matplotlib.transforms import Bbox
-from ase.io import read
+from ase.io import read, write
 import sys
 import matplotlib.pyplot as plt
+import glob
 
 
 def distance(file, index1, index2):
@@ -30,7 +33,7 @@ def distance(file, index1, index2):
 
     Execute from terminal using:
     python miscellaneous.py distance arg1 arg2 arg3
-    
+
     E.g.
     python miscellaneous.py distance optimization.log 1 20
     """
@@ -41,6 +44,7 @@ def distance(file, index1, index2):
 
     return d
 
+
 def output_terminal(cmd, **kwargs):
     """
     Runs a command in a terminal and save the output in a list
@@ -50,7 +54,7 @@ def output_terminal(cmd, **kwargs):
     ==========
     cmd: str
         bash command to be executed in the terminal.
-    
+
     Return
     ======
     out = list[str] output of the executed command.
@@ -64,8 +68,10 @@ def output_terminal(cmd, **kwargs):
     out1, err1 = p.communicate()
     out, err = out1.decode('ascii'), err1.decode('ascii')
 
-    assert not p.returncode, "MISCELLANEOUS ERROR: executing the function output_terminal\m" + err
+    assert not p.returncode, "ERROR executing the function output_terminal\n" \
+                             + err
     return out
+
 
 def plot_changes(dq, dims):
     """
@@ -109,12 +115,6 @@ def plot_changes(dq, dims):
 
 
 def _time(keyword, logfile):
-    """
-    
-    
-    Parameters
-    ==========
-    """
     out = output_terminal("grep '"+keyword+"' "+logfile)
     out = out.split()
     start = out.index('at')
@@ -128,19 +128,21 @@ def _time(keyword, logfile):
 
     return month, day, hour, minu, seco
 
+
 def time_g09(logfile):
     """
     Function that extracts the time spend for one gaussian simulation from a
     .log file.
-    
+
     Parameters
     ==========
     logfile: string
         .log file obtained during a gaussian simulation.
-    
+
     Return
     ======
-    Time in seconds although the time in minutes, seconds and hours are printed.
+    Time in seconds although the time in minutes, seconds and hours are
+    printed.
     """
     t_i = _time('Leave Link    1', logfile)
     t_f = _time('Normal termination of Gaussian', logfile)
@@ -155,13 +157,13 @@ def time_g09(logfile):
         print("Time in seconds= ", total)
         print("Time in minutes= ", total/60)
         print("Time in hours= ", total/3600)
-        
+
         return total/60
 
     else:
         print('sorry, I cannot help you, modify me to compute \
             changes of months')
-            
+
 
 def format_to_pdb(name_input, name_output=None):
     """"
@@ -171,7 +173,7 @@ def format_to_pdb(name_input, name_output=None):
     Parameters
     ==========
     name_input: string
-        Name of files to be modified (e.g. './*.log' ). 
+        Name of files to be modified (e.g. './*.log' ).
 
     name_output: string
         Output name. Default: same name as input but with pdb extension.
@@ -184,7 +186,6 @@ def format_to_pdb(name_input, name_output=None):
     to_modify = glob.glob(name_input)
     to_modify.sort()
     n_files_to_modify = len(to_modify)
-
 
     if name_output is not None > 1:  # there is an output name
         if n_files_to_modify > 1:  # there are several files to be modified
@@ -202,13 +203,13 @@ def format_to_pdb(name_input, name_output=None):
         a = read(to_modify[i], index=-1)
         write(output[i], a)
         print(f" {to_modify[i]} ---> {output[i]} ")
-    
+
     return output
 
 
 def optimized_e(file):
     """
-    This code finds the last energy in a log file of gaussian computed using 
+    This code finds the last energy in a log file of gaussian computed using
     RBMK functional. The output is given in eV.
 
     Parameters
@@ -216,7 +217,7 @@ def optimized_e(file):
 
     file: str
         log gaussian file.
-    
+
     Return
     ======
     Potential energy in eV units.
@@ -231,7 +232,7 @@ def plot_hessian(hessian, ax=None, deci=2, orientation='vertical', cbar=True,
     """
     Function that plots the a matrix using a divergent colormap to separate the
     negative from the positive values.
-    
+
     Parameters
     ==========
     hessian: NxN numpy.array
@@ -247,7 +248,7 @@ def plot_hessian(hessian, ax=None, deci=2, orientation='vertical', cbar=True,
         True to show the colorbar. Default: True
     ticks: float
         ticks size.
-    
+
     Return
     ======
     PathCollection
@@ -263,7 +264,7 @@ def plot_hessian(hessian, ax=None, deci=2, orientation='vertical', cbar=True,
         rotation = 90
 
     if ax is None:
-        _, ax = plt.subplots(1,1, figsize=(10,10))
+        _, ax = plt.subplots(1, 1, figsize=(10, 10))
     if orientation[0] == 'v':
         pad = 0.02
         shrink = 0.85
@@ -273,8 +274,8 @@ def plot_hessian(hessian, ax=None, deci=2, orientation='vertical', cbar=True,
         shrink = 0.9
         rotation = 90
 
-    cmap = mpl.cm.RdBu_r # set the colormap to soemthing diverging
-    
+    cmap = mpl.cm.RdBu_r  # set the colormap to a divergent one
+
     indexes = np.arange(hessian.shape[0])
 
     x = [[i for i in indexes] for j in indexes]
@@ -284,7 +285,7 @@ def plot_hessian(hessian, ax=None, deci=2, orientation='vertical', cbar=True,
 
     im = ax.scatter(x, y, c=hessian.flatten(), marker='s',
                     cmap=cmap, vmin=-lim, vmax=lim)
-    
+
     if cbar:
         cbar = plt.colorbar(im, ax=ax, format='%1.{}f'.format(deci),
                             orientation=orientation, pad=pad,
@@ -292,14 +293,15 @@ def plot_hessian(hessian, ax=None, deci=2, orientation='vertical', cbar=True,
         cbar.ax.tick_params(labelsize=ticks, rotation=rotation)
     return im
 
+
 def hessian_blocks(hessian, dims, decis=[2, 2, 2, 2], orientation='vertical',
                    cbar=True, ticks=15,
-                   deltas = [1, 1, 1, 1]):
+                   deltas=[1, 1, 1, 1]):
     fig, ax = plt.subplots(4, 3, figsize=(10, 12))
     """
     Plots the hessian matrix of the sith object separating it in blocks
     corresponding to the different degrees of freedom
-    
+
     Parameters
     ==========
     hessian: NxN numpy.array
@@ -321,7 +323,7 @@ def hessian_blocks(hessian, dims, decis=[2, 2, 2, 2], orientation='vertical',
     ======
     PathCollection
     """
-    if orientation[0] == 'v': 
+    if orientation[0] == 'v':
         pad = 0.02
         shrink = 1
         rotation = 0
@@ -330,7 +332,7 @@ def hessian_blocks(hessian, dims, decis=[2, 2, 2, 2], orientation='vertical',
         shrink = 0.9
         rotation = 90
     ax[0][0].set_title('Bonds')
-    plot_hessian(hessian[:dims[1], :dims[1]], ax=ax[0][0], 
+    plot_hessian(hessian[:dims[1], :dims[1]], ax=ax[0][0],
                  orientation='vertical', cbar=True, ticks=ticks, deci=decis[0])
     range_bonds = np.arange(1,
                             dims[1]+1,
@@ -339,10 +341,11 @@ def hessian_blocks(hessian, dims, decis=[2, 2, 2, 2], orientation='vertical',
     ax[0][0].set_xticklabels(range_bonds)
     ax[0][0].set_yticks(range_bonds - 1)
     ax[0][0].set_yticklabels(range_bonds)
-    
+
     ax[0][1].set_title('Angles')
-    plot_hessian(hessian[dims[1]:dims[2]+dims[1], dims[1]:dims[2]+dims[1]], ax=ax[0][1], 
-                 orientation='vertical', cbar=True, ticks=ticks, deci=decis[1])
+    plot_hessian(hessian[dims[1]:dims[2]+dims[1], dims[1]:dims[2]+dims[1]],
+                 ax=ax[0][1], orientation='vertical', cbar=True, ticks=ticks,
+                 deci=decis[1])
     range_angles = np.arange(dims[1] + 1,
                              dims[1] + dims[2] + 1,
                              deltas[1])
@@ -352,7 +355,7 @@ def hessian_blocks(hessian, dims, decis=[2, 2, 2, 2], orientation='vertical',
     ax[0][1].set_yticklabels(range_angles)
 
     ax[0][2].set_title('Dihedrals')
-    plot_hessian(hessian[dims[2]+dims[1]:, dims[2]+dims[1]:], ax=ax[0][2], 
+    plot_hessian(hessian[dims[2]+dims[1]:, dims[2]+dims[1]:], ax=ax[0][2],
                  orientation='vertical', cbar=True, ticks=ticks, deci=decis[2])
     range_dihedrals = np.arange(dims[1] + dims[2] + 1,
                                 dims[1] + dims[2] + dims[3] + 1,
@@ -366,10 +369,10 @@ def hessian_blocks(hessian, dims, decis=[2, 2, 2, 2], orientation='vertical',
     ldy = ax[3][0].get_position().get_points()[0][1]
     rux = ax[0][2].get_position().get_points()[1][0]
     ruy = ax[1][2].get_position().get_points()[1][1]
-    
-    [[ax[i][j].set_visible(False) for i in range(1,4)] for j in range(1,3)]
+
+    [[ax[i][j].set_visible(False) for i in range(1, 4)] for j in range(1, 3)]
     im = plot_hessian(hessian, ax=ax[1][0], cbar=False)
-    ax[1][0].plot([dims[1]-0.5, dims[1]-0.5, -0.5,-0.5, dims[1]-0.5],
+    ax[1][0].plot([dims[1]-0.5, dims[1]-0.5, -0.5, -0.5, dims[1]-0.5],
                   [-0.5, dims[1]-0.5, dims[1]-0.5, -0.5, -0.5], color='black',
                   lw=1)
     range_total = np.arange(1, dims[0]+1, deltas[3])
@@ -377,14 +380,14 @@ def hessian_blocks(hessian, dims, decis=[2, 2, 2, 2], orientation='vertical',
     ax[1][0].set_xticklabels(range_total)
     ax[1][0].set_yticks(range_total - 1)
     ax[1][0].set_yticklabels(range_total)
-    
+
     ax[1][0].plot([dims[2]-0.5+dims[1], dims[2]-0.5+dims[1],
                    dims[1]-0.5, dims[1]-0.5,
                    dims[2]-0.5+dims[1]],
                   [dims[1]-0.5, dims[2]-0.5+dims[1],
                    dims[2]-0.5+dims[1], dims[1]-0.5,
                    dims[1]-0.5], color='black', lw=1)
-    
+
     ax[1][0].plot([dims[3]-0.5+dims[1]+dims[2], dims[3]-0.5+dims[1]+dims[2],
                    dims[2]-0.5+dims[1], dims[2]-0.5+dims[1],
                    dims[3]-0.5+dims[1]+dims[2]],
@@ -395,12 +398,13 @@ def hessian_blocks(hessian, dims, decis=[2, 2, 2, 2], orientation='vertical',
     cbar = fig.colorbar(im, cax=ax[3][2], format='%1.{}f'.format(decis[3]),
                         orientation=orientation, pad=pad, shrink=shrink)
     cbar.ax.tick_params(labelsize=ticks, rotation=rotation)
-    
-    ax[3][2].set_position(Bbox([[rux+0.02, ldy], [rux+0.05, ruy]]), which='both')
+
+    ax[3][2].set_position(Bbox([[rux+0.02, ldy], [rux+0.05, ruy]]),
+                          which='both')
     ax[2][0].set_visible(False)
     ax[3][0].set_visible(False)
     ax[3][2].set_visible(True)
-        
+
     ax[1][0].set_position(Bbox([[ldx, ldy], [rux, ruy]]), which='both')
     ax[1][0].set_aspect('equal')
     print(im)
@@ -411,12 +415,12 @@ def hessian_blocks(hessian, dims, decis=[2, 2, 2, 2], orientation='vertical',
 def cap_hydrogen_atoms(pdb_file):
     """"
     find the indexes of the hydrogen atoms of the caps parts in the peptide.
-    
+
     Parameters
     ==========
     pdb_file: string
         name of the pdb file with the molecule of interest.
-    
+
     Return
     ======
     list of indexes.
@@ -424,32 +428,30 @@ def cap_hydrogen_atoms(pdb_file):
     output = output_terminal(f'grep ATOM {pdb_file} | grep -n ATOM | grep -e \
                                ACE -e NME | grep HH')
     output = output.split('\n')[:-1]
-    
+
     indexes = [int(line.split(':')[0]) for line in output]
     return indexes
 
 
-def all_hydrogen_atoms(pdb_file):
+def all_hydrogen_atoms(file):
     """"
     find the indexes of all the hydrogen atoms in the peptide.
-    
+
     Parameters
     ==========
-    pdb_file: string
-        name of the pdb file with the molecule of interest.
-    
+    file: string
+        name of the input file with the molecule of interest. The format of
+        this file has to be readable by ase. Please check: "ase info --formats"
+
     Return
     ======
     list of indexes.
     """
-    output = output_terminal(f"grep ATOM {pdb_file} | grep -n ATOM |" + 
-                              " awk '{if ($(NF)==\"H\") print $1}'")
+    mol = read(file)
+    indexes = np.where(mol.get_atomic_numbers() == 1)[0]
 
-    
-    output = output.split('\n')[:-1]
-    
-    indexes = [int(line.split(':')[0]) for line in output]
-    return indexes
+    return indexes + 1
+
 
 def plot_sith(dofs, xlabel, energy_units='a.u', fig=None, ax=None, cbar=True,
               cmap=None, orientation='vertical', labelsize=15,
@@ -481,7 +483,7 @@ def plot_sith(dofs, xlabel, energy_units='a.u', fig=None, ax=None, cbar=True,
         try:
             import cmocean as cmo
             cmap = cmo.cm.algae
-        except ImportError as e:
+        except ImportError:
             cmap = mpl.colormaps['viridis']
 
     if ax is None:
@@ -512,8 +514,10 @@ def plot_sith(dofs, xlabel, energy_units='a.u', fig=None, ax=None, cbar=True,
     ax.set_xlabel(xlabel, fontsize=20)
     ax.set_ylabel('energy [a.u]', fontsize=20)
 
+    return ax
 
-def min_profile(file, indexes=[3 , 2, 0], num_ranges=20):
+
+def min_profile(file, indexes=[3, 2, 0], num_ranges=20):
     """
     This function returns the profile of minimum potential energy respect to
     one variable.
@@ -532,7 +536,7 @@ def min_profile(file, indexes=[3 , 2, 0], num_ranges=20):
     num_ranges: int
         number of blocks to divide the variable range. Default 20
 
-    Note: The idea of this function is to split the variable in ranges and to 
+    Note: The idea of this function is to split the variable in ranges and to
     take the minimum energy in each range.
 
     Return
@@ -552,12 +556,11 @@ def min_profile(file, indexes=[3 , 2, 0], num_ranges=20):
     split_time = []
 
     for index in range(len(subranges[:-1])):
-        split_var.append(variables[np.logical_and(variables >= subranges[index],
-                                                variables < subranges[index+1])])
-        split_ener.append(energies[np.logical_and(variables >= subranges[index],
-                                                variables < subranges[index+1])])
-        split_time.append(times[np.logical_and(variables >= subranges[index],
-                                            variables < subranges[index+1])])
+        blocks = np.logical_and(variables >= subranges[index],
+                                variables < subranges[index+1])
+        split_var.append(variables[blocks])
+        split_ener.append(energies[blocks])
+        split_time.append(times[blocks])
 
     var = [variables[0]]
     ener = [energies[0]]
@@ -569,13 +572,13 @@ def min_profile(file, indexes=[3 , 2, 0], num_ranges=20):
             var.append(split_var[i][index])
             ener.append(split_ener[i][index])
             time.append(split_time[i][index])
-        except:
+        except IndexError:
             continue
 
     return time, var, ener
 
 
-def min_profile_from_several(files, indexes=[3 , 2, 0], num_ranges=20):
+def min_profile_from_several(files, indexes=[3, 2, 0], num_ranges=20):
     """
     This function returns the profile of minimum potential energy respect to
     one variable.
@@ -594,7 +597,7 @@ def min_profile_from_several(files, indexes=[3 , 2, 0], num_ranges=20):
     num_ranges: int
         number of blocks to divide the variable range. Default 20
 
-    Note: The idea of this function is to split the variable in ranges and to 
+    Note: The idea of this function is to split the variable in ranges and to
     take the minimum energy in each range.
 
     Return
@@ -622,12 +625,11 @@ def min_profile_from_several(files, indexes=[3 , 2, 0], num_ranges=20):
     split_time = []
 
     for index in range(len(subranges[:-1])):
-        split_var.append(variables[np.logical_and(variables >= subranges[index],
-                                                variables < subranges[index+1])])
-        split_ener.append(energies[np.logical_and(variables >= subranges[index],
-                                                variables < subranges[index+1])])
-        split_time.append(times[np.logical_and(variables >= subranges[index],
-                                            variables < subranges[index+1])])
+        blocks = np.logical_and(variables >= subranges[index],
+                                variables < subranges[index+1])
+        split_var.append(variables[blocks])
+        split_ener.append(energies[blocks])
+        split_time.append(times[blocks])
 
     var = [variables[0]]
     ener = [energies[0]]
@@ -639,11 +641,10 @@ def min_profile_from_several(files, indexes=[3 , 2, 0], num_ranges=20):
             var.append(split_var[i][index])
             ener.append(split_ener[i][index])
             time.append(split_time[i][index])
-        except:
+        except IndexError:
             continue
 
     return time, var, ener
-
 
 
 if __name__ == '__main__':
@@ -664,7 +665,8 @@ if __name__ == '__main__':
 
         functions.sort()
 
-        print("\nThis code contains a set of tools you can use for different\n" +
+        print("\n" +
+              "This code contains a set of tools you can use for different\n" +
               "functions. To execute from terminal use \n python miscellane" +
               "ous.py <function> <arg1> <arg2> ...\n\n where function is an" +
               "y of the next options: \n")
