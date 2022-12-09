@@ -74,7 +74,7 @@ def output_terminal(cmd, **kwargs):
     return out
 
 
-def plot_changes(dq, dims):
+def plot_changes(dq, dims, markersize=3, gradient=True):
     """
     Plot the changes in the DOFs of an streched config
 
@@ -96,13 +96,23 @@ def plot_changes(dq, dims):
     """
     nstreched = len(dq[0])
     _, axes = plt.subplots(3, 1, figsize=(8, 10))
-    ylabels = [r'$\Delta$ Bonds', r'$\Delta$ Angles', r'$\Delta$ Dihedrals']
+    ylabels = [r'$\Delta$ Bonds [Å]',
+               r'$\Delta$ Angles [degrees]',
+               r'$\Delta$ Dihedrals [degrees]']
     borders = [0, dims[1], dims[1]+dims[2], dims[0]]
     scales = [1, 180/np.pi, 180/np.pi]
 
     for i in range(3):
         dof = dq[borders[i]:borders[i+1]]
-        [axes[i].plot(changes*scales[i]) for changes in dof]
+        x = np.arange(0, len(dof[0]), 1)
+        if gradient:
+            [plot_gradient(axes[i], x, changes*scales[i],
+                           markersize=markersize)
+             for changes in dof]
+        else:
+            [axes[i].plot(changes*scales[i], '-o', markersize=markersize)
+             for changes in dof]
+            [axes[i].plot]
 
     [axes[i].set_ylabel(ylabels[i], fontsize=15) for i in range(3)]
 
@@ -456,7 +466,7 @@ def all_hydrogen_atoms(file):
 
 def plot_sith(dofs, xlabel, energy_units='a.u', fig=None, ax=None, cbar=True,
               cmap=None, orientation='vertical', labelsize=15,
-              axes=None, aspect=25):
+              axes=None, aspect=25, step=1):
     """
     This function plots the energies per degrees of freedom from
     sith_object.energies
@@ -510,15 +520,16 @@ def plot_sith(dofs, xlabel, energy_units='a.u', fig=None, ax=None, cbar=True,
         cbar.set_label(label="Stretched", fontsize=labelsize)
         cbar.ax.tick_params(labelsize=labelsize, rotation=rotation, length=0)
 
-    [ax.plot(dofs.T[i], '.-', markersize=10, color=cmap(normalize(i))[:3])
+    [ax.plot(dofs.T[i], '.-', markersize=10, color=cmap(normalize(i+0.5))[:3])
      for i in range(len(dofs[0]))]
     ax.set_xlabel(xlabel, fontsize=20)
-    ax.set_ylabel('energy [a.u]', fontsize=20)
+    ax.set_xticks(np.arange(1, len(dofs.T[0]), step))
+    ax.set_ylabel(f'energy [{energy_units}]', fontsize=20)
 
     return ax
 
 
-def plot_energies_in_DOFs(sith):
+def plot_energies_in_DOFs(sith, steps=[1, 1, 1, 1]):
     fig, axes = plt.subplots(2, 2, figsize=(18, 15))
 
     energies_per_DOF = sith.energies
@@ -530,13 +541,14 @@ def plot_energies_in_DOFs(sith):
                     color='gray')
     axes[0][0].plot([dims[1]+dims[2]-0.5, dims[1]+dims[2]-0.5], [emin, emax],
                     '--', color='gray')
-    plot_sith(energies_per_DOF, 'all DOF', fig=fig, ax=axes[0][0], cbar=False)
+    plot_sith(energies_per_DOF, 'all DOF', fig=fig, ax=axes[0][0], cbar=False,
+              step=steps[0])
     plot_sith(energies_per_DOF[:dims[1]], 'Lengths DOF', fig=fig,
-              ax=axes[0][1], cbar=False)
+              ax=axes[0][1], cbar=False, step=steps[1])
     plot_sith(energies_per_DOF[dims[1]:dims[1]+dims[2]], 'Angles DOF', fig=fig,
-              ax=axes[1][0], cbar=False)
+              ax=axes[1][0], cbar=False, step=steps[2])
     plot_sith(energies_per_DOF[dims[1]+dims[2]:], 'Dihedral DOF', fig=fig,
-              ax=axes[1][1], cbar=True, axes=axes, aspect=40)
+              ax=axes[1][1], cbar=True, axes=axes, aspect=40, step=steps[3])
     plt.subplots_adjust(left=0.1,
                         bottom=0.1,
                         right=0.76,
@@ -674,6 +686,92 @@ def min_profile_from_several(files, indexes=[3, 2, 0], num_ranges=20):
             continue
 
     return time, var, ener
+
+
+def plot_gradient(axes, x, y, cmap=None, markersize=1):
+    """
+    Plot line with gradient:
+
+    Parameters
+    ==========
+    axes:
+        matplotlib axes to add the line.
+    x:
+        array with the x values
+    y:
+        array with the y values
+    """
+    if cmap is None:
+        try:
+            import cmocean as cmo
+            cmap = cmo.cm.algae
+        except ImportError:
+            cmap = mpl.colormaps['viridis']
+    points = len(x)
+    k = int(10000/points)
+    x2 = np.interp(np.arange(points * k), np.arange(points) * k, x)
+    y2 = np.interp(np.arange(points * k), np.arange(points) * k, y)
+    return axes.scatter(x2, y2, c=range(points * k), linewidths=0, marker='o',
+                        s=markersize, cmap=cmap)
+
+
+def plot_angles(sith, cmap=None):
+    if cmap is None:
+        try:
+            import cmocean as cmo
+            cmap = cmo.cm.algae
+        except ImportError:
+            cmap = mpl.colormaps['viridis']
+
+    distances = sith._reference.dims[1]
+    n_angles = len(sith._reference.ric[distances:])
+
+    fig = plt.figure(figsize=(10, 10))
+    ax1 = fig.add_subplot(2, 2, 1)
+    ax2 = fig.add_subplot(2, 2, 2, projection='polar')
+    ax3 = fig.add_subplot(2, 2, 3)
+    ax4 = fig.add_subplot(2, 2, 4, projection='polar')
+
+    # Plot values in cartesian
+
+    boundaries = np.arange(1, len(sith._deformed) + 2, 1)
+    normalize = mpl.colors.BoundaryNorm(boundaries-0.5, cmap.N)
+    for i, deformed in enumerate(sith._deformed):
+        ax1.plot(deformed.ric[distances:], '-o', markersize=1,
+                 color=cmap(normalize(i+0.5))[:3])
+
+    ax1.plot([0, n_angles], [np.pi, np.pi], '--', color='gray')
+    ax1.plot([0, n_angles], [-np.pi, -np.pi], '--', color='gray')
+    ax1.set_xlabel('Angles and Dihedral Angles', fontsize=20)
+    ax1.set_ylabel('values', fontsize=20)
+
+    # Plot values in Polar format
+    rics = []
+    for deformed in sith._deformed:
+        rics.append(deformed.ric[distances:])
+
+    rs = np.arange(len(np.array(rics).T[0]))
+    for dof in np.array(rics).T[1:]:
+        plot_gradient(ax2, dof, rs)
+
+    # Plot changes in Polar format
+    rs = np.arange(len(sith.deltaQ[0]))
+    for change in sith.deltaQ[distances:]:
+        plot_gradient(ax4, change, rs)
+    # Plot changes
+    for i, dof in enumerate(sith.deltaQ[distances:].T):
+        ax3.plot(dof, color=cmap(normalize(i+0.5))[:3])
+    ax3.plot([0, n_angles], [np.pi, np.pi], '--', color='gray')
+    ax3.plot([0, n_angles], [-np.pi, -np.pi], '--', color='gray')
+    ax3.set_xlabel('Angles and Dihedral Angles', fontsize=20)
+    ax3.set_ylabel('changes', fontsize=20)
+    print("Note: in the polar representation, each line is a DOF and each " +
+          "radio is a deformation state. In the cartesian representation, " +
+          "the x axis corresponds to the DOF and the each line is the " +
+          "deformation. \n\n The cartesian representation shows that the " +
+          "values are in the expected range. The polar representation shows" +
+          " that the changes are smooth.")
+    return [ax1, ax2, ax3, ax4]
 
 
 if __name__ == '__main__':
