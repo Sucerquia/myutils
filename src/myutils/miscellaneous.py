@@ -10,6 +10,92 @@ from ase.io import read, write
 import sys
 import matplotlib.pyplot as plt
 import glob
+from MDAnalysis.analysis.dihedrals import Ramachandran
+import MDAnalysis as ma
+from myutils.sith.compare_DOFs import compare
+from myutils.sith.ase_increase_distance import increase_distance
+from myutils.sith.sith_analysis import sith_analysis
+from pathlib import Path
+
+
+def ramachandran(sith, pdb_file):
+    """
+    Returns the ramachandran angles of several stretched configurations.
+    each compoe
+
+    Parameters
+    ==========
+    sith:
+        sith object.
+    pdb_file:
+        pdb file that contains the structural information. It doesn't matter if
+        the coordinates don't correspond to something relevant. The importance
+        are in the structural description (aminoacids, number of residue...)
+    """
+    u = ma.Universe(pdb_file)
+    r = Ramachandran(u.select_atoms('protein')).run()
+    rama_angles = []
+    u = ma.Universe(pdb_file)
+    for conf in sith._deformed:   
+        u.load_new(conf.atoms.positions)
+        r = Ramachandran(u.select_atoms('protein')).run()
+        rama_angles.extend(r.results.angles.copy())
+    rama_angles = np.array(rama_angles)
+
+    return rama_angles
+
+def plot_ramachandran(rama_angles, step=1, marker_size_polar=5, marker_size_rama=20,
+                      label_dots='Amino\nAcids'):
+    """
+    Shows the evolution of each phi-psi angle of each aminoacid in a polar and
+    Ramachandran plot.
+
+    Parameters
+    ==========
+    """
+    fig = plt.figure(figsize=(10, 17))
+
+    ax1 = fig.add_subplot(2, 2, 1, projection='polar')
+    ax2 = fig.add_subplot(2, 2, 2, projection='polar')
+    ax3 = fig.add_subplot(2, 1, 2)
+
+    rs = np.arange(len(rama_angles))
+    for j in range(len(rama_angles[0])):
+        ax3.scatter(rama_angles[:,j][:,0], rama_angles[:,j][:,1],
+                    s=marker_size_rama)
+        ax1.plot(rama_angles[:,j][:,0]*np.pi/180, rs, '*-',
+                 markersize=marker_size_polar, label=str(j+1))
+        ax2.plot(rama_angles[:,j][:,1]*np.pi/180, rs, '*-',
+                 markersize=marker_size_polar)
+        
+    ax1.set_title(r'$\phi$', fontsize=20)
+    leg = ax1.legend(loc=[1     , 0])
+    leg.set_title(label_dots)
+    ax2.set_title(r'$\psi$', fontsize=20)
+
+    ax1.set_rlabel_position(315)
+    scale=0.08
+    ax1.set_rticks(rs[::step])
+    ax1.set_ylim([-rs[-1]*scale, rs[-1]*(1+scale)])
+
+    ax2.set_rlabel_position(315)
+    ax2.set_rticks(rs[::step])
+    ax2.set_ylim([-rs[-1]*scale, rs[-1]*(1+scale)])
+
+    ax3.set_position(Bbox([[0.125, 0.125], [0.9, 0.58]]), which='both')
+    ax3.plot([0,0], [-180,180], color='gray')
+    ax3.plot([-180,180], [0,0], color='gray')
+    ticks = np.arange(-180, 180.1, 45, dtype=int)
+    ax3.set_xticks(ticks)
+    ax3.set_yticks(ticks)
+    ax3.set_xlim([-180.1, 180.1])
+    ax3.set_ylim([-180.1, 180.1])
+    ax3.set_xlabel(r'$\phi$', fontsize=20)
+    ax3.set_ylabel(r'$\psi$', fontsize=20)
+    ax3.grid(True)
+    ax3.tick_params(axis='both', labelsize=15)
+
+    return [ax1, ax2, ax3]
 
 
 def distance(file, index1, index2):
@@ -33,10 +119,10 @@ def distance(file, index1, index2):
     index2.
 
     Execute from terminal using:
-    python miscellaneous.py distance arg1 arg2 arg3
+    myutils distance arg1 arg2 arg3
 
     E.g.
-    python miscellaneous.py distance optimization.log 1 20
+    myutils distance optimization.log 1 20
     """
     index1 = int(index1)
     index2 = int(index2)
@@ -444,29 +530,73 @@ def cap_hydrogen_atoms(pdb_file):
     return indexes
 
 
-def all_hydrogen_atoms(file):
+def all_hydrogen_atoms(mol):
     """"
-    find the indexes of all the hydrogen atoms in the peptide.
+    find the indexes of all the hydrogen atoms in the peptide from an ASE.Atoms
+    object.
 
     Parameters
     ==========
-    file: string
-        name of the input file with the molecule of interest. The format of
-        this file has to be readable by ase. Please check: "ase info --formats"
+    mol: string
+        ASE.Atoms object to extract the hydrogen indexes.
 
     Return
     ======
     list of indexes.
     """
-    mol = read(file)
     indexes = np.where(mol.get_atomic_numbers() == 1)[0]
 
     return indexes + 1
 
 
-def plot_sith(dofs, xlabel, energy_units='a.u', fig=None, ax=None, cbar=True,
+def indexes_per_aminoacid(pdb_file):
+    with open(pdb_file, 'r') as file:
+        lines = file.readlines()
+    atoms = [line for line in lines if 'ATOM' in line]
+    aminoacids = np.genfromtxt(atoms, usecols=5, dtype=int)
+    indexes = np.genfromtxt(atoms, usecols=1, dtype=int)
+    atoms_per_aminoacids = {}
+    for i in range(1, max(aminoacids) + 1):
+        atoms_per_aminoacids[i] = []
+    for i in range(len(indexes)):
+        atoms_per_aminoacids[aminoacids[i]].append(indexes[i])
+    return atoms_per_aminoacids
+
+
+def dof_classificator(dofs_indexes, atoms_per_aminoacids):
+    list_aminos = {}
+    for i in range(1, max(atoms_per_aminoacids.keys()) + 1):
+        list_aminos[i] = np.array([], dtype=int)
+    for i in range(len(dofs_indexes)):
+        for j in atoms_per_aminoacids.keys():
+            if np.isin(dofs_indexes[i], atoms_per_aminoacids[j]).all():
+                list_aminos[j] = np.append(list_aminos[j],i)
+                break
+    return list_aminos
+
+
+def add_color_per_amino(sith, pdb_file, ax=None):
+    if ax is None:
+        fig, ax = plt.subplots(1,1)
+    atoms_per_aminoacids = indexes_per_aminoacid(pdb_file)
+    dofs_classified = dof_classificator(sith._reference.dimIndices, atoms_per_aminoacids)
+    init = dofs_classified[1] + 0.5
+    final = dofs_classified[1] + 1.5
+
+    cmap = plt.colormaps['tab10_r']
+    boundaries = np.arange(1, 11, 1)
+    normalize = mpl.colors.BoundaryNorm(boundaries-0.5, cmap.N)
+
+    for i in dofs_classified.keys():
+        init = dofs_classified[i] + 0.5
+        final = dofs_classified[i] + 1.5
+        for region in np.stack((init, final)).T:
+            ax.axvspan(region[0], region[1], color=cmap(normalize(i)), alpha=0.1)
+
+
+def plot_sith(dofs, xlabel, xlim, energy_units='a.u', fig=None, ax=None, cbar=True,
               cmap=None, orientation='vertical', labelsize=15,
-              axes=None, aspect=25, step=1):
+              axes=None, aspect=25, step=1, dofs_classified=None):
     """
     This function plots the energies per degrees of freedom from
     sith_object.energies
@@ -519,17 +649,18 @@ def plot_sith(dofs, xlabel, energy_units='a.u', fig=None, ax=None, cbar=True,
         cbar.set_ticks(boundaries[:-1])
         cbar.set_label(label="Stretched", fontsize=labelsize)
         cbar.ax.tick_params(labelsize=labelsize, rotation=rotation, length=0)
-
-    [ax.plot(dofs.T[i], '.-', markersize=10, color=cmap(normalize(i+0.5))[:3])
+    
+    [ax.plot(xlim, dofs.T[i], '.-', markersize=10, color=cmap(normalize(i+0.5))[:3])
      for i in range(len(dofs[0]))]
     ax.set_xlabel(xlabel, fontsize=20)
-    ax.set_xticks(np.arange(1, len(dofs.T[0]), step))
+    ax.set_xticks(np.arange(xlim[0], xlim[-1]+1, step))
+    ax.set_xlim([xlim[0]-0.5, xlim[-1]+0.5])
     ax.set_ylabel(f'energy [{energy_units}]', fontsize=20)
 
     return ax
 
 
-def plot_energies_in_DOFs(sith, steps=[1, 1, 1, 1]):
+def plot_energies_in_DOFs(sith, steps=[1, 1, 1, 1], sep_aminos=None, pdb_for_aminos=None):
     fig, axes = plt.subplots(2, 2, figsize=(18, 15))
 
     energies_per_DOF = sith.energies
@@ -541,14 +672,19 @@ def plot_energies_in_DOFs(sith, steps=[1, 1, 1, 1]):
                     color='gray')
     axes[0][0].plot([dims[1]+dims[2]-0.5, dims[1]+dims[2]-0.5], [emin, emax],
                     '--', color='gray')
-    plot_sith(energies_per_DOF, 'all DOF', fig=fig, ax=axes[0][0], cbar=False,
+    plot_sith(energies_per_DOF, 'all DOF', np.arange(1, dims[0]+1), fig=fig, ax=axes[0][0], cbar=False,
               step=steps[0])
-    plot_sith(energies_per_DOF[:dims[1]], 'Lengths DOF', fig=fig,
+    plot_sith(energies_per_DOF[:dims[1]], 'Lengths DOF', np.arange(1, dims[1]+1), fig=fig,
               ax=axes[0][1], cbar=False, step=steps[1])
-    plot_sith(energies_per_DOF[dims[1]:dims[1]+dims[2]], 'Angles DOF', fig=fig,
+    plot_sith(energies_per_DOF[dims[1]:dims[1]+dims[2]], 'Angles DOF', np.arange(dims[1]+1, dims[1]+dims[2]+1), fig=fig,
               ax=axes[1][0], cbar=False, step=steps[2])
-    plot_sith(energies_per_DOF[dims[1]+dims[2]:], 'Dihedral DOF', fig=fig,
+    plot_sith(energies_per_DOF[dims[1]+dims[2]:], 'Dihedral DOF', np.arange(dims[1]+dims[2]+1, dims[0]+1), fig=fig,
               ax=axes[1][1], cbar=True, axes=axes, aspect=40, step=steps[3])
+    
+    if pdb_for_aminos is not None:
+        x_limits = [ax.get_xlim() for ax in axes.flatten()]
+        [add_color_per_amino(sith, pdb_for_aminos, ax) for ax in axes.flatten()]
+
     plt.subplots_adjust(left=0.1,
                         bottom=0.1,
                         right=0.76,
@@ -715,7 +851,7 @@ def plot_gradient(axes, x, y, cmap=None, markersize=1):
                         s=markersize, cmap=cmap)
 
 
-def plot_angles(sith, cmap=None):
+def plot_angles(sith, cmap=None, gradient=True, markersize=5):
     if cmap is None:
         try:
             import cmocean as cmo
@@ -737,13 +873,16 @@ def plot_angles(sith, cmap=None):
     boundaries = np.arange(1, len(sith._deformed) + 2, 1)
     normalize = mpl.colors.BoundaryNorm(boundaries-0.5, cmap.N)
     for i, deformed in enumerate(sith._deformed):
-        ax1.plot(deformed.ric[distances:], '-o', markersize=1,
+        if gradient:
+            ax1.plot(deformed.ric[distances:], '-o', markersize=1,
                  color=cmap(normalize(i+0.5))[:3])
+        else:
+            ax1.plot(deformed.ric[distances:], '-o', markersize=1)
 
     ax1.plot([0, n_angles], [np.pi, np.pi], '--', color='gray')
     ax1.plot([0, n_angles], [-np.pi, -np.pi], '--', color='gray')
     ax1.set_xlabel('Angles and Dihedral Angles', fontsize=20)
-    ax1.set_ylabel('values', fontsize=20)
+    ax1.set_ylabel('values [radians]', fontsize=20)
 
     # Plot values in Polar format
     rics = []
@@ -752,20 +891,32 @@ def plot_angles(sith, cmap=None):
 
     rs = np.arange(len(np.array(rics).T[0]))
     for dof in np.array(rics).T[1:]:
-        plot_gradient(ax2, dof, rs)
+        if gradient:
+            ax2.plot(dof, rs, lw=0.5, alpha=0.5)
+            ax2.scatter(dof, rs, c=rs, marker='o', s=markersize, cmap=cmap)
+        else:
+            ax2.plot(dof, rs)
+
+    # Plot changes
+    for i, change in enumerate(sith.deltaQ[distances:].T):
+        if gradient:
+            ax3.plot(change, color=cmap(normalize(i+0.5))[:3])
+        else:
+            ax3.plot(change)
+
+    ax3.set_xlabel('Angles and Dihedral Angles', fontsize=20)
+    ax3.set_ylabel('changes [radians]', fontsize=20)
 
     # Plot changes in Polar format
-    rs = np.arange(len(sith.deltaQ[0]))
     for change in sith.deltaQ[distances:]:
-        plot_gradient(ax4, change, rs)
-    # Plot changes
-    for i, dof in enumerate(sith.deltaQ[distances:].T):
-        ax3.plot(dof, color=cmap(normalize(i+0.5))[:3])
-    ax3.plot([0, n_angles], [np.pi, np.pi], '--', color='gray')
-    ax3.plot([0, n_angles], [-np.pi, -np.pi], '--', color='gray')
-    ax3.set_xlabel('Angles and Dihedral Angles', fontsize=20)
-    ax3.set_ylabel('changes', fontsize=20)
-    print("Note: in the polar representation, each line is a DOF and each " +
+        if gradient:
+            ax4.plot(change, rs, lw=0.5, alpha=0.5)
+            ax4.scatter(change, rs, c=rs, marker='o', s=markersize, cmap=cmap)
+        else:
+            ax4.plot(change, rs)
+
+    if not gradient:
+        print("Note: in the polar representation, each line is a DOF and each " +
           "radio is a deformation state. In the cartesian representation, " +
           "the x axis corresponds to the DOF and the each line is the " +
           "deformation. \n\n The cartesian representation shows that the " +
@@ -774,7 +925,10 @@ def plot_angles(sith, cmap=None):
     return [ax1, ax2, ax3, ax4]
 
 
-if __name__ == '__main__':
+def main():
+    run_in_terminal = ['optimization',
+                       'stretching',
+                       'workflow']
     if sys.argv[1] == '-h':
         functions = ['distance',
                      'plot_sith',
@@ -788,7 +942,10 @@ if __name__ == '__main__':
                      'cap_hydrogen_atoms',
                      'all_hydrogen_atoms',
                      'min_profile',
-                     'min_profile_from_several']
+                     'min_profile_from_several',
+                     'compare_DOFs','optimization',
+                     'stretching',
+                     'workflow']
 
         functions.sort()
 
@@ -801,9 +958,16 @@ if __name__ == '__main__':
             if function[0] != '_' and function[0] != '.':
                 print("-   "+function)
         print("\nFor detailed information of each function action, use\n" +
-              "python miscellaneous.py <function> -h\n")
+              "myutils <function> -h\n")
+    
+    elif sys.argv[1] in run_in_terminal:
+        output_terminal(str(Path(__file__).parent) + 'sith/' + sys.argv[1]+'.sh '+' '.join(sys.argv[2:]))
 
     elif '-h' in sys.argv:
         print(globals()[sys.argv[1]].__doc__)
     else:
-        print(globals()[sys.argv[1]](*sys.argv[2:]))
+        globals()[sys.argv[1]](*sys.argv[2:])
+
+
+if __name__ == '__main__':
+    main()

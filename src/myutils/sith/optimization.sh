@@ -46,7 +46,7 @@ done
 # test dependencies
 ase -h &> /dev/null || fail "
     ++++++++ SYS_OPT_MSG: ERROR - This code needs ase ++++++++"
-which g09 &> /dev/null || fail "
+command -V g09 &> /dev/null || fail "
     ++++++++ SYS_OPT_MSG: ERROR - This code needs g09 ++++++++"
 # set up finished
 
@@ -65,7 +65,7 @@ do
     ++++++++ SYS_OPT_MSG: VERBOSE - $pep optimization from last configuration
     of $name ++++++++"
     label=${name#*e}
-    python $mine/utils/ase_increase_distance.py \
+    python $mine/utils/sith/ase_increase_distance.py \
         $forcedir/analysis_largestconfig-md_0_$label.pdb $name  0 1 0 &&\
     sed -i "1a %NProcShared=8" $name.com && \
     sed -i "3a opt(modredun,calcfc)" $name.com &&\
@@ -96,4 +96,5 @@ cd ..
 echo "$index1 $index2" > tmp_indexes.txt
 echo "
     ++++++++ SYS_OPT_MSG: VERBOSE - $pep optimization finishes ++++++++"
+
 exit 0

@@ -23,10 +23,11 @@ locally. Consider the next options:
     -f   forces to be used in the pulling step in [kJ mol^-1 nm^-2]. 
          Default 300. The argument \"10 300 200\" define several forces.
     -g   gromacs binary. For example gmx or gmx_mpi. Default gmx.
+    -k   keep all the files of the process. By default, only stretching files 
+         are kept.
     -n   pepgen options.
     -p   follow the workflow until pulling classicaly and generating analysis.
     -o   follow the workflow until optimization of the stretched configuration.
-    -r   restart. the code starts looking for the directories of each step.
     -s   follow the workflow until stretching by constrains.
 
 
@@ -53,28 +54,28 @@ stretch='false'
 peptides=$(echo $@ | sed "s/-.*//")
 cascade='false'
 gmx='gmx'
-restart='true'
 forces="300" # [kJ mol^-1 nm^-2].
+keep='false'
 
-
-while getopts 'a:cg:noprsf:h' flag; 
+while getopts 'a:cg:knopsf:h' flag; 
 do
     case "${flag}" in
       a) peptides=${OPTARG} ;;
       c) cascade='true' ;;
+      k) keep='true' ;;
       g) gmx=${OPTARG} ;;
       o) opt='true' ;;
       p) pulling='true' ;;
       s) stretch='true' ;;
       f) forces=${OPTARG} ;;
       n) pep_options=${OPTARG} ;;
-      r) restart='true' ;;
 
       h) print_help
     esac
 done
 
 echo "peptides $peptides"
+
 if $cascade
 then
     echo "This JOB will be run in the Node:"
@@ -171,9 +172,21 @@ do
     python $utils/sith/sith_analysis.py ./stretching/$pep-stretched00.fchk \
            ./stretching/ || fail "
     ++++++++ WorkFlow_MSG: ERROR - Sith analysis of $pep failed. ++++++++"
-
+    
+    if ! $keep
+    then
+        echo "
+    ++++++++ WorkFlow_MSG: VERBOSE - The worflow finished successfully. Then,
+    only the stretching will be keeped. ++++++++"
+        rm -rf equilibrate
+        rm -rf force*
+        rm -rf optimization
+        mv stretching/* .
+        rm -rf stretching
+    fi
     # Going back to initial directory
     cd ..
+    fi 
 done
 
 exit 0

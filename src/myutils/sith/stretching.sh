@@ -22,6 +22,7 @@ function fail {
 size=0.2
 n_stretch=25
 mydir='/hits/basement/mbm/sucerquia/'
+
 while getopts 'p:n:s:h' flag; do
     case "${flag}" in
       p) pep=${OPTARG} ;;
@@ -35,7 +36,7 @@ done
 # check dependencies
 ase -h &> /dev/null || fail "
     ++++++++ STRETCHING_MSG: ERROR - This code needs ASE ++++++++"
-which g09 &> /dev/null || fail "
+command -V g09 &> /dev/null || fail "
     ++++++++ STRETCHING_MSG: ERROR - This code needs gaussian ++++++++"
 # set up finished
 
@@ -44,14 +45,14 @@ echo "
     ++++++++ STRETCHING_MSG: VERBOSE - $pep streching starts ++++++++"
 
 # C-CAP indexes in python convention
-tmp=$(cat tmp_indexes.txt)
+tmp=$(cat tmp_indices.txt)
 indexes=( $tmp )
 index1=$((${indexes[0]}))
 index2=$((${indexes[1]}))
+
 # check that already read the indexes:
-[ ${#index1} -eq 0 ] || [ ${#index2} -eq 0 ] && fail "
+[ $index1 -eq 0 ] && [ $index2 -eq 0 ] && fail "
     ++++++++ STRETCHING_MSG: ERROR - Not recognized indexes ++++++++"
-rm tmp_indexes.txt
 echo "
     ++++++++ STRETCHING_MSG: VERBOSE - This code will stretch the atoms with
     the indexes $index1 $index2 ++++++++"
@@ -74,7 +75,7 @@ do
         python $mydir/utils/gromacs/trans_xyz.py $pep-stretched${namei}.log xyz || failed "
     ++++++++ STRETCHING_MSG: ERROR - Transforming log file to xyz ++++++++"
         mv $pep-stretched${namei}_optimized_out.xyz $pep-stretched${namei}.xyz
-        python $mydir/utils/ase_increase_distance.py \
+        python $mydir/utils/sith/ase_increase_distance.py \
                $pep-stretched$namei.xyz $pep-stretched${nameiplusone} $index1 \
                $index2 $size || fail "
     ++++++++ STRETCHING_MSG: ERROR - Preparating the input of gaussian ++++++++"
@@ -103,7 +104,7 @@ do
             echo "
     ++++++++ STRETCHING_MSG: VERBOSE - Optimization did not converged with dista-
     nce $(($i + 1))*0.2 . Then, a new trial will start now. ++++++++"
-            python $mydir/utils/ase_increase_distance.py \
+            python $mydir/utils/sith/ase_increase_distance.py \
                 $pep-stretched${nameiplusone}.log \
                 $pep-stretched${nameiplustwo} 0 1 0
             # save the failed files in ...-stretched<number>a.*
@@ -138,14 +139,16 @@ do
     ++++++++ STRETCHING_MSG: VERBOSE - Checking DOFs of stretching ${nameiplusone} ++++++++"
     python $mydir/utils/sith/compare_DOFs.py $pep-stretched00.fchk \
            $pep-stretched${nameiplusone}.fchk \
-           $index1 $index2 || mkdir rupture ; mv $pep-stretched${nameiplusone}.* rupture ; echo "
-    ++++++++ STRETCHING_MSG: WARNING - As ${nameiplusone} removed one DOF, the stretching will stop here ++++++++" ; break
+           $(( $index1 + 1 )) $(( $index2 + 1 )) || { mkdir rupture ; mv $pep-stretched${nameiplusone}.* rupture ; echo "
+    ++++++++ STRETCHING_MSG: WARNING - As ${nameiplusone} removed one DOF, the stretching will stop here ++++++++" ; break ; }
     i=$(( $i + 1 ))
 done
 cd ..
 
 echo "
     ++++++++ STRETCHING_MSG: VERBOSE - $pep streching finished ++++++++"
+
+rm tmp_indices.txt
 
 exit 0
 

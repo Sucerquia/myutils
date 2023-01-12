@@ -62,7 +62,7 @@ pull-coord1-geometry    = direction-periodic
 pull-coord1-dim         = Y N N
 pull-coord1-vec         = 1 0 0
 pull-coord1-start       = yes
-pull-coord1-k           = -<force>  ; kJ mol^-1 nm^-2
+pull-coord1-k           = -<force>  ; kJ mol^-1 nm^-1
 
 pull-coord2-groups      = 0 2
 pull-coord2-type        = constant-force 
@@ -70,4 +70,4 @@ pull-coord2-geometry    = direction-periodic
 pull-coord2-dim         = Y N N
 pull-coord2-vec         = 1 0 0
 pull-coord2-start       = yes
-pull-coord2-k           = <force> ; kJ mol^-1 nm^-2
+pull-coord2-k           = <force> ; kJ mol^-1 nm^-1

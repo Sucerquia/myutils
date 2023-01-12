@@ -7,7 +7,7 @@ This code executes the pulling adding an external force along the x axis to the
 carbon atoms of the NME and ACE caps. Consider the next options:
 
     -g    gromacs binary. For example gmx or gmx_mpi. Default gmx.
-    -f    forces to stretch the peptide in [kJ mol^-1 nm^-2].
+    -f    forces to stretch the peptide in [kJ mol^-1 nm^-1].
 
 To run:
  utils/gromacs/pulling.sh -f <force> -g <gmx_executable> 

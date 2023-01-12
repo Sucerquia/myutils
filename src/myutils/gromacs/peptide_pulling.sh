@@ -7,7 +7,7 @@ Consider the next options:
    
     -a    properties you want to analyse. For example \"-d -r\". Default \"-d -l\".
           For more information, check: utils/gromacs/analysis.sh -h
-    -f    forces to stretch the peptide in [kJ mol^-1 nm^-2]. Default 200
+    -f    forces to stretch the peptide in [kJ mol^-1 nm^-1]. Default 200
     -g    gromacs binary. For example gmx or gmx_mpi. Default gmx.
     -o    pepgen flags
     -p    peptide.
@@ -67,7 +67,7 @@ then
     echo "
     ++++++++ SYS_PULL_MSG: WARNING - You didn't specify which forces you want to
     use. Then the pulling will be done using the values by default (10 30 50
-    100 300 500) [kJ mol^-1 nm^-2] ++++++++"
+    100 300 500) [kJ mol^-1 nm^-1] ++++++++"
     forces="200"
 fi
 
