@@ -15,6 +15,7 @@ import MDAnalysis as ma
 from myutils.sith.compare_DOFs import compare
 from myutils.sith.ase_increase_distance import increase_distance
 from myutils.sith.sith_analysis import sith_analysis
+from myutils.sith.trans_xyz import log2xyz
 from pathlib import Path
 
 
@@ -945,7 +946,8 @@ def main():
                      'min_profile_from_several',
                      'compare_DOFs','optimization',
                      'stretching',
-                     'workflow']
+                     'workflow',
+                     'log2xyz']
 
         functions.sort()
 

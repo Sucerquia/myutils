@@ -2,7 +2,6 @@
 
 #SBATCH -N 1                   # number of nodes
 #SBATCH -n 8
-#SBATCH -p cascade.p
 #SBATCH --job-name="workflow"       #job name
 #SBATCH -t 24:00:00
 #SBATCH --output=peptides_analysis-%j.o
@@ -17,29 +16,20 @@ This tool executes the sith analysis in a set of peptides defined as arguments.
 You may use this script as TEMPLATE to submit a Job in cascade or to execute
 locally. Consider the next options:
     
-    -a   chains of aminoacids to ve evaluated. For example, \"AAA GG\" would 
-         analyse a trialanine and a glycineglycine peptide.
+    -a   chains of aminoacids to ve evaluated. For example, \"AAA\" would 
+         analyse a trialanine peptide.
     -c   run in cascade. (modules are loaded)
-    -f   forces to be used in the pulling step in [kJ mol^-1 nm^-2]. 
-         Default 300. The argument \"10 300 200\" define several forces.
-    -g   gromacs binary. For example gmx or gmx_mpi. Default gmx.
-    -k   keep all the files of the process. By default, only stretching files 
-         are kept.
     -n   pepgen options.
-    -p   follow the workflow until pulling classicaly and generating analysis.
-    -o   follow the workflow until optimization of the stretched configuration.
-    -s   follow the workflow until stretching by constrains.
-
+    -r   restart. In this case, run from the directory of the precreated peptide.
 
     -h   prints this message.
 
-NOTE 1: Please, add the flags after the peptides.
-
-NOTE 2: if you do not give any flag, the code will follow the whole workflow,
+NOTE 1: if you do not give any flag, the code will follow the whole workflow,
 namely, until aplying the JEDI method with SITH.
 "
 exit 0
 }
+
 # Function that returns the error message and stops the run if something fails.
 function fail {
     printf '%s\n' "$1" >&2 
@@ -47,49 +37,53 @@ function fail {
 }
 
 # General variables
-utils="/hits/basement/mbm/sucerquia/utils/"
-pulling='false'
-opt='false'
-stretch='false'
 peptides=$(echo $@ | sed "s/-.*//")
 cascade='false'
-gmx='gmx'
-forces="300" # [kJ mol^-1 nm^-2].
-keep='false'
+restart=''
 
-while getopts 'a:cg:knopsf:h' flag; 
+
+while getopts 'a:cnrh' flag; 
 do
     case "${flag}" in
       a) peptides=${OPTARG} ;;
       c) cascade='true' ;;
-      k) keep='true' ;;
-      g) gmx=${OPTARG} ;;
-      o) opt='true' ;;
-      p) pulling='true' ;;
-      s) stretch='true' ;;
-      f) forces=${OPTARG} ;;
       n) pep_options=${OPTARG} ;;
+      r) restart='-r' ;;
 
       h) print_help
     esac
 done
 
-echo "peptides $peptides"
+# starting information
+echo "
+    ++++++++ WorkFlow_MSG: VERBOSE - execution information +++++++++++++++++++"
+echo " * Date:"
+date
+echo "* Command:"
+echo $0 $@
 
 if $cascade
 then
     echo "This JOB will be run in the Node:"
     echo $SLURM_JOB_NODELIST
     cd $SLURM_SUBMIT_DIR
+    # check dependencies
+    module purge
+    source $HOME/.bashrc
+    source /etc/profile.d/modules.sh
+    source /hits/basement/mbm/sucerquia/exec/load_g09.sh
 fi
 
-# check dependencies
+echo "
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+
 if [ ${#peptides} -eq 0 ]
 then 
     fail "
     ++++++++ WorkFlow_MSG: ERROR - This code needs one peptide. Please, define it
     using the flag -a. For more info, use \"../workflow -h\" ++++++++"
 fi
+
 # set up finished
 
 for pep in $peptides
@@ -97,96 +91,44 @@ do
     # Creation of the peptide directory and moving inside.
 
     # ---- firstly, backup previous directories with the same name
-    bck=$pep-bck_1
-    if [ -d $pep ]
-    then 
-        bck_i=2
-        while [ -d $bck ]
-        do
-            bck=$pep-bck_$bck_i
-            bck_i=$(( $bck_i + 1 ))
-        done
-        echo "
+    if [[ $restart != '-r' ]]
+    then
+        pepgen -h &> /dev/null || fail "
+    ++++++++ SYS_PULL_MSG: ERROR - This code needs pepgen ++++++++"
+        bck=$pep-bck_1
+        if [ -d $pep ]
+        then 
+            bck_i=2
+            while [ -d $bck ]
+            do
+                bck=$pep-bck_$bck_i
+                bck_i=$(( $bck_i + 1 ))
+            done
+            echo "
     ++++++++ WorkFlow_MSG: WARNING - pep directory arealdy exist. This directory
     will be backed up in $bck. ++++++++"
-        mv $pep $bck
-    fi
-    mkdir $pep
-    cd $pep
-
-    # Creation and pulling
-    if $cascade
-    then
-        module purge
-        module use /hits/sw/mcm/modules
-        module load mcm/molbio/plumed/2.7.2-cascade
-        export GMX_NO_MPI_BIN="/hits/fast/mcm/app/plumed/plumed-2.7.2/gromacs-2020.5/bin" 
-        export OMP_NUM_THREADS=2
-        
-        $utils/gromacs/peptide_pulling.sh -p $pep -g $GMXBIN/gmx_mpi -o $pep_options || fail "
-    ++++++++ WorkFlow_MSG: ERROR - Pulling of $pep failed. ++++++++"
+            mv $pep $bck
+        fi
+    
+        mkdir $pep
+        cd $pep
+        # Creation of peptide
+        pepgen $pep tmp -s flat $pep_options || fail "
+    ++++++++ SYS_PULL_MSG: ERROR - Creating peptide $pep ++++++++"
+        mv tmp/pep.pdb ./$pep-stretched00.pdb
+        rm -r tmp
     else
-        $utils/gromacs/peptide_pulling.sh -p $pep -g $gmx || fail "
-    ++++++++ WorkFlow_MSG: ERROR - Pulling of $pep failed. ++++++++"
+        echo "
+    ++++++++ WorkFlow_MSG: WARNING - restarted. ++++++++"
     fi
     
-    if $pulling
-    then 
-        cd .. 
-        echo "
-    ++++++++ WorkFlow_MSG: WARNING - Workflow stopped after pulling ++++++++"
-        continue
-    fi
-
-    # Optimization
-    if $cascade
-    then
-        module purge
-        source $HOME/.bashrc
-        source /etc/profile.d/modules.sh
-        source /hits/basement/mbm/sucerquia/exec/load_g09.sh
-    fi
-    $utils/sith/optimization.sh -p $pep || fail "
-    ++++++++ WorkFlow_MSG: ERROR - Optimization of $pep failed. ++++++++"
-    
-    if $opt
-    then 
-        cd ..
-        echo "
-    ++++++++ WorkFlow_MSG: WARNING - Workflow stopped after optimization ++++++++"
-        continue
-    fi
-
     # Stretching
-    $utils/sith/stretching.sh -p $pep || fail "
+    myutils stretching -p $pep $restart || fail "
     ++++++++ WorkFlow_MSG: ERROR - Stretching of $pep failed. ++++++++"
-    
-    if $stretch
-    then
-        cd ..
-        echo "
-    ++++++++ WorkFlow_MSG: WARNING - Workflow stopped after stretching ++++++++"
-        continue
-    fi
 
-    python $utils/sith/sith_analysis.py ./stretching/$pep-stretched00.fchk \
+    myutils sith_analysis ./stretching/$pep-stretched00.fchk \
            ./stretching/ || fail "
     ++++++++ WorkFlow_MSG: ERROR - Sith analysis of $pep failed. ++++++++"
-    
-    if ! $keep
-    then
-        echo "
-    ++++++++ WorkFlow_MSG: VERBOSE - The worflow finished successfully. Then,
-    only the stretching will be keeped. ++++++++"
-        rm -rf equilibrate
-        rm -rf force*
-        rm -rf optimization
-        mv stretching/* .
-        rm -rf stretching
-    fi
-    # Going back to initial directory
-    cd ..
-    fi 
 done
 
 exit 0
