@@ -1,3 +1,5 @@
+#!/bin/bash
+
 print_help() {
 echo "
 This tool obtains the stretched configuration by increasing the distance between
@@ -14,13 +16,13 @@ caps carbon, constraining and optimizing using BMK exchange-correlation.
 exit 0
 }
 # Function that returns the error message and stops the run if something fails.
-function fail {
+fail () {
     printf '%s\n' "$1" >&2
     exit "${2-1}"
 }
 
 # Function to rename all the files of interest
-function mv_stretching_files {
+mv_stretching_files () {
     mv $1.log $1-$2.log ;
     mv $1.com $1-$2.com ;
     mv $1.chk $1-$2.chk ;
@@ -70,7 +72,6 @@ then
     i=$(( ${last:0-2} ))
 
     # try to take the last optimization
-    
 	nameiplusone=$(printf "%02d" $(($i + 1)))
     retake='true'
     # searchs advances in i+1a

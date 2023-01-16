@@ -13,25 +13,22 @@
 print_help() {
 echo "
 This tool executes the sith analysis in a set of peptides defined as arguments.
-You may use this script as TEMPLATE to submit a Job in cascade or to execute
-locally. Consider the next options:
+You can use this code to submit a Job in cascade or to execute it locally. 
+Consider the next options:
     
-    -a   chains of aminoacids to ve evaluated. For example, \"AAA\" would 
+    -a   chains of aminoacids to be evaluated. For example, \"AAA\" would 
          analyse a trialanine peptide.
     -c   run in cascade. (modules are loaded)
     -n   pepgen options.
     -r   restart. In this case, run from the directory of the precreated peptide.
 
     -h   prints this message.
-
-NOTE 1: if you do not give any flag, the code will follow the whole workflow,
-namely, until aplying the JEDI method with SITH.
 "
 exit 0
 }
 
 # Function that returns the error message and stops the run if something fails.
-function fail {
+fail () {
     printf '%s\n' "$1" >&2 
     exit "${2-1}" 
 }
@@ -42,7 +39,7 @@ cascade='false'
 restart=''
 
 
-while getopts 'a:cnrh' flag; 
+while getopts 'a:cn:rh' flag; 
 do
     case "${flag}" in
       a) peptides=${OPTARG} ;;
@@ -56,15 +53,15 @@ done
 
 # starting information
 echo "
-    ++++++++ WorkFlow_MSG: VERBOSE - execution information +++++++++++++++++++"
+    ++++++++ WorkFlow_MSG: VERBOSE - JOB information +++++++++++++++++++++++++"
 echo " * Date:"
 date
-echo "* Command:"
+echo " * Command:"
 echo $0 $@
 
 if $cascade
 then
-    echo "This JOB will be run in the Node:"
+    echo " * This JOB will be run in the Node:"
     echo $SLURM_JOB_NODELIST
     cd $SLURM_SUBMIT_DIR
     # check dependencies
@@ -72,6 +69,7 @@ then
     source $HOME/.bashrc
     source /etc/profile.d/modules.sh
     source /hits/basement/mbm/sucerquia/exec/load_g09.sh
+    conda activate myutils
 fi
 
 echo "
@@ -80,10 +78,9 @@ echo "
 if [ ${#peptides} -eq 0 ]
 then 
     fail "
-    ++++++++ WorkFlow_MSG: ERROR - This code needs one peptide. Please, define it
-    using the flag -a. For more info, use \"../workflow -h\" ++++++++"
+    ++++++++ WorkFlow_MSG: ERROR - This code needs one peptide. Please, define
+    it using the flag -a. For more info, use \"myutils workflow -h\" +++++++++"
 fi
-
 # set up finished
 
 for pep in $peptides
@@ -106,7 +103,7 @@ do
             done
             echo "
     ++++++++ WorkFlow_MSG: WARNING - pep directory arealdy exist. This directory
-    will be backed up in $bck. ++++++++"
+    will be backed up in $bck. ++++++++++++++++++++++++++++"
             mv $pep $bck
         fi
     
@@ -114,7 +111,7 @@ do
         cd $pep
         # Creation of peptide
         pepgen $pep tmp -s flat $pep_options || fail "
-    ++++++++ SYS_PULL_MSG: ERROR - Creating peptide $pep ++++++++"
+    ++++++++ WorkFlow_MSG: ERROR - Creating peptide $pep ++++++++"
         mv tmp/pep.pdb ./$pep-stretched00.pdb
         rm -r tmp
     else
@@ -123,7 +120,7 @@ do
     fi
     
     # Stretching
-    myutils stretching -p $pep $restart || fail "
+    $( myutils stretching ) -p $pep $restart || fail "
     ++++++++ WorkFlow_MSG: ERROR - Stretching of $pep failed. ++++++++"
 
     myutils sith_analysis ./stretching/$pep-stretched00.fchk \

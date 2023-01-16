@@ -35,7 +35,6 @@ def compare(fchk1, fchk2, constrain1, constrain2):
         dofs2.remove((constrain1, constrain2))
 
     except ValueError:
-        print("not removed anything from 2")
         pass
     #assert len(dofs1) == len(dofs2), "there are DOF in one that is not in the other"
 
