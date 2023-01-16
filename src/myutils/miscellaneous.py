@@ -19,6 +19,125 @@ from myutils.sith.trans_xyz import log2xyz
 from pathlib import Path
 
 
+class peptide_info:
+    def __init__(self, pdb_file, withx=0):
+        pdb_header = ['END',
+                      'MODEL',
+                      'CRYST1',
+                      'REMARK',
+                      'TITLE',
+                      'TER']
+        indexes_aminos = np.loadtxt(pdb_file, comments=pdb_header,
+                                    usecols=5+withx, dtype=int)
+        names_aminos = np.loadtxt(pdb_file, comments=pdb_header,
+                                  usecols=3, dtype=str)
+        indexes_atoms = np.loadtxt(pdb_file, comments=pdb_header,
+                                   usecols=1, dtype=int)
+        self.name_atoms_raw = np.loadtxt(pdb_file, comments=pdb_header,
+                                     usecols=2, dtype=str)
+        self.atom_names = {}
+        self.amino_name = {}
+        self.atom_indexes = {}
+        self.amino_info = {}
+
+        for i in range(len(indexes_aminos)):
+            self.amino_name[indexes_aminos[i]] = names_aminos[i]
+            self.atom_names[indexes_aminos[i]] = []
+            self.atom_indexes[indexes_aminos[i]] = []
+            self.amino_info[indexes_aminos[i]] = {}
+        for i in range(len(indexes_aminos)):
+            self.atom_names[indexes_aminos[i]].append(self.name_atoms_raw[i])
+            self.atom_indexes[indexes_aminos[i]].append(indexes_atoms[i])
+            self.amino_info[indexes_aminos[i]][self.name_atoms_raw[i]] = indexes_atoms[i]
+    
+    def endo_exo_proline(self, sith):
+        """
+        Endo, exo states must correspond with the first angle equal to zero.
+        """
+        prolines = np.where(np.array(list(self.amino_name.values())) == 'PRO')[0]
+        angles = np.array([[0, 0]])
+        for i in prolines:
+            isolated_proline = self.amino_info[ i + 1 ]
+            for conf in sith._deformed:
+                try:
+                    index = conf.dimIndices.index((isolated_proline['CB'],
+                                                   isolated_proline['CA'],
+                                                   isolated_proline['N'],
+                                                   isolated_proline['CD']))
+                    angle1 = conf.ric[index]*180/np.pi
+                except ValueError:
+                    index = conf.dimIndices.index((isolated_proline['CD'],
+                                                   isolated_proline['N'],
+                                                   isolated_proline['CA'],
+                                                   isolated_proline['CB']))
+                    angle1 = -conf.ric[index]*180/np.pi
+                try:
+                    index = conf.dimIndices.index((isolated_proline['N'],
+                                                   isolated_proline['CA'],
+                                                   isolated_proline['CB'],
+                                                   isolated_proline['CG']))
+                    angle2 = conf.ric[index]*180/np.pi
+                except ValueError:
+                    index = conf.dimIndices.index((isolated_proline['CG'],
+                                                   isolated_proline['CB'],
+                                                   isolated_proline['CA'],
+                                                   isolated_proline['N']))
+                    angle2 = -conf.ric[index]*180/np.pi
+                angles = np.append(angles, [[angle1, angle2]], axis=0)
+
+        return np.delete(angles, 0, 0)
+
+    def xis_angles(self, sith):
+        """
+        Endo, exo states must correspond with the first angle equal to zero.
+        """
+        prolines = np.where(np.array(list(self.amino_name.values())) == 'PRO')[0]
+        angles = np.array([[0, 0]])
+        for i in prolines:
+            isolated_proline = self.amino_info[ i + 1 ]
+            for conf in sith._deformed:
+                try:
+                    index = conf.dimIndices.index((isolated_proline['N'],
+                                                   isolated_proline['CD'],
+                                                   isolated_proline['CG'],
+                                                   isolated_proline['CB']))
+                    angle1 = -conf.ric[index]*180/np.pi
+                except ValueError:
+                    index = conf.dimIndices.index((isolated_proline['CB'],
+                                                   isolated_proline['CG'],
+                                                   isolated_proline['CD'],
+                                                   isolated_proline['N']))
+                    angle1 = conf.ric[index]*180/np.pi
+                try:
+                    index = conf.dimIndices.index((isolated_proline['N'],
+                                                   isolated_proline['CA'],
+                                                   isolated_proline['CB'],
+                                                   isolated_proline['CG']))
+                    angle2 = conf.ric[index]*180/np.pi
+                except ValueError:
+                    index = conf.dimIndices.index((isolated_proline['CG'],
+                                                   isolated_proline['CB'],
+                                                   isolated_proline['CA'],
+                                                   isolated_proline['N']))
+                    angle2 = -conf.ric[index]*180/np.pi
+                angles = np.append(angles, [[(angle1+angle2)/(2*np.cos(4*np.pi/5)),
+                                             (angle1-angle2)/(2*np.cos(4*np.pi/5))]], axis=0)
+
+        return np.delete(angles, 0, 0)
+
+
+def inner_ring_angles(angles, lim=[-180, 180]):
+    _, ax = plt.subplots(1,1, figsize=(5,5))
+    ax.plot(angles.T[0], angles.T[1], '*')
+    ax.plot([0, 0], [-180, 180], color='gray', lw=0.5)
+    ax.plot([-180, 180], [0, 0], color='gray', lw=0.5)
+    ax.set_xlabel('CB-CA-N-CD')
+    ax.set_ylabel('N-CA-CB-CG')
+    ax.set_xlim(lim)
+    ax.set_ylim(lim)
+
+    return ax
+
 def ramachandran(sith, pdb_file):
     """
     Returns the ramachandran angles of several stretched configurations.
@@ -133,7 +252,7 @@ def distance(file, index1, index2):
     return d
 
 
-def output_terminal(cmd, **kwargs):
+def output_terminal(cmd, print_output=False, **kwargs):
     """
     Runs a command in a terminal and save the output in a list
     of strings
@@ -156,8 +275,11 @@ def output_terminal(cmd, **kwargs):
     out1, err1 = p.communicate()
     out, err = out1.decode('ascii'), err1.decode('ascii')
 
-    assert not p.returncode, "ERROR executing the function output_terminal\n" \
-                             + err
+    if print_output and out:
+        print(out)
+
+    assert not p.returncode, "ERROR executing the function output_terminal \
+        with the next message:\n" + err
     return out
 
 
@@ -545,6 +667,8 @@ def all_hydrogen_atoms(mol):
     ======
     list of indexes.
     """
+    if type(mol) is str:
+        mol = read(mol)
     indexes = np.where(mol.get_atomic_numbers() == 1)[0]
 
     return indexes + 1
@@ -929,7 +1053,8 @@ def plot_angles(sith, cmap=None, gradient=True, markersize=5):
 def main():
     run_in_terminal = ['optimization',
                        'stretching',
-                       'workflow']
+                       'workflow',
+                       'remove']
     if sys.argv[1] == '-h':
         functions = ['distance',
                      'plot_sith',
@@ -945,16 +1070,17 @@ def main():
                      'min_profile',
                      'min_profile_from_several',
                      'compare_DOFs','optimization',
-                     'stretching',
-                     'workflow',
+                     'stretching*',
+                     'workflow*',
                      'log2xyz']
 
         functions.sort()
 
         print("\n" +
               "This code contains a set of tools you can use for different\n" +
-              "functions. To execute from terminal use \n python miscellane" +
-              "ous.py <function> <arg1> <arg2> ...\n\n where function is an" +
+              "functions.To execute from terminal use \n myutils <function>" +
+              " <arg1> <arg2> ... <-- normal functions\n or \n   $( <function*> ) <arg1> <arg2> ..." +
+              " <arg1> <arg2> ...\n\nor The next list shows the options of functions that you can execut is an" +
               "y of the next options: \n")
         for function in functions:
             if function[0] != '_' and function[0] != '.':
@@ -963,7 +1089,9 @@ def main():
               "myutils <function> -h\n")
     
     elif sys.argv[1] in run_in_terminal:
-        output_terminal(str(Path(__file__).parent) + 'sith/' + sys.argv[1]+'.sh '+' '.join(sys.argv[2:]))
+        print(str(Path(__file__).parent) + '/sith/' + sys.argv[1]+'.sh ')
+        #output = output_terminal(str(Path(__file__).parent) + '/sith/' + sys.argv[1]+'.sh '+' '.join(sys.argv[2:]),
+        #                         print_output=True)
 
     elif '-h' in sys.argv:
         print(globals()[sys.argv[1]].__doc__)
