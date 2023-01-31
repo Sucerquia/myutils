@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH -N 1                   # number of nodes
-#SBATCH -n 8
+#SBATCH -n 9
 #SBATCH --job-name="workflow"       #job name
 #SBATCH -t 24:00:00
 #SBATCH --output=peptides_analysis-%j.o
@@ -61,6 +61,7 @@ echo $0 $@
 
 if $cascade
 then
+    $( myutils resubmit ) $peptides &
     echo " * This JOB will be run in the Node:"
     echo $SLURM_JOB_NODELIST
     cd $SLURM_SUBMIT_DIR
@@ -106,7 +107,6 @@ do
     will be backed up in $bck. ++++++++++++++++++++++++++++"
             mv $pep $bck
         fi
-    
         mkdir $pep
         cd $pep
         # Creation of peptide
@@ -123,8 +123,8 @@ do
     $( myutils stretching ) -p $pep $restart || fail "
     ++++++++ WorkFlow_MSG: ERROR - Stretching of $pep failed. ++++++++"
 
-    myutils sith_analysis ./stretching/$pep-stretched00.fchk \
-           ./stretching/ || fail "
+    myutils sith_analysis ./$pep-stretched00.fchk \
+           ./  $pep-stretched00.xyz || fail "
     ++++++++ WorkFlow_MSG: ERROR - Sith analysis of $pep failed. ++++++++"
 done
 
