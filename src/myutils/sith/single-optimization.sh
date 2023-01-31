@@ -18,7 +18,6 @@ echo "This JOB will be run in the Node:"
 echo $SLURM_JOB_NODELIST
 cd $SLURM_SUBMIT_DIR
 # check dependencies
-
 module purge
 source $HOME/.bashrc
 source /etc/profile.d/modules.sh
