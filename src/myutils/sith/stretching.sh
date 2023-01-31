@@ -35,7 +35,7 @@ mv_stretching_files () {
 # set up starts
 # General variables
 size=0.2
-n_stretch=25
+n_stretch=-1
 restart='false'
 
 while getopts 'p:n:rs:h' flag; do
@@ -69,18 +69,18 @@ then
     previous=( $(ls *.xyz) )
     wext=${previous[-1]}
     last=${wext%%.*} 
-    i=$(( ${last:0-2} ))
+    i=$(( 10#${last:0-2} ))
 
     # try to take the last optimization
 	nameiplusone=$(printf "%02d" $(($i + 1)))
     retake='true'
     # searchs advances in i+1a
     myutils log2xyz \
-        $pep-stretched${nameiplusone}a.log && \
+        $pep-stretched${nameiplusone}-a.log && \
     mv_stretching_files $pep-stretched${nameiplusone} bck1 &&
-    mv_stretching_files $pep-stretched${nameiplusone}a bck2 &&
+    mv_stretching_files $pep-stretched${nameiplusone}-a bck2 &&
     myutils increase_distance \
-        $pep-stretched${nameiplusone}a-bck2.xyz \
+        $pep-stretched${nameiplusone}-a-bck2.xyz \
         $pep-stretched${nameiplusone} 0 1 0 && \
     retake='false' && \
     echo "
@@ -114,13 +114,16 @@ index2=$(( $( grep NME $pep-stretched00.pdb | grep CH3 | awk '{print $2}' ) - 1 
 # check that already read the indexes:
 [ $index1 -eq 0 ] && [ $index2 -eq 0 ] && fail "
     ++++++++ STRETCHING_MSG: ERROR - Not recognized indexes ++++++++++++++++++"
+[ $index1 -eq -1 ] && [ $index2 -eq -1 ] && fail "
+    ++++++++ STRETCHING_MSG: ERROR - Not recognized indexes ++++++++++++++++++"
 echo "
     ++++++++ STRETCHING_MSG: VERBOSE - This code will stretch the atoms with
     the indexes $index1 $index2 ++++++++++++++++++++++++++++++++++++++++++++++"
 
 retake='true'
 
-while [[ $i -lt $n_stretch ]]
+
+while ! [[ -d rupture ]]
 do
 	namei=$(printf "%02d" $i)
 	nameiplusone=$(printf "%02d" $(($i + 1)))
@@ -177,7 +180,7 @@ do
             sed -i "1a %NProcShared=8" $pep-stretched${nameiplusone}.com
             sed -i "3a opt(modredun,calcfc)" $pep-stretched${nameiplusone}.com
             sed -i '$d' $pep-stretched${nameiplusone}.com
-            sed -i '$a $(($index1 + 1)) $(($index2 + 1)) F' \
+            echo "$(($index1 + 1)) $(($index2 + 1)) F" >> \
                 $pep-stretched${nameiplusone}.com
             g09 $pep-stretched${nameiplusone}.com \
                 $pep-stretched${nameiplusone}.log
