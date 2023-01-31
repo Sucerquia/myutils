@@ -16,6 +16,7 @@ from myutils.sith.compare_DOFs import compare
 from myutils.sith.ase_increase_distance import increase_distance
 from myutils.sith.sith_analysis import sith_analysis
 from myutils.sith.trans_xyz import log2xyz
+from myutils.sith.xyz2pdb import all_xyz2pdb
 from pathlib import Path
 
 
@@ -719,7 +720,7 @@ def add_color_per_amino(sith, pdb_file, ax=None):
             ax.axvspan(region[0], region[1], color=cmap(normalize(i)), alpha=0.1)
 
 
-def plot_sith(dofs, xlabel, xlim, energy_units='a.u', fig=None, ax=None, cbar=True,
+def plot_sith(dofs, xlabel, xlim, energy_units='Ha', fig=None, ax=None, cbar=True,
               cmap=None, orientation='vertical', labelsize=15,
               axes=None, aspect=25, step=1, dofs_classified=None):
     """
@@ -793,9 +794,9 @@ def plot_energies_in_DOFs(sith, steps=[1, 1, 1, 1], sep_aminos=None, pdb_for_ami
 
     emin = min(energies_per_DOF.flatten())
     emax = max(energies_per_DOF.flatten())
-    axes[0][0].plot([dims[1]-0.5, dims[1]-0.5], [emin, emax], '--',
+    axes[0][0].plot([dims[1]+0.5, dims[1]+0.5], [emin, emax], '--',
                     color='gray')
-    axes[0][0].plot([dims[1]+dims[2]-0.5, dims[1]+dims[2]-0.5], [emin, emax],
+    axes[0][0].plot([dims[1]+dims[2]+0.5, dims[1]+dims[2]+0.5], [emin, emax],
                     '--', color='gray')
     plot_sith(energies_per_DOF, 'all DOF', np.arange(1, dims[0]+1), fig=fig, ax=axes[0][0], cbar=False,
               step=steps[0])
@@ -1050,11 +1051,16 @@ def plot_angles(sith, cmap=None, gradient=True, markersize=5):
     return [ax1, ax2, ax3, ax4]
 
 
+def classical_energies():
+    return (str(Path(__file__).parent) + '/gromacs/classical_energies.sh')
+
 def main():
     run_in_terminal = ['optimization',
                        'stretching',
                        'workflow',
-                       'remove']
+                       'remove',
+                       'resubmit']
+    gromacs = ["minim"]
     if sys.argv[1] == '-h':
         functions = ['distance',
                      'plot_sith',
@@ -1092,11 +1098,14 @@ def main():
         print(str(Path(__file__).parent) + '/sith/' + sys.argv[1]+'.sh ')
         #output = output_terminal(str(Path(__file__).parent) + '/sith/' + sys.argv[1]+'.sh '+' '.join(sys.argv[2:]),
         #                         print_output=True)
+    
+    elif sys.argv[1] in gromacs:
+        print(str(Path(__file__).parent) + '/gromacs/' + sys.argv[1]+'.mdp')
 
     elif '-h' in sys.argv:
         print(globals()[sys.argv[1]].__doc__)
     else:
-        globals()[sys.argv[1]](*sys.argv[2:])
+        print(globals()[sys.argv[1]](*sys.argv[2:]))
 
 
 if __name__ == '__main__':
