@@ -66,7 +66,7 @@ then
     echo "
     ++++++++ STRETCHING_MSG: VERBOSE - searching last optimization +++++++++++"
     # find the index of the last i
-    previous=( $(ls *.xyz) )
+    previous=( $( ls *.xyz | grep -v bck ) )
     wext=${previous[-1]}
     last=${wext%%.*} 
     i=$(( 10#${last:0-2} ))
