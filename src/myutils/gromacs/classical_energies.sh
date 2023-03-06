@@ -1,8 +1,21 @@
+print_help() {
+echo "
+Tool that computes the classical energy from a set of pdb files in the
+executing directory.
+"
+exit 0
+}
+
 fail () {
     printf '%s\n' "$1" >&2
     exit "${2-1}"
 }
 
+while getopts 'h' flag; do
+    case "${flag}" in
+      h) print_help
+    esac
+done
 counter=0
 
 myutils all_xyz2pdb *-stretched00.pdb || fail "error creating pdbs"
