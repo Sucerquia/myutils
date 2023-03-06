@@ -1,1 +1,0 @@
-sleep 23h 59m ; sbatch $( myutils workflow ) -a $1 -c -r | echo ; echo "new JOB submitted"

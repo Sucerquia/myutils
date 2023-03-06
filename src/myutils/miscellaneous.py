@@ -4,19 +4,24 @@ work in output-terminal
 """
 import numpy as np
 import subprocess
-import matplotlib as mpl
 from matplotlib.transforms import Bbox
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 from ase.io import read, write
 import sys
-import matplotlib.pyplot as plt
 import glob
 from MDAnalysis.analysis.dihedrals import Ramachandran
 import MDAnalysis as ma
 from myutils.sith.compare_DOFs import compare
-from myutils.sith.ase_increase_distance import increase_distance
+from myutils.sith.extract_dofs import save_dofs
+from myutils.sith.find_extraDOFs import save_extradofs
+from myutils.sith.generate_random_peptide import gen_randpep
 from myutils.sith.sith_analysis import sith_analysis
 from myutils.sith.trans_xyz import log2xyz
 from myutils.sith.xyz2pdb import all_xyz2pdb
+from myutils.ase_utils.change_distance import g09_scale_distance
+from myutils.ase_utils.change_distance import g09_add_distance
+
 from pathlib import Path
 
 
@@ -1059,8 +1064,12 @@ def main():
                        'stretching',
                        'workflow',
                        'remove',
-                       'resubmit']
-    gromacs = ["minim"]
+                       'resubmit',
+                       'find_forces',
+                       'find_forces2',
+                       'extract_forces']
+    gromacs_mdp = ["minim"]
+    gromacs_sh = ["classical_minimization"]
     if sys.argv[1] == '-h':
         functions = ['distance',
                      'plot_sith',
@@ -1099,8 +1108,11 @@ def main():
         #output = output_terminal(str(Path(__file__).parent) + '/sith/' + sys.argv[1]+'.sh '+' '.join(sys.argv[2:]),
         #                         print_output=True)
     
-    elif sys.argv[1] in gromacs:
+    elif sys.argv[1] in gromacs_mdp:
         print(str(Path(__file__).parent) + '/gromacs/' + sys.argv[1]+'.mdp')
+    
+    elif sys.argv[1] in gromacs_sh:
+        print(str(Path(__file__).parent) + '/gromacs/' + sys.argv[1]+'.sh')
 
     elif '-h' in sys.argv:
         print(globals()[sys.argv[1]].__doc__)
