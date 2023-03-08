@@ -3,26 +3,9 @@ import sys
 
 
 pymodules = {
-    'min_profile_from_several': 'myutils.miscellaneous',
-    'optimized_e': 'myutils.miscellaneous',
-    'format_to_pdb': 'myutils.miscellaneous',
-    'time_g09': 'myutils.miscellaneous',
-    'distance': 'myutils.analysis',
 }
     
 sh_executers = {
-    'peptide_pulling': './gromacs/peptide_pulling.sh',
-    'pulling': './gromacs/pulling.sh',
-    'classical_minimization': './gromacs/classical_minimization.sh',
-    'classical_energies': './gromacs/classical_energies.sh',
-    'analysis': './gromacs/analysis.sh',
-    'generate_main': './cli/generate_main.sh',
-    'find_forces': './sith/find_forces.sh',
-    'single-optimization': './sith/single-optimization.sh',
-    'stretching': './sith/stretching.sh',
-    'workflow': './sith/workflow.sh',
-    'remove': './sith/test_remove/remove.sh',
-    'extract_forces': './sith/extract_forces.sh',
 }
 
 def main():
