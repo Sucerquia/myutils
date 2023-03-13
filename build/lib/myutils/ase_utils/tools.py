@@ -108,7 +108,7 @@ class MoleculeSetter:
         Transforme the positions of the atoms such that the atoms of indexes 1
         and 2 are aligned in the x axis. The atom with index 3 would be in the
         xy plane in case to be given.
-
+        
         Parameters
         ==========
         index 1 and 2: int
@@ -117,7 +117,7 @@ class MoleculeSetter:
 
         index 3: int (optional)
             The atom with index 3 would be in the xy plane in case to be given.
-
+            
         Center: int (optional)
             It must be index1 or index2, that means the atom with this index
             will be placed in the origin. In case center=None (default), the
@@ -126,7 +126,7 @@ class MoleculeSetter:
         """
         # Move the origin
         if center is None:
-            center = (self.atoms[index1].position +
+            center = (self.atoms[index1].position+
                       self.atoms[index2].position)/2
         else:
             center = self.atoms[center].position
@@ -143,7 +143,7 @@ class MoleculeSetter:
         """
         Increase the distance between two atoms keeping
         the same midpoint.
-
+        
         Parameters
         ==========
         index1: int
@@ -156,12 +156,12 @@ class MoleculeSetter:
         d1norm = self.atoms.get_distance(index1, index2)
         self.atoms.set_distance(index1, index2, d1norm+deltad)
         return self.atoms
-
+    
     def scale_distance(self, index1, index2, deltad, index3=None):
         """
         Increase the distance between two atoms by aligning those atoms with
         the x axis and scaling the x-coordinate of all intermedia atoms.
-
+        
         Parameters
         ==========
         index1: int
@@ -175,8 +175,7 @@ class MoleculeSetter:
         # Move atom1 to the origin and rotate the molecule such that atom2 is
         # aligned with the +x axis:
         self.xy_alignment(index1, index2, center=index1)
-        new_positions = [atom.position *
-                         np.array([(d1norm + deltad)/d1norm, 1, 1])
+        new_positions = [atom.position * np.array([(d1norm + deltad)/d1norm, 1 , 1])
                          for atom in self.atoms]
         self.atoms.set_positions(new_positions)
         if index3 is not None:

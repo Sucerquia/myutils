@@ -6,6 +6,7 @@ This tool optimizes a configuration from an initial pdb file"
 while getopts 'h' flag; do
     case "${flag}" in
         h) print_help
+    esac
 done
 fail () {
     printf '%s\n' "$1" >&2

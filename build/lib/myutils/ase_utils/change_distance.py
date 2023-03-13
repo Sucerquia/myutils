@@ -9,7 +9,7 @@ def change_distance(inp, out, index1, index2, deltad, charge, method):
     the same midpoint. with the new structure write down a gaussian file
     without specifing the kind of calculus to run (optimization, ab-initio md,
     frequencies...).
-
+    
     Parameters
     ==========
     inp: str
@@ -41,15 +41,13 @@ def change_distance(inp, out, index1, index2, deltad, charge, method):
 
     return f"{out}.com file created"
 
-
-# add2executable
 def g09_add_distance(inp, out, index1, index2, deltad, charge):
     """
     Take a configuration and increase the distance between two atoms keeping
     the same midpoint. with the new structure write down a gaussian file
     without specifing the kind of calculus to run (optimization, ab-initio md,
     frequencies...).
-
+    
     Parameters
     ==========
     inp: str
@@ -66,13 +64,10 @@ def g09_add_distance(inp, out, index1, index2, deltad, charge):
         charge in e to create the g09 input file. The multiplicity is assumed
         to be one.
     """
-    change_distance(inp, out, index1, index2, deltad, charge,
-                    'increase_distance')
+    change_distance(inp, out, index1, index2, deltad, charge, 'increase_distance')
 
     return f"{out}.com file created"
 
-
-# add2executable
 def g09_scale_distance(inp, out, index1, index2, deltad, charge):
     """
     Take a configuration and increase the distance between two atoms by
@@ -80,7 +75,7 @@ def g09_scale_distance(inp, out, index1, index2, deltad, charge):
     intermedia atoms. With the new structure write down a gaussian file without
     specifing the kind of calculus to run (optimization, ab-initio md,
     frequencies...).
-
+    
     Parameters
     ==========
     inp: str

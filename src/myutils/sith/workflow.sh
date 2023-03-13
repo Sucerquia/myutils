@@ -108,7 +108,7 @@ fi
 
 if $cascade
 then
-    $( myutils resubmit ) $peptides &
+    resubmit $peptides &
     echo " * This JOB will be run in the Node:"
     echo $SLURM_JOB_NODELIST
     cd $SLURM_SUBMIT_DIR
@@ -123,7 +123,7 @@ then
     ase -h &> /dev/null || fail "This code needs ASE"
     command -V g09 &> /dev/null || fail "This code needs gaussian"
     gmx -h &> /dev/null || fail "This code needs gmx"
-    myutils workflow &> /dev/null || fail "This code needs myutils"
+    myutils -h &> /dev/null || fail "This code needs myutils"
 fi
 perl -E "say '+' x 80"
 

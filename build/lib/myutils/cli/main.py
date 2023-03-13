@@ -1,15 +1,28 @@
-from importlib import import_module
 from pathlib import Path
 import sys
 
 
 pymodules = {
+    'min_profile_from_several': 'myutils.miscellaneous',
+    'optimized_e': 'myutils.miscellaneous',
+    'format_to_pdb': 'myutils.miscellaneous',
+    'time_g09': 'myutils.miscellaneous',
+    'distance': 'myutils.analysis',
 }
     
 sh_executers = {
-}
-
-other_files = {
+    'peptide_pulling': './gromacs/peptide_pulling.sh',
+    'pulling': './gromacs/pulling.sh',
+    'classical_minimization': './gromacs/classical_minimization.sh',
+    'classical_energies': './gromacs/classical_energies.sh',
+    'analysis': './gromacs/analysis.sh',
+    'generate_main': './cli/generate_main.sh',
+    'find_forces': './sith/find_forces.sh',
+    'single-optimization': './sith/single-optimization.sh',
+    'stretching': './sith/stretching.sh',
+    'workflow': './sith/workflow.sh',
+    'remove': './sith/test_remove/remove.sh',
+    'extract_forces': './sith/extract_forces.sh',
 }
 
 def main():
@@ -38,21 +51,17 @@ def main():
     
     # python module from terminal
     elif sys.argv[1] in pymodules.keys():
-        #exec(f'from {pymodules[sys.argv[1]]} import {sys.argv[1]}')
-        #exec("from myutils.sith.generate_random_peptide import gen_randpep")
-        module = import_module(pymodules[sys.argv[1]])
-        method = getattr(module, sys.argv[1])
-
+        exec(f'from {pymodules[sys.argv[1]]} import {sys.argv[1]}')
         if '-h' in sys.argv:
-            print(method.__doc__)
+            print(globals()[sys.argv[1]].__doc__)
 
         else:
-            output = method(*sys.argv[2:])
+            output = globals()[sys.argv[1]](*sys.argv[2:])
             if output is not None:
                 print(output)
 
     # bash codes
-    elif sys.argv[1] in sh_executers.keys() or sys.argv[1] in other_files.keys():
+    elif sys.argv[1] in sh_executers.keys():
         print(str(Path(__file__).parent)[:-3] + sh_executers[sys.argv[1]][2:])
 
     # Not recognized keyword

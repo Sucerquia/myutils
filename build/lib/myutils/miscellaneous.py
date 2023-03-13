@@ -156,7 +156,7 @@ def optimized_e(file):
 
 # ----------------------------------- deprected -------------------------------
 # add2executable
-def min_profile_from_several(files, num_ranges=20):
+def min_profile_from_several(files, indexes=[3, 2, 0], num_ranges=20):
     """
     This function returns the profile of minimum potential energy respect to
     one variable.

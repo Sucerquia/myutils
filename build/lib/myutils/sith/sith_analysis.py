@@ -4,15 +4,14 @@ from ase.io import read
 import numpy as np
 
 
-# add2executable
 def sith_analysis(drelaxed, dstreched, xyz_file):
     """
-    Creates the sith analysis.
-
+    Creates the sith analysis 
+    
     Parameters
     ==========
     drelaxed: str
-        fchk file corresponding to the relaxed structure
+        fchk file corresponding to the relaxed structure 
     dstretched: str
         fchk file corresponding to the stretched structure. In case this
         argument is a directory, all fchk files in there will be considered as
@@ -23,8 +22,8 @@ def sith_analysis(drelaxed, dstreched, xyz_file):
     """
 
     print("\
-    JEDI analysis will be applied using the SITH package using the next \
-    elaxed file and stretched directory:")
+    JEDI analysis will be applied using the SITH package using the next relaxed\
+    file and stretched directory:")
     print("   - ", drelaxed)
     print("   - ", dstreched)
     sith = SITH(drelaxed, dstreched)

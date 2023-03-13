@@ -1,6 +1,5 @@
 from SITH.SITH import SITH
 
-
 def save_dofs(fchk_file):
     sith = SITH(fchk_file, fchk_file)
 
@@ -12,3 +11,4 @@ def save_dofs(fchk_file):
             for i in dof:
                 dofs_file.write(f"{i} ")
             dofs_file.write("\n")
+    

@@ -1,6 +1,6 @@
 from ase.io import read
+import sys
 import glob
-
 
 def transform(xyzfile, pdbtemplate, pdbfile=None):
     if pdbfile is None:
@@ -19,20 +19,16 @@ def transform(xyzfile, pdbtemplate, pdbfile=None):
                 n2dot_toreplace = len(toreplace.split('.')[0])
                 replacefor = "{:.3f}".format(atomposition[i])
                 n2dot_replacefor = len(replacefor.split('.')[0])
-
+                
                 if n2dot_replacefor > n2dot_toreplace:
-                    toreplace = ' '*(n2dot_replacefor - n2dot_toreplace) + \
-                        toreplace
+                    toreplace = ' '*(n2dot_replacefor - n2dot_toreplace) + toreplace
                 if n2dot_toreplace > n2dot_replacefor:
-                    replacefor = ' '*(n2dot_toreplace - n2dot_replacefor) + \
-                        replacefor
+                    replacefor = ' '*(n2dot_toreplace - n2dot_replacefor) + replacefor
                 lines[index] = lines[index].replace(toreplace, replacefor)
 
     with open(pdbfile, "w") as f:
         [f.write(line) for line in lines]
 
-
-# add2executable
 def all_xyz2pdb(template):
     configs = glob.glob('*.xyz')
     configs.sort()

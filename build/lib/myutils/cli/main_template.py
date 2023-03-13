@@ -1,4 +1,3 @@
-from importlib import import_module
 from pathlib import Path
 import sys
 
@@ -7,9 +6,6 @@ pymodules = {
 }
     
 sh_executers = {
-}
-
-other_files = {
 }
 
 def main():
@@ -38,21 +34,17 @@ def main():
     
     # python module from terminal
     elif sys.argv[1] in pymodules.keys():
-        #exec(f'from {pymodules[sys.argv[1]]} import {sys.argv[1]}')
-        #exec("from myutils.sith.generate_random_peptide import gen_randpep")
-        module = import_module(pymodules[sys.argv[1]])
-        method = getattr(module, sys.argv[1])
-
+        exec(f'from {pymodules[sys.argv[1]]} import {sys.argv[1]}')
         if '-h' in sys.argv:
-            print(method.__doc__)
+            print(globals()[sys.argv[1]].__doc__)
 
         else:
-            output = method(*sys.argv[2:])
+            output = globals()[sys.argv[1]](*sys.argv[2:])
             if output is not None:
                 print(output)
 
     # bash codes
-    elif sys.argv[1] in sh_executers.keys() or sys.argv[1] in other_files.keys():
+    elif sys.argv[1] in sh_executers.keys():
         print(str(Path(__file__).parent)[:-3] + sh_executers[sys.argv[1]][2:])
 
     # Not recognized keyword

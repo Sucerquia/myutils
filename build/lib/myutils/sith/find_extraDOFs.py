@@ -2,14 +2,11 @@ from SITH.SITH import SITH
 from myutils.sith.sith2 import sith2
 import sys
 
+"""" This code finds the degrees of freedom in the
+optmimization calculation that don't belong to the
+forces code """
 
-# DEPRECTED
-# add2executable
 def save_extradofs(drelaxed, dstretched):
-    """"
-    This code finds the degrees of freedom in the
-    optmimization calculation that don't belong to the
-    forces code """
     sith = SITH(drelaxed, dstretched)
 
     sith.extractData()
