@@ -1,6 +1,46 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
+from matplotlib.transforms import Bbox
+from myutils.analysis import indexes_per_aminoacid
+from myutils.analysis import dof_classificator
+
+
+def standard(x, y=None, ax=None, fig=None, data_label=None, xlabel='',
+             ylabel='', proportional=False, figsize=10, xticks=None,
+             yticks=None, color_labels=[0.4, 0.4, 0.4]):
+
+    if ax is None and fig is None:
+        fig, ax = plt.subplots(1, 1, figsize=(figsize, figsize))
+    elif fig is None:
+        fig.add_subplot()
+
+    # scale all the dimensions?
+    if proportional:
+        factor = fig.get_size_inches()[0]
+    else:
+        factor = 10
+
+    # plot!
+    if y is None:
+        ax.plot(x, linewidth=factor/3, label=data_label)
+    else:
+        ax.plot(x, y, linewidth=factor/3, label=data_label)
+    if data_label is not None:
+        ax.legend(fontsize=factor*2, frameon=False)
+
+    ax.tick_params(labelsize=factor*1.5)
+    if xticks is not None:
+        ax.set_xticks(xticks)
+    if yticks is not None:
+        ax.set_yticks(yticks)
+
+    ax.set_xlabel(xlabel, fontsize=factor*2.5, color=color_labels,
+                  weight='bold', labelpad=factor)
+    ax.set_ylabel(ylabel, fontsize=factor*2.5, color=color_labels,
+                  weight='bold', labelpad=factor)
+
+    return fig, ax
 
 
 def plot_gradient(axes, x, y, cmap=None, markersize=1):
@@ -38,8 +78,8 @@ def plot_angles(sith, cmap=None, gradient=True, markersize=5):
         except ImportError:
             cmap = mpl.colormaps['viridis']
 
-    distances = sith._reference.dims[1]
-    n_angles = len(sith._reference.ric[distances:])
+    distances = sith._deformed[0].dims[1]
+    n_angles = len(sith._deformed[0].ric[distances:])
 
     fig = plt.figure(figsize=(10, 10))
     ax1 = fig.add_subplot(2, 2, 1)
@@ -77,7 +117,7 @@ def plot_angles(sith, cmap=None, gradient=True, markersize=5):
             ax2.plot(dof, rs)
 
     # Plot changes
-    for i, change in enumerate(sith.deltaQ[distances:].T):
+    for i, change in enumerate(sith.deltaQ.T[distances:].T):
         if gradient:
             ax3.plot(change, color=cmap(normalize(i+0.5))[:3])
         else:
@@ -87,7 +127,7 @@ def plot_angles(sith, cmap=None, gradient=True, markersize=5):
     ax3.set_ylabel('changes [radians]', fontsize=20)
 
     # Plot changes in Polar format
-    for change in sith.deltaQ[distances:]:
+    for change in sith.deltaQ.T[distances:]:
         if gradient:
             ax4.plot(change, rs, lw=0.5, alpha=0.5)
             ax4.scatter(change, rs, c=rs, marker='o', s=markersize, cmap=cmap)
@@ -170,7 +210,7 @@ def plot_changes(dq, dims, markersize=3, gradient=True):
         changes saved in sith object as sith.deltaQ
 
     dims: list
-        dimensions usually saved in sith._reference.dims
+        dimensions usually saved in sith._deformed[0].dims
 
 
     Return
@@ -399,7 +439,7 @@ def add_color_per_amino(sith, pdb_file, ax=None):
     if ax is None:
         fig, ax = plt.subplots(1, 1)
     atoms_per_aminoacids = indexes_per_aminoacid(pdb_file)
-    dofs_classified = dof_classificator(sith._reference.dimIndices,
+    dofs_classified = dof_classificator(sith._deformed[0].dimIndices,
                                         atoms_per_aminoacids)
     init = dofs_classified[1] + 0.5
     final = dofs_classified[1] + 1.5
@@ -488,7 +528,7 @@ def plot_energies_in_DOFs(sith, steps=[1, 1, 1, 1], sep_aminos=None,
     fig, axes = plt.subplots(2, 2, figsize=(18, 15))
 
     energies_per_DOF = sith.energies
-    dims = sith._reference.dims
+    dims = sith._deformed[0].dims
 
     emin = min(energies_per_DOF.flatten())
     emax = max(energies_per_DOF.flatten())
@@ -496,16 +536,16 @@ def plot_energies_in_DOFs(sith, steps=[1, 1, 1, 1], sep_aminos=None,
                     color='gray')
     axes[0][0].plot([dims[1]+dims[2]+0.5, dims[1]+dims[2]+0.5], [emin, emax],
                     '--', color='gray')
-    plot_sith(energies_per_DOF, 'all DOF',
+    plot_sith(energies_per_DOF.T, 'all DOF',
               np.arange(1, dims[0]+1), fig=fig, ax=axes[0][0],
               cbar=False, step=steps[0])
-    plot_sith(energies_per_DOF[:dims[1]], 'Lengths DOF',
+    plot_sith(energies_per_DOF.T[:dims[1]], 'Lengths DOF',
               np.arange(1, dims[1]+1), fig=fig, ax=axes[0][1],
               cbar=False, step=steps[1])
-    plot_sith(energies_per_DOF[dims[1]:dims[1]+dims[2]], 'Angles DOF',
+    plot_sith(energies_per_DOF.T[dims[1]:dims[1]+dims[2]], 'Angles DOF',
               np.arange(dims[1]+1, dims[1]+dims[2]+1), fig=fig, ax=axes[1][0],
               cbar=False, step=steps[2])
-    plot_sith(energies_per_DOF[dims[1]+dims[2]:], 'Dihedral DOF',
+    plot_sith(energies_per_DOF.T[dims[1]+dims[2]:], 'Dihedral DOF',
               np.arange(dims[1]+dims[2]+1, dims[0]+1), fig=fig, ax=axes[1][1],
               cbar=True, axes=axes, aspect=40, step=steps[3])
 
@@ -596,3 +636,47 @@ def min_profile(file, indexes=[3, 2, 0], num_ranges=20):
             continue
 
     return time, var, ener
+
+
+def plot_error(sith, amino_info, classical):
+    first_cap = amino_info.amino_name[1]
+    if first_cap == 'ACE':
+        first_atom = 'N'
+        last_atom = 'C'
+    else:
+        first_atom = 'C'
+        last_atom = 'N'
+    last_amino = list(amino_info.amino_info.keys())[-2]
+    index1 = amino_info.amino_info[2][first_atom] - 1
+    index2 = amino_info.amino_info[last_amino][last_atom] - 1
+
+    distances = []
+    for defo in sith._deformed:
+        distances.append(defo.atoms.get_distance(index1, index2))
+    distances = (np.array(distances) - distances[0])/(last_amino - 1)
+
+    e = sith.compareEnergies()
+
+    _, axis = plt.subplots(3, 1, figsize=(5, 8))
+
+    axis[0].plot(distances, e[1][:len(distances)], '*-', label='BMK')
+    axis[0].plot(distances, e[0][:len(distances)], '*-', label='SITH')
+    axis[0].plot(distances, classical[:len(distances)], '*-', label='amber99')
+    axis[0].set_ylabel('$\Delta$E [Ha]', fontsize=15)
+    axis[0].xaxis.grid(True, linestyle='--')
+    axis[0].legend()
+
+    axis[1].plot(distances, e[2][:len(distances)], '*-', color='C3')
+    axis[1].set_ylabel('$\Delta$E$_{SITH}$ - $\Delta$E$_{BMK}$ [Ha]',
+                       fontsize=15)
+    axis[1].xaxis.grid(True, linestyle='--')
+
+    axis[2].plot(distances, e[3][:len(distances)], '*-', color='C4')
+    axis[2].set_xlabel('$\Delta$d/N$_a$ [Å]', fontsize=15)
+    axis[2].set_ylabel('Error [%]', fontsize=15)
+    axis[2].set_ylim([-5, 105])
+    axis[2].xaxis.grid(True, linestyle='--')
+
+    plt.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0.2, hspace=0)
+
+    return e, distances, axis
