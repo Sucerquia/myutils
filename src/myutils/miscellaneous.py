@@ -1,8 +1,5 @@
 import numpy as np
 import subprocess
-from matplotlib.transforms import Bbox
-import matplotlib as mpl
-import matplotlib.pyplot as plt
 from ase.io import read, write
 import glob
 

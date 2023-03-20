@@ -8,7 +8,7 @@ def save_dofs(fchk_file):
     sith.energyAnalysis()
 
     with open("all_dofs.dat", "w") as dofs_file:
-        for dof in sith._reference.dimIndices:
+        for dof in sith._deformed[0].dimIndices:
             for i in dof:
                 dofs_file.write(f"{i} ")
             dofs_file.write("\n")

@@ -78,12 +78,8 @@ def main():
                 print(output)
 
     # bash codes
-    elif sys.argv[1] in sh_executers.keys():
+    elif sys.argv[1] in sh_executers.keys() or sys.argv[1] in other_files.keys():
         print(str(Path(__file__).parent)[:-3] + sh_executers[sys.argv[1]][2:])
-
-    # other files
-    elif sys.argv[1] in other_files.keys():
-        print(str(Path(__file__).parent)[:-3] + other_files[sys.argv[1]][2:])
 
     # Not recognized keyword
     else:
