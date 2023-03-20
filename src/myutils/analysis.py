@@ -1,5 +1,7 @@
 from MDAnalysis.analysis.dihedrals import Ramachandran
 import MDAnalysis as ma
+from ase.io import read
+import numpy as np
 
 
 def ramachandran(sith, pdb_file):
@@ -99,20 +101,6 @@ def all_hydrogen_atoms(mol):
     return indexes + 1
 
 
-def indexes_per_aminoacid(pdb_file):
-    with open(pdb_file, 'r') as file:
-        lines = file.readlines()
-    atoms = [line for line in lines if 'ATOM' in line]
-    aminoacids = np.genfromtxt(atoms, usecols=5, dtype=int)
-    indexes = np.genfromtxt(atoms, usecols=1, dtype=int)
-    atoms_per_aminoacids = {}
-    for i in range(1, max(aminoacids) + 1):
-        atoms_per_aminoacids[i] = []
-    for i in range(len(indexes)):
-        atoms_per_aminoacids[aminoacids[i]].append(indexes[i])
-    return atoms_per_aminoacids
-
-
 def dof_classificator(dofs_indexes, atoms_per_aminoacids):
     list_aminos = {}
     for i in range(1, max(atoms_per_aminoacids.keys()) + 1):
@@ -123,6 +111,70 @@ def dof_classificator(dofs_indexes, atoms_per_aminoacids):
                 list_aminos[j] = np.append(list_aminos[j], i)
                 break
     return list_aminos
+
+
+def classical_energies(file):
+    "Return the classical energies in Hartrees"
+    potential_energy = np.loadtxt(file, usecols=4)
+    potential_energy = (potential_energy)*1/2600  # 1Ha=2600kJ/mol
+    DOFs_energy = np.loadtxt(file, usecols=[1, 2, 3])*1/2600  # 1Ha=2600kJ/mol
+
+    appr_eDOF = np.sum(DOFs_energy, axis=1)
+    appr_eDOF = (appr_eDOF)
+    return potential_energy, appr_eDOF
+
+
+def length_energy(sith, aminos_info, atoms_types):
+    """
+    return the value of the DOF and the energies as the molecule is stretched
+
+    Parameters
+    ==========
+    sith: sith object
+    aminos_info: dic
+        amino_info.amino_info of the requiered amino acid.
+    atom_types:
+        name of the atoms inside the aminoacid that will be studied,
+        example ['CA', 'CB']
+    """
+    defo = sith._deformed[0]
+    try:
+        i_ric = defo.dimIndices.index((aminos_info[atoms_types[0]],
+                                       aminos_info[atoms_types[1]]))
+    except ValueError:
+        i_ric = defo.dimIndices.index((aminos_info[atoms_types[1]],
+                                       aminos_info[atoms_types[0]]))
+    energies = sith.energies.T[i_ric]
+    values_dof = []
+    for defo in sith._deformed:
+        values_dof.append(defo.ric[i_ric])
+    return [values_dof, energies]
+
+
+def le_same_aminoacids(sith, aminos_info, atoms_types, kind_aminoacid):
+    indexes = []
+    for j, amino_name in enumerate(aminos_info.amino_name.values()):
+        if amino_name in kind_aminoacid:
+            indexes.append(j+1)
+    all_le = []
+    for index in indexes:
+        values = length_energy(sith, aminos_info.amino_info[index],
+                               atoms_types)
+        all_le.append(values)
+    return all_le
+
+
+def plot_energy_in_lenght(all_le, title, axis=None):
+    if axis is None:
+        fig, axis = plt.subplots(figsize=(5, 5))
+    for le in all_le:
+        axis.plot(le[0]-le[0][0], le[1])
+
+    axis.set_title(title)
+    axis.set_xlabel('$\Delta$d [Å]', fontsize=15)
+    axis.set_ylabel('Energy [Ha]', fontsize=15)
+
+    return fig, axis
 
 
 # ------------------ remove ---------------------------------------------------
