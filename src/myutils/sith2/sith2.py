@@ -52,8 +52,9 @@ class Geometry:
 
 class Sith:
     def __init__(self, forces_xyz_files=None, master_directory='./',
-                 killAtoms=None, killDOFs=None, killElements=None):
-        
+                 killAtoms=None, killDOFs=None, killElements=None,
+                 rem_first_def=0, rem_last_def=0):
+
         # General vairbales
         if forces_xyz_files is None:
             forces_xyz_files = [None, None]
@@ -63,7 +64,7 @@ class Sith:
             killDOFs = []
         if killElements is None:
             killElements = []
-        
+
         # files path
         self.forces_files = forces_xyz_files[0]
         self.xyz_files = forces_xyz_files[1]
@@ -93,6 +94,8 @@ class Sith:
         # create Geometries shape=(n_def, 1)
         self._deformed = [Geometry(i, j)
                           for i, j in zip(self.xyz_files, self.forces_files)]
+        # number of deformed configs
+        self.n_deformed = len(self._deformed)
 
         # debug: test the DOFs in all force files
         self.check_dofs()
@@ -114,6 +117,7 @@ class Sith:
         self.energies, self.configs_ener = self.analysis()
 
         self.killer(killAtoms, killDOFs, killElements)
+        self.rem_first_last(rem_first_def, rem_last_def)
 
     def create_files(self):
         """"
@@ -238,3 +242,15 @@ class Sith:
         self.all_forces = np.delete(self.all_forces ,  rIndices, axis=1)
 
         return rIndices
+
+# ---------------------- remove deformations ----------------------------------
+    def rem_first_last(self, rem_first_def=0, rem_last_def=0):
+        self._deformed = self._deformed[rem_first_def:-rem_last_def]
+        self.qF = self.qF[rem_first_def:-rem_last_def]
+        self.deltaQ = self.deltaQ[rem_first_def:-rem_last_def]
+        self.all_forces = self.all_forces[rem_first_def:-rem_last_def]
+        self.energies = self.energies[rem_first_def:-rem_last_def]
+        self.configs_ener = self.configs_ener[rem_first_def:-rem_last_def]
+        self.deformationEnergy = self.deformationEnergy[rem_first_def:-rem_last_def]
+
+        return self._deformed
