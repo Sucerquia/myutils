@@ -164,19 +164,6 @@ def le_same_aminoacids(sith, aminos_info, atoms_types, kind_aminoacid):
     return all_le
 
 
-def plot_energy_in_lenght(all_le, title, axis=None):
-    if axis is None:
-        fig, axis = plt.subplots(figsize=(5, 5))
-    for le in all_le:
-        axis.plot(le[0]-le[0][0], le[1])
-
-    axis.set_title(title)
-    axis.set_xlabel('$\Delta$d [Å]', fontsize=15)
-    axis.set_ylabel('Energy [Ha]', fontsize=15)
-
-    return fig, axis
-
-
 # ------------------ remove ---------------------------------------------------
 def cap_hydrogen_atoms(pdb_file):
     """"

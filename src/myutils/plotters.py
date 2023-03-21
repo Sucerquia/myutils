@@ -680,3 +680,16 @@ def plot_error(sith, amino_info, classical):
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0.2, hspace=0)
 
     return e, distances, axis
+
+
+def plot_energy_in_lenght(all_le, title, axis=None, fig=None):
+    if axis is None:
+        fig, axis = plt.subplots(figsize=(5, 5))
+    for le in all_le:
+        axis.plot(le[0]-le[0][0], le[1])
+
+    axis.set_title(title)
+    axis.set_xlabel('$\Delta$d [Å]', fontsize=15)
+    axis.set_ylabel('Energy [Ha]', fontsize=15)
+
+    return fig, axis
