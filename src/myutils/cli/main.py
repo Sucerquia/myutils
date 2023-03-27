@@ -18,7 +18,7 @@ pymodules = {
     'all_xyz2pdb': 'myutils.sith.xyz2pdb',
     'distance': 'myutils.analysis',
 }
-    
+
 sh_executers = {
     'peptide_pulling': './gromacs/peptide_pulling.sh',
     'pulling': './gromacs/pulling.sh',
@@ -28,6 +28,7 @@ sh_executers = {
     'generate_main': './cli/generate_main.sh',
     'find_forces': './sith/find_forces.sh',
     'single-optimization': './sith/single-optimization.sh',
+    'remove': './sith/remove.sh',
     'stretching': './sith/stretching.sh',
     'workflow': './sith/workflow.sh',
     'extract_forces': './sith/extract_forces.sh',
@@ -54,14 +55,14 @@ def main():
         print("\nTo execute bash script codes, use:\n    $( myutils " +
               "<function> ) <arg1> <arg2> ... \nwhere <function> " +
               "can be one of the next options:")
-        
+
         functions = list(sh_executers.keys())
         functions.sort()
         for function in functions:
             print("    -   " + function)
         print("\nFor detailed information of any bash or python function, " +
               "use \"-h\" as first argument (<arg1>).")
-    
+
     # python module from terminal
     elif sys.argv[1] in pymodules.keys():
         #exec(f'from {pymodules[sys.argv[1]]} import {sys.argv[1]}')
@@ -78,8 +79,12 @@ def main():
                 print(output)
 
     # bash codes
-    elif sys.argv[1] in sh_executers.keys() or sys.argv[1] in other_files.keys():
+    elif sys.argv[1] in sh_executers.keys():
         print(str(Path(__file__).parent)[:-3] + sh_executers[sys.argv[1]][2:])
+
+    # other files
+    elif sys.argv[1] in other_files.keys():
+        print(str(Path(__file__).parent)[:-3] + other_files[sys.argv[1]][2:])
 
     # Not recognized keyword
     else:
@@ -87,4 +92,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
