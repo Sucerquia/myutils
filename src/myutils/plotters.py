@@ -1,3 +1,4 @@
+import matplotlib.ticker as mticker
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
@@ -8,11 +9,63 @@ from myutils.analysis import dof_classificator
 
 def standard(x, y=None, ax=None, fig=None, data_label=None, xlabel='',
              ylabel='', proportional=False, figsize=10, xticks=None,
-             yticks=None, color_labels=[0.4, 0.4, 0.4]):
+             yticks=None, color_labels=None, pstyle='-', color_plot=None,
+             xminor=None, yminor=None, grid=False, mingrid=False, raxis=False):
+    """
+    Parameters
+    ==========
+    x: list or array
+        data to be plotted. It will correspond to the data in the y axis if no
+        y if given, or x data in case y is given.
+    y: list or array. default=None
+        data to be plotted. It will correspond to the data in the y. It has to
+        have the same dimension than the x list.
+    ax: axes. default=None
+        plt.axes object. In case it is not given, a new one will be created.
+    fig: figure. default=None
+        plt.figure object. In case it is not given, a new one will be created.
+    data_label: str. default=None
+        label to the curve to be plotted.
+    xlabel: str. default=''
+        label for the x axis.
+    ylabel: str. default=''
+        label for the y axis.
+    proportional: bool. default=False
+        True to scale the size of labels to the figsize.
+    figsize: float. default=10
+        size of the figure. it is usefull only if a new figure is created.
+    xticks: array. default=None
+        numbers to appear in the x axis.
+    yticks: array. default=None
+        numbers to appear in the y axis.
+    xminor: array. default=None
+        minor ticks to add to the x axis.
+    yminor: array. default=None
+        minor ticks to add to the y axis.
+    color_labels: RGB array or matplotlib colors. default [0.4, 0.4, 0.4]
+        color of the x and y labels
+    plotstyle: str. default='-'
+        matplotlib line style.
+    grid: bool. default False
+        grid regarding the main ticks (major)
+    mingrid: bool. default False
+        grid regarding the secundary ticks (minor)
+    raxis: bool. default False
+        use the right axis.
+    color_plot: color format. default None (namely matplotlib palette)
+        define the color of the data you want to plot
+
+    Output
+    ======
+    figure, axes.
+    """
+
+    if color_labels is None:
+        color_labels = [0.4, 0.4, 0.4]
 
     if ax is None and fig is None:
         fig, ax = plt.subplots(1, 1, figsize=(figsize, figsize))
-    elif fig is None:
+    if fig is None:
         fig.add_subplot()
 
     # scale all the dimensions?
@@ -21,24 +74,51 @@ def standard(x, y=None, ax=None, fig=None, data_label=None, xlabel='',
     else:
         factor = 10
 
+    # right y-axis
+    if raxis:
+        ax2 = ax.twinx()
+        ax = ax2
+
     # plot!
     if y is None:
-        ax.plot(x, linewidth=factor/3, label=data_label)
+        p = ax.plot(x, pstyle, linewidth=factor/3, label=data_label,
+                    color=color_plot)
     else:
-        ax.plot(x, y, linewidth=factor/3, label=data_label)
+        p = ax.plot(x, y, pstyle, linewidth=factor/3, label=data_label,
+                    color=color_plot)
+    # color axis
+    if raxis:
+        ax.tick_params(axis='y', colors=p[0].get_color())
+        color_labels = p[0].get_color()
     if data_label is not None:
         ax.legend(fontsize=factor*2, frameon=False)
 
+    # ticks
     ax.tick_params(labelsize=factor*1.5)
     if xticks is not None:
         ax.set_xticks(xticks)
     if yticks is not None:
         ax.set_yticks(yticks)
 
+    if xminor is not None:
+        ax.set_xticks(xminor, minor=True)
+    if yminor is not None:
+        ax.set_yticks(yminor, minor=True)
+
     ax.set_xlabel(xlabel, fontsize=factor*2.5, color=color_labels,
                   weight='bold', labelpad=factor)
     ax.set_ylabel(ylabel, fontsize=factor*2.5, color=color_labels,
                   weight='bold', labelpad=factor)
+    ax.yaxis.offsetText.set_fontsize(factor*1.5)
+    formatter = mticker.ScalarFormatter(useMathText=True)
+    ax.yaxis.set_major_formatter(formatter)
+    if grid:
+        ax.grid(True)
+    if mingrid:
+        if (xminor is None) and (yminor is None):
+            raise ValueError(
+                "To add min grid you have to define xminticks or yminticks")
+        ax.grid(True, which='minor')
 
     return fig, ax
 
