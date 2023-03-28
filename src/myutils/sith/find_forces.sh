@@ -76,8 +76,6 @@ echo "++++ FORCES: create extradofs.dat ++++"
 compute_forces ${chks[0]}
 $( myutils extract_forces ) || fail "
     ++++ FORCES: error extracting forces ++++"
-myutils save_extradofs *00.fchk *00.fchk || fail "
-    ++++ FORCES: error creating extradofs ++++"
 
 for chkfile in ${chks[@]}
 do
@@ -87,6 +85,5 @@ do
     mv forces.log forces/${name%.*}.log
 done
 
-rm extra_DOFs.dat
 rm forces.dat
 mv forces.com forces/input_template.com
