@@ -245,12 +245,21 @@ class Sith:
 
 # ---------------------- remove deformations ----------------------------------
     def rem_first_last(self, rem_first_def=0, rem_last_def=0):
-        self._deformed = self._deformed[rem_first_def:-rem_last_def]
-        self.qF = self.qF[rem_first_def:-rem_last_def]
-        self.deltaQ = self.deltaQ[rem_first_def:-rem_last_def]
-        self.all_forces = self.all_forces[rem_first_def:-rem_last_def]
-        self.energies = self.energies[rem_first_def:-rem_last_def]
-        self.configs_ener = self.configs_ener[rem_first_def:-rem_last_def]
-        self.deformationEnergy = self.deformationEnergy[rem_first_def:-rem_last_def]
+
+        self._deformed = self._deformed[rem_first_def:self.n_deformed -
+                                        rem_last_def]
+        self.qF = self.qF[rem_first_def:self.n_deformed -
+                          rem_last_def]
+        self.deltaQ = self.deltaQ[rem_first_def: self.n_deformed -
+                                  rem_last_def]
+        self.all_forces = self.all_forces[rem_first_def: self.n_deformed -
+                                          rem_last_def]
+        self.energies = self.energies[rem_first_def: self.n_deformed -
+                                      rem_last_def]
+        self.configs_ener = self.configs_ener[rem_first_def: self.n_deformed -
+                                              rem_last_def]
+        self.deformationEnergy = self.deformationEnergy[rem_first_def:
+                                                        self.n_deformed -
+                                                        rem_last_def]
 
         return self._deformed
