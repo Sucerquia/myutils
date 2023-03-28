@@ -34,8 +34,10 @@ class Geometry:
         from ric, dimIndices, and internal_forces, updates dims
         """
         self.ric = np.delete(self.ric, dofis)
-        tdofremoved = [0, 0, 0]  # counter of the number of DOF removed 
-                                 # arranged in types (lenght, angle, dihedral)
+        # counter of the number of DOF removed arranged in
+        # types (lenght, angle, dihedral)
+        tdofremoved = [0, 0, 0]
+
         for index in sorted(dofis, reverse=True):
             tdofremoved[len(self.dimIndices[index]) - 2] += 1
             del self.dimIndices[index]
@@ -44,7 +46,7 @@ class Geometry:
         self.dims[1] -= tdofremoved[0]
         self.dims[2] -= tdofremoved[1]
         self.dims[3] -= tdofremoved[2]
-        #change for forces
+        # change for forces
         if(self.internal_forces is not None):
             self.internal_forces = np.delete(self.internal_forces, dofis)
         return self.ric, self.dims, self.internal_forces
@@ -78,7 +80,7 @@ class Sith:
             self.xyz_files = glob.glob(master_directory + '/*force*.xyz')
         assert len(self.forces_files) == len(self.xyz_files), "Different " + \
             "number of forces and xyz files."
-        ## Create forces files
+        # # Create forces files
         if (len(self.forces_files) == 0):
             if (len(glob.glob(self.master_directory+'/*force*.log')) == 0):
                 raise OSError(f"{self.master_directory} does not exist or " +
@@ -87,7 +89,7 @@ class Sith:
             else:
                 self.create_files()
 
-        ## sorth forces and xyz
+        # # sorth forces and xyz
         self.forces_files.sort()
         self.xyz_files.sort()
 
@@ -101,19 +103,19 @@ class Sith:
         self.check_dofs()
 
         # Create matrices
-        ## DFT energies for each configuration shape=(n_def, 1)
+        # # DFT energies for each configuration shape=(n_def, 1)
         self.deformationEnergy = np.array([defo.energy
                                            for defo in self._deformed])
-        ## ric values matrix shape=(n_def, n_dofs)
+        # # ric values matrix shape=(n_def, n_dofs)
         self.qF = np.array([defo.ric for defo in self._deformed])
-        ## matrix changes shape=(n_def, n_dofs)
+        # # matrix changes shape=(n_def, n_dofs)
         self.deltaQ = self.extract_changes()
-        ## all forces shape=(n_def, n_dofs)
+        # # all forces shape=(n_def, n_dofs)
         self.all_forces = np.array([defo.internal_forces
                                     for defo in self._deformed])
 
-        ## energies per DOF shape=(n_def, n_dofs)
-        ## and computed energy shape=(n_def, 1)  
+        # # energies per DOF shape=(n_def, n_dofs)
+        # # and computed energy shape=(n_def, 1)
         self.energies, self.configs_ener = self.analysis()
 
         self.killer(killAtoms, killDOFs, killElements)
@@ -125,7 +127,8 @@ class Sith:
         coordinates in xyz format.
         """
         get_forces_exec = output_terminal("myutils extract_forces")
-        output_terminal(get_forces_exec.replace("\n", "") + f" -d {self.master_directory}")
+        output_terminal(get_forces_exec.replace("\n", "") +
+                        f" -d {self.master_directory}")
         self.forces_files = glob.glob(self.master_directory + '/*force*.dat')
         self.xyz_files = glob.glob(self.master_directory + '/*force*.xyz')
 
@@ -135,12 +138,14 @@ class Sith:
         referece = self._deformed[0].dimIndices
         for defo in self._deformed[1:]:
             to_compare = defo.dimIndices
-            assert len(to_compare) == len(referece), f"the number of DOFs in " +\
-                f"the first force file and in {defo.name} is different."
+            assert len(to_compare) == len(referece), \
+                "The number of DOFs in the first force file and in " + \
+                f"{defo.name} is different."
             for i in range(len(referece)):
                 assert to_compare[i] == referece[i] or \
-                    to_compare[i] == referece[i][::-1], f"The DOF in the first force" +\
-                         f" file is {referece[i]} and the DOF in {defo.name} is {to_compare[i]}"
+                    to_compare[i] == referece[i][::-1], \
+                    f"The DOF in the first force file is {referece[i]} and" +\
+                    f" the DOF in {defo.name} is {to_compare[i]}"
         return True
 
     def extract_changes(self):
@@ -160,7 +165,7 @@ class Sith:
                     else (dq + 2*np.pi if dq < -np.pi else dq)
 
         return delta_rics
-    
+
     def analysis(self):
         all_values = - self.all_forces * self.deltaQ
         energies = np.cumsum(all_values, axis=0)
@@ -170,13 +175,13 @@ class Sith:
 
     def compareEnergies(self):
         """
-        Takes in SITH object sith, Returns Tuple of expected stress energy, stress
-        energy error, and %Error
+        Takes in SITH object sith, Returns Tuple of expected stress energy,
+        stress energy error, and %Error
 
         Notes
         -----
-        Expected Stress Energy: Total E deformed structure from input .fchk - total
-        E reference structure from input .fchk
+        Expected Stress Energy: Total E deformed structure from input .fchk -
+        total E reference structure from input .fchk
         Stress Energy Error: calculated stress energy - Expected Stress Energy
         %Error: Stress Energy Error / Expected Stress Energy
         """
@@ -207,11 +212,11 @@ class Sith:
 
         # concatenate elements in atoms to be killed
         molecule = np.array(self._deformed[0].atoms.get_chemical_symbols())
-        
+
         for element in killElements:
             indexes_element = np.where(molecule == element)[0] + 1
             self.atoms_to_kill.extend(indexes_element)
-        
+
         # concatenate atoms in DOFs to be killed
         for atom in self.atoms_to_kill:
             self.dims_to_kill.extend(
@@ -226,7 +231,6 @@ class Sith:
 
         return self.dims_to_kill
 
-
     def __killDOFs(self, dofs):
         rIndices = list()
         for dof in dofs:
@@ -237,9 +241,9 @@ class Sith:
         for defo in self._deformed:
             defo._killDOFs(rIndices)
         # kill DOFs in sith
-        self.qF = np.delete(self.qF ,  rIndices, axis=1)
-        self.deltaQ = np.delete(self.deltaQ ,  rIndices, axis=1)
-        self.all_forces = np.delete(self.all_forces ,  rIndices, axis=1)
+        self.qF = np.delete(self.qF,  rIndices, axis=1)
+        self.deltaQ = np.delete(self.deltaQ,  rIndices, axis=1)
+        self.all_forces = np.delete(self.all_forces,  rIndices, axis=1)
 
         return rIndices
 
