@@ -66,14 +66,14 @@ resubmit () {
 
 # ----- set up starts ---------------------------------------------------------
 # General variables
-peptides=$(echo $@ | sed "s/-.*//")
+pep=''
 cascade='false'
 restart=''
 
 while getopts 'a:cn:rR:h' flag; 
 do
     case "${flag}" in
-      a) peptides=${OPTARG} ;;
+      a) pep=${OPTARG} ;;
       c) cascade='true' ;;
       n) pep_options=${OPTARG} ;;
       r) restart='-r' ;;
@@ -95,11 +95,16 @@ if [ ! ${#random} -eq 0 ]
 then
     warning "The code will create a random peptide, even if you also passed -a
         argument"
-    peptides=$( myutils gen_randpep $random ) || fail "Creating
+    pep=$( myutils gen_randpep $random ) || fail "Creating
         random peptide"
+    while [ -d $pep ]
+    do
+        pep=$( myutils gen_randpep $random ) || fail "Creating
+            random peptide"
+    done
 fi
 
-if [ ${#peptides} -eq 0 ]
+if [ ${#pep} -eq 0 ]
 then 
     fail "This code needs one peptide. Please, define it using the flag -a or
         -R. For more info, use \"myutils workflow -h\""
@@ -108,7 +113,7 @@ fi
 
 if $cascade
 then
-    resubmit $peptides &
+    resubmit $pep &
     echo " * This JOB will be run in the Node:"
     echo $SLURM_JOB_NODELIST
     cd $SLURM_SUBMIT_DIR
@@ -129,43 +134,40 @@ perl -E "say '+' x 80"
 
 # ----- set up finishes -------------------------------------------------------
 
-for pep in $peptides
-do
-    # ---- firstly, backup previous directories with the same name
-    if [[ $restart != '-r' ]]
-    then
-        pepgen -h &> /dev/null || fail "This code needs pepgen"
-        bck=$pep-bck_1
-        if [ -d $pep ]
-        then 
-            bck_i=2
-            while [ -d $bck ]
-            do
-                bck=$pep-bck_$bck_i
-                bck_i=$(( $bck_i + 1 ))
-            done
-            warning "$pep directory already exist. This directory will be
-                backed up in $bck"
-            mv $pep $bck
-        fi
-        # Creation of the peptide directory and moving inside.
-        mkdir $pep
-        cd $pep
-        # Creation of peptide
-        pepgen $pep tmp -s flat $pep_options || fail "Creating peptide $pep"
-        mv tmp/pep.pdb ./$pep-stretched00.pdb
-        rm -r tmp
-    else
-        warning "restarted"
+# ---- firstly, backup previous directories with the same name
+if [[ $restart != '-r' ]]
+then
+    pepgen -h &> /dev/null || fail "This code needs pepgen"
+    bck=$pep-bck_1
+    if [ -d $pep ]
+    then 
+        bck_i=2
+        while [ -d $bck ]
+        do
+            bck=$pep-bck_$bck_i
+            bck_i=$(( $bck_i + 1 ))
+        done
+        warning "$pep directory already exist. This directory will be
+            backed up in $bck"
+        mv $pep $bck
     fi
+    # Creation of the peptide directory and moving inside.
+    mkdir $pep
+    cd $pep
+    # Creation of peptide
+    pepgen $pep tmp -s flat $pep_options || fail "Creating peptide $pep"
+    mv tmp/pep.pdb ./$pep-stretched00.pdb
+    rm -r tmp
+else
+    cd $pep
+    warning "restarted"
+fi
 
-    # Stretching
-    $( myutils stretching ) -p $pep $restart || fail "Stretching of $pep failed"
+# Stretching
+$( myutils stretching ) -p $pep $restart || fail "Stretching of $pep failed"
 
-    myutils sith_analysis ./$pep-stretched00.fchk \
-           ./  $pep-stretched00.xyz || fail "Sith analysis of $pep failed"
-done
+# compute forces
+$( myutils find_forces )
 
 verbose "Workflow finished"
-
 exit 0
