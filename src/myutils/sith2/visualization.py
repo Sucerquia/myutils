@@ -544,13 +544,22 @@ class MoleculeViewer:
             angle *= -1
         return self.rot_x(-angle)
 
-    def apply_trans(self, atoms, trans):
+    def apply_trans(self, atoms, trans, indexes=None):
         """
         Apply a transformation to all vector positions of the
         atoms object
         """
-        new_positions = [np.dot(trans, atom.position) for atom in atoms]
+        if indexes is None:
+            indexes = list(range(len(atoms)))
+
+        new_positions = []
+        for i, atom in enumerate(atoms):
+            if i in indexes:
+                new_positions.append(np.dot(trans, atom.position))
+            else:
+                new_positions.append(atom.position)
         atoms.set_positions(new_positions)
+
         return new_positions
 
     def xy_alignment(self, atoms, index1, index2, index3):
@@ -689,7 +698,7 @@ class VisualizeEnergies(MoleculeViewer):
         optional kwargs for energies_some_dof
         """
         dofs = self.sith._deformed[0].dimIndices[self.nbonds:self.nbonds +
-                                               self.nangles]
+                                                 self.nangles]
         return self.energies_some_dof(dofs, **kwargs)
 
     def energies_dihedrals(self, **kwargs):
@@ -866,14 +875,14 @@ class VisualizeEnergies(MoleculeViewer):
         residues = np.loadtxt(pdb_file, comments='END', usecols=5, dtype=int)
         index_aminos = {}
 
-        for l in residues:
-            index_aminos[int(l)] = []
-        for i,l in enumerate(residues):
+        for m in residues:
+            index_aminos[int(m)] = []
+        for i, l in enumerate(residues):
             index_aminos[int(l)].append(i)
 
         return index_aminos
 
-    def show_aminos(self, pdb_file, colors=[[1, 0, 0], [0, 1, 0], [0, 0,1]]):
+    def show_aminos(self, pdb_file, colors=[[1, 0, 0], [0, 1, 0], [0, 0, 1]]):
         aminos = self.aminoacids(pdb_file)
         labels_aminos = []
         for indexes in aminos.values():
@@ -882,8 +891,8 @@ class VisualizeEnergies(MoleculeViewer):
         self.viewer.view.clear_representations()
         for i, label in enumerate(labels_aminos):
             self.viewer.view.add_surface(label, probeRadius=0.001,
-                                         color=colors[i%len(colors)], opacity=0.2)
+                                         color=colors[i % len(colors)],
+                                         opacity=0.2)
         self.viewer.view.add_ball_and_stick()
 
         return aminos, label
-        
