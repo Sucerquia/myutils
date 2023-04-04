@@ -130,6 +130,10 @@ then
     previous=( $( ls *.xyz | grep -v bck ) )
     wext=${previous[-1]}
     last=${wext%%.*}
+    if [ ${last: -1} == 'a' ]
+    then
+        last=${last::-2}
+    fi
     i=$(( 10#${last:0-2} ))
 	nameiplusone=$(printf "%02d" $(($i + 1)))
     # searchs advances in i+1a
