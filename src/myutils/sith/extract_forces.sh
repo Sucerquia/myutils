@@ -3,10 +3,11 @@
 # ----- definition of functions starts ----------------------------------------
 print_help() {
 echo "
-Extract the forces and indexes of the DOFs. The output is a set of files called
-<pep>-forces<n_stretching>.dat and <pep>-forces<n_stretching>.xyz
+Extract the forces and indexes of the DOFs from the log files. The output is a
+set of files called <pep>-forces<n_stretching>.dat and
+<pep>-forces<n_stretching>.xyz
 
-    -d   <path>. directory where forces_files.log are located
+    -d   <path>. directory where forces_files.log are located. Default ./forces
 
     -h   prints this message.
 "
