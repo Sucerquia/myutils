@@ -69,12 +69,14 @@ resubmit () {
 pep=''
 cascade='false'
 restart=''
+endoexo='random'
 
-while getopts 'a:cn:rR:h' flag; 
+while getopts 'a:e:cn:rR:h' flag;
 do
     case "${flag}" in
       a) pep=${OPTARG} ;;
       c) cascade='true' ;;
+      e) endoexo=${OPTARG} ;;
       n) pep_options=${OPTARG} ;;
       r) restart='-r' ;;
       R) random=${OPTARG} ;;
@@ -137,7 +139,10 @@ perl -E "say '+' x 80"
 # ---- firstly, backup previous directories with the same name
 if [[ $restart != '-r' ]]
 then
+    # check pepgen
     pepgen -h &> /dev/null || fail "This code needs pepgen"
+
+    # create back up
     bck=$pep-bck_1
     if [ -d $pep ]
     then 
@@ -157,8 +162,11 @@ then
     # Creation of peptide
     pepgen $pep tmp -s flat $pep_options || fail "Creating peptide $pep"
     mv tmp/pep.pdb ./$pep-stretched00.pdb
+    $(myutils proline_mod) $pep-stretched00.pdb $endoexo
+
     rm -r tmp
 else
+    # moving to the peptide directory
     cd $pep
     warning "restarted"
 fi

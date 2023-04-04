@@ -12,10 +12,12 @@ pymodules = {
     'time_g09': 'myutils.miscellaneous',
     'log2xyz': 'myutils.sith.trans_xyz',
     'sith_analysis': 'myutils.sith.sith_analysis',
+    'proline_state': 'myutils.sith.set_proline_state',
     'compare': 'myutils.sith.compare_DOFs',
     'gen_randpep': 'myutils.sith.generate_random_peptide',
     'save_extradofs': 'myutils.sith.find_extraDOFs',
     'all_xyz2pdb': 'myutils.sith.xyz2pdb',
+    'xyz2pdb': 'myutils.sith.xyz2pdb',
     'distance': 'myutils.analysis',
 }
 
@@ -28,6 +30,7 @@ sh_executers = {
     'generate_main': './cli/generate_main.sh',
     'find_forces': './sith/find_forces.sh',
     'single-optimization': './sith/single-optimization.sh',
+    'proline_mod': './sith/proline_mod.sh',
     'remove': './sith/remove.sh',
     'stretching': './sith/stretching.sh',
     'workflow': './sith/workflow.sh',
@@ -38,6 +41,7 @@ other_files = {
     'pulling': './gromacs/pulling.mdp',
     'minim': './gromacs/minim.mdp',
 }
+
 
 def main():
     # Help menu of this code
@@ -65,8 +69,6 @@ def main():
 
     # python module from terminal
     elif sys.argv[1] in pymodules.keys():
-        #exec(f'from {pymodules[sys.argv[1]]} import {sys.argv[1]}')
-        #exec("from myutils.sith.generate_random_peptide import gen_randpep")
         module = import_module(pymodules[sys.argv[1]])
         method = getattr(module, sys.argv[1])
 
@@ -88,7 +90,8 @@ def main():
 
     # Not recognized keyword
     else:
-        print (f"ERROR: keyword {sys.argv[1]} not recognized. Please ")
+        print(f"ERROR: keyword {sys.argv[1]} not recognized. Please ")
+
 
 if __name__ == "__main__":
     main()
