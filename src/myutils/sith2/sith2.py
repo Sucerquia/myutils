@@ -3,6 +3,7 @@ from ase import units
 import glob
 from myutils.miscellaneous import output_terminal
 from ase.io import read
+from scipy.integrate import simpson
 
 
 class Geometry:
@@ -55,9 +56,10 @@ class Geometry:
 class Sith:
     def __init__(self, forces_xyz_files=None, master_directory='./',
                  killAtoms=None, killDOFs=None, killElements=None,
-                 rem_first_def=0, rem_last_def=0):
+                 rem_first_def=0, rem_last_def=0, method=1):
 
-        # General vairbales
+        # General variabales
+        self.method = method
         if forces_xyz_files is None:
             forces_xyz_files = [None, None]
         if killAtoms is None:
@@ -109,6 +111,7 @@ class Sith:
         # # ric values matrix shape=(n_def, n_dofs)
         self.qF = np.array([defo.ric for defo in self._deformed])
         # # matrix changes shape=(n_def, n_dofs)
+        self.all_rics = self.rics()
         self.deltaQ = self.extract_changes()
         # # all forces shape=(n_def, n_dofs)
         self.all_forces = np.array([defo.internal_forces
@@ -116,7 +119,12 @@ class Sith:
 
         # # energies per DOF shape=(n_def, n_dofs)
         # # and computed energy shape=(n_def, 1)
-        self.energies, self.configs_ener = self.analysis()
+        if self.method == 1:
+            self.energies, self.configs_ener = self.analysis()
+        elif self.method == 2:
+            self.energies, self.configs_ener = self.analysis_classical()
+        else:
+            raise ValueError("Non-recognized method")
 
         self.killer(killAtoms, killDOFs, killElements)
         self.rem_first_last(rem_first_def, rem_last_def)
@@ -148,16 +156,19 @@ class Sith:
                     f" the DOF in {defo.name} is {to_compare[i]}"
         return True
 
-    def extract_changes(self):
+    def rics(self):
         rics = list()
         for defo in self._deformed:
             ric = defo.ric
             ric[:defo.dims[1]] = ric[:defo.dims[1]]
             ric[defo.dims[1]:] = ric[defo.dims[1]:] * np.pi/180
             rics.append(defo.ric)
+        return np.array(rics)
 
-        rics = np.array(rics)
-        delta_rics = rics - np.insert(rics[:-1], 0, rics[0], axis=0)
+    def extract_changes(self):
+        delta_rics = self.all_rics - np.insert(self.all_rics[:-1], 0,
+                                               self.all_rics[0],
+                                               axis=0)
 
         with np.nditer(delta_rics, op_flags=['readwrite']) as dqit:
             for dq in dqit:
@@ -167,6 +178,20 @@ class Sith:
         return delta_rics
 
     def analysis(self):
+        all_ener = [np.zeros(len(self.all_forces[0]))]
+        # next loop is a nasty cummulative integration. Maybe it could
+        # be improved
+        for i in range(1, len(self.all_forces) + 1):
+            ener_def = -simpson(self.all_forces[:i + 1],
+                                x=self.all_rics[:i + 1],
+                                axis=0)
+            all_ener.append(ener_def)
+        all_ener = np.array(all_ener)
+        total_ener = np.sum(all_ener, axis=1)
+
+        return all_ener, total_ener
+
+    def analysis_classical(self):
         all_values = - self.all_forces * self.deltaQ
         energies = np.cumsum(all_values, axis=0)
         total_ener = np.sum(energies, axis=1)
@@ -227,7 +252,12 @@ class Sith:
         # remove DOFs
         self.__killDOFs(self.dims_to_kill)
 
-        self.energies, self.configs_ener = self.analysis()
+        if self.method == 1:
+            self.energies, self.configs_ener = self.analysis()
+        elif self.method == 2:
+            self.energies, self.configs_ener = self.analysis_classical()
+        else:
+            raise ValueError("Non-recognized method")
 
         return self.dims_to_kill
 
@@ -240,8 +270,10 @@ class Sith:
         # kill DOFs in Geometries
         for defo in self._deformed:
             defo._killDOFs(rIndices)
+
         # kill DOFs in sith
         self.qF = np.delete(self.qF,  rIndices, axis=1)
+        self.all_rics = np.delete(self.all_rics,  rIndices, axis=1)
         self.deltaQ = np.delete(self.deltaQ,  rIndices, axis=1)
         self.all_forces = np.delete(self.all_forces,  rIndices, axis=1)
 
@@ -249,7 +281,6 @@ class Sith:
 
 # ---------------------- remove deformations ----------------------------------
     def rem_first_last(self, rem_first_def=0, rem_last_def=0):
-
         self._deformed = self._deformed[rem_first_def:self.n_deformed -
                                         rem_last_def]
         self.qF = self.qF[rem_first_def:self.n_deformed -
@@ -265,5 +296,8 @@ class Sith:
         self.deformationEnergy = self.deformationEnergy[rem_first_def:
                                                         self.n_deformed -
                                                         rem_last_def]
+        self.all_rics = self.all_rics[rem_first_def:
+                                      self.n_deformed -
+                                      rem_last_def]
 
         return self._deformed
