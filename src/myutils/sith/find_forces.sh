@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH -N 1                   # number of nodes
-#SBATCH -n 9
+#SBATCH -n 8
 #SBATCH --job-name="workflow"       #job name
 #SBATCH -t 24:00:00
 #SBATCH --output=compute_forces-%j.o
@@ -13,46 +13,63 @@ echo "
 This tool computes the forces in all chk files and store them in a directory
 called forces.
 
-    -c    run in cascade
-    -d    degrees of freedom. Use compute all the dofs in the opt file. By
-          default, this code uses the DOFs of newzmat
+    -c    run in cascade.
+    -d    directory containging the chk files of the stretching-optimization
+          process. Default ./
 
     -h    prints this message.
 "
 exit 0
 }
 
+# Function that adjustes the text to 80 characters
+adjust () {
+    text=$( echo "++++++++ FORCES: $@ " )
+    addchar=$( expr 80 - ${#text} % 80 )
+    text=$( echo $text $( perl -E "say '+' x $addchar" ))
+    nlines=$( expr ${#text} / 80 )
+    w=0
+    while [ $w -le $(( nlines - 1 )) ]
+    do
+        echo ${text:$(( w * 79 )):79}
+        w=$(( w + 1 ))
+    done
+    echo
+}
 # Function that returns the error message and stops the run if something fails.
 fail () {
-    printf '%s\n' "$1" >&2
+    adjust "ERROR" $1
     exit "${2-1}"
+}
+# prints some text adjusted to 80 characters per line, filling empty spaces
+# with +
+verbose () {
+    adjust "VERBOSE" $1
+}
+warning () {
+    adjust "WARNING" $1
 }
 
 compute_forces () {
-    echo "++++ FORCES: construct Z-matrix for $1 ++++"
+    verbose "construct Z-matrix for $1"
     newzmat -ichk -ozmat -rebuildzmat -bmodel $1 forces.com || fail "
-    ++++ FORCES: error creating the matrix ++++"
+    Error creating the matrix"
     sed -i "s/#P bmk\/6-31+g opt(modredun,calcfc)/%NProcShared=8\n#P bmk\/6-31+g force/g" forces.com
-    if [ -f extra_DOFs.dat ]
-    then
-        line=$( grep -n ".000" forces.com | tail -n 1 | cut -d ":" -f 1 )
-        { head -n $line forces.com ; \
-          cat extra_DOFs.dat ; \
-          tail -n +$line forces.com ; } > tmp.com
-        mv tmp.com forces.com
-    fi
-    g09 forces.com || fail "
-    ++++ FORCES: computing forces ++++"
+    g09 forces.com || fail "computing forces"
 }
 
-while getopts 'a:ch' flag; do
+# ----- definition of functions finishes --------------------------------------
+
+directory='./'
+while getopts 'd:ch' flag; do
     case "${flag}" in
-      a) all_directories=${OPTARG} ;;
+      d) directory=${OPTARG} ;;
       c) cascade='true' ;;
 
       h) print_help
     esac
 done
+cd $directory
 
 if $cascade
 then
@@ -67,21 +84,19 @@ then
     conda activate myutils
 fi
 
-echo "++++ FORCES: create directory ++++"
+verbose "Create forces directory"
 mkdir forces
+mkdir bck
+mv *-bck*.* bck
+mv *-a.* bck
 
 chks=( $( ls *.chk ) )
-
-echo "++++ FORCES: create extradofs.dat ++++"
-compute_forces ${chks[0]}
-$( myutils extract_forces ) || fail "
-    ++++ FORCES: error extracting forces ++++"
 
 for chkfile in ${chks[@]}
 do
     compute_forces $chkfile
     name=$( echo $chkfile | sed "s/stretched/force/g" )
-    echo "moving result to forces/${name%.*}.log"
+    verbose "Moving result to forces/${name%.*}.log"
     mv forces.log forces/${name%.*}.log
 done
 
