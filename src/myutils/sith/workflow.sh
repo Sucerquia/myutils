@@ -174,8 +174,11 @@ fi
 # Stretching
 $( myutils stretching ) -p $pep $restart || fail "Stretching of $pep failed"
 
-# compute forces
-$( myutils find_forces )
-
 verbose "Workflow finished"
+
+# compute forces
+verbose "submitting comptutation of forces."
+pwd
+sbatch $( myutils find_forces ) -c
+
 exit 0
