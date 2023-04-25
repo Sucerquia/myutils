@@ -2,6 +2,8 @@ from MDAnalysis.analysis.dihedrals import Ramachandran
 import MDAnalysis as ma
 from ase.io import read
 import numpy as np
+from ase.geometry.analysis import Analysis
+from ase.io import read
 
 
 def ramachandran(sith, pdb_file):
@@ -113,6 +115,21 @@ def dof_classificator(dofs_indexes, atoms_per_aminoacids):
     return list_aminos
 
 
+def dof_classificator2(dofs_indexes, atoms_per_aminoacids):
+    """
+    Return all degrees of freedom that includes at least one atom of a residue
+    """
+    list_aminos = {}
+    for i in range(1, max(atoms_per_aminoacids.keys()) + 1):
+        list_aminos[i] = np.array([], dtype=int)
+    for i in range(len(dofs_indexes)):
+        for j in atoms_per_aminoacids.keys():
+            if np.isin(dofs_indexes[i], atoms_per_aminoacids[j]).any():
+                list_aminos[j] = np.append(list_aminos[j], i)
+                break
+    return list_aminos
+
+
 def classical_energies(file):
     "Return the classical energies in Hartrees"
     potential_energy = np.loadtxt(file, usecols=4)
@@ -148,6 +165,7 @@ def length_energy(sith, aminos_info, atoms_types):
     values_dof = []
     for defo in sith._deformed:
         values_dof.append(defo.ric[i_ric])
+    values_dof = np.array(values_dof)
     return [values_dof, energies]
 
 
@@ -184,3 +202,39 @@ def cap_hydrogen_atoms(pdb_file):
     indexes = [int(line.split(':')[0]) for line in output]
 
     return indexes
+
+
+def extract_bonds(readable_file):
+    atoms = read(readable_file)
+    ana = Analysis(atoms)
+    bonds_zm = ana.unique_bonds
+
+    bonds = []
+    for i, pairs in enumerate(bonds_zm[0]):
+        if len(pairs) != 0:
+            for pair in pairs:
+                bonds.append([i+1, pair+1])
+    return bonds
+
+
+# add2executable
+def diff_bonds(file1, file2, file='frozen_dofs.dat'):
+    """
+    This function returns the bonds that are in one file (first argument) but
+    not in the other (second argument).
+    """
+
+    bonds1 = extract_bonds(file1)
+    bonds2 = extract_bonds(file2)
+
+    different_bonds = []
+    for bond in bonds1:
+        if bond not in bonds2:
+            different_bonds.append(bond)
+
+    with open(file, 'a') as fdofs:
+        for bond in different_bonds:
+            for index in bond:
+                fdofs.write(str(index) + ' ')
+            fdofs.write('F\n')
+    return different_bonds
