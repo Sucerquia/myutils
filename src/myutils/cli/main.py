@@ -4,6 +4,7 @@ import sys
 
 
 pymodules = {
+    'sep_w_cons': 'myutils.ase_utils.change_distance',
     'g09_scale_distance': 'myutils.ase_utils.change_distance',
     'g09_add_distance': 'myutils.ase_utils.change_distance',
     'min_profile_from_several': 'myutils.miscellaneous',
@@ -18,6 +19,7 @@ pymodules = {
     'save_extradofs': 'myutils.sith.find_extraDOFs',
     'all_xyz2pdb': 'myutils.sith.xyz2pdb',
     'xyz2pdb': 'myutils.sith.xyz2pdb',
+    'diff_bonds': 'myutils.analysis',
     'distance': 'myutils.analysis',
 }
 
@@ -32,6 +34,7 @@ sh_executers = {
     'single-optimization': './sith/single-optimization.sh',
     'proline_mod': './sith/proline_mod.sh',
     'remove': './sith/remove.sh',
+    'overstretching': './sith/overstretching.sh',
     'stretching': './sith/stretching.sh',
     'workflow': './sith/workflow.sh',
     'extract_forces': './sith/extract_forces.sh',

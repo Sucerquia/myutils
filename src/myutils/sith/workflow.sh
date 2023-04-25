@@ -24,6 +24,8 @@ Consider the next options:
     -R   random pepeptide. Give the number of amino acids with this argument.
     -r   restart. In this case, run from the directory of the precreated
          peptide.
+    -s   type of stretching. Supported options: rupture, overstretching.
+         Default: rupture.
 
     -h   prints this message.
 "
@@ -59,7 +61,7 @@ warning () {
 }
 resubmit () {
     sleep 23h 59m ; \
-    sbatch $( myutils workflow ) -a $1 -c -r | echo ; \
+    sbatch $( myutils workflow ) -a $1 -c -r -s $2 | echo ; \
     echo "new JOB submitted"
 }
 # ----- definition of functions finishes --------------------------------------
@@ -70,16 +72,20 @@ pep=''
 cascade='false'
 restart=''
 endoexo='random'
+stretching_type='rupture'
+breaks=1
 
-while getopts 'a:e:cn:rR:h' flag;
+while getopts 'a:b:e:cn:rR:s:h' flag;
 do
     case "${flag}" in
       a) pep=${OPTARG} ;;
+      b) breaks=${OPTARG} ;;
       c) cascade='true' ;;
       e) endoexo=${OPTARG} ;;
       n) pep_options=${OPTARG} ;;
       r) restart='-r' ;;
       R) random=${OPTARG} ;;
+      s) stretching_type=${OPTARG} ;;
 
       h) print_help
     esac
@@ -115,7 +121,7 @@ fi
 
 if $cascade
 then
-    resubmit $pep &
+    resubmit $pep $stretching_type &
     echo " * This JOB will be run in the Node:"
     echo $SLURM_JOB_NODELIST
     cd $SLURM_SUBMIT_DIR
@@ -171,8 +177,17 @@ else
     warning "restarted"
 fi
 
-# Stretching
-$( myutils stretching ) -p $pep $restart || fail "Stretching of $pep failed"
+if [[ $stretching_type == 'rupture' ]]
+then
+    # Stretching
+    $( myutils stretching ) -p $pep $restart || fail "Stretching of $pep failed"
+elif [[ $stretching_type == 'overstretching' ]]
+then
+    # Stretching
+    $( myutils overstretching ) -p $pep $restart -o $breaks || fail "Stretching of $pep failed"
+else
+    fail "Non recognized stretching type"
+fi
 
 verbose "Workflow finished"
 
