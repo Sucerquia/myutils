@@ -41,6 +41,6 @@ def all_xyz2pdb(template):
     configs.sort()
     configs.pop(0)
     for config in configs:
-        transform(config, template)
+        xyz2pdb(config, template)
 
     return 0
