@@ -45,22 +45,16 @@ warning () {
     adjust "WARNING" $1
 }
 
-# function that extracts the number of degrees of freedom from the .log file
-n_dofs () {
-    init=$( grep -ni "initial parameters" $1 | head -n 1 | cut -d ":" -f 1 )
-    end=$( tail -n +$(( $init + 5 )) $1 | grep -n -i "^ ---" | head -n 1 | \
-        cut -d ":" -f 1 )
-    echo $( tail -n +$(( $init + 5 )) $1 | head -n $(( $end - 1 )) | wc -l )
-}
-
 # Function to rename all the files of interest
 mv_stretching_files () {
-    mv $1.log $1-$2.log ;
-    mv $1.com $1-$2.com ;
-    mv $1.chk $1-$2.chk ;
-    mv $1.fchk $1-$2.fchk ;
-    mv $1.xyz $1-$2.xyz ;
-
+    for ext in log com chk xyz
+    do
+        if [ -f $1.$ext ]
+        then
+            verbose "moving $1.$ext to $1-$2.$ext"
+            mv $1.$ext $1-$2.$ext || fail "error moving files"
+        fi
+    done
     return 0
 }
 
@@ -74,11 +68,11 @@ separate_letters () {
         i=$(( i + 1 ))
     done
 }
+
 count_letter () {
     n=$( separate_letters $1 | grep -c $2 )
     echo $n
 }
-
 # ----- definition of functions finishes --------------------------------------
 
 # ----- set up starts ---------------------------------------------------------
@@ -106,9 +100,13 @@ command -V g09 &> /dev/null || fail "This code needs gaussian"
 # C-CAP indexes in python convention
 index1=$(( $( grep ACE $pep-stretched00.pdb | grep CH3 | awk '{print $2}' ) - 1 ))
 index2=$(( $( grep NME $pep-stretched00.pdb | grep CH3 | awk '{print $2}' ) - 1 ))
-# check that already read the indexes:
+# check that the indexes were read properly:
 [ $index1 -eq 0 ] && [ $index2 -eq 0 ] && fail "Not recognized indexes"
 [ $index1 -eq -1 ] && [ $index2 -eq -1 ] && fail "Not recognized indexes"
+if ! [[ -f 'frozen_dofs.dat' ]]
+then
+    echo "$(($index1 + 1)) $(($index2 + 1)) F" > frozen_dofs.dat
+fi
 verbose "This code will stretch the atoms with the indexes $index1 $index2"
 
 # compute charges
@@ -123,10 +121,6 @@ verbose "The charge is $charge"
 # ----- checking restart starts -----------------------------------------------
 if $restart
 then
-    # compute the number of DOFs in the initial case
-    ndofs=$( n_dofs $pep-stretched00.log )
-
-    verbose "Restarting, searching last optimization"
     previous=( $( ls *.xyz | grep -v bck ) )
     wext=${previous[-1]}
     last=${wext%%.*}
@@ -135,26 +129,33 @@ then
         last=${last::-2}
     fi
     i=$(( 10#${last:0-2} ))
+    verbose "Restarting, searching last optimization, $i is the last stretching
+        detected"
 	nameiplusone=$(printf "%02d" $(($i + 1)))
+
     # searchs advances in i+1a
     myutils log2xyz $pep-stretched${nameiplusone}-a.log 2> /dev/null && \
-    mv_stretching_files $pep-stretched${nameiplusone} bck1 && \
-    mv_stretching_files $pep-stretched${nameiplusone}-a bck2 && \
-    myutils g09_scale_distance $pep-stretched${nameiplusone}-a-bck2.xyz \
+        mv_stretching_files $pep-stretched${nameiplusone} bck1 && \
+        mv_stretching_files $pep-stretched${nameiplusone}-a bck2 && \
+        myutils g09_scale_distance $pep-stretched${nameiplusone}-a-bck2.xyz \
             $pep-stretched${nameiplusone} $index1 $index2 0 $charge && \
-    retake='false' && \
-    warning "The stretching of peptide $pep will be restarted from $(($i + 1))a"
+        retake='false' && \
+        warning "The stretching of peptide $pep will be restarted from
+            $(($i + 1))a"
+
     # searchs advances in i+1
     $retake && \
-    myutils log2xyz $pep-stretched${nameiplusone}.log 2> /dev/null && \
-    mv_stretching_files $pep-stretched${nameiplusone} bck1 &&
-    myutils g09_scale_distance $pep-stretched${nameiplusone}-bck1.xyz \
+        myutils log2xyz $pep-stretched${nameiplusone}.log 2> /dev/null && \
+        mv_stretching_files $pep-stretched${nameiplusone} bck1 &&
+        myutils g09_scale_distance $pep-stretched${nameiplusone}-bck1.xyz \
             $pep-stretched${nameiplusone} 0 1 0 $charge && \
-    retake='false' && \
-    warning "The stretching of peptide $pep will be restarted from $(($i + 1))"
+        retake='false' && \
+        warning "The stretching of peptide $pep will be restarted
+            from $(($i + 1))"
+
     # if i+1 trial doesn't exist
     $retake && \
-    warning "The stretching of peptide $pep will be restarted from $i"
+        warning "The stretching of peptide $pep will be restarted from $i"
 else
     i=-1
 fi
@@ -162,9 +163,9 @@ fi
 
 # ----- stretching starts -----------------------------------------------------
 verbose "Stretching of $pep starts"
-# stretching process
 while ! [[ -d rupture ]]
 do
+    # names by index
 	namei=$(printf "%02d" $i)
 	nameiplusone=$(printf "%02d" $(($i + 1)))
 	nameiplustwo=$(printf "%02d" $(($i + 2)))
@@ -175,56 +176,38 @@ do
         # configuration:
         if $retake
         then
-            myutils log2xyz $pep-stretched${namei}.log || fail "Transforming
-                log file to xyz"
             myutils g09_scale_distance \
                 $pep-stretched$namei.xyz $pep-stretched${nameiplusone} \
                 $index1 $index2 $size $charge || fail "Preparating g09 input"
         fi
         retake='true'
         sed -i '$d' $pep-stretched${nameiplusone}.com
-        echo "$(($index1 + 1)) $(($index2 + 1)) F" >> \
+        # add constrains
+        cat frozen_dofs.dat >> \
             $pep-stretched${nameiplusone}.com
     else
         # classical optimization
         $( myutils classical_minimization ) $pep-stretched00.pdb || fail "
             Classical minimization"
-            
+
         # initial optimization
         verbose "The first g09 process is an optimization"
         myutils g09_scale_distance $pep-stretched00.pdb \
             $pep-stretched00 $index1 $index2 0 $charge || fail "Preparating
             the input of gaussian"
         sed -i  '/^TV  /d' $pep-stretched00.com
-        verbose "Compute initial number of DOFs"
-        sed -i "1a %KJob L103 1" $pep-stretched00.com && \
-        sed -i "3a opt(modredun,calcfc)" $pep-stretched00.com
-        g09 $pep-stretched00.com $pep-stretched00.log #&& \
-        ndofs=$( n_dofs $pep-stretched00.log ) || fail "Computing initial
-            number of DOFs"
-        sed -i "/KJob/d" $pep-stretched00.com
         sed -i "/opt/d" $pep-stretched00.com
     fi
     sed -i "1a %NProcShared=$processors" $pep-stretched${nameiplusone}.com
     sed -i "3a opt(modredun,calcfc)" $pep-stretched${nameiplusone}.com
-    verbose "Comparing number of DOFs"
-    sed -i "1a %KJob L103 1" $pep-stretched${nameiplusone}.com && \
-    g09 $pep-stretched${nameiplusone}.com $pep-stretched${nameiplusone}.log && \
-    curndofs=$( n_dofs $pep-stretched${nameiplusone}.log ) || fail "Comparing number of DOFs"
-    [ $(( i + 1 )) -eq 0 ] || [ $(( curndofs - 1 )) -eq $ndofs ] && verbose "Correct number of DOFs" \
-        || { rm $pep-stretched${nameiplusone}.* ; \
-        mkdir rupture ; mv $pep-stretched${namei}.* rupture ; verbose "The 
-        stretching ${namei} showed a rupture or a wrong prediction of the DOFs.
-        The workflow finishes here" ; \
-        exit 0 ; }
 
     # run gaussian
     verbose "Running optmization of stretching ${nameiplusone}"
-    sed -i "/KJob/d" $pep-stretched${nameiplusone}.com
     g09 $pep-stretched${nameiplusone}.com $pep-stretched${nameiplusone}.log || \
         { if [ $( grep "Atoms too close." $pep-stretched${nameiplusone}.log | \
-                wc -l ) -eq 1 ]; then fail "Atoms too close in pdb" ; fi ; }
-    # check output
+            wc -l ) -eq 1 ]; then fail "Atoms too close for ${nameiplusone}" ; \
+            fi ; }
+    # check convergence from output
     output=$(grep -i optimized $pep-stretched${nameiplusone}.log | \
         grep -i Non | wc -l)
     if [ $output -ne 0 ]
@@ -248,7 +231,7 @@ do
             sed -i "1a %NProcShared=$processors" $pep-stretched${nameiplusone}.com
             sed -i "3a opt(modredun,calcfc)" $pep-stretched${nameiplusone}.com
             sed -i '$d' $pep-stretched${nameiplusone}.com
-            echo "$(($index1 + 1)) $(($index2 + 1)) F" >> \
+            cat frozen_dofs.dat >> \
                 $pep-stretched${nameiplusone}.com
             # run optimization
             verbose "Re-running optimization"
@@ -261,6 +244,24 @@ do
         grep -i Non | wc -l)
     [ $output -ne 0 ] && failed "Optimization when the stretched distance was
         $(($i + 1))*0.2 didn't converge. No more stretching will be applied"
+
+    # Testing DOFs
+    verbose "Testing dofs"
+    myutils log2xyz $pep-stretched${nameiplusone}.log || fail "Transforming
+        log file to xyz"
+    extrad=$( myutils diff_bonds $pep-stretched${namei}.xyz \
+        $pep-stretched${nameiplusone}.xyz )
+
+    if [ ${#extrad} -ne 2 ]
+    then
+        # if a rupture is detected, stop running
+        verbose "rupture found in $extrad. The workflow finishes here"
+        mkdir rupture
+        mv $pep-stretched${nameiplusone}.* rupture
+        exit 0
+    else
+        verbose "Non-rupture detected in stretched ${nameiplusone}"
+    fi
 
     verbose "Stretched ${nameiplusone} finished"
 
