@@ -68,6 +68,8 @@ def distance(file, index1, index2):
     return d
 
 
+# DEPRECTED
+# now this function is in peptides
 def indexes_per_aminoacid(pdb_file):
     with open(pdb_file, 'r') as file:
         lines = file.readlines()
@@ -104,6 +106,8 @@ def all_hydrogen_atoms(mol):
 
 
 def dof_classificator(dofs_indexes, atoms_per_aminoacids):
+    """
+    return all degrees of freedom defined by atoms of the same residue"""
     list_aminos = {}
     for i in range(1, max(atoms_per_aminoacids.keys()) + 1):
         list_aminos[i] = np.array([], dtype=int)
