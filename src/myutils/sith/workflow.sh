@@ -191,6 +191,10 @@ fi
 
 verbose "Workflow finished"
 
+# Compute classical energies
+verbose "computing classical energies."
+
+$( myutils classical_energies )
 # compute forces
 verbose "submitting comptutation of forces."
 pwd
