@@ -607,8 +607,8 @@ def plot_sith(dofs, xlabel, xlim, fig=None, ax=None,
         cbar.ax.tick_params(labelsize=factor*1.5, rotation=rotation, length=0)
 
     [standard(xlim, dofs.T[i], ax=ax, fig=fig, pstyle=pstyle,
-              ylabel=ylabel+f' [{energy_units}]',
-              xlabel=xlabel, color_plot=cmap(normalize(i+0.5))[:3],
+              ylabel=ylabel, xlabel=xlabel,
+              color_plot=cmap(normalize(i+0.5))[:3],
               xticks=np.arange(xlim[0], xlim[-1]+1, step),
               **kwargs)
      for i in range(len(dofs[0]))]
@@ -650,8 +650,8 @@ def plot_energies_in_DOFs(sith, steps=[1, 1, 1, 1],
         #x_limits = [ax.get_xlim() for ax in axes.flatten()]
         colors = [add_color_per_amino(sith, pdb_for_aminos, ax)
          for ax in axes.flatten()]
-    if show_amino_legends:
-        ax.legend(colors)
+        if show_amino_legends:
+            axes[0][0].legend(colors)
 
     plt.subplots_adjust(left=0.1,
                         bottom=0.1,
