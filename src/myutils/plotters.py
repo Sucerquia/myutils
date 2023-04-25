@@ -5,12 +5,15 @@ import numpy as np
 from matplotlib.transforms import Bbox
 from myutils.analysis import indexes_per_aminoacid
 from myutils.analysis import dof_classificator
+import matplotlib.patches as mpatches
+from myutils.peptides import info as peptide_info
 
 
 def standard(x, y=None, ax=None, fig=None, data_label=None, xlabel='',
-             ylabel='', proportional=False, figsize=10, xticks=None,
+             ylabel='', factor=10, figsize=10, xticks=None,
              yticks=None, color_labels=None, pstyle='-', color_plot=None,
-             xminor=None, yminor=None, grid=False, mingrid=False, raxis=False):
+             xminor=None, yminor=None, grid=False, mingrid=False, raxis=False,
+             fraclw=3, **kwargs):
     """
     Parameters
     ==========
@@ -68,12 +71,6 @@ def standard(x, y=None, ax=None, fig=None, data_label=None, xlabel='',
     if fig is None:
         fig.add_subplot()
 
-    # scale all the dimensions?
-    if proportional:
-        factor = fig.get_size_inches()[0]
-    else:
-        factor = 10
-
     # right y-axis
     if raxis:
         ax2 = ax.twinx()
@@ -82,10 +79,10 @@ def standard(x, y=None, ax=None, fig=None, data_label=None, xlabel='',
     # plot!
     if y is None:
         p = ax.plot(x, pstyle, linewidth=factor/3, label=data_label,
-                    color=color_plot)
+                    color=color_plot, **kwargs)
     else:
-        p = ax.plot(x, y, pstyle, linewidth=factor/3, label=data_label,
-                    color=color_plot)
+        p = ax.plot(x, y, pstyle, linewidth=factor/fraclw, label=data_label,
+                    color=color_plot, **kwargs)
     # color axis
     if raxis:
         ax.tick_params(axis='y', colors=p[0].get_color())
@@ -111,6 +108,7 @@ def standard(x, y=None, ax=None, fig=None, data_label=None, xlabel='',
                   weight='bold', labelpad=factor)
     ax.yaxis.offsetText.set_fontsize(factor*1.5)
     formatter = mticker.ScalarFormatter(useMathText=True)
+    formatter.set_powerlimits((-2, 2))
     ax.yaxis.set_major_formatter(formatter)
     if grid:
         ax.grid(True)
@@ -150,7 +148,8 @@ def plot_gradient(axes, x, y, cmap=None, markersize=1):
                         s=markersize, cmap=cmap)
 
 
-def plot_angles(sith, cmap=None, gradient=True, markersize=5):
+def plot_angles(sith, cmap=None, gradient=True, markersize=5, step=1):
+    scale = 0.08
     if cmap is None:
         try:
             import cmocean as cmo
@@ -168,7 +167,6 @@ def plot_angles(sith, cmap=None, gradient=True, markersize=5):
     ax4 = fig.add_subplot(2, 2, 4, projection='polar')
 
     # Plot values in cartesian
-
     boundaries = np.arange(1, len(sith._deformed) + 2, 1)
     normalize = mpl.colors.BoundaryNorm(boundaries-0.5, cmap.N)
     for i, deformed in enumerate(sith._deformed):
@@ -195,8 +193,10 @@ def plot_angles(sith, cmap=None, gradient=True, markersize=5):
             ax2.scatter(dof, rs, c=rs, marker='o', s=markersize, cmap=cmap)
         else:
             ax2.plot(dof, rs)
+    ax2.set_rticks(rs[::step])
+    ax2.set_ylim([-rs[-1]*scale, rs[-1]*(1+scale)])
 
-    # Plot changes
+    # Plot changes in cartesian
     for i, change in enumerate(sith.deltaQ.T[distances:].T):
         if gradient:
             ax3.plot(change, color=cmap(normalize(i+0.5))[:3])
@@ -213,6 +213,8 @@ def plot_angles(sith, cmap=None, gradient=True, markersize=5):
             ax4.scatter(change, rs, c=rs, marker='o', s=markersize, cmap=cmap)
         else:
             ax4.plot(change, rs)
+    ax4.set_rticks(rs[::step])
+    ax4.set_ylim([-rs[-1]*scale, rs[-1]*(1+scale)])
 
     if not gradient:
         print("Note: in the polar representation, each line is a DOF and " +
@@ -299,7 +301,7 @@ def plot_changes(dq, dims, markersize=3, gradient=True):
 
     NOTE: this function cannot be run from the terminal
     """
-    nstreched = len(dq[0])
+    nstreched = len(dq)
     _, axes = plt.subplots(3, 1, figsize=(8, 10))
     ylabels = [r'$\Delta$ Bonds [Å]',
                r'$\Delta$ Angles [degrees]',
@@ -308,7 +310,7 @@ def plot_changes(dq, dims, markersize=3, gradient=True):
     scales = [1, 180/np.pi, 180/np.pi]
 
     for i in range(3):
-        dof = dq[borders[i]:borders[i+1]]
+        dof = dq.T[borders[i]:borders[i+1]]
         x = np.arange(0, len(dof[0]), 1)
         if gradient:
             [plot_gradient(axes[i], x, changes*scales[i],
@@ -515,10 +517,11 @@ def hessian_blocks(hessian, dims, decis=[2, 2, 2, 2], orientation='vertical',
     return im
 
 
-def add_color_per_amino(sith, pdb_file, ax=None):
+def add_color_per_amino(sith, pdb_file, ax=None, withx=0):
     if ax is None:
         fig, ax = plt.subplots(1, 1)
-    atoms_per_aminoacids = indexes_per_aminoacid(pdb_file)
+    pep_inf = peptide_info(pdb_file, withx=withx)
+    atoms_per_aminoacids = pep_inf.atom_indexes
     dofs_classified = dof_classificator(sith._deformed[0].dimIndices,
                                         atoms_per_aminoacids)
     init = dofs_classified[1] + 0.5
@@ -527,18 +530,27 @@ def add_color_per_amino(sith, pdb_file, ax=None):
     cmap = plt.colormaps['tab10_r']
     boundaries = np.arange(1, 11, 1)
     normalize = mpl.colors.BoundaryNorm(boundaries-0.5, cmap.N)
-
+    patches = {}
     for i in dofs_classified.keys():
         init = dofs_classified[i] + 0.5
         final = dofs_classified[i] + 1.5
         for region in np.stack((init, final)).T:
-            ax.axvspan(region[0], region[1], color=cmap(normalize(i)),
+            ax.axvspan(region[0],
+                       region[1],
+                       color=cmap(normalize(i)),
                        alpha=0.1)
+            patch = mpatches.Patch(facecolor=cmap(normalize(i)),
+                                   label=f'{i}-{pep_inf.amino_name[i]}',
+                                   alpha=0.1,
+                                   edgecolor="black", linewidth=1)
+            patches[i] = patch
+    return patches
 
 
-def plot_sith(dofs, xlabel, xlim, energy_units='Ha', fig=None, ax=None,
+def plot_sith(dofs, xlabel, xlim, fig=None, ax=None,
               cmap=None, orientation='vertical', labelsize=15, cbar=True,
-              axes=None, aspect=25, step=1):
+              axes=None, aspect=25, step=1, pstyle='-o',
+              ylabel=r'$\Delta$E$_{\rm{\bf i}}$'+f'Ha', **kwargs):
     """
     This function plots the energies per degrees of freedom from
     sith_object.energies
@@ -571,6 +583,8 @@ def plot_sith(dofs, xlabel, xlim, energy_units='Ha', fig=None, ax=None,
 
     if ax is None:
         fig, ax = plt.subplots(1, 1)
+    factor = fig.get_size_inches()[0]
+
     if axes is None:
         axes = np.array([ax])
     ax.tick_params(axis='both', labelsize=15)
@@ -589,22 +603,22 @@ def plot_sith(dofs, xlabel, xlim, energy_units='Ha', fig=None, ax=None,
                             ax=axes.ravel().tolist(),
                             orientation='vertical',)
         cbar.set_ticks(boundaries[:-1])
-        cbar.set_label(label="Stretched", fontsize=labelsize)
-        cbar.ax.tick_params(labelsize=labelsize, rotation=rotation, length=0)
+        cbar.set_label(label="Stretched", fontsize=factor*1.5, rotation=90)
+        cbar.ax.tick_params(labelsize=factor*1.5, rotation=rotation, length=0)
 
-    [ax.plot(xlim, dofs.T[i], '.-', markersize=10,
-             color=cmap(normalize(i+0.5))[:3])
+    [standard(xlim, dofs.T[i], ax=ax, fig=fig, pstyle=pstyle,
+              ylabel=ylabel+f' [{energy_units}]',
+              xlabel=xlabel, color_plot=cmap(normalize(i+0.5))[:3],
+              xticks=np.arange(xlim[0], xlim[-1]+1, step),
+              **kwargs)
      for i in range(len(dofs[0]))]
-    ax.set_xlabel(xlabel, fontsize=20)
-    ax.set_xticks(np.arange(xlim[0], xlim[-1]+1, step))
     ax.set_xlim([xlim[0]-0.5, xlim[-1]+0.5])
-    ax.set_ylabel(f'energy [{energy_units}]', fontsize=20)
 
-    return ax
+    return fig, ax
 
 
-def plot_energies_in_DOFs(sith, steps=[1, 1, 1, 1], sep_aminos=None,
-                          pdb_for_aminos=None):
+def plot_energies_in_DOFs(sith, steps=[1, 1, 1, 1],
+                          pdb_for_aminos=None, show_amino_legends=False, **kwargs):
     fig, axes = plt.subplots(2, 2, figsize=(18, 15))
 
     energies_per_DOF = sith.energies
@@ -618,21 +632,26 @@ def plot_energies_in_DOFs(sith, steps=[1, 1, 1, 1], sep_aminos=None,
                     '--', color='gray')
     plot_sith(energies_per_DOF.T, 'all DOF',
               np.arange(1, dims[0]+1), fig=fig, ax=axes[0][0],
-              cbar=False, step=steps[0])
+              cbar=False, step=steps[0], **kwargs)
     plot_sith(energies_per_DOF.T[:dims[1]], 'Lengths DOF',
               np.arange(1, dims[1]+1), fig=fig, ax=axes[0][1],
-              cbar=False, step=steps[1])
+              cbar=False, step=steps[1], **kwargs)
     plot_sith(energies_per_DOF.T[dims[1]:dims[1]+dims[2]], 'Angles DOF',
               np.arange(dims[1]+1, dims[1]+dims[2]+1), fig=fig, ax=axes[1][0],
-              cbar=False, step=steps[2])
+              cbar=False, step=steps[2], **kwargs)
     plot_sith(energies_per_DOF.T[dims[1]+dims[2]:], 'Dihedral DOF',
               np.arange(dims[1]+dims[2]+1, dims[0]+1), fig=fig, ax=axes[1][1],
-              cbar=True, axes=axes, aspect=40, step=steps[3])
+              cbar=True, axes=axes, aspect=40, step=steps[3],
+              **kwargs)
 
     if pdb_for_aminos is not None:
-        x_limits = [ax.get_xlim() for ax in axes.flatten()]
-        [add_color_per_amino(sith, pdb_for_aminos, ax)
+        # DEPRECTED
+        # the next line is not doing anything
+        #x_limits = [ax.get_xlim() for ax in axes.flatten()]
+        colors = [add_color_per_amino(sith, pdb_for_aminos, ax)
          for ax in axes.flatten()]
+    if show_amino_legends:
+        ax.legend(colors)
 
     plt.subplots_adjust(left=0.1,
                         bottom=0.1,

@@ -41,7 +41,7 @@ class MoleculeViewer:
             self.add_axis()
 
     def add_bond(self, atom1index, atom2index,
-                 color=[0.5, 0.5, 0.5], radius=0.1):
+                 color=None, radius=0.1):
         """ Add a bond between two atoms:
         atom1 and atom2
 
@@ -67,6 +67,8 @@ class MoleculeViewer:
             atoms = self.atoms[0]
         else:
             atoms = self.atoms
+        if color is None:
+            color = [0.5, 0.5, 0.5]
 
         indexes = [atom1index, atom2index]
         indexes.sort()
@@ -358,7 +360,7 @@ class MoleculeViewer:
         self.angles.clear()
 
     def add_dihedral(self, atom1index, atom2index, atom3index,
-                     atom4index, color=[0.5, 0.5, 0.5], n=0):
+                     atom4index, color=None, n=0):
         """ Add an dihedral angle between four atoms:
         atom1, atom2, atom3 and atom4
         - with the vertex in the midle of the atom 2 and 3
@@ -383,6 +385,8 @@ class MoleculeViewer:
             atoms = self.atoms[0]
         else:
             atoms = self.atoms
+        if color is None:
+            color = [0.5, 0.5, 0.5]
 
         indexes = [atom1index, atom2index, atom3index, atom4index]
         indexes.sort()
@@ -639,7 +643,7 @@ class VisualizeEnergies(MoleculeViewer):
         self.sith.extractData()
         self.sith.energyAnalysis()
 
-    def add_dof(self, dof, color=[0.5, 0.5, 0.5], n=5, radius=0.07):
+    def add_dof(self, dof, color=None, n=5, radius=0.07):
         """
         Add the degree of freedom to the molecule image
 
@@ -655,6 +659,9 @@ class VisualizeEnergies(MoleculeViewer):
             i=(1, 2, 3) means an angle between atoms 1, 2 and 3
             i=(1, 2, 3, 4) means a dihedral angle between atoms 1, 2, 3 and 4
         """
+
+        if color is None:
+            color = [0.5, 0.5, 0.5]
 
         types = ["bond", "angle", "dihedral"]
         type_dof = types[len(dof)-2]
@@ -861,7 +868,7 @@ class VisualizeEnergies(MoleculeViewer):
         The color is not related with the JEDI method. It
         could be changed with the kwarg color=rgb list.
         """
-        dofs = self.sith._deformed[0][0].dimIndices[:self.nbonds]
+        dofs = self.sith._deformed[0].dimIndices[:self.nbonds]
         self.show_dof(dofs, **kwargs)
 
     def create_trajectory(self, **kwargs):
@@ -872,7 +879,8 @@ class VisualizeEnergies(MoleculeViewer):
         return self.traj
 
     def aminoacids(self, pdb_file):
-        residues = np.loadtxt(pdb_file, comments='END', usecols=5, dtype=int)
+        comments = ['REMARK', 'TITLE', 'CRYST', 'MODEL', 'TER', 'END']
+        residues = np.loadtxt(pdb_file, comments=comments, usecols=5, dtype=int)
         index_aminos = {}
 
         for m in residues:
