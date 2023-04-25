@@ -56,7 +56,7 @@ class Geometry:
 class Sith:
     def __init__(self, forces_xyz_files=None, master_directory='./',
                  killAtoms=None, killDOFs=None, killElements=None,
-                 rem_first_def=0, rem_last_def=0, method=1):
+                 rem_first_def=0, rem_last_def=0, method=2):
 
         # General variabales
         self.method = method
