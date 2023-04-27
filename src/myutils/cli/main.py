@@ -4,9 +4,7 @@ import sys
 
 
 pymodules = {
-    'sep_w_cons': 'myutils.ase_utils.change_distance',
-    'g09_scale_distance': 'myutils.ase_utils.change_distance',
-    'g09_add_distance': 'myutils.ase_utils.change_distance',
+    'change_distance': 'myutils.ase_utils.change_distance',
     'min_profile_from_several': 'myutils.miscellaneous',
     'optimized_e': 'myutils.miscellaneous',
     'format_to_pdb': 'myutils.miscellaneous',
@@ -30,6 +28,8 @@ sh_executers = {
     'classical_energies': './gromacs/classical_energies.sh',
     'analysis': './gromacs/analysis.sh',
     'generate_main': './cli/generate_main.sh',
+    'basics': './basics.sh',
+    'stretching2': './sith/stretching2.sh',
     'find_forces': './sith/find_forces.sh',
     'single-optimization': './sith/single-optimization.sh',
     'proline_mod': './sith/proline_mod.sh',
