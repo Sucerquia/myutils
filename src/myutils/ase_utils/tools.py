@@ -139,52 +139,48 @@ class MoleculeSetter:
             self.apply_trans(self.align_plane(third))
         return self.atoms.positions
 
-    def increase_distance(self, index1, index2, deltad):
+    def increase_distance(self, constraints, deltad):
         """
-        Increase the distance between two atoms keeping
-        the same midpoint.
+        increase the distance between two atoms by moving them and keeping the
+        rest of the atoms in the same place.
 
         Parameters
         ==========
-        index1: int
-            index of one of the atoms to increase the distance.
-        index2: int
-            index of the other atom to increase the distance.
+        constraints:
+            constraints with the shape (n, 2), where n is the number of
+            constraints and the first pair is the one to increase the
+            distance.
         deltad: float
             amount to add to the distance between atoms.
         """
-        d1norm = self.atoms.get_distance(index1, index2)
-        self.atoms.set_distance(index1, index2, d1norm+deltad)
+        d1norm = self.atoms.get_distance(constraints[0][0], constraints[0][1])
+        self.atoms.set_distance(constraints[0][0], constraints[0][1],
+                                d1norm+deltad)
         return self.atoms
 
-    def increase_distance_with_constrain(self, index1, index2, deltad,
-                                         constrains):
+    def increase_distance_with_constraints(self, constraints, deltad):
         """
-        Increase the distance between two atoms keeping
-        the same midpoint.
+        Take a configuration and increase the distance between two atoms by
+        moving those atoms and all constraints containing them and keeping
+        the rest of the atoms in the same place.
 
         Parameters
         ==========
-        index1: int
-            index of one of the atoms to increase the distance, ASE notation.
-        index2: int
-            index of the other atom to increase the distance, ASE notation.
+        constraints:
+            constraints with the shape (n, 2), where n is the number of
+            constraints and the first pair is the one to increase the
+            distance.
         deltad: float
             amount to add to the distance between atoms.
-        constrains:
-            pairs of atoms to keep the same distance, ASE notation. This
-            parameter has to be defined as:
-            [[cons1_ind1, cons1_ind2], [cons2_ind1, cons2_ind2], ... ]
-            in g09 index notation.
         """
-        left = [index1]
-        right = [index2]
+        left = [constraints[0][0]]
+        right = [constraints[0][1]]
         len_right = 0
         len_left = 0
         while ((len_left != len(left)) and (len_right != len(right))):
             len_left = len(left)
             len_right = len(right)
-            for cons in constrains:
+            for cons in constraints[1:]:
                 if ((cons[0] in left) and (cons[1] not in left)):
                     left.append(cons[1])
                 elif ((cons[1] in left) and (cons[0] not in left)):
@@ -193,10 +189,10 @@ class MoleculeSetter:
                     right.append(cons[1])
                 elif ((cons[1] in right) and (cons[0] not in right)):
                     right.append(cons[0])
-        print("this will be the atoms moved to the left: ", left)
-        print("this will be the atoms moved to the right: ", right)
+        print("These will be the atoms moved to the left: ", left)
+        print("These will be the atoms moved to the right: ", right)
 
-        new_positions =[]
+        new_positions = []
         for i, atom in enumerate(self.atoms):
             if i in right:
                 new_positions.append(atom.position +
@@ -210,20 +206,21 @@ class MoleculeSetter:
         self.atoms.set_positions(new_positions)
         return self.atoms
 
-    def scale_distance(self, index1, index2, deltad, index3=None):
+    def scale_distance(self, constraints, deltad, index3=None):
         """
         Increase the distance between two atoms by aligning those atoms with
         the x axis and scaling the x-coordinate of all intermedia atoms.
 
         Parameters
         ==========
-        index1: int
-            index of one of the atoms to increase the distance.
-        index2: int
-            index of the other atom to increase the distance.
+        constraints: list
+            constraints with the shape (n, 2), where n is the number of
+            constraints and the first pair is the one to increase the
+            distance.
         deltad: float
             amount to add to the distance between atoms.
         """
+        index1, index2 = constraints[0]
         d1norm = self.atoms.get_distance(index1, index2)
         # Move atom1 to the origin and rotate the molecule such that atom2 is
         # aligned with the +x axis:
@@ -238,7 +235,8 @@ class MoleculeSetter:
 
         return new_positions
 
-    # Not working yet
+    # DEPRECTED
+    # Not working yet, never worked.
     def scale_w_cons(self, index1, index2, deltad, constrains):
         """
         Increase the distance between two atoms by aligning those atoms with
@@ -267,11 +265,12 @@ class MoleculeSetter:
             if i not in frozen:
                 frozen.append(i)
 
-        new_positions=[]
+        new_positions = []
         for i, atom in enumerate(self.atoms):
             if i + 1 not in frozen:
                 new_positions.append(atom.position *
-                                 np.array([(d1norm + deltad)/d1norm, 1, 1]))
+                                     np.array([(d1norm + deltad)/d1norm, 1, 1])
+                                     )
         self.atoms.set_positions(new_positions)
 
         return new_positions

@@ -29,7 +29,6 @@ sh_executers = {
     'analysis': './gromacs/analysis.sh',
     'generate_main': './cli/generate_main.sh',
     'basics': './basics.sh',
-    'stretching2': './sith/stretching2.sh',
     'find_forces': './sith/find_forces.sh',
     'single-optimization': './sith/single-optimization.sh',
     'proline_mod': './sith/proline_mod.sh',
