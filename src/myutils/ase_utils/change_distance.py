@@ -27,10 +27,10 @@ def change_distance(inp, out, file_cons, deltad, charge, method):
     method: str
         increase_distance or scale. Methods defined in myutils.ase_utils.tools.
         So far, the methods already implemented are: 'scale_distance',
-        'increase_distane', 'increase_distance_with_constrains'.
+        'increase_distance', 'increase_distance_with_constraints'.
     """
-    methods = ['scale_distance', 'increase_distane',
-               'increase_distance_with_constrains']
+    methods = ['scale_distance', 'increase_distance',
+               'increase_distance_with_constraints']
     if method not in methods:
         raise ValueError("Non-recognized stretching method. To see the " +
                          "options, check 'myutils change_distance -h'")
