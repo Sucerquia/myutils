@@ -125,11 +125,17 @@ class MoleculeSetter:
             and index2.
         """
         # Move the origin
-        if center is None:
+        if center == index1:
+            center = self.atoms[center].position
+        elif center == index2:
+            center = self.atoms[center].position
+            index2 = index1
+            index1 = center
+        else:
             center = (self.atoms[index1].position +
                       self.atoms[index2].position)/2
-        else:
-            center = self.atoms[center].position
+
+            
         self.atoms.set_positions(self.atoms.positions - center)
         # set index1 and index2 along x axis
         axis = self.atoms[index2].position
@@ -173,6 +179,7 @@ class MoleculeSetter:
         deltad: float
             amount to add to the distance between atoms.
         """
+        self.xy_alignment(constraints[0][0], constraints[0][1])
         left = [constraints[0][0]]
         right = [constraints[0][1]]
         len_right = 0
