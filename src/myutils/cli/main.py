@@ -33,7 +33,6 @@ sh_executers = {
     'single-optimization': './sith/single-optimization.sh',
     'proline_mod': './sith/proline_mod.sh',
     'remove': './sith/remove.sh',
-    'overstretching': './sith/overstretching.sh',
     'stretching': './sith/stretching.sh',
     'workflow': './sith/workflow.sh',
     'extract_forces': './sith/extract_forces.sh',

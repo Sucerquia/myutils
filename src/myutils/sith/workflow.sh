@@ -11,54 +11,33 @@
 
 
 # ----- definition of functions starts ----------------------------------------
+source $(myutils basics) STRETCHING_MSG
+
 print_help() {
 echo "
 This tool executes the sith analysis in a set of peptides defined as arguments.
 You can use this code to submit a Job in cascade or to execute it locally. 
 Consider the next options:
     
-    -a   <peptide>. Chains of aminoacids to be evaluated. For example, \"AAA\" would 
-         analyse a trialanine peptide.
-    -c   run in cascade. (modules are loaded)
-    -n   <options>. pepgen options.
+    -b    <number of breakages> The simulation will run until get this number of
+              ruptures.
+    -c    run in cascade. (modules are loaded)
+    -e    <endo> or <exo> states for initial state of proline. Default <random>.
+    -m    <method>. stretching method. To see the options, use
+              'myutils change_distance -h'
+    -n    <options>. pepgen options.
+    -p    <peptide>. Chains of aminoacids to be evaluated. For example, \"AAA\"
+              would analyse a trialanine peptide.
     -R   random pepeptide. Give the number of amino acids with this argument.
     -r   restart. In this case, run from the directory of the precreated
          peptide.
-    -s   type of stretching. Supported options: rupture, overstretching.
-         Default: rupture.
+    -s   <size[A]> of the step that increases the distances. Default 0.2A
 
     -h   prints this message.
 "
 exit 0
 }
 
-# Function that returns the error message and stops the run if something fails.
-# Function that adjustes the text to 80 characters
-adjust () {
-    text=$( echo "++++++++ WORKFLOW_MSG: $@ " )
-    addchar=$( expr 80 - ${#text} % 80 )
-    text=$( echo $text $( perl -E "say '+' x $addchar" ))
-    nlines=$( expr ${#text} / 80 )
-    for (( w=0; w<=$nlines-1; w++ ))
-    do
-        echo ${text:$(( w * 79 )):79}
-    done
-    echo
-}
-# Function that returns the error message and stops the run if something fails.
-fail () {
-    adjust "ERROR" $1
-    exit "${2-1}"
-}
-
-# prints some text adjusted to 80 characters per line, filling empty spaces
-# with +
-verbose () {
-    adjust "VERBOSE" $1
-}
-warning () {
-    adjust "WARNING" $1
-}
 resubmit () {
     sleep 23h 59m ; \
     sbatch $( myutils workflow ) -a $1 -c -r -s $2 | echo ; \
@@ -68,24 +47,26 @@ resubmit () {
 
 # ----- set up starts ---------------------------------------------------------
 # General variables
-pep=''
+breakages=1
 cascade='false'
-restart=''
 endoexo='random'
-stretching_type='rupture'
-breaks=1
+method=0
+pep=''
+restart=''
+size=0.2
 
-while getopts 'a:b:e:cn:rR:s:h' flag;
+while getopts 'b:ce:m:n:p:rR:s:h' flag;
 do
     case "${flag}" in
-      a) pep=${OPTARG} ;;
-      b) breaks=${OPTARG} ;;
+      b) breakages=${OPTARG} ;;
       c) cascade='true' ;;
       e) endoexo=${OPTARG} ;;
+      m) method=${OPTARG} ;;
       n) pep_options=${OPTARG} ;;
+      p) pep=${OPTARG} ;;
       r) restart='-r' ;;
       R) random=${OPTARG} ;;
-      s) stretching_type=${OPTARG} ;;
+      s) size=${OPTARG} ;;
 
       h) print_help
     esac
@@ -101,7 +82,7 @@ echo $0 $@
 # random peptide
 if [ ! ${#random} -eq 0 ]
 then
-    warning "The code will create a random peptide, even if you also passed -a
+    warning "The code will create a random peptide, even if you also passed -p
         argument"
     pep=$( myutils gen_randpep $random ) || fail "Creating
         random peptide"
@@ -114,7 +95,7 @@ fi
 
 if [ ${#pep} -eq 0 ]
 then 
-    fail "This code needs one peptide. Please, define it using the flag -a or
+    fail "This code needs one peptide. Please, define it using the flag -p or
         -R. For more info, use \"myutils workflow -h\""
 fi
 
@@ -177,19 +158,8 @@ else
     warning "restarted"
 fi
 
-if [[ $stretching_type == 'rupture' ]]
-then
-    # Stretching
-    $( myutils stretching ) -p $pep $restart || fail "Stretching of $pep failed"
-elif [[ $stretching_type == 'overstretching' ]]
-then
-    # Stretching
-    $( myutils overstretching ) -p $pep $restart -o $breaks || fail "Stretching of $pep failed"
-else
-    fail "Non recognized stretching type"
-fi
-
-verbose "Workflow finished"
+$( myutils stretching ) -b $breakages -p $pep $restart -m $method \ 
+    -s $size || fail "Stretching of $pep failed"
 
 # Compute classical energies
 verbose "computing classical energies."
@@ -199,5 +169,7 @@ $( myutils classical_energies )
 verbose "submitting comptutation of forces."
 pwd
 sbatch $( myutils find_forces ) -c
+
+verbose "Workflow finished"
 
 exit 0

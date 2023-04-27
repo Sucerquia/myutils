@@ -1,61 +1,28 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
+source $(myutils basics) STRETCHING_MSG
+
 print_help() {
 echo "
 This tool obtains the stretched configuration by increasing the distance between
 caps carbon, constraining and optimizing using BMK exchange-correlation.
 
-    -p    <peptide>. In this directory has to exist a file called 
-                     <peptide>-stretched00.pdb
-    -n    <number of processors>
+    -b    <number of breakages> The simulation will run until get this number of
+              ruptures.
+    -p    <peptide>. In this directory, a file called <peptide>-stretched00.pdb
+              has to exist.
+    -m    <method>. stretching method. To see the options, use
+              'myutils change_distance -h'
+    -n    <number of processors> for the gaussian optimization 
+              (function not implemented yet)
     -r    restart stretching. In this case, this conde must be executed from
-          the peptide's directory.
+              the peptide's directory.
     -s    <size[A]> of the step that increases the distances. Default 0.2A
 
     -h    prints this message.
 "
 exit 0
-}
-
-# Function that adjustes the text to 80 characters
-adjust () {
-    text=$( echo "++++++++ STRETCHING_MSG: $@ " )
-    addchar=$( expr 80 - ${#text} % 80 )
-    text=$( echo $text $( perl -E "say '+' x $addchar" ))
-    nlines=$( expr ${#text} / 80 )
-    for (( w=0; w<=$nlines-1; w++ ))
-    do
-        echo ${text:$(( w * 79 )):79}
-    done
-    echo
-}
-# Function that returns the error message and stops the run if something fails.
-fail () {
-    adjust "ERROR" $1
-    exit "${2-1}"
-}
-
-# prints some text adjusted to 80 characters per line, filling empty spaces
-# with +
-verbose () {
-    adjust "VERBOSE" $1
-}
-warning () {
-    adjust "WARNING" $1
-}
-
-# Function to rename all the files of interest
-mv_stretching_files () {
-    for ext in log com chk xyz
-    do
-        if [ -f $1.$ext ]
-        then
-            verbose "moving $1.$ext to $1-$2.$ext"
-            mv $1.$ext $1-$2.$ext || fail "error moving files"
-        fi
-    done
-    return 0
 }
 
 # functions used to define the charge
@@ -77,14 +44,18 @@ count_letter () {
 
 # ----- set up starts ---------------------------------------------------------
 # General variables
-size=0.2
+breakages=1
+method=0
+n_processors=8
 restart='false'
-processors=8
+size=0.2
 retake='true'
 
-while getopts 'p:n:rs:h' flag; do
+while getopts 'b:p:m:n:rs:h' flag; do
     case "${flag}" in
+      b) breakages=${OPTARG} ;;
       p) pep=${OPTARG} ;;
+      m) method=${OPTARG} ;;
       n) processors=${OPTARG} ;;
       r) restart='true' ;;
       s) size=${OPTARG} ;;
@@ -93,21 +64,34 @@ while getopts 'p:n:rs:h' flag; do
     esac
 done
 
+# stretching method
+if [[ $method -eq 0 ]]
+then
+    if [ $breakages -eq 1 ]
+    then
+        method='scale_distance'
+    else
+        method='increase_distance_with_constraints'
+    fi
+fi
+verbose "The stretching method will be '$method'"
+
 # check dependencies
 ase -h &> /dev/null || fail "This code needs ASE"
 command -V g09 &> /dev/null || fail "This code needs gaussian"
 
-# C-CAP indexes in python convention
-index1=$(( $( grep ACE $pep-stretched00.pdb | grep CH3 | awk '{print $2}' ) - 1 ))
-index2=$(( $( grep NME $pep-stretched00.pdb | grep CH3 | awk '{print $2}' ) - 1 ))
+# C-CAP indexes in g09 convention
+index1=$( grep ACE $pep-stretched00.pdb | grep CH3 | awk '{print $2}' )
+index2=$( grep NME $pep-stretched00.pdb | grep CH3 | awk '{print $2}' )
 # check that the indexes were read properly:
+[ $index1 -eq 1 ] && [ $index2 -eq 1 ] && fail "Not recognized indexes"
 [ $index1 -eq 0 ] && [ $index2 -eq 0 ] && fail "Not recognized indexes"
-[ $index1 -eq -1 ] && [ $index2 -eq -1 ] && fail "Not recognized indexes"
 if ! [[ -f 'frozen_dofs.dat' ]]
 then
-    echo "$(($index1 + 1)) $(($index2 + 1)) F" > frozen_dofs.dat
+    echo "$index1 $index2 F" > frozen_dofs.dat
 fi
-verbose "This code will stretch the atoms with the indexes $index1 $index2"
+verbose "This code will stretch the atoms with the indexes $index1 $index2
+    (g09 convention)"
 
 # compute charges
 Kn=$( count_letter $pep "K" ) # Lysine
@@ -121,6 +105,7 @@ verbose "The charge is $charge"
 # ----- checking restart starts -----------------------------------------------
 if $restart
 then
+    # extracting last i with xyz file already created
     previous=( $( ls *.xyz | grep -v bck ) )
     wext=${previous[-1]}
     last=${wext%%.*}
@@ -131,74 +116,81 @@ then
     i=$(( 10#${last:0-2} ))
     verbose "Restarting, searching last optimization, $i is the last stretching
         detected"
-	nameiplusone=$(printf "%02d" $(($i + 1)))
 
-    # searchs advances in i+1a
+    # searching incomplete optimization trials
+	nameiplusone=$(printf "%02d" $(($i + 1)))
+    # searching advances in i+1a
     myutils log2xyz $pep-stretched${nameiplusone}-a.log 2> /dev/null && \
         mv_stretching_files $pep-stretched${nameiplusone} bck1 && \
         mv_stretching_files $pep-stretched${nameiplusone}-a bck2 && \
-        myutils g09_scale_distance $pep-stretched${nameiplusone}-a-bck2.xyz \
-            $pep-stretched${nameiplusone} $index1 $index2 0 $charge && \
+        myutils change_distance $pep-stretched${nameiplusone}-a-bck2.xyz \
+            $pep-stretched${nameiplusone} frozen_dofs.dat 0 $charge  \
+            $method && \
         retake='false' && \
         warning "The stretching of peptide $pep will be restarted from
             $(($i + 1))a"
 
-    # searchs advances in i+1
+    # searching advances in i+1
     $retake && \
         myutils log2xyz $pep-stretched${nameiplusone}.log 2> /dev/null && \
         mv_stretching_files $pep-stretched${nameiplusone} bck1 &&
-        myutils g09_scale_distance $pep-stretched${nameiplusone}-bck1.xyz \
-            $pep-stretched${nameiplusone} 0 1 0 $charge && \
+        myutils sep_w_cons $pep-stretched${nameiplusone}-bck1.xyz \
+            $pep-stretched${nameiplusone} frozen_dofs.dat 0 $charge \
+            $method && \
         retake='false' && \
         warning "The stretching of peptide $pep will be restarted
             from $(($i + 1))"
-
     # if i+1 trial doesn't exist
     $retake && \
         warning "The stretching of peptide $pep will be restarted from $i"
 else
+    # in case of not restarting
     i=-1
 fi
 # ----- checking restart finishes ---------------------------------------------
 
 # ----- stretching starts -----------------------------------------------------
-verbose "Stretching of $pep starts"
-while ! [[ -d rupture ]]
+verbose "Stretching of $pep starts and will run until getting $breakages
+    ruptures"
+
+while [[ $( cat frozen_dofs.dat | wc -l ) -le $breakages ]]
 do
     # names by index
 	namei=$(printf "%02d" $i)
 	nameiplusone=$(printf "%02d" $(($i + 1)))
 	nameiplustwo=$(printf "%02d" $(($i + 2)))
+
 	verbose "Stretched ${nameiplusone} starts"
-    if [ $(($i + 1)) -ne 0 ]
+    if [ $(($i + 1)) -eq 0 ]
     then
-        # 0 corresponds to the optimized config. if it is not the optimized
-        # configuration:
+        # 0 corresponds to the optimized config without constraints
+        # classical optimization
+        $( myutils classical_minimization ) $pep-stretched00.pdb || fail "
+            Classical minimization"
+
+        # initial g09 optimization
+        verbose "The first g09 process is an optimization"
+        myutils change_distance $pep-stretched00.pdb \
+            $pep-stretched00 frozen_dofs.dat 0 $charge $method || \
+            fail "Preparating the input of gaussian"
+        sed -i  '/^TV  /d' $pep-stretched00.com
+        sed -i "/opt/d" $pep-stretched00.com
+    else
         if $retake
         then
-            myutils g09_scale_distance \
+            myutils change_distance \
                 $pep-stretched$namei.xyz $pep-stretched${nameiplusone} \
-                $index1 $index2 $size $charge || fail "Preparating g09 input"
+                frozen_dofs.dat $size $charge $method \
+                || fail "Preparating g09 input"
         fi
         retake='true'
         sed -i '$d' $pep-stretched${nameiplusone}.com
         # add constrains
         cat frozen_dofs.dat >> \
             $pep-stretched${nameiplusone}.com
-    else
-        # classical optimization
-        $( myutils classical_minimization ) $pep-stretched00.pdb || fail "
-            Classical minimization"
-
-        # initial optimization
-        verbose "The first g09 process is an optimization"
-        myutils g09_scale_distance $pep-stretched00.pdb \
-            $pep-stretched00 $index1 $index2 0 $charge || fail "Preparating
-            the input of gaussian"
-        sed -i  '/^TV  /d' $pep-stretched00.com
-        sed -i "/opt/d" $pep-stretched00.com
+        
     fi
-    sed -i "1a %NProcShared=$processors" $pep-stretched${nameiplusone}.com
+    sed -i "1a %NProcShared=$n_processors" $pep-stretched${nameiplusone}.com
     sed -i "3a opt(modredun,calcfc)" $pep-stretched${nameiplusone}.com
 
     # run gaussian
@@ -219,16 +211,17 @@ do
                 $size . Then, a new trial will start now"
             myutils log2xyz $pep-stretched${nameiplusone}.log || fail "
                 Transforming log file to xyz in second trial of optimization"
-            myutils g09_scale_distance \
+            myutils change_distance \
                 $pep-stretched${nameiplusone}.xyz \
-                $pep-stretched${nameiplustwo} $index1 $index2 0 $charge
+                $pep-stretched${nameiplustwo} frozen_dofs.dat 0 $charge \
+                $method
             # save the failed files in ...-stretched<number>a.*
             mv_stretching_files $pep-stretched${nameiplusone} a
             # then restart the optimization
             mv $pep-stretched${nameiplustwo}.com $pep-stretched${nameiplusone}.com
             sed -i "s/stretched${nameiplustwo}/stretched${nameiplusone}/g" \
                 $pep-stretched${nameiplusone}.com
-            sed -i "1a %NProcShared=$processors" $pep-stretched${nameiplusone}.com
+            sed -i "1a %NProcShared=$n_processors" $pep-stretched${nameiplusone}.com
             sed -i "3a opt(modredun,calcfc)" $pep-stretched${nameiplusone}.com
             sed -i '$d' $pep-stretched${nameiplusone}.com
             cat frozen_dofs.dat >> \
@@ -249,18 +242,22 @@ do
     verbose "Testing dofs"
     myutils log2xyz $pep-stretched${nameiplusone}.log || fail "Transforming
         log file to xyz"
+    # Add extra values to frozen
     extrad=$( myutils diff_bonds $pep-stretched${namei}.xyz \
         $pep-stretched${nameiplusone}.xyz )
 
     if [ ${#extrad} -ne 2 ]
     then
-        # if a rupture is detected, stop running
-        verbose "rupture found in $extrad. The workflow finishes here"
-        mkdir rupture
-        mv $pep-stretched${nameiplusone}.* rupture
-        exit 0
+        # if a rupture is detected, this dof is detected and a new state 
+        verbose "rupture found in $extrad, this bond will be frozen"
+        if ! [[ -d rupture ]]
+        then
+            mkdir rupture
+        fi
+        mv $pep-stretched${nameiplusone}.* rupture/
+        continue
     else
-        verbose "Non-rupture detected in stretched ${nameiplusone}"
+       verbose "Non-rupture detected in stretched ${nameiplusone}"
     fi
 
     verbose "Stretched ${nameiplusone} finished"
