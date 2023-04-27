@@ -1,7 +1,7 @@
 # Definition functions and variables that are used along the whole package.
 
 # ------ variables ------------------------------------------------------------
-$pckg_name='myutils'
+pckg_name='myutils'
 
 # ------ functions ------------------------------------------------------------
 # Function that adjustes the text to 80 characters
