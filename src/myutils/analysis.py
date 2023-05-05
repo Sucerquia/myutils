@@ -37,11 +37,10 @@ def ramachandran(sith, pdb_file):
 def distance(file, index1, index2):
     """
     This code checks the distances between two atoms in the last configuration
-    of a trajectory file (e.g. *.log file from gaussian)
+    of a trajectory file (e.g. .log file from gaussian).
 
     Parameters
     ==========
-
     file: str
         name of the file that contains the trajectory.
     index1: int

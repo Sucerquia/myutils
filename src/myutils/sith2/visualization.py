@@ -744,7 +744,6 @@ class VisualizeEnergies(MoleculeViewer):
 
         Parameters
         ==========
-
         dofs: list of tuples.
             list of degrees of freedom defined according with g09 convention.
 
@@ -815,16 +814,14 @@ class VisualizeEnergies(MoleculeViewer):
         """
         Show an specific dof.
 
-        Params
-        ======
-
+        Parameters
+        ==========
         dof: int.
             index in sith object that corresponds to the dof you want to show.
         unique: Bool. default False.
             True if you want to remove all the other bonds and only keeping
             these ones.
-        color: list[int]*3. default R G B for bonds, angles, dihedrals
-               respectively.
+        color: list[int]\*3. default R G B for angles, distances, dihedrals.
             color that you want to use in this dof.
         """
         dof_indices = self.sith._deformed[0].dimIndices[dof]
@@ -845,9 +842,8 @@ class VisualizeEnergies(MoleculeViewer):
         """
         Show specific degrees of freedom.
 
-        Params
-        ======
-
+        Parameters
+        ==========
         dofs: list of tuples.
             list of degrees of freedom defined according with g09 convention.
 

@@ -89,14 +89,14 @@ def time_g09(logfile):
 
 # add2executable
 def format_to_pdb(name_input, name_output=None):
-    """"
+    """
     This function takes the last configuration of one file (e.g. one gaussian
-    *.log file) and saves the last configuration in a pdb file.
+    \*.log file) and saves the last configuration in a pdb file.
 
     Parameters
     ==========
     name_input: string
-        Name of files to be modified (e.g. './*.log' ).
+        Name of files to be modified (e.g. './\*.log' ).
 
     name_output: string
         Output name. Default: same name as input but with pdb extension.

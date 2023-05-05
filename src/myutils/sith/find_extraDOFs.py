@@ -1,5 +1,5 @@
 from SITH.SITH import SITH
-from myutils.sith2.sith2 import sith2
+from myutils.sith2.sith2 import Sith
 import sys
 
 
@@ -16,7 +16,7 @@ def save_extradofs(drelaxed, dstretched):
     sith.energyAnalysis()
     print(sith._deformed[0].dims)
 
-    a = sith2(sith)
+    a = Sith(sith)
 
     print(sith._deformed[0].dims)
 
