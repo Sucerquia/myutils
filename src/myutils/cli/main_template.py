@@ -58,6 +58,9 @@ def main():
     elif sys.argv[1] in other_files.keys():
         print(str(Path(__file__).parent)[:-3] + other_files[sys.argv[1]][2:])
 
+    elif sys.argv[1] == 'path':
+        print(str(Path(__file__).parent)[:-3])
+
     # Not recognized keyword
     else:
         print(f"ERROR: keyword {sys.argv[1]} not recognized. Please ")
