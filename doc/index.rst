@@ -6,8 +6,8 @@
 .. toctree::
    about
    install
-   myutils/myutils
-   tutorials/tutorials
+   modules/modules
+
 
 
 Indices and tables
