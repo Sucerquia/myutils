@@ -1,0 +1,42 @@
+﻿myutils.plotters
+================
+
+.. automodule:: myutils.plotters
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      add_color_per_amino
+      hessian_blocks
+      inner_ring_angles
+      min_profile
+      plot_angles
+      plot_changes
+      plot_energies_in_DOFs
+      plot_energy_in_lenght
+      plot_error
+      plot_gradient
+      plot_hessian
+      plot_ramachandran
+      plot_sith
+      standard
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

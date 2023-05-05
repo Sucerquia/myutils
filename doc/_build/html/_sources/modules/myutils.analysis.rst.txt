@@ -1,0 +1,40 @@
+﻿myutils.analysis
+================
+
+.. automodule:: myutils.analysis
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      all_hydrogen_atoms
+      cap_hydrogen_atoms
+      classical_energies
+      diff_bonds
+      distance
+      dof_classificator
+      dof_classificator2
+      extract_bonds
+      indexes_per_aminoacid
+      le_same_aminoacids
+      length_energy
+      ramachandran
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

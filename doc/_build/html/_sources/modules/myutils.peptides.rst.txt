@@ -1,0 +1,29 @@
+﻿myutils.peptides
+================
+
+.. automodule:: myutils.peptides
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      info
+   
+   
+
+   
+   
+   
+
+
+

@@ -1,0 +1,25 @@
+.. myutils documentation master file, created by
+   sphinx-quickstart on Tue May  2 13:22:11 2023.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+
+Modules
+=======
+
+.. autosummary::
+.. toctree::
+   :maxdepth: 4
+
+   myutils.peptides.info
+
+.. autoclass:: myutils.peptides.info
+   :members:
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
