@@ -16,7 +16,7 @@ then
     name_mod=$( echo $file | rev | cut -d "/" -f 1 | rev )
     echo $name_mod
     equals=$( perl -E "say '=' x ${#name_mod}" )
-    echo -e ".. _$name_mod:\n\n $name_mod \n $equals \n\n" >> $mod_doc/$file.rst
+    echo -e ".. _$name_mod:\n\n$name_mod\n$equals\n\n" >> $mod_doc/$file.rst
     echo -e ".. _$name_mod: was added to $mod_doc/$file.rst"
 fi
 
@@ -27,8 +27,6 @@ then
     echo "${file:2} was added to $mod_doc/modules.rst"
 fi
 
-
-
 # ==== clases =================================================================
 classes=$(grep "^class " $pkg_path/$file.py | awk '{print $2}')
 for class in $classes
@@ -37,7 +35,7 @@ do
     to_add=${tmp%\(*}
     line=".. autoclass:: $ref_mod.$to_add"
     lineinrst=$(grep "$line" $mod_doc/$file.rst)
-    if [ ! ${#lineinrst} -eq 0 ]
+    if [ ${#lineinrst} -eq 0 ]
     then
         echo -e "$line\n    :members:" >> $mod_doc/$file.rst
         echo "$line added to $mod_doc/$file.rst"
@@ -50,11 +48,11 @@ for funct in $functions
 do
     tmp=${funct%:*}
     to_add=${tmp%\(*}
-    line=".. automodule:: $ref_mod.$to_add"
+    line=".. autofunction:: $ref_mod.$to_add"
     lineinrst=$(grep "$line" $file.rst)
-    if [ ! ${#lineinrst} -eq 0 ]
+    if [ ${#lineinrst} -eq 0 ]
     then
-        echo -e "$line\n    :members:" >> $mod_doc/$file.rst
+        echo -e "$line\n" >> $mod_doc/$file.rst
         echo "$line added to $mod_doc/$file.rst"
     fi
 done

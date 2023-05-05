@@ -5,7 +5,7 @@
 pkg_name='myutils'
 mod_path=$($pkg_name path)   # path to the files to be documented
 # path to new module directory
-mod_doc=$($pkg_name path)../../doc/modules
+mod_doc=$($pkg_name path)../../doc2/modules
 # directories to be ignore during documentation.
 ignore_dirs=( 'pycache' 'tests' 'cli' )
 # files to be ignore during documentation.
@@ -38,7 +38,7 @@ fi
 
 if [ ! -f $mod_doc/modules.rst ]
 then
-    echo -e ".. _modules:\n\n Modules \n ======= \n\n .. toctree::" > $mod_doc/modules.rst
+    echo -e ".. _modules:\n\nModules \n======= \n\n.. toctree::\n    :maxdepth: 2" > $mod_doc/modules.rst
 fi
 
 # create directories with the same structure than the package in modules.
@@ -89,83 +89,3 @@ do
         $(myutils doc_pythonfile) ${fil%.*} $mod_path $mod_doc $pkg_name
     fi
 done
-
-
-
-if [ 9 -eq 2 ]
-then
-
-for fil in $pck_fils
-do
-    echo ${fil%.*}
-    path=$(echo ${fil%.*} | sed 's/\//\./g')
-    echo "$pkg_name${path:1}"
-    ext=$(echo $fil | cut -d '.' -f3 )
-    echo $ext
-done
-
-
-for fil in $pck_fils
-do
-    if [ ! -f ${fil%.*}.rst ]
-    then
-        touch modules/${fil%.*}.rst
-    fi
-    ext=$(echo $fil | cut -d '.' -f3 )
-    #echo ${${fil#.*}#.*}
-    echo $ext
-done
-
-
-
-
-
-
-
-
-
-if [ ! -d modules ]
-then
-    mkdir modules
-fi
-for dir in $pck_dirs
-do
-    mod="modules/${dir#*\.\/}"
-    if [ ! -d $mod ]
-    then
-        mkdir $mod
-        echo " $mod was created"
-    fi
-done
-# ------------- Compare directories in documentation with dirs in package -----
-verbose "comparing directories in package with directories in documentation"
-cd modules
-local_dirs=$( find . -type d )
-cd $wd
-for dir in $local_dirs
-do
-    if [[ ! -d  $mod_path/$dir ]]
-    then
-        warning "$dir is refered as a module in the documentation, but it does
-            not exist in the package."
-    fi
-done
-cd $wd
-
-
-
-
-echo ".. _myutils:
-
-=======
-Modules
-=======
-
-" >> $pkg_name.rst
-
-for fil in  $directories
-do
-    echo $fil
-done
-
-fi
