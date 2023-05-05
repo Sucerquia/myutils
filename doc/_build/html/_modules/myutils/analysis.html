@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myutils.analysis &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/modules.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">myutils.analysis</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for myutils.analysis</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">MDAnalysis.analysis.dihedrals</span> <span class="kn">import</span> <span class="n">Ramachandran</span>
+<span class="kn">import</span> <span class="nn">MDAnalysis</span> <span class="k">as</span> <span class="nn">ma</span>
+<span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">read</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">ase.geometry.analysis</span> <span class="kn">import</span> <span class="n">Analysis</span>
+<span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">read</span>
+
+
+<div class="viewcode-block" id="ramachandran"><a class="viewcode-back" href="../../modules/analysis.html#myutils.analysis.ramachandran">[docs]</a><span class="k">def</span> <span class="nf">ramachandran</span><span class="p">(</span><span class="n">sith</span><span class="p">,</span> <span class="n">pdb_file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the ramachandran angles of several stretched configurations.</span>
+<span class="sd">    each compoe</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    sith:</span>
+<span class="sd">        sith object.</span>
+<span class="sd">    pdb_file:</span>
+<span class="sd">        pdb file that contains the structural information. It doesn&#39;t matter if</span>
+<span class="sd">        the coordinates don&#39;t correspond to something relevant. The importance</span>
+<span class="sd">        are in the structural description (aminoacids, number of residue...)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">pdb_file</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">Ramachandran</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s1">&#39;protein&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+    <span class="n">rama_angles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">pdb_file</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">conf</span> <span class="ow">in</span> <span class="n">sith</span><span class="o">.</span><span class="n">_deformed</span><span class="p">:</span>
+        <span class="n">u</span><span class="o">.</span><span class="n">load_new</span><span class="p">(</span><span class="n">conf</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">positions</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">Ramachandran</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="s1">&#39;protein&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+        <span class="n">rama_angles</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">angles</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+    <span class="n">rama_angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rama_angles</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">rama_angles</span></div>
+
+
+<span class="c1"># add2executable</span>
+<div class="viewcode-block" id="distance"><a class="viewcode-back" href="../../modules/analysis.html#myutils.analysis.distance">[docs]</a><span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">index1</span><span class="p">,</span> <span class="n">index2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This code checks the distances between two atoms in the last configuration</span>
+<span class="sd">    of a trajectory file (e.g. .log file from gaussian).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    file: str</span>
+<span class="sd">        name of the file that contains the trajectory.</span>
+<span class="sd">    index1: int</span>
+<span class="sd">        index of the first atom to compute distances</span>
+<span class="sd">    arg2: int</span>
+<span class="sd">        index of the second atom to compute distances</span>
+
+<span class="sd">    Return</span>
+<span class="sd">    ======</span>
+<span class="sd">    (float)  Distance between atoms corresponding with atom with index1 and</span>
+<span class="sd">    index2.</span>
+
+<span class="sd">    Execute from terminal using:</span>
+<span class="sd">    myutils distance arg1 arg2 arg3</span>
+
+<span class="sd">    E.g.</span>
+<span class="sd">    myutils distance optimization.log 1 20</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">index1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">index1</span><span class="p">)</span>
+    <span class="n">index2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">index2</span><span class="p">)</span>
+    <span class="n">atoms</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">get_distance</span><span class="p">(</span><span class="n">index1</span><span class="p">,</span> <span class="n">index2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">d</span></div>
+
+
+<span class="c1"># DEPRECTED</span>
+<span class="c1"># now this function is in peptides</span>
+<div class="viewcode-block" id="indexes_per_aminoacid"><a class="viewcode-back" href="../../modules/analysis.html#myutils.analysis.indexes_per_aminoacid">[docs]</a><span class="k">def</span> <span class="nf">indexes_per_aminoacid</span><span class="p">(</span><span class="n">pdb_file</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pdb_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="n">atoms</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span> <span class="k">if</span> <span class="s1">&#39;ATOM&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
+    <span class="n">aminoacids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">indexes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">atoms_per_aminoacids</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">aminoacids</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">atoms_per_aminoacids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">indexes</span><span class="p">)):</span>
+        <span class="n">atoms_per_aminoacids</span><span class="p">[</span><span class="n">aminoacids</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indexes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">atoms_per_aminoacids</span></div>
+
+
+<div class="viewcode-block" id="all_hydrogen_atoms"><a class="viewcode-back" href="../../modules/analysis.html#myutils.analysis.all_hydrogen_atoms">[docs]</a><span class="k">def</span> <span class="nf">all_hydrogen_atoms</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">    find the indexes of all the hydrogen atoms in the peptide from an ASE.Atoms</span>
+<span class="sd">    object.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    mol: string</span>
+<span class="sd">        ASE.Atoms object to extract the hydrogen indexes.</span>
+
+<span class="sd">    Return</span>
+<span class="sd">    ======</span>
+<span class="sd">    list of indexes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">mol</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">indexes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mol</span><span class="o">.</span><span class="n">get_atomic_numbers</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">indexes</span> <span class="o">+</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="dof_classificator"><a class="viewcode-back" href="../../modules/analysis.html#myutils.analysis.dof_classificator">[docs]</a><span class="k">def</span> <span class="nf">dof_classificator</span><span class="p">(</span><span class="n">dofs_indexes</span><span class="p">,</span> <span class="n">atoms_per_aminoacids</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    return all degrees of freedom defined by atoms of the same residue&quot;&quot;&quot;</span>
+    <span class="n">list_aminos</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">atoms_per_aminoacids</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">list_aminos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dofs_indexes</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">atoms_per_aminoacids</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">dofs_indexes</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">atoms_per_aminoacids</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                <span class="n">list_aminos</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">list_aminos</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">i</span><span class="p">)</span>
+                <span class="k">break</span>
+    <span class="k">return</span> <span class="n">list_aminos</span></div>
+
+
+<div class="viewcode-block" id="dof_classificator2"><a class="viewcode-back" href="../../modules/analysis.html#myutils.analysis.dof_classificator2">[docs]</a><span class="k">def</span> <span class="nf">dof_classificator2</span><span class="p">(</span><span class="n">dofs_indexes</span><span class="p">,</span> <span class="n">atoms_per_aminoacids</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return all degrees of freedom that includes at least one atom of a residue</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">list_aminos</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">atoms_per_aminoacids</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">list_aminos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dofs_indexes</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">atoms_per_aminoacids</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">dofs_indexes</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">atoms_per_aminoacids</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="n">list_aminos</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">list_aminos</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">i</span><span class="p">)</span>
+                <span class="k">break</span>
+    <span class="k">return</span> <span class="n">list_aminos</span></div>
+
+
+<div class="viewcode-block" id="classical_energies"><a class="viewcode-back" href="../../modules/analysis.html#myutils.analysis.classical_energies">[docs]</a><span class="k">def</span> <span class="nf">classical_energies</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+    <span class="s2">&quot;Return the classical energies in Hartrees&quot;</span>
+    <span class="n">potential_energy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">potential_energy</span> <span class="o">=</span> <span class="p">(</span><span class="n">potential_energy</span><span class="p">)</span><span class="o">*</span><span class="mi">1</span><span class="o">/</span><span class="mi">2600</span>  <span class="c1"># 1Ha=2600kJ/mol</span>
+    <span class="n">DOFs_energy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span><span class="o">*</span><span class="mi">1</span><span class="o">/</span><span class="mi">2600</span>  <span class="c1"># 1Ha=2600kJ/mol</span>
+
+    <span class="n">appr_eDOF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">DOFs_energy</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">appr_eDOF</span> <span class="o">=</span> <span class="p">(</span><span class="n">appr_eDOF</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">potential_energy</span><span class="p">,</span> <span class="n">appr_eDOF</span></div>
+
+
+<div class="viewcode-block" id="length_energy"><a class="viewcode-back" href="../../modules/analysis.html#myutils.analysis.length_energy">[docs]</a><span class="k">def</span> <span class="nf">length_energy</span><span class="p">(</span><span class="n">sith</span><span class="p">,</span> <span class="n">aminos_info</span><span class="p">,</span> <span class="n">atoms_types</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    return the value of the DOF and the energies as the molecule is stretched</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    sith: sith object</span>
+<span class="sd">    aminos_info: dic</span>
+<span class="sd">        amino_info.amino_info of the requiered amino acid.</span>
+<span class="sd">    atom_types:</span>
+<span class="sd">        name of the atoms inside the aminoacid that will be studied,</span>
+<span class="sd">        example [&#39;CA&#39;, &#39;CB&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">defo</span> <span class="o">=</span> <span class="n">sith</span><span class="o">.</span><span class="n">_deformed</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">i_ric</span> <span class="o">=</span> <span class="n">defo</span><span class="o">.</span><span class="n">dimIndices</span><span class="o">.</span><span class="n">index</span><span class="p">((</span><span class="n">aminos_info</span><span class="p">[</span><span class="n">atoms_types</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                                       <span class="n">aminos_info</span><span class="p">[</span><span class="n">atoms_types</span><span class="p">[</span><span class="mi">1</span><span class="p">]]))</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="n">i_ric</span> <span class="o">=</span> <span class="n">defo</span><span class="o">.</span><span class="n">dimIndices</span><span class="o">.</span><span class="n">index</span><span class="p">((</span><span class="n">aminos_info</span><span class="p">[</span><span class="n">atoms_types</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+                                       <span class="n">aminos_info</span><span class="p">[</span><span class="n">atoms_types</span><span class="p">[</span><span class="mi">0</span><span class="p">]]))</span>
+    <span class="n">energies</span> <span class="o">=</span> <span class="n">sith</span><span class="o">.</span><span class="n">energies</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">i_ric</span><span class="p">]</span>
+    <span class="n">values_dof</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">defo</span> <span class="ow">in</span> <span class="n">sith</span><span class="o">.</span><span class="n">_deformed</span><span class="p">:</span>
+        <span class="n">values_dof</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">defo</span><span class="o">.</span><span class="n">ric</span><span class="p">[</span><span class="n">i_ric</span><span class="p">])</span>
+    <span class="n">values_dof</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">values_dof</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">values_dof</span><span class="p">,</span> <span class="n">energies</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="le_same_aminoacids"><a class="viewcode-back" href="../../modules/analysis.html#myutils.analysis.le_same_aminoacids">[docs]</a><span class="k">def</span> <span class="nf">le_same_aminoacids</span><span class="p">(</span><span class="n">sith</span><span class="p">,</span> <span class="n">aminos_info</span><span class="p">,</span> <span class="n">atoms_types</span><span class="p">,</span> <span class="n">kind_aminoacid</span><span class="p">):</span>
+    <span class="n">indexes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">amino_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">aminos_info</span><span class="o">.</span><span class="n">amino_name</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="n">amino_name</span> <span class="ow">in</span> <span class="n">kind_aminoacid</span><span class="p">:</span>
+            <span class="n">indexes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">all_le</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">indexes</span><span class="p">:</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">length_energy</span><span class="p">(</span><span class="n">sith</span><span class="p">,</span> <span class="n">aminos_info</span><span class="o">.</span><span class="n">amino_info</span><span class="p">[</span><span class="n">index</span><span class="p">],</span>
+                               <span class="n">atoms_types</span><span class="p">)</span>
+        <span class="n">all_le</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">all_le</span></div>
+
+
+<span class="c1"># ------------------ remove ---------------------------------------------------</span>
+<div class="viewcode-block" id="cap_hydrogen_atoms"><a class="viewcode-back" href="../../modules/analysis.html#myutils.analysis.cap_hydrogen_atoms">[docs]</a><span class="k">def</span> <span class="nf">cap_hydrogen_atoms</span><span class="p">(</span><span class="n">pdb_file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">    find the indexes of the hydrogen atoms of the caps parts in the peptide.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    pdb_file: string</span>
+<span class="sd">        name of the pdb file with the molecule of interest.</span>
+
+<span class="sd">    Return</span>
+<span class="sd">    ======</span>
+<span class="sd">    list of indexes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">output_terminal</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;grep ATOM </span><span class="si">{</span><span class="n">pdb_file</span><span class="si">}</span><span class="s1"> | grep -n ATOM | grep -e </span><span class="se">\</span>
+<span class="s1">                               ACE -e NME | grep HH&#39;</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">indexes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">output</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">indexes</span></div>
+
+
+<div class="viewcode-block" id="extract_bonds"><a class="viewcode-back" href="../../modules/analysis.html#myutils.analysis.extract_bonds">[docs]</a><span class="k">def</span> <span class="nf">extract_bonds</span><span class="p">(</span><span class="n">readable_file</span><span class="p">):</span>
+    <span class="n">atoms</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">readable_file</span><span class="p">)</span>
+    <span class="n">ana</span> <span class="o">=</span> <span class="n">Analysis</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
+    <span class="n">bonds_zm</span> <span class="o">=</span> <span class="n">ana</span><span class="o">.</span><span class="n">unique_bonds</span>
+
+    <span class="n">bonds</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pairs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bonds_zm</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
+                <span class="n">bonds</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">pair</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">bonds</span></div>
+
+
+<span class="c1"># add2executable</span>
+<div class="viewcode-block" id="diff_bonds"><a class="viewcode-back" href="../../modules/analysis.html#myutils.analysis.diff_bonds">[docs]</a><span class="k">def</span> <span class="nf">diff_bonds</span><span class="p">(</span><span class="n">file1</span><span class="p">,</span> <span class="n">file2</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s1">&#39;frozen_dofs.dat&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function returns the bonds that are in one file (first argument) but</span>
+<span class="sd">    not in the other (second argument).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">bonds1</span> <span class="o">=</span> <span class="n">extract_bonds</span><span class="p">(</span><span class="n">file1</span><span class="p">)</span>
+    <span class="n">bonds2</span> <span class="o">=</span> <span class="n">extract_bonds</span><span class="p">(</span><span class="n">file2</span><span class="p">)</span>
+
+    <span class="n">different_bonds</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">bonds1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">bond</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bonds2</span><span class="p">:</span>
+            <span class="n">different_bonds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bond</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fdofs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">different_bonds</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">bond</span><span class="p">:</span>
+                <span class="n">fdofs</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
+            <span class="n">fdofs</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;F</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">different_bonds</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

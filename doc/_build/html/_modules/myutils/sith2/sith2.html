@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myutils.sith2.sith2 &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/modules.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">myutils.sith2.sith2</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for myutils.sith2.sith2</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">ase</span> <span class="kn">import</span> <span class="n">units</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">from</span> <span class="nn">myutils.miscellaneous</span> <span class="kn">import</span> <span class="n">output_terminal</span>
+<span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">read</span>
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">simpson</span>
+
+
+<div class="viewcode-block" id="Geometry"><a class="viewcode-back" href="../../../modules/sith2/sith2.html#myutils.sith2.sith2.Geometry">[docs]</a><span class="k">class</span> <span class="nc">Geometry</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xyz_file</span><span class="p">,</span> <span class="n">force_file</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">force_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">xyz_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nAtoms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">force_file</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                             <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dimIndices</span> <span class="o">=</span> <span class="p">[</span><span class="nb">eval</span><span class="p">(</span><span class="n">ric_indexes</span><span class="p">)</span> <span class="k">for</span> <span class="n">ric_indexes</span> <span class="ow">in</span> <span class="n">indexes</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ric</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">force_file</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimIndices</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">internal_forces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">force_file</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">internal_forces</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">internal_forces</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">/</span> <span class="n">units</span><span class="o">.</span><span class="n">Bohr</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">force_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">ff</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">header</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_killDOFs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dofis</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes a list of indices of degrees of freedom to remove, Removes DOFs</span>
+<span class="sd">        from ric, dimIndices, and internal_forces, updates dims</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ric</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ric</span><span class="p">,</span> <span class="n">dofis</span><span class="p">)</span>
+        <span class="c1"># counter of the number of DOF removed arranged in</span>
+        <span class="c1"># types (lenght, angle, dihedral)</span>
+        <span class="n">tdofremoved</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">dofis</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">tdofremoved</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dimIndices</span><span class="p">[</span><span class="n">index</span><span class="p">])</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimIndices</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dofis</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-=</span> <span class="n">tdofremoved</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-=</span> <span class="n">tdofremoved</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-=</span> <span class="n">tdofremoved</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="c1"># change for forces</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">internal_forces</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">internal_forces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">internal_forces</span><span class="p">,</span> <span class="n">dofis</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ric</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_forces</span></div>
+
+
+<div class="viewcode-block" id="Sith"><a class="viewcode-back" href="../../../modules/sith2/sith2.html#myutils.sith2.sith2.Sith">[docs]</a><span class="k">class</span> <span class="nc">Sith</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">forces_xyz_files</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">master_directory</span><span class="o">=</span><span class="s1">&#39;./&#39;</span><span class="p">,</span>
+                 <span class="n">killAtoms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">killDOFs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">killElements</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">rem_first_def</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rem_last_def</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+
+        <span class="c1"># General variabales</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="k">if</span> <span class="n">forces_xyz_files</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">forces_xyz_files</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">killAtoms</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">killAtoms</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">killDOFs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">killDOFs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">killElements</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">killElements</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># files path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">forces_files</span> <span class="o">=</span> <span class="n">forces_xyz_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xyz_files</span> <span class="o">=</span> <span class="n">forces_xyz_files</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_directory</span> <span class="o">=</span> <span class="n">master_directory</span>
+
+        <span class="c1"># default set-up</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">forces_files</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">forces_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">master_directory</span> <span class="o">+</span>
+                                          <span class="s1">&#39;/*force*.dat&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyz_files</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xyz_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">master_directory</span> <span class="o">+</span> <span class="s1">&#39;/*force*.xyz&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">forces_files</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz_files</span><span class="p">),</span> <span class="s2">&quot;Different &quot;</span> <span class="o">+</span> \
+            <span class="s2">&quot;number of forces and xyz files.&quot;</span>
+        <span class="c1"># # Create forces files</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">forces_files</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">master_directory</span><span class="o">+</span><span class="s1">&#39;/*force*.log&#39;</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">master_directory</span><span class="si">}</span><span class="s2"> does not exist or &quot;</span> <span class="o">+</span>
+                              <span class="s2">&quot;does not contain *force*.log files the &quot;</span> <span class="o">+</span>
+                              <span class="s2">&quot;forces_xyz_files is empty.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">create_files</span><span class="p">()</span>
+
+        <span class="c1"># # sorth forces and xyz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">forces_files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xyz_files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="c1"># create Geometries shape=(n_def, 1)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_deformed</span> <span class="o">=</span> <span class="p">[</span><span class="n">Geometry</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+                          <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz_files</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">forces_files</span><span class="p">)]</span>
+        <span class="c1"># number of deformed configs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_deformed</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_deformed</span><span class="p">)</span>
+
+        <span class="c1"># debug: test the DOFs in all force files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_dofs</span><span class="p">()</span>
+
+        <span class="c1"># Create matrices</span>
+        <span class="c1"># # DFT energies for each configuration shape=(n_def, 1)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deformationEnergy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">defo</span><span class="o">.</span><span class="n">energy</span>
+                                           <span class="k">for</span> <span class="n">defo</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deformed</span><span class="p">])</span>
+        <span class="c1"># # ric values matrix shape=(n_def, n_dofs)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">defo</span><span class="o">.</span><span class="n">ric</span> <span class="k">for</span> <span class="n">defo</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deformed</span><span class="p">])</span>
+        <span class="c1"># # matrix changes shape=(n_def, n_dofs)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_rics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rics</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deltaQ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_changes</span><span class="p">()</span>
+        <span class="c1"># # all forces shape=(n_def, n_dofs)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_forces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">defo</span><span class="o">.</span><span class="n">internal_forces</span>
+                                    <span class="k">for</span> <span class="n">defo</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deformed</span><span class="p">])</span>
+
+        <span class="c1"># # energies per DOF shape=(n_def, n_dofs)</span>
+        <span class="c1"># # and computed energy shape=(n_def, 1)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">energies</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs_ener</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">energies</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs_ener</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis_classical</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Non-recognized method&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">killer</span><span class="p">(</span><span class="n">killAtoms</span><span class="p">,</span> <span class="n">killDOFs</span><span class="p">,</span> <span class="n">killElements</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rem_first_last</span><span class="p">(</span><span class="n">rem_first_def</span><span class="p">,</span> <span class="n">rem_last_def</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Sith.create_files"><a class="viewcode-back" href="../../../modules/sith2/sith2.html#myutils.sith2.sith2.Sith.create_files">[docs]</a>    <span class="k">def</span> <span class="nf">create_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">        Uses \&quot;myutils extract_forces\&quot; to get the forces, coordinates and</span>
+<span class="sd">        coordinates in xyz format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">get_forces_exec</span> <span class="o">=</span> <span class="n">output_terminal</span><span class="p">(</span><span class="s2">&quot;myutils extract_forces&quot;</span><span class="p">)</span>
+        <span class="n">output_terminal</span><span class="p">(</span><span class="n">get_forces_exec</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span>
+                        <span class="sa">f</span><span class="s2">&quot; -d </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">master_directory</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">forces_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">master_directory</span> <span class="o">+</span> <span class="s1">&#39;/*force*.dat&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xyz_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">master_directory</span> <span class="o">+</span> <span class="s1">&#39;/*force*.xyz&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">forces_files</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyz_files</span></div>
+
+    <span class="k">def</span> <span class="nf">check_dofs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">referece</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deformed</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dimIndices</span>
+        <span class="k">for</span> <span class="n">defo</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deformed</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">to_compare</span> <span class="o">=</span> <span class="n">defo</span><span class="o">.</span><span class="n">dimIndices</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_compare</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">referece</span><span class="p">),</span> \
+                <span class="s2">&quot;The number of DOFs in the first force file and in &quot;</span> <span class="o">+</span> \
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">defo</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> is different.&quot;</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">referece</span><span class="p">)):</span>
+                <span class="k">assert</span> <span class="n">to_compare</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">referece</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">or</span> \
+                    <span class="n">to_compare</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">referece</span><span class="p">[</span><span class="n">i</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> \
+                    <span class="sa">f</span><span class="s2">&quot;The DOF in the first force file is </span><span class="si">{</span><span class="n">referece</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2"> and&quot;</span> <span class="o">+</span>\
+                    <span class="sa">f</span><span class="s2">&quot; the DOF in </span><span class="si">{</span><span class="n">defo</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> is </span><span class="si">{</span><span class="n">to_compare</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">rics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">rics</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">defo</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deformed</span><span class="p">:</span>
+            <span class="n">ric</span> <span class="o">=</span> <span class="n">defo</span><span class="o">.</span><span class="n">ric</span>
+            <span class="n">ric</span><span class="p">[:</span><span class="n">defo</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">ric</span><span class="p">[:</span><span class="n">defo</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="n">ric</span><span class="p">[</span><span class="n">defo</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]:]</span> <span class="o">=</span> <span class="n">ric</span><span class="p">[</span><span class="n">defo</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]:]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>
+            <span class="n">rics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">defo</span><span class="o">.</span><span class="n">ric</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rics</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">extract_changes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">delta_rics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_rics</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rics</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span>
+                                               <span class="bp">self</span><span class="o">.</span><span class="n">all_rics</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                               <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">nditer</span><span class="p">(</span><span class="n">delta_rics</span><span class="p">,</span> <span class="n">op_flags</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;readwrite&#39;</span><span class="p">])</span> <span class="k">as</span> <span class="n">dqit</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">dq</span> <span class="ow">in</span> <span class="n">dqit</span><span class="p">:</span>
+                <span class="n">dq</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">dq</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="k">if</span> <span class="n">dq</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> \
+                    <span class="k">else</span> <span class="p">(</span><span class="n">dq</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="k">if</span> <span class="n">dq</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="k">else</span> <span class="n">dq</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">delta_rics</span>
+
+    <span class="k">def</span> <span class="nf">analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_ener</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_forces</span><span class="p">[</span><span class="mi">0</span><span class="p">]))]</span>
+        <span class="c1"># next loop is a nasty cummulative integration. Maybe it could</span>
+        <span class="c1"># be improved</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_forces</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">ener_def</span> <span class="o">=</span> <span class="o">-</span><span class="n">simpson</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_forces</span><span class="p">[:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+                                <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rics</span><span class="p">[:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+                                <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">all_ener</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ener_def</span><span class="p">)</span>
+        <span class="n">all_ener</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_ener</span><span class="p">)</span>
+        <span class="n">total_ener</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">all_ener</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">all_ener</span><span class="p">,</span> <span class="n">total_ener</span>
+
+    <span class="k">def</span> <span class="nf">analysis_classical</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_values</span> <span class="o">=</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_forces</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">deltaQ</span>
+        <span class="n">energies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">all_values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">total_ener</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">energies</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">energies</span><span class="p">,</span> <span class="n">total_ener</span>
+
+<div class="viewcode-block" id="Sith.compareEnergies"><a class="viewcode-back" href="../../../modules/sith2/sith2.html#myutils.sith2.sith2.Sith.compareEnergies">[docs]</a>    <span class="k">def</span> <span class="nf">compareEnergies</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes in SITH object sith, Returns Tuple of expected stress energy,</span>
+<span class="sd">        stress energy error, and %Error</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Expected Stress Energy: Total E deformed structure from input .fchk -</span>
+<span class="sd">        total E reference structure from input .fchk</span>
+<span class="sd">        Stress Energy Error: calculated stress energy - Expected Stress Energy</span>
+<span class="sd">        %Error: Stress Energy Error / Expected Stress Energy</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">obtainedDE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs_ener</span>
+        <span class="n">expectedDE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformationEnergy</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformationEnergy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">errorDE</span> <span class="o">=</span> <span class="n">obtainedDE</span> <span class="o">-</span> <span class="n">expectedDE</span>
+        <span class="n">pErrorDE</span> <span class="o">=</span> <span class="p">(</span><span class="n">errorDE</span> <span class="o">/</span> <span class="n">expectedDE</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="n">pErrorDE</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">pErrorDE</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">pErrorDE</span><span class="p">))]</span> <span class="o">=</span> <span class="mi">200</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">obtainedDE</span><span class="p">,</span> <span class="n">expectedDE</span><span class="p">,</span> <span class="n">errorDE</span><span class="p">,</span> <span class="n">pErrorDE</span><span class="p">])</span></div>
+
+<span class="c1"># --------------------------- killer ------------------------------------------</span>
+<div class="viewcode-block" id="Sith.killer"><a class="viewcode-back" href="../../../modules/sith2/sith2.html#myutils.sith2.sith2.Sith.killer">[docs]</a>    <span class="k">def</span> <span class="nf">killer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">killAtoms</span><span class="o">=</span><span class="p">[],</span> <span class="n">killDOFs</span><span class="o">=</span><span class="p">[],</span> <span class="n">killElements</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        killAtoms:</span>
+<span class="sd">            list of indexes of atoms to be killed</span>
+<span class="sd">        killDOFs:</span>
+<span class="sd">            list of tuples with the DOFs to be killed</span>
+<span class="sd">        killElements:</span>
+<span class="sd">            list of strings with the elements to be killed. So, if you want to</span>
+<span class="sd">            remove all hydrogens and carbons, use killElements=[&#39;H&#39;, &#39;C&#39;].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dims_to_kill</span> <span class="o">=</span> <span class="n">killDOFs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atoms_to_kill</span> <span class="o">=</span> <span class="n">killAtoms</span>
+
+        <span class="c1"># concatenate elements in atoms to be killed</span>
+        <span class="n">molecule</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_deformed</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_chemical_symbols</span><span class="p">())</span>
+
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">killElements</span><span class="p">:</span>
+            <span class="n">indexes_element</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">molecule</span> <span class="o">==</span> <span class="n">element</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">atoms_to_kill</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">indexes_element</span><span class="p">)</span>
+
+        <span class="c1"># concatenate atoms in DOFs to be killed</span>
+        <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms_to_kill</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dims_to_kill</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">dim</span> <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deformed</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dimIndices</span> <span class="k">if</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">dim</span><span class="p">])</span>
+        <span class="c1"># remove repetitions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dims_to_kill</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dims_to_kill</span><span class="p">))</span>
+
+        <span class="c1"># remove DOFs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__killDOFs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dims_to_kill</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">energies</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs_ener</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">energies</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs_ener</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analysis_classical</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Non-recognized method&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims_to_kill</span></div>
+
+    <span class="k">def</span> <span class="nf">__killDOFs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dofs</span><span class="p">):</span>
+        <span class="n">rIndices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">dof</span> <span class="ow">in</span> <span class="n">dofs</span><span class="p">:</span>
+            <span class="n">rIndices</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_deformed</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deformed</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dimIndices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">dof</span><span class="p">])</span>
+
+        <span class="c1"># kill DOFs in Geometries</span>
+        <span class="k">for</span> <span class="n">defo</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deformed</span><span class="p">:</span>
+            <span class="n">defo</span><span class="o">.</span><span class="n">_killDOFs</span><span class="p">(</span><span class="n">rIndices</span><span class="p">)</span>
+
+        <span class="c1"># kill DOFs in sith</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qF</span><span class="p">,</span>  <span class="n">rIndices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_rics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rics</span><span class="p">,</span>  <span class="n">rIndices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deltaQ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deltaQ</span><span class="p">,</span>  <span class="n">rIndices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_forces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_forces</span><span class="p">,</span>  <span class="n">rIndices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rIndices</span>
+
+<span class="c1"># ---------------------- remove deformations ----------------------------------</span>
+    <span class="k">def</span> <span class="nf">rem_first_last</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rem_first_def</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rem_last_def</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_deformed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deformed</span><span class="p">[</span><span class="n">rem_first_def</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_deformed</span> <span class="o">-</span>
+                                        <span class="n">rem_last_def</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qF</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qF</span><span class="p">[</span><span class="n">rem_first_def</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_deformed</span> <span class="o">-</span>
+                          <span class="n">rem_last_def</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deltaQ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deltaQ</span><span class="p">[</span><span class="n">rem_first_def</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_deformed</span> <span class="o">-</span>
+                                  <span class="n">rem_last_def</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_forces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_forces</span><span class="p">[</span><span class="n">rem_first_def</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_deformed</span> <span class="o">-</span>
+                                          <span class="n">rem_last_def</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">energies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energies</span><span class="p">[</span><span class="n">rem_first_def</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_deformed</span> <span class="o">-</span>
+                                      <span class="n">rem_last_def</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">configs_ener</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs_ener</span><span class="p">[</span><span class="n">rem_first_def</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_deformed</span> <span class="o">-</span>
+                                              <span class="n">rem_last_def</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deformationEnergy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformationEnergy</span><span class="p">[</span><span class="n">rem_first_def</span><span class="p">:</span>
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">n_deformed</span> <span class="o">-</span>
+                                                        <span class="n">rem_last_def</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_rics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_rics</span><span class="p">[</span><span class="n">rem_first_def</span><span class="p">:</span>
+                                      <span class="bp">self</span><span class="o">.</span><span class="n">n_deformed</span> <span class="o">-</span>
+                                      <span class="n">rem_last_def</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deformed</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

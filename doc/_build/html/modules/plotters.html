@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>plotters &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="visualization" href="sith2/visualization.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">install</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="miscellaneous.html">miscellaneous</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/constrain_rupture.html">constrain_rupture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/trans_xyz.html">trans_xyz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/compare_DOFs.html">compare_DOFs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/sith_analysis.html">sith_analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/extract_dofs.html">extract_dofs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/xyz2pdb.html">xyz2pdb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/set_proline_state.html">set_proline_state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/generate_random_peptide.html">generate_random_peptide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/find_extraDOFs.html">find_extraDOFs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="peptides.html">peptides</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ase_utils/tools.html">tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ase_utils/change_distance.html">change_distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.html">analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jupyter.html">jupyter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith2/sith2.html">sith2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith2/visualization.html">visualization</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">plotters</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Modules</a></li>
+      <li class="breadcrumb-item active">plotters</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/plotters.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="plotters">
+<span id="id1"></span><h1>plotters<a class="headerlink" href="#plotters" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.plotters.standard">
+<span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">standard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pstyle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'-'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xminor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yminor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mingrid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fraclw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#standard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.standard" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>list</em><em> or </em><em>array</em>) – data to be plotted. It will correspond to the data in the y axis if no
+y if given, or x data in case y is given.</p></li>
+<li><p><strong>y</strong> (<em>list</em><em> or </em><em>array. default=None</em>) – data to be plotted. It will correspond to the data in the y. It has to
+have the same dimension than the x list.</p></li>
+<li><p><strong>ax</strong> (<em>axes. default=None</em>) – plt.axes object. In case it is not given, a new one will be created.</p></li>
+<li><p><strong>fig</strong> (<em>figure. default=None</em>) – plt.figure object. In case it is not given, a new one will be created.</p></li>
+<li><p><strong>data_label</strong> (<em>str. default=None</em>) – label to the curve to be plotted.</p></li>
+<li><p><strong>xlabel</strong> (<em>str. default=''</em>) – label for the x axis.</p></li>
+<li><p><strong>ylabel</strong> (<em>str. default=''</em>) – label for the y axis.</p></li>
+<li><p><strong>proportional</strong> (<em>bool. default=False</em>) – True to scale the size of labels to the figsize.</p></li>
+<li><p><strong>figsize</strong> (<em>float. default=10</em>) – size of the figure. it is usefull only if a new figure is created.</p></li>
+<li><p><strong>xticks</strong> (<em>array. default=None</em>) – numbers to appear in the x axis.</p></li>
+<li><p><strong>yticks</strong> (<em>array. default=None</em>) – numbers to appear in the y axis.</p></li>
+<li><p><strong>xminor</strong> (<em>array. default=None</em>) – minor ticks to add to the x axis.</p></li>
+<li><p><strong>yminor</strong> (<em>array. default=None</em>) – minor ticks to add to the y axis.</p></li>
+<li><p><strong>color_labels</strong> (<em>RGB array</em><em> or </em><em>matplotlib colors. default</em><em> [</em><em>0.4</em><em>, </em><em>0.4</em><em>, </em><em>0.4</em><em>]</em>) – color of the x and y labels</p></li>
+<li><p><strong>plotstyle</strong> (<em>str. default='-'</em>) – matplotlib line style.</p></li>
+<li><p><strong>grid</strong> (<em>bool. default False</em>) – grid regarding the main ticks (major)</p></li>
+<li><p><strong>mingrid</strong> (<em>bool. default False</em>) – grid regarding the secundary ticks (minor)</p></li>
+<li><p><strong>raxis</strong> (<em>bool. default False</em>) – use the right axis.</p></li>
+<li><p><strong>color_plot</strong> (<em>color format. default None</em><em> (</em><em>namely matplotlib palette</em><em>)</em>) – define the color of the data you want to plot</p></li>
+<li><p><strong>Output</strong> – </p></li>
+<li><p><strong>======</strong> – </p></li>
+<li><p><strong>figure</strong> – </p></li>
+<li><p><strong>axes.</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.plotters.plot_gradient">
+<span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">plot_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markersize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#plot_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.plot_gradient" title="Permalink to this definition"></a></dt>
+<dd><p>Plot line with gradient:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – matplotlib axes to add the line.</p></li>
+<li><p><strong>x</strong> – array with the x values</p></li>
+<li><p><strong>y</strong> – array with the y values</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.plotters.plot_angles">
+<span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">plot_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sith</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markersize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#plot_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.plot_angles" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.plotters.plot_ramachandran">
+<span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">plot_ramachandran</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rama_angles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marker_size_polar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marker_size_rama</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_dots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Amino\nAcids'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#plot_ramachandran"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.plot_ramachandran" title="Permalink to this definition"></a></dt>
+<dd><p>Shows the evolution of each phi-psi angle of each aminoacid in a polar and
+Ramachandran plot.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.plotters.plot_changes">
+<span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">plot_changes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markersize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#plot_changes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.plot_changes" title="Permalink to this definition"></a></dt>
+<dd><p>Plot the changes in the DOFs of an streched config</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dq</strong> (<em>array</em>) – changes saved in sith object as sith.deltaQ</p></li>
+<li><p><strong>dims</strong> (<em>list</em>) – dimensions usually saved in sith._deformed[0].dims</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>(Axes) matplotlib.Axes object with the plot of the changes.</em></p></li>
+<li><p><strong>NOTE</strong> (<em>this function cannot be run from the terminal</em>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.plotters.plot_hessian">
+<span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">plot_hessian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hessian</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deci</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'vertical'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#plot_hessian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.plot_hessian" title="Permalink to this definition"></a></dt>
+<dd><p>Function that plots the a matrix using a divergent colormap to separate the
+negative from the positive values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hessian</strong> (<em>NxN numpy.array</em>) – matrix to be ploted</p></li>
+<li><p><strong>ax</strong> (<em>plt.Axes</em>) – Axis to add the plot. Default: None, in this case, the function creates
+a new Axis.</p></li>
+<li><p><strong>deci</strong> (<em>int</em>) – number of decimals in the colorbar.</p></li>
+<li><p><strong>orientation</strong> (<em>str</em>) – orientation of the colorbar. Default: ‘vertical’.</p></li>
+<li><p><strong>cbar</strong> (<em>Bool</em>) – True to show the colorbar. Default: True</p></li>
+<li><p><strong>ticks</strong> (<em>float</em>) – ticks size.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>PathCollection</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.plotters.hessian_blocks">
+<span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">hessian_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hessian</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[2,</span> <span class="pre">2,</span> <span class="pre">2,</span> <span class="pre">2]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'vertical'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">1]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#hessian_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.hessian_blocks" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.plotters.add_color_per_amino">
+<span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">add_color_per_amino</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sith</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdb_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#add_color_per_amino"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.add_color_per_amino" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.plotters.plot_sith">
+<span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">plot_sith</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dofs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'vertical'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pstyle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'-o'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'$\\Delta$E$_{\\rm{\\bf</span> <span class="pre">i}}$Ha'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#plot_sith"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.plot_sith" title="Permalink to this definition"></a></dt>
+<dd><p>This function plots the energies per degrees of freedom from
+sith_object.energies</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dofs</strong> (<em>array</em>) – <p>energies per degree of freedom. Usually a matrix where each component
+contains the energies for each DOF for each deformed config</p>
+<dl class="simple">
+<dt>dofdeformed     0 1  2  3 …</dt><dd><p>0             [[              ]]
+1             [[              ]]
+2             [[              ]]
+.
+.
+.</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>xlabel</strong> (<em>str</em>) – label of the xlabel indicating the represented DOFS</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.plotters.plot_energies_in_DOFs">
+<span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">plot_energies_in_DOFs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sith</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdb_for_aminos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_amino_legends</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#plot_energies_in_DOFs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.plot_energies_in_DOFs" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.plotters.inner_ring_angles">
+<span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">inner_ring_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-</span> <span class="pre">180,</span> <span class="pre">180]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#inner_ring_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.inner_ring_angles" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.plotters.min_profile">
+<span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">min_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indexes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[3,</span> <span class="pre">2,</span> <span class="pre">0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_ranges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#min_profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.min_profile" title="Permalink to this definition"></a></dt>
+<dd><p>This function returns the profile of minimum potential energy respect to
+one variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>string</em>) – file that contains the data.</p></li>
+<li><p><strong>indexes</strong> (<em>list of ints</em>) – indexes of the columns that contains the data of variable, energy and
+time. Default indexes are 3, 2, 0 that corresponds to the distance
+variable, pot energy and time in the file analysis_merged_table.dat</p></li>
+<li><p><strong>num_ranges</strong> (<em>int</em>) – number of blocks to divide the variable range. Default 20</p></li>
+<li><p><strong>Note</strong> (<em>The idea of this function is to split the variable in ranges and to</em>) – </p></li>
+<li><p><strong>range.</strong> (<em>take the minimum energy in each</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Duple with de data time, variable, energy</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.plotters.plot_error">
+<span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">plot_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sith</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amino_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classical</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#plot_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.plot_error" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.plotters.plot_energy_in_lenght">
+<span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">plot_energy_in_lenght</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_le</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#plot_energy_in_lenght"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.plot_energy_in_lenght" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sith2/visualization.html" class="btn btn-neutral float-left" title="visualization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

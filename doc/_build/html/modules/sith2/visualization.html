@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>visualization &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="plotters" href="../plotters.html" />
+    <link rel="prev" title="sith2" href="sith2.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">install</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../miscellaneous.html">miscellaneous</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sith/constrain_rupture.html">constrain_rupture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sith/trans_xyz.html">trans_xyz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sith/compare_DOFs.html">compare_DOFs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sith/sith_analysis.html">sith_analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sith/extract_dofs.html">extract_dofs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sith/xyz2pdb.html">xyz2pdb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sith/set_proline_state.html">set_proline_state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sith/generate_random_peptide.html">generate_random_peptide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sith/find_extraDOFs.html">find_extraDOFs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../peptides.html">peptides</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ase_utils/tools.html">tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ase_utils/change_distance.html">change_distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../analysis.html">analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../jupyter.html">jupyter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith2.html">sith2</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotters.html">plotters</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">Modules</a></li>
+      <li class="breadcrumb-item active">visualization</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/modules/sith2/visualization.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="visualization">
+<span id="id1"></span><h1>visualization<a class="headerlink" href="#visualization" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">myutils.sith2.visualization.</span></span><span class="sig-name descname"><span class="pre">MoleculeViewer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alignment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.add_angle">
+<span class="sig-name descname"><span class="pre">add_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom1index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom2index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom3index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.5,</span> <span class="pre">0.5,</span> <span class="pre">0.5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.add_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.add_angle" title="Permalink to this definition"></a></dt>
+<dd><p>Add an angle to between three atoms:
+atom1, atom2 and atom3
+- with the vertex in the atom2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atom1index</strong> (<em>int</em>) – Indexes of the three atoms that defines the angle.</p></li>
+<li><p><strong>atom3index</strong> (<em>atom2index and</em>) – Indexes of the three atoms that defines the angle.</p></li>
+<li><p><strong>color</strong> (<em>color list. Default all gray</em><em>(</em><em>[</em><em>0.5</em><em>, </em><em>0.5</em><em>, </em><em>0.5</em><em>]</em><em>)</em>) – RGB triplet.</p></li>
+<li><p><strong>n</strong> (<em>int. Default 10</em>) – number of intermedia points to add in the arc of
+the angle.</p></li>
+<li><p><strong>Output</strong> – </p></li>
+<li><p><strong>======</strong> – </p></li>
+<li><p><strong>system</strong> (<em>Return the angles in the</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.add_axis">
+<span class="sig-name descname"><span class="pre">add_axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.add_axis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.add_axis" title="Permalink to this definition"></a></dt>
+<dd><p>Add xyz axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>length</strong> (<em>float</em>) – indicates the length of the axis in the visualization. Default=1</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – thickness of the xyz axis</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.add_bond">
+<span class="sig-name descname"><span class="pre">add_bond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom1index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom2index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.add_bond"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.add_bond" title="Permalink to this definition"></a></dt>
+<dd><p>Add a bond between two atoms:
+atom1 and atom2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atom2index</strong><strong>)</strong> (<em>atom1index</em><em> (</em><em>and</em>) – Indexes of the atoms to be connected according with g09
+convention.</p></li>
+<li><p><strong>color</strong> (<em>list. Default gray</em><em>(</em><em>[</em><em>0.5</em><em>, </em><em>0.5</em><em>, </em><em>0.5</em><em>]</em><em>)</em>) – RGB triplet.</p></li>
+<li><p><strong>radius</strong> (<em>float. Default 0.1</em>) – Radius of the bond.</p></li>
+<li><p><strong>Output</strong> – </p></li>
+<li><p><strong>======</strong> – </p></li>
+<li><p><strong>system</strong> (<em>Return the bonds in the</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.add_bonds">
+<span class="sig-name descname"><span class="pre">add_bonds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms1indexes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms2indexes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radii</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.add_bonds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.add_bonds" title="Permalink to this definition"></a></dt>
+<dd><p>Add a bond between each pair of atoms corresponding to
+two lists of atoms:
+atoms1 and atoms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atom2index</strong><strong>)</strong> (<em>atom1index</em><em> (</em><em>and</em>) – Indexes of the atoms to be connected according with g09
+convention.</p></li>
+<li><p><strong>colors</strong> (<em>list of color lists. Default all gray</em><em>(</em><em>[</em><em>0.5</em><em>, </em><em>0.5</em><em>, </em><em>0.5</em><em>]</em><em>)</em>) – RGB triplets for each of the bonds. It can be one a triplet
+in case of just one color in all bonds.</p></li>
+<li><p><strong>radii</strong> (<em>float</em><em> or </em><em>list of floats. Default 0.1</em>) – radius of each bond.</p></li>
+<li><p><strong>Output</strong> – </p></li>
+<li><p><strong>======</strong> – </p></li>
+<li><p><strong>system</strong> (<em>Return the bonds in the</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.add_dihedral">
+<span class="sig-name descname"><span class="pre">add_dihedral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom1index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom2index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom3index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom4index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.add_dihedral"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.add_dihedral" title="Permalink to this definition"></a></dt>
+<dd><p>Add an dihedral angle between four atoms:
+atom1, atom2, atom3 and atom4
+- with the vertex in the midle of the atom 2 and 3</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atom1index</strong> (<em>int</em>) – Indexes of the three atoms that defines the angle.</p></li>
+<li><p><strong>atom2index</strong> (<em>int</em>) – Indexes of the three atoms that defines the angle.</p></li>
+<li><p><strong>atom4index</strong> (<em>atom3index and</em>) – Indexes of the three atoms that defines the angle.</p></li>
+<li><p><strong>color</strong> (<em>color list. Default all gray</em><em>(</em><em>[</em><em>0.5</em><em>, </em><em>0.5</em><em>, </em><em>0.5</em><em>]</em><em>)</em>) – RGB triplet.</p></li>
+<li><p><strong>n</strong> (<em>int. Default 10</em>) – number of intermedia points to add in the arc of
+the angle.</p></li>
+<li><p><strong>Output</strong> – </p></li>
+<li><p><strong>======</strong> – </p></li>
+<li><p><strong>angles</strong> (<em>Return the dihedral</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.align_axis">
+<span class="sig-name descname"><span class="pre">align_axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.align_axis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.align_axis" title="Permalink to this definition"></a></dt>
+<dd><p>Apply the necessary rotations to set a
+vector aligned with positive x axis</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.align_plane">
+<span class="sig-name descname"><span class="pre">align_plane</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.align_plane"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.align_plane" title="Permalink to this definition"></a></dt>
+<dd><p>Rotation around x axis to set a vector in the xy plane</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.apply_trans">
+<span class="sig-name descname"><span class="pre">apply_trans</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indexes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.apply_trans"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.apply_trans" title="Permalink to this definition"></a></dt>
+<dd><p>Apply a transformation to all vector positions of the
+atoms object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.intermedia_vectors">
+<span class="sig-name descname"><span class="pre">intermedia_vectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.intermedia_vectors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.intermedia_vectors" title="Permalink to this definition"></a></dt>
+<dd><p>Define the intermedia arc dots between two vectors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>arrays</em>) – side vectors of the angles.</p></li>
+<li><p><strong>b</strong> (<em>arrays</em>) – side vectors of the angles.</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – number of intermedia dots.</p></li>
+<li><p><strong>Output</strong> – </p></li>
+<li><p><strong>======</strong> – </p></li>
+<li><p><strong>vectors.</strong> (<em>Return the intermedia vectors between two side</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.plot_arc">
+<span class="sig-name descname"><span class="pre">plot_arc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arcdots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.plot_arc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.plot_arc" title="Permalink to this definition"></a></dt>
+<dd><p>Add an arc using triangles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertex</strong> (<em>array</em>) – center of the arc</p></li>
+<li><p><strong>arcdots</strong> (<em>list of arrays</em>) – vectors that define the points of the arc. These
+vectors must be defined respect the vertex.</p></li>
+<li><p><strong>Output</strong> – </p></li>
+<li><p><strong>======</strong> – </p></li>
+<li><p><strong>angle.</strong> (<em>Return the triangles in the</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.remove_all_angles">
+<span class="sig-name descname"><span class="pre">remove_all_angles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.remove_all_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.remove_all_angles" title="Permalink to this definition"></a></dt>
+<dd><p>remove all angles</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.remove_all_bonds">
+<span class="sig-name descname"><span class="pre">remove_all_bonds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.remove_all_bonds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.remove_all_bonds" title="Permalink to this definition"></a></dt>
+<dd><p>remove all bonds</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.remove_all_dihedrals">
+<span class="sig-name descname"><span class="pre">remove_all_dihedrals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.remove_all_dihedrals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.remove_all_dihedrals" title="Permalink to this definition"></a></dt>
+<dd><p>remove all dihedral angles</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.remove_angle">
+<span class="sig-name descname"><span class="pre">remove_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom1index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom2index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom3index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.remove_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.remove_angle" title="Permalink to this definition"></a></dt>
+<dd><p>Remove an angle if it exists</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atom2/3index</strong><strong>)</strong> (<em>atom1index</em><em> (</em><em>and</em>) – Indexes of the three atoms that defines the angle
+to remove.</p></li>
+<li><p><strong>Output</strong> – </p></li>
+<li><p><strong>======</strong> – </p></li>
+<li><p><strong>angles</strong> (<em>Return the</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.remove_axis">
+<span class="sig-name descname"><span class="pre">remove_axis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.remove_axis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.remove_axis" title="Permalink to this definition"></a></dt>
+<dd><p>remove xyz axis</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.remove_bond">
+<span class="sig-name descname"><span class="pre">remove_bond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom1index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom2index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.remove_bond"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.remove_bond" title="Permalink to this definition"></a></dt>
+<dd><p>Remove a bond between two atoms:
+atoms1 and atoms2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atom2index</strong><strong>)</strong> (<em>atom1index</em><em> (</em><em>and</em>) – Indexes of the atoms that are connected. This bond
+will be removed.</p></li>
+<li><p><strong>Output</strong> – </p></li>
+<li><p><strong>======</strong> – </p></li>
+<li><p><strong>system</strong> (<em>Return the bonds in the</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.remove_bonds">
+<span class="sig-name descname"><span class="pre">remove_bonds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms1indexes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms2indexes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.remove_bonds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.remove_bonds" title="Permalink to this definition"></a></dt>
+<dd><p>remove several bonds in the plot between two list of atoms:
+atoms1 and atoms2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atom2index</strong><strong>)</strong> (<em>atom1index</em><em> (</em><em>and</em>) – Indexes of the atoms that are connected.</p></li>
+<li><p><strong>Note</strong> (<em>if atoms2 is None</em><em>, </em><em>all bonds with atoms1 will me removed.</em>) – </p></li>
+<li><p><strong>None</strong> (<em>If atoms1 and atoms2 are</em>) – </p></li>
+<li><p><strong>are</strong> (<em>all bonds in the structure</em>) – </p></li>
+<li><p><strong>removed.</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.remove_dihedral">
+<span class="sig-name descname"><span class="pre">remove_dihedral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom1index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom2index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom3index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom4index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.remove_dihedral"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.remove_dihedral" title="Permalink to this definition"></a></dt>
+<dd><p>Remove the dihedral angle between 4 atoms:</p>
+<p>atom1, atom2, atom3 and atom4</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atom1index</strong> (<em>int</em>) – Indexes of the three atoms that defines the angle.</p></li>
+<li><p><strong>atom2index</strong> (<em>int</em>) – Indexes of the three atoms that defines the angle.</p></li>
+<li><p><strong>atom4index</strong> (<em>atom3index and</em>) – Indexes of the three atoms that defines the angle.</p></li>
+<li><p><strong>Output</strong> – </p></li>
+<li><p><strong>======</strong> – </p></li>
+<li><p><strong>angles</strong> (<em>Return the dihedral</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.show">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.show" title="Permalink to this definition"></a></dt>
+<dd><p>Show the molecule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.MoleculeViewer.xy_alignment">
+<span class="sig-name descname"><span class="pre">xy_alignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#MoleculeViewer.xy_alignment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.MoleculeViewer.xy_alignment" title="Permalink to this definition"></a></dt>
+<dd><p>transforme the positions of the atoms such that
+the atoms of indexes 1 and 2 are aligned in the
+x axis</p>
+<p>the atom 3 is in the xy plane</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.VisualizeEnergies">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">myutils.sith2.visualization.</span></span><span class="sig-name descname"><span class="pre">VisualizeEnergies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sith_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alignment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'#ffc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajectory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#VisualizeEnergies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.VisualizeEnergies" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.VisualizeEnergies.add_dof">
+<span class="sig-name descname"><span class="pre">add_dof</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dof</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.07</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#VisualizeEnergies.add_dof"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.VisualizeEnergies.add_dof" title="Permalink to this definition"></a></dt>
+<dd><p>Add the degree of freedom to the molecule image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dof</strong> (<em>tuple</em>) – label of the degree of freedom according with g09 convention.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>i=(1, 2) means a bond between atoms 1 and 2
+i=(1, 2, 3) means an angle between atoms 1, 2 and 3
+i=(1, 2, 3, 4) means a dihedral angle between atoms 1, 2, 3 and 4</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.VisualizeEnergies.energies_all_dof">
+<span class="sig-name descname"><span class="pre">energies_all_dof</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#VisualizeEnergies.energies_all_dof"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.VisualizeEnergies.energies_all_dof" title="Permalink to this definition"></a></dt>
+<dd><p>Add all DOF with a color scale that represents the
+distribution of energy according to the JEDI method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>energies_some_dof</strong> (<em>optional kwargs for</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.VisualizeEnergies.energies_angles">
+<span class="sig-name descname"><span class="pre">energies_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#VisualizeEnergies.energies_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.VisualizeEnergies.energies_angles" title="Permalink to this definition"></a></dt>
+<dd><p>Add the angles with a color scale that represents the
+distribution of energy according to the JEDI method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>energies_some_dof</strong> (<em>optional kwargs for</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.VisualizeEnergies.energies_bonds">
+<span class="sig-name descname"><span class="pre">energies_bonds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#VisualizeEnergies.energies_bonds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.VisualizeEnergies.energies_bonds" title="Permalink to this definition"></a></dt>
+<dd><p>Add the bonds with a color scale that represents the
+distribution of energy according to the JEDI method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>energies_some_dof</strong> (<em>optional kwargs for</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.VisualizeEnergies.energies_dihedrals">
+<span class="sig-name descname"><span class="pre">energies_dihedrals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#VisualizeEnergies.energies_dihedrals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.VisualizeEnergies.energies_dihedrals" title="Permalink to this definition"></a></dt>
+<dd><p>Add the dihedral angles with a color scale that represents the
+distribution of energy according to the JEDI method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>energies_some_dof</strong> (<em>optional kwargs for</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.VisualizeEnergies.energies_some_dof">
+<span class="sig-name descname"><span class="pre">energies_some_dof</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dofs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap=&lt;matplotlib.colors.LinearSegmentedColormap</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label='Energy</span> <span class="pre">[Ha]'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelsize=20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation='vertical'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">div=5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deci=2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width='700px'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height='600px'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#VisualizeEnergies.energies_some_dof"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.VisualizeEnergies.energies_some_dof" title="Permalink to this definition"></a></dt>
+<dd><p>Add the bonds with a color scale that represents the
+distribution of energy according to the JEDI method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dofs</strong> (<em>list of tuples.</em>) – list of degrees of freedom defined according with g09 convention.</p></li>
+<li><p><strong>cmap</strong> (<em>cmap. Default: mpl.cm.get_cmap</em><em>(</em><em>&quot;Blues&quot;</em><em>)</em>) – cmap used in the color bar.</p></li>
+<li><p><strong>label</strong> (<em>str. Default: &quot;Energy</em><em> [</em><em>a.u</em><em>]</em><em>&quot;</em>) – label of the color bar.</p></li>
+<li><p><strong>labelsize</strong> (<em>float.</em>) – size of the label in the</p></li>
+<li><p><strong>orientation</strong> (<em>&quot;vertical&quot;</em><em> or </em><em>&quot;horizontal&quot;. Default: &quot;vertical&quot;</em>) – orientation of the color bar.</p></li>
+<li><p><strong>div</strong> (<em>int. Default: 5</em>) – number of colors in the colorbar.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.VisualizeEnergies.show_bonds">
+<span class="sig-name descname"><span class="pre">show_bonds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#VisualizeEnergies.show_bonds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.VisualizeEnergies.show_bonds" title="Permalink to this definition"></a></dt>
+<dd><p>Show the bonds in the molecule.</p>
+<p class="rubric">Notes</p>
+<p>The color is not related with the JEDI method. It
+could be changed with the kwarg color=rgb list.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.VisualizeEnergies.show_bonds_of_DOF">
+<span class="sig-name descname"><span class="pre">show_bonds_of_DOF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dof</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unique</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#VisualizeEnergies.show_bonds_of_DOF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.VisualizeEnergies.show_bonds_of_DOF" title="Permalink to this definition"></a></dt>
+<dd><p>Show an specific dof.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dof</strong> (<em>int.</em>) – index in sith object that corresponds to the dof you want to show.</p></li>
+<li><p><strong>unique</strong> (<em>Bool. default False.</em>) – True if you want to remove all the other bonds and only keeping
+these ones.</p></li>
+<li><p><strong>color</strong> (<em>list</em><em>[</em><em>int</em><em>]</em><em>*3. default R G B for angles</em><em>, </em><em>distances</em><em>, </em><em>dihedrals.</em>) – color that you want to use in this dof.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.sith2.visualization.VisualizeEnergies.show_dof">
+<span class="sig-name descname"><span class="pre">show_dof</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dofs</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/sith2/visualization.html#VisualizeEnergies.show_dof"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith2.visualization.VisualizeEnergies.show_dof" title="Permalink to this definition"></a></dt>
+<dd><p>Show specific degrees of freedom.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dofs</strong> (<em>list of tuples.</em>) – list of degrees of freedom defined according with g09 convention.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The color is not related with the JEDI method. It
+could be changed with the kwarg color=rgb list.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sith2.html" class="btn btn-neutral float-left" title="sith2" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../plotters.html" class="btn btn-neutral float-right" title="plotters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

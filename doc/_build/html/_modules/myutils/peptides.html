@@ -11,9 +11,12 @@
   <![endif]-->
   
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
@@ -37,8 +40,12 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/modules.html">Modules</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -69,7 +76,7 @@
 <span class="kn">from</span> <span class="nn">myutils.sith2.visualization</span> <span class="kn">import</span> <span class="n">MoleculeViewer</span>
 
 
-<div class="viewcode-block" id="info"><a class="viewcode-back" href="../../index.html#myutils.peptides.info">[docs]</a><span class="k">class</span> <span class="nc">info</span><span class="p">:</span>
+<div class="viewcode-block" id="info"><a class="viewcode-back" href="../../modules/peptides.html#myutils.peptides.info">[docs]</a><span class="k">class</span> <span class="nc">info</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pdb_file</span><span class="p">,</span> <span class="n">withx</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">pdb_file</span><span class="p">)</span>
         <span class="n">pdb_header</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;END&#39;</span><span class="p">,</span>
@@ -102,8 +109,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">atom_indexes</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indexes_atoms</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">amino_info</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">name_atoms_raw</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">indexes_atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-<div class="viewcode-block" id="info.endo_exo_proline"><a class="viewcode-back" href="../../index.html#myutils.peptides.info.endo_exo_proline">[docs]</a>    <span class="k">def</span> <span class="nf">endo_exo_proline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sith</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="info.endo_exo_proline"><a class="viewcode-back" href="../../modules/peptides.html#myutils.peptides.info.endo_exo_proline">[docs]</a>    <span class="k">def</span> <span class="nf">endo_exo_proline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sith</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Endo, exo states must correspond with the first angle equal to zero.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">prolines</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
@@ -140,8 +147,8 @@
 
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">angles</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="info.xis_angles"><a class="viewcode-back" href="../../index.html#myutils.peptides.info.xis_angles">[docs]</a>    <span class="k">def</span> <span class="nf">xis_angles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sith</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="info.xis_angles"><a class="viewcode-back" href="../../modules/peptides.html#myutils.peptides.info.xis_angles">[docs]</a>    <span class="k">def</span> <span class="nf">xis_angles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sith</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Endo, exo states must correspond with the first angle equal to zero.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">prolines</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
@@ -210,8 +217,8 @@
 
         <span class="k">return</span> <span class="n">sign</span> <span class="o">*</span> <span class="n">theta</span>
 
-<div class="viewcode-block" id="info.build_proline_state"><a class="viewcode-back" href="../../index.html#myutils.peptides.info.build_proline_state">[docs]</a>    <span class="k">def</span> <span class="nf">build_proline_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aminoacid</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="info.build_proline_state"><a class="viewcode-back" href="../../modules/peptides.html#myutils.peptides.info.build_proline_state">[docs]</a>    <span class="k">def</span> <span class="nf">build_proline_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aminoacid</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ==========</span>
 <span class="sd">        aminoacid: int</span>

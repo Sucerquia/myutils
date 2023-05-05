@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myutils.sith.sith_analysis &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/modules.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">myutils.sith.sith_analysis</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for myutils.sith.sith_analysis</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">SITH.SithWriter</span> <span class="kn">import</span> <span class="n">writeSummary</span>
+<span class="kn">from</span> <span class="nn">SITH.SITH</span> <span class="kn">import</span> <span class="n">SITH</span>
+<span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">read</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<span class="c1"># add2executable</span>
+<div class="viewcode-block" id="sith_analysis"><a class="viewcode-back" href="../../../modules/sith/sith_analysis.html#myutils.sith.sith_analysis.sith_analysis">[docs]</a><span class="k">def</span> <span class="nf">sith_analysis</span><span class="p">(</span><span class="n">drelaxed</span><span class="p">,</span> <span class="n">dstreched</span><span class="p">,</span> <span class="n">xyz_file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates the sith analysis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    drelaxed: str</span>
+<span class="sd">        fchk file corresponding to the relaxed structure</span>
+<span class="sd">    dstretched: str</span>
+<span class="sd">        fchk file corresponding to the stretched structure. In case this</span>
+<span class="sd">        argument is a directory, all fchk files in there will be considered as</span>
+<span class="sd">        the result of the stretching.</span>
+<span class="sd">    xyz_file: str</span>
+<span class="sd">        xyz file of one of the configurations in order to find the Hydrogen</span>
+<span class="sd">        atoms.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\</span>
+<span class="s2">    JEDI analysis will be applied using the SITH package using the next </span><span class="se">\</span>
+<span class="s2">    elaxed file and stretched directory:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   - &quot;</span><span class="p">,</span> <span class="n">drelaxed</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   - &quot;</span><span class="p">,</span> <span class="n">dstreched</span><span class="p">)</span>
+    <span class="n">sith</span> <span class="o">=</span> <span class="n">SITH</span><span class="p">(</span><span class="n">drelaxed</span><span class="p">,</span> <span class="n">dstreched</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">xyz_file</span><span class="p">)</span>
+    <span class="n">Hatoms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mol</span><span class="o">.</span><span class="n">get_atomic_numbers</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">sith</span><span class="o">.</span><span class="n">setKillAtoms</span><span class="p">(</span><span class="n">Hatoms</span><span class="p">)</span>
+    <span class="n">sith</span><span class="o">.</span><span class="n">extractData</span><span class="p">()</span>
+    <span class="n">sith</span><span class="o">.</span><span class="n">energyAnalysis</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">writeSummary</span><span class="p">(</span><span class="n">sith</span><span class="p">,</span> <span class="n">includeXYZ</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

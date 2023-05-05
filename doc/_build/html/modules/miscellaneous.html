@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>miscellaneous &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="constrain_rupture" href="sith/constrain_rupture.html" />
+    <link rel="prev" title="Modules" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">install</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">miscellaneous</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/constrain_rupture.html">constrain_rupture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/trans_xyz.html">trans_xyz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/compare_DOFs.html">compare_DOFs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/sith_analysis.html">sith_analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/extract_dofs.html">extract_dofs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/xyz2pdb.html">xyz2pdb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/set_proline_state.html">set_proline_state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/generate_random_peptide.html">generate_random_peptide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith/find_extraDOFs.html">find_extraDOFs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="peptides.html">peptides</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ase_utils/tools.html">tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ase_utils/change_distance.html">change_distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.html">analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jupyter.html">jupyter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith2/sith2.html">sith2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sith2/visualization.html">visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotters.html">plotters</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Modules</a></li>
+      <li class="breadcrumb-item active">miscellaneous</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/miscellaneous.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="miscellaneous">
+<span id="id1"></span><h1>miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.miscellaneous.output_terminal">
+<span class="sig-prename descclassname"><span class="pre">myutils.miscellaneous.</span></span><span class="sig-name descname"><span class="pre">output_terminal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/miscellaneous.html#output_terminal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.miscellaneous.output_terminal" title="Permalink to this definition"></a></dt>
+<dd><p>Runs a command in a terminal and save the output in a list
+of strings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cmd</strong> (<em>str</em>) – bash command to be executed in the terminal.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>out = list[str] output of the executed command.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.miscellaneous._time">
+<span class="sig-prename descclassname"><span class="pre">myutils.miscellaneous.</span></span><span class="sig-name descname"><span class="pre">_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keyword</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/miscellaneous.html#_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.miscellaneous._time" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.miscellaneous.time_g09">
+<span class="sig-prename descclassname"><span class="pre">myutils.miscellaneous.</span></span><span class="sig-name descname"><span class="pre">time_g09</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/miscellaneous.html#time_g09"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.miscellaneous.time_g09" title="Permalink to this definition"></a></dt>
+<dd><p>Function that extracts the time spend for one gaussian simulation from a
+.log file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>logfile</strong> (<em>string</em>) – .log file obtained during a gaussian simulation.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>Time in seconds although the time in minutes, seconds and hours are</em></p></li>
+<li><p><em>printed.</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.miscellaneous.format_to_pdb">
+<span class="sig-prename descclassname"><span class="pre">myutils.miscellaneous.</span></span><span class="sig-name descname"><span class="pre">format_to_pdb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/miscellaneous.html#format_to_pdb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.miscellaneous.format_to_pdb" title="Permalink to this definition"></a></dt>
+<dd><p>This function takes the last configuration of one file (e.g. one gaussian
+*.log file) and saves the last configuration in a pdb file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name_input</strong> (<em>string</em>) – Name of files to be modified (e.g. ‘./*.log’ ).</p></li>
+<li><p><strong>name_output</strong> (<em>string</em>) – Output name. Default: same name as input but with pdb extension.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of output names of pdb files.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.miscellaneous.optimized_e">
+<span class="sig-prename descclassname"><span class="pre">myutils.miscellaneous.</span></span><span class="sig-name descname"><span class="pre">optimized_e</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/miscellaneous.html#optimized_e"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.miscellaneous.optimized_e" title="Permalink to this definition"></a></dt>
+<dd><p>This code finds the last energy in a log file of gaussian computed using
+RBMK functional. The output is given in eV.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – log gaussian file.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Potential energy in eV units.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.miscellaneous.min_profile_from_several">
+<span class="sig-prename descclassname"><span class="pre">myutils.miscellaneous.</span></span><span class="sig-name descname"><span class="pre">min_profile_from_several</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_ranges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/miscellaneous.html#min_profile_from_several"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.miscellaneous.min_profile_from_several" title="Permalink to this definition"></a></dt>
+<dd><p>This function returns the profile of minimum potential energy respect to
+one variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>files</strong> (<em>list of strings</em>) – files that contain the data.</p></li>
+<li><p><strong>indexes</strong> (<em>list of ints</em>) – indexes of the columns that contains the data of variable, energy and
+time. Default indexes are 3, 2, 0 that corresponds to the distance
+variable, pot energy and time in the file analysis_merged_table.dat</p></li>
+<li><p><strong>num_ranges</strong> (<em>int</em>) – number of blocks to divide the variable range. Default 20</p></li>
+<li><p><strong>Note</strong> (<em>The idea of this function is to split the variable in ranges and to</em>) – </p></li>
+<li><p><strong>range.</strong> (<em>take the minimum energy in each</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Duple with de data time, variable, energy</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sith/constrain_rupture.html" class="btn btn-neutral float-right" title="constrain_rupture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myutils.miscellaneous &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/modules.html">Modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">myutils.miscellaneous</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for myutils.miscellaneous</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">read</span><span class="p">,</span> <span class="n">write</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+
+
+<div class="viewcode-block" id="output_terminal"><a class="viewcode-back" href="../../modules/miscellaneous.html#myutils.miscellaneous.output_terminal">[docs]</a><span class="k">def</span> <span class="nf">output_terminal</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">print_output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Runs a command in a terminal and save the output in a list</span>
+<span class="sd">    of strings</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    cmd: str</span>
+<span class="sd">        bash command to be executed in the terminal.</span>
+
+<span class="sd">    Return</span>
+<span class="sd">    ======</span>
+<span class="sd">    out = list[str] output of the executed command.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span>
+                         <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+                         <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+                         <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">out1</span><span class="p">,</span> <span class="n">err1</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+    <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">out1</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">),</span> <span class="n">err1</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">print_output</span> <span class="ow">and</span> <span class="n">out</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">returncode</span><span class="p">,</span> <span class="s2">&quot;ERROR executing the function output_terminal </span><span class="se">\</span>
+<span class="s2">        with the next message:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">err</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="_time"><a class="viewcode-back" href="../../modules/miscellaneous.html#myutils.miscellaneous._time">[docs]</a><span class="k">def</span> <span class="nf">_time</span><span class="p">(</span><span class="n">keyword</span><span class="p">,</span> <span class="n">logfile</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">output_terminal</span><span class="p">(</span><span class="s2">&quot;grep &#39;&quot;</span><span class="o">+</span><span class="n">keyword</span><span class="o">+</span><span class="s2">&quot;&#39; &quot;</span><span class="o">+</span><span class="n">logfile</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;at&#39;</span><span class="p">)</span>
+
+    <span class="n">month</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="n">start</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">day</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="n">start</span><span class="o">+</span><span class="mi">3</span><span class="p">])</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="n">start</span><span class="o">+</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+    <span class="n">hour</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">minu</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">seco</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">hour</span><span class="p">,</span> <span class="n">minu</span><span class="p">,</span> <span class="n">seco</span></div>
+
+
+<span class="c1"># add2executable</span>
+<div class="viewcode-block" id="time_g09"><a class="viewcode-back" href="../../modules/miscellaneous.html#myutils.miscellaneous.time_g09">[docs]</a><span class="k">def</span> <span class="nf">time_g09</span><span class="p">(</span><span class="n">logfile</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function that extracts the time spend for one gaussian simulation from a</span>
+<span class="sd">    .log file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    logfile: string</span>
+<span class="sd">        .log file obtained during a gaussian simulation.</span>
+
+<span class="sd">    Return</span>
+<span class="sd">    ======</span>
+<span class="sd">    Time in seconds although the time in minutes, seconds and hours are</span>
+<span class="sd">    printed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">t_i</span> <span class="o">=</span> <span class="n">_time</span><span class="p">(</span><span class="s1">&#39;Leave Link    1&#39;</span><span class="p">,</span> <span class="n">logfile</span><span class="p">)</span>
+    <span class="n">t_f</span> <span class="o">=</span> <span class="n">_time</span><span class="p">(</span><span class="s1">&#39;Normal termination of Gaussian&#39;</span><span class="p">,</span> <span class="n">logfile</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">t_i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">t_f</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="n">days</span> <span class="o">=</span> <span class="p">(</span><span class="n">t_f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">t_i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="mi">24</span><span class="o">*</span><span class="mi">3600</span>
+        <span class="n">hours</span> <span class="o">=</span> <span class="p">(</span><span class="n">t_f</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">t_i</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">*</span><span class="mi">3600</span>
+        <span class="n">minus</span> <span class="o">=</span> <span class="p">(</span><span class="n">t_f</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="n">t_i</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">*</span><span class="mi">60</span>
+        <span class="n">secos</span> <span class="o">=</span> <span class="n">t_f</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">-</span><span class="n">t_i</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="n">days</span> <span class="o">+</span> <span class="n">hours</span> <span class="o">+</span> <span class="n">minus</span> <span class="o">+</span> <span class="n">secos</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time in seconds= &quot;</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time in minutes= &quot;</span><span class="p">,</span> <span class="n">total</span><span class="o">/</span><span class="mi">60</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time in hours= &quot;</span><span class="p">,</span> <span class="n">total</span><span class="o">/</span><span class="mi">3600</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">total</span><span class="o">/</span><span class="mi">60</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sorry, I cannot help you, modify me to compute </span><span class="se">\</span>
+<span class="s1">            changes of months&#39;</span><span class="p">)</span></div>
+
+
+<span class="c1"># add2executable</span>
+<div class="viewcode-block" id="format_to_pdb"><a class="viewcode-back" href="../../modules/miscellaneous.html#myutils.miscellaneous.format_to_pdb">[docs]</a><span class="k">def</span> <span class="nf">format_to_pdb</span><span class="p">(</span><span class="n">name_input</span><span class="p">,</span> <span class="n">name_output</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function takes the last configuration of one file (e.g. one gaussian</span>
+<span class="sd">    \*.log file) and saves the last configuration in a pdb file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    name_input: string</span>
+<span class="sd">        Name of files to be modified (e.g. &#39;./\*.log&#39; ).</span>
+
+<span class="sd">    name_output: string</span>
+<span class="sd">        Output name. Default: same name as input but with pdb extension.</span>
+
+<span class="sd">    Return</span>
+<span class="sd">    ======</span>
+<span class="sd">    List of output names of pdb files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">to_modify</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">name_input</span><span class="p">)</span>
+    <span class="n">to_modify</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="n">n_files_to_modify</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_modify</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">name_output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># there is an output name</span>
+        <span class="k">if</span> <span class="n">n_files_to_modify</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># there are several files to be modified</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="n">name_output</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.pdb&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">to_modify</span><span class="p">))]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="n">name_output</span><span class="o">+</span><span class="s1">&#39;.pdb&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">to_modify</span><span class="p">:</span>
+            <span class="n">index_rename</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+            <span class="n">rename</span> <span class="o">=</span> <span class="n">name</span><span class="p">[:</span><span class="n">index_rename</span><span class="p">]</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rename</span><span class="o">+</span><span class="s1">&#39;.pdb&#39;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_files_to_modify</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">to_modify</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">index</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">write</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">a</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">to_modify</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2"> ---&gt; </span><span class="si">{</span><span class="n">output</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">output</span></div>
+
+
+<span class="c1"># add2executable</span>
+<div class="viewcode-block" id="optimized_e"><a class="viewcode-back" href="../../modules/miscellaneous.html#myutils.miscellaneous.optimized_e">[docs]</a><span class="k">def</span> <span class="nf">optimized_e</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This code finds the last energy in a log file of gaussian computed using</span>
+<span class="sd">    RBMK functional. The output is given in eV.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+
+<span class="sd">    file: str</span>
+<span class="sd">        log gaussian file.</span>
+
+<span class="sd">    Return</span>
+<span class="sd">    ======</span>
+<span class="sd">    Potential energy in eV units.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">output_terminal</span><span class="p">(</span><span class="s1">&#39;grep &quot;E(RBMK) =&quot; &#39;</span><span class="o">+</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">energy</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="o">-</span><span class="mi">5</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">energy</span> <span class="o">*</span> <span class="mf">27.21</span>  <span class="c1"># energy in eV</span></div>
+
+
+<span class="c1"># ----------------------------------- deprected -------------------------------</span>
+<span class="c1"># add2executable</span>
+<div class="viewcode-block" id="min_profile_from_several"><a class="viewcode-back" href="../../modules/miscellaneous.html#myutils.miscellaneous.min_profile_from_several">[docs]</a><span class="k">def</span> <span class="nf">min_profile_from_several</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">num_ranges</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function returns the profile of minimum potential energy respect to</span>
+<span class="sd">    one variable.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+
+<span class="sd">    files: list of strings</span>
+<span class="sd">        files that contain the data.</span>
+
+<span class="sd">    indexes: list of ints</span>
+<span class="sd">        indexes of the columns that contains the data of variable, energy and</span>
+<span class="sd">        time. Default indexes are 3, 2, 0 that corresponds to the distance</span>
+<span class="sd">        variable, pot energy and time in the file analysis_merged_table.dat</span>
+
+<span class="sd">    num_ranges: int</span>
+<span class="sd">        number of blocks to divide the variable range. Default 20</span>
+
+<span class="sd">    Note: The idea of this function is to split the variable in ranges and to</span>
+<span class="sd">    take the minimum energy in each range.</span>
+
+<span class="sd">    Return</span>
+<span class="sd">    ======</span>
+<span class="sd">        Duple with de data time, variable, energy</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">variables</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">energies</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="n">variable</span><span class="p">,</span> <span class="n">energy</span><span class="p">,</span> <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">file</span><span class="p">,</span>
+                                            <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                                            <span class="n">unpack</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">variables</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">variables</span><span class="p">)</span>
+        <span class="n">energies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">energy</span><span class="p">,</span> <span class="n">energies</span><span class="p">)</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">times</span><span class="p">)</span>
+
+    <span class="n">subranges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">variables</span><span class="p">),</span>
+                            <span class="nb">max</span><span class="p">(</span><span class="n">variables</span><span class="p">),</span>
+                            <span class="n">num_ranges</span><span class="p">)</span>
+
+    <span class="n">split_var</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">split_ener</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">split_time</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">subranges</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])):</span>
+        <span class="n">blocks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">variables</span> <span class="o">&gt;=</span> <span class="n">subranges</span><span class="p">[</span><span class="n">index</span><span class="p">],</span>
+                                <span class="n">variables</span> <span class="o">&lt;</span> <span class="n">subranges</span><span class="p">[</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">split_var</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">variables</span><span class="p">[</span><span class="n">blocks</span><span class="p">])</span>
+        <span class="n">split_ener</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">energies</span><span class="p">[</span><span class="n">blocks</span><span class="p">])</span>
+        <span class="n">split_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="n">blocks</span><span class="p">])</span>
+
+    <span class="n">var</span> <span class="o">=</span> <span class="p">[</span><span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">ener</span> <span class="o">=</span> <span class="p">[</span><span class="n">energies</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="p">[</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">split_var</span><span class="p">)):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">split_ener</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="nb">min</span><span class="p">(</span><span class="n">split_ener</span><span class="p">[</span><span class="n">i</span><span class="p">]))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">var</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">split_var</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">index</span><span class="p">])</span>
+            <span class="n">ener</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">split_ener</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">index</span><span class="p">])</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">split_time</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">index</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+    <span class="k">return</span> <span class="n">time</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">ener</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
