@@ -1,13 +1,17 @@
+#!/bin/sh
+
 # Definition functions and variables that are used along the whole package.
 
 # ------ variables ------------------------------------------------------------
 pckg_name='myutils'
+names=( $1 ${names[@]} )
+name=${names[0]}
 
 # ------ functions ------------------------------------------------------------
+
 # Function that adjustes the text to 80 characters
-name=$1
 adjust () {
-    text=$( echo "++++++++ $name: $@ " )
+    text=$( echo "++++++++ $(echo $name): $@ " )
     addchar=$( expr 80 - ${#text} % 80 )
     text=$( echo $text $( perl -E "say '+' x $addchar" ))
     nlines=$( expr ${#text} / 80 )
@@ -16,11 +20,6 @@ adjust () {
         echo ${text:$(( w * 79 )):79}
     done
     echo
-}
-# Function that returns the error message and stops the run if something fails.
-fail () {
-    adjust "ERROR" $1
-    exit "${2-1}"
 }
 
 # prints some text adjusted to 80 characters per line, filling empty spaces
@@ -31,6 +30,19 @@ verbose () {
 
 warning () {
     adjust "WARNING" $1
+}
+
+finish () {
+    names=( ${names[@]:1} )
+    name=${names[0]}
+}
+
+# Function that returns the error message and stops the run if something fails.
+fail () {
+    adjust "ERROR" $1
+    finish
+    exit "${2-1}"
+    name=$name_bck
 }
 
 # Function to rename all the files of interest

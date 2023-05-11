@@ -172,4 +172,5 @@ sbatch $( myutils find_forces ) -c
 
 verbose "Workflow finished"
 
+finish
 exit 0

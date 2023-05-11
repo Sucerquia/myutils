@@ -271,4 +271,5 @@ done
 verbose "$pep streching finished"
 # ----- stretching finishes ---------------------------------------------------
 
+finish
 exit 0
