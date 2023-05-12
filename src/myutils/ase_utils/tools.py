@@ -56,14 +56,13 @@ class MoleculeSetter:
 
     def align_axis(self, vector):
         """
-        Apply the necessary rotations to set a
-        vector aligned with positive x axis.
+        Apply the necessary rotations to set a vector aligned with positive x
+        axis.
 
         Parameters
         ==========
         vector: array
-            vector tp be aligned.
-
+            vector to be aligned.
         """
         xyproj = vector.copy()
         xyproj[2] = 0
@@ -97,7 +96,7 @@ class MoleculeSetter:
         Parameters
         ==========
         trans: array (3x3)
-            transformation matrix to be applied to all atoms positions.
+            transformation matrix to be applied to all atom positions.
         """
         new_positions = [np.dot(trans, atom.position) for atom in self.atoms]
         self.atoms.set_positions(new_positions)
@@ -105,13 +104,13 @@ class MoleculeSetter:
 
     def xy_alignment(self, index1, index2, index3=None, center=None):
         """
-        Transforme the positions of the atoms such that the atoms of indexes 1
-        and 2 are aligned in the x axis. The atom with index 3 would be in the
-        xy plane in case to be given.
+        Transform the positions of the atoms such that the atoms of indexes1
+        and index2 are aligned in the x axis. The atom with index3 would be in
+        the xy plane in case to be given.
 
         Parameters
         ==========
-        index 1 and 2: int
+        index1 and index2: int
             indexes of the atoms to be aligned with the x-axis. The positive
             direction of x would go from atom 1 to atom 2.
 
@@ -135,7 +134,6 @@ class MoleculeSetter:
             center = (self.atoms[index1].position +
                       self.atoms[index2].position)/2
 
-            
         self.atoms.set_positions(self.atoms.positions - center)
         # set index1 and index2 along x axis
         axis = self.atoms[index2].position
@@ -242,51 +240,11 @@ class MoleculeSetter:
 
         return new_positions
 
-    # DEPRECTED
-    # Not working yet, never worked.
-    def scale_w_cons(self, index1, index2, deltad, constrains):
-        """
-        Increase the distance between two atoms by aligning those atoms with
-        the x axis and scaling the x-coordinate of all intermedia atoms.
-
-        Parameters
-        ==========
-        index1: int
-            index of one of the atoms to increase the distance.
-        index2: int
-            index of the other atom to increase the distance.
-        deltad: float
-            amount to add to the distance between atoms.
-        constrains:
-            pairs of atoms to keep the same distance. with the shape:
-            [[cons1_ind1, cons1_ind2], [cons2_ind1, cons2_ind2], ... ]
-            in g09 index notation.
-        """
-        d1norm = self.atoms.get_distance(index1, index2)
-        # Move atom1 to the origin and rotate the molecule such that atom2 is
-        # aligned with the +x axis:
-        self.xy_alignment(index1, index2, center=index1)
-
-        frozen = []
-        for i in constrains.flatten():
-            if i not in frozen:
-                frozen.append(i)
-
-        new_positions = []
-        for i, atom in enumerate(self.atoms):
-            if i + 1 not in frozen:
-                new_positions.append(atom.position *
-                                     np.array([(d1norm + deltad)/d1norm, 1, 1])
-                                     )
-        self.atoms.set_positions(new_positions)
-
-        return new_positions
-
     def create_gaussian_input(self, out=None, charge=0, xc='bmk',
                               basis='6-31+g'):
         """
         Creates a g09 .com file without specifing the kind of calculus to run
-        (optimization, ab-initio md, frequencies...).
+        (optimization, ab-initio md, frequencies...). You would have to add it.
 
         Parameters
         ==========

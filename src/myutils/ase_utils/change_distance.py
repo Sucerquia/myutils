@@ -25,9 +25,9 @@ def change_distance(inp, out, file_cons, deltad, charge, method):
         charge in e to create the g09 input file. The multiplicity is assumed.
         to be one.
     method: str
-        increase_distance or scale. Methods defined in myutils.ase_utils.tools.
-        So far, the methods already implemented are: 'scale_distance',
-        'increase_distance', 'increase_distance_with_constraints'.
+        method defined in myutils.ase_utils.tools. So far, the methods already
+        implemented are: 'scale_distance', 'increase_distance',
+        'increase_distance_with_constraints'.
     """
     methods = ['scale_distance', 'increase_distance',
                'increase_distance_with_constraints']
