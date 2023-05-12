@@ -83,9 +83,8 @@ echo $0 $@
 if [ ! ${#random} -eq 0 ]
 then
     warning "The code will create a random peptide, even if you also passed -p
-        argument"
-    pep=$( myutils gen_randpep $random ) || fail "Creating
-        random peptide"
+        argument."
+    pep=$( myutils gen_randpep $random ) || fail "Creating random peptide"
     while [ -d $pep ]
     do
         pep=$( myutils gen_randpep $random ) || fail "Creating
@@ -130,19 +129,8 @@ then
     pepgen -h &> /dev/null || fail "This code needs pepgen"
 
     # create back up
-    bck=$pep-bck_1
-    if [ -d $pep ]
-    then 
-        bck_i=2
-        while [ -d $bck ]
-        do
-            bck=$pep-bck_$bck_i
-            bck_i=$(( $bck_i + 1 ))
-        done
-        warning "$pep directory already exist. This directory will be
-            backed up in $bck"
-        mv $pep $bck
-    fi
+    create_bck $pep
+
     # Creation of the peptide directory and moving inside.
     mkdir $pep
     cd $pep

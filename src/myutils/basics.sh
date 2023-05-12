@@ -58,4 +58,42 @@ mv_stretching_files () {
     return 0
 }
 
+# function that moves an existing file or directory to <name>-bck_n[.ext] where
+# n is the number of the backup and ext is automatically extracted from the
+# original file
+create_bck () {
+    # in case creating backup directory
+    new_dir=$1
+    bck=$new_dir-bck_1
+    if [ -d $new_dir ]
+    then 
+        bck_i=2
+        while [ -d $bck ]
+        do
+            bck=$new_dir-bck_$bck_i
+            bck_i=$(( $bck_i + 1 ))
+        done
+        warning "$new_dir directory already exist. This directory will be
+            backed up in $bck"
+        mv $new_dir $bck
+    fi
+
+    # in case creating backup file
+    tmp=$1
+    new_fil=${tmp%.*}
+    ext=${tmp##*.}
+    bck=$new_fil-bck_1.$ext
+    if [ -f $1 ]
+    then 
+        bck_i=2
+        while [ -f $bck ]
+        do
+            bck=$new_fil-bck_$bck_i.$ext
+            bck_i=$(( $bck_i + 1 ))
+        done
+        warning "$new_dir directory already exist. This directory will be
+            backed up in $bck"
+        mv $1 $bck
+    fi
+}
 # Add bck function
