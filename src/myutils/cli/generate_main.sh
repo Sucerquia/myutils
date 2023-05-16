@@ -1,8 +1,8 @@
 # This code creates the code that would be executed when myutils is called from
 # terminal (myutils.cli.main). This code adds all the sh files and all modules
 # that contains the comment # add2executable one line before to be defined.
-output='main.py'
 
+output='main.py'
 
 cp main_template.py $output
 cd ../

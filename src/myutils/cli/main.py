@@ -47,6 +47,9 @@ other_files = {
 
 
 def main():
+    """"
+    This function run each time myutils is called from the terminal.
+    """
     # Help menu of this code
     if sys.argv[1] == '-h':
         functions = list(pymodules.keys())
@@ -91,12 +94,14 @@ def main():
     elif sys.argv[1] in other_files.keys():
         print(str(Path(__file__).parent)[:-3] + other_files[sys.argv[1]][2:])
 
+    # own path
     elif sys.argv[1] == 'path':
         print(str(Path(__file__).parent)[:-3])
 
     # Not recognized keyword
     else:
-        print(f"ERROR: keyword {sys.argv[1]} not recognized. Please ")
+        print(f"ERROR: keyword {sys.argv[1]} not recognized as part of" +
+              " myutils. Use 'myutils -h' to see the options you can use.")
 
 
 if __name__ == "__main__":
