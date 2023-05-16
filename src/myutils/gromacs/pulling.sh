@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# ----- definition of functions starts ----------------------------------------
+source $(myutils basics) PULLING
 
 print_help() {
 echo "
@@ -14,14 +16,9 @@ To run:
 "
 exit 0
 }
+# ----- definition of functions finishes --------------------------------------
 
-
-# set up starts
-function fail {
-    printf '%s\n' "$1" >&2
-    exit "${2-1}" 
-}
-
+# ----- set up starts ---------------------------------------------------------
 # General variables
 mine="/hits/basement/mbm/sucerquia/"
 gmx="gmx"
@@ -38,30 +35,22 @@ done
 # check dependencies
 if [ ! -d equilibrate ]
 then 
-    fail "
-    ++++++++ PULL_MSG: ERROR - Equilibrate directory does not exist ++++++++"
+    fail "Equilibrate"
 fi
-$gmx -h &> /dev/null || fail "
-    ++++++++ PULL_MSG: ERROR - This code needs gromacs ($gmx failed) ++++++++"
-# set up finished
-
-
-echo "
-    ++++++++ PULL_MSG: VERBOSE - Creates index file of force $force ++++++++"
+$gmx -h &> /dev/null || fail "This code needs gromacs ($gmx failed)"
+# ----- set up finishes -------------------------------------------------------
+verbose "Creates index file of force $force"
 
 echo -e "r ACE & a CH3 \n r NME & a CH3 \n \"ACE_&_CH3\" | \"NME_&_CH3\" \n q\n " \
     | $gmx make_ndx -f ./equilibrate/npt.gro || \
-    fail "
-    ++++++++ PULL_MSG: ERROR - Creation of index file the pulling for force
-    $force ++++++++"
+    fail "Creation of index file the pulling for force $force"
 
 sed -i "s/ACE_&_CH3_NME_&_CH3/distance/g" index.ndx && \
-cp $mine/utils/gromacs/pulling.mdp ./pulling.mdp && \
-sed -i "s/<force>/$force/g" pulling.mdp || fail "
-    ++++++++ PULL_MSG: ERROR - setting the file pulling.mdp ++++++++"
+    cp $mine/utils/gromacs/pulling.mdp ./pulling.mdp && \
+    sed -i "s/<force>/$force/g" pulling.mdp || fail "setting the file
+        pulling.mdp"
 
-echo "
-    ++++++++ PULL_MSG: VERBOSE - Creates MD executable of force $force ++++++++"
+verbose "Creates MD executable of force $force"
 forcename=$(printf "%04d" $force)
 
 $gmx grompp -f pulling.mdp \
@@ -70,20 +59,15 @@ $gmx grompp -f pulling.mdp \
             -p ./equilibrate/pep_out.top \
             -n index.ndx \
             -maxwarn 5 \
-            -o md_0_$forcename.tpr || fail "
-    ++++++++ PULL_MSG: ERROR - grompp step of the pulling for force
-    $force ++++++++"
+            -o md_0_$forcename.tpr || fail "grompp step of the pulling for
+    force $force"
 
-
-echo "
-    ++++++++ PULL_MSG: VERBOSE - MD run for force $force ++++++++" && \
-$gmx mdrun -deffnm md_0_$forcename || fail "
-    ++++++++ PULL_MSG: ERROR - Execution step of the pulling for force
-    $force ++++++++"
-
-echo "
-    ++++++++ PULL_MSG: VERBOSE - Pulling finished correctly of $force ++++++++"
+verbose "MD run for force $force"
+$gmx mdrun -deffnm md_0_$forcename || fail "Execution step of the pulling for
+    force $force"
 
 rm -f \#*
 
+verbose "Pulling finished correctly of $force"
+finish
 exit 0

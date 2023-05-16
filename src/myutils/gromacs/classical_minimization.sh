@@ -1,3 +1,5 @@
+source $(myutils basics) CLASSICAL_MIN
+
 print_help () {
 echo "
 This tool optimizes a configuration from an initial pdb file"
@@ -16,15 +18,13 @@ fail () {
 
 pdbfile=$1
 
-echo "
-    ++++++++ CLASSICALMIN_MSG: VERBOSE - creating .gro file from $pdbfile ++++++++++++++++++"
-echo -e "4\n 7\n" | gmx pdb2gmx -f $pdbfile -o minim.gro -ignh >&2 || fail "
-    ++++++++ CLASSICALMIN_MSG: ERROR - creating gro file +++++++++++++++++++++"
+verbose "creating .gro file from $pdbfile"
+echo -e "4\n 7\n" | gmx pdb2gmx -f $pdbfile -o minim.gro -ignh || fail "
+    creating gro file"
 
 gmx editconf -f minim.gro \
              -o minim_box.gro \
-             -c -d 5.0 -bt cubic >&2 || fail "
-    ++++++++ CLASSICALMIN_MSG: ERROR - creating simulation box +++++++++++++++"
+             -c -d 5.0 -bt cubic || fail "creating simulation box"
 
 mv minim_box.gro minim.gro
 
@@ -32,17 +32,14 @@ gmx grompp -f $( myutils minim ) \
            -c minim.gro \
            -p topol.top \
            -o em.tpr  \
-           -maxwarn 10 >&2 || fail "
-    ++++++++ CLASSICALMIN_MSG: ERROR - creating em +++++++++++++++++++++++++++"
+           -maxwarn 10 || fail "creating em"
 
-echo "
-    ++++++++ CLASSICALMIN_MSG: VERBOSE - run minimization ++++++++++++++++++++"
-gmx mdrun -v -deffnm em >&2 || fail "
-    ++++++++ CLASSICALMIN_MSG: ERROR - computing energy ++++++++++++++++++++++"
+verbose "run minimization"
+gmx mdrun -v -deffnm em || fail "computing energy"
 
 echo -e "0\n" | gmx trjconv -f em.gro -o $pdbfile -s em.tpr >&2 \
-    || fail "
-    ++++++++ CLASSICALMIN_MSG: ERROR - extracting pdb ++++++++++++++++++++++++"
+    || fail "extracting pdb"
+
 
 rm \#*
 rm em.*
@@ -50,3 +47,7 @@ rm mdout.mdp
 rm mini*
 rm posre.itp
 rm topol.top
+
+verbose "Minimization finished."
+finish
+exit 0

@@ -1,4 +1,7 @@
-# The next function shows the description of this code:
+#!/bin/bash
+
+# ----- definition of functions starts ----------------------------------------
+source $(myutils basics) peptide_pulling
 
 print_help() {
 echo "
@@ -16,17 +19,10 @@ Consider the next options:
 "
 exit 0
 }
-# Function that returns the error message and stops the run if something fails.
-function fail {
-    printf '%s\n' "$1" >&2 
-    exit "${2-1}" 
-}
+# ----- definition of functions finishes --------------------------------------
 
-
-# set up starts
+# ----- set up starts ---------------------------------------------------------
 # General variables
-mine='/hits/basement/mbm/sucerquia/'
-gromacs_tools='/hits/basement/mbm/sucerquia/utils/gromacs/'
 gmx='gmx'
 forces=()
 analysis="-d -l"
@@ -44,63 +40,45 @@ while getopts 'oa:f:g:p:h' flag; do
 done
 
 # check dependencies
-pepgen -h &> /dev/null || fail "
-    ++++++++ SYS_PULL_MSG: ERROR - This code needs pepgen ++++++++"
-$gmx -h &> /dev/null || fail "
-    ++++++++ SYS_PULL_MSG: ERROR - This code needs gromacs ($gmx failed) ++++++++"
-# set up finished
+pepgen -h &> /dev/null || fail "This code needs pepgen"
+$gmx -h &> /dev/null || fail "This code needs gromacs ($gmx failed)"
+# ----- set up finishes -------------------------------------------------------
 
 
-echo "
-    ++++++++ SYS_PULL_MSG: VERBOSE - Creation and equilibration of $pep starts ++++++++"
-pepgen $pep equilibrate -gmx $gmx $pep_options || fail "
-    ++++++++ SYS_PULL_MSG: ERROR - Creating peptide $pep ++++++++"
-echo "
-    ++++++++ SYS_PULL_MSG: VERBOSE - Equilibration step finishes ++++++++"
+# create peptide
+verbose "Creation and equilibration of $pep starts"
+pepgen $pep equilibrate -gmx $gmx $pep_options || fail "Creating peptide $pep"
 
-
-echo "
-    ++++++++ SYS_PULL_MSG: VERBOSE - Pulling of $pep starts ++++++++"
-
+# pulling
+verbose "Pulling of $pep starts"
 if [ ${#forces[@]} -eq 0 ]
 then
-    echo "
-    ++++++++ SYS_PULL_MSG: WARNING - You didn't specify which forces you want to
-    use. Then the pulling will be done using the values by default (10 30 50
-    100 300 500) [kJ mol^-1 nm^-1] ++++++++"
+    warning "You didn't specify which forces you want to use. Then the pulling
+        will be done using the value by default: 200 [kJ mol^-1 nm^-1]"
     forces="200"
 fi
 
 for force in $forces
 do
     forcename=$(printf "%04d" $force)
-    echo "
-    ++++++++ SYS_PULL_MSG: VERBOSE - Force $force acting $pep  starts ++++++++"
-    $gromacs_tools/pulling.sh -g $gmx -f $force || fail "
-    ++++++++ SYS_PULL_MSG: ERROR - Pulling $pep with $force failed ++++++++"
+    verbose "Force $force acting $pep  starts"
+    $( myutils pulling ) -g $gmx -f $force || fail "Pulling $pep with $force
+        failed"
     mkdir force$forcename && \
-    mv md_0_* force$forcename && \
-    mv *.ndx force$forcename && \
-    mv *.mdp force$forcename || fail "
-    ++++++++ SYS_PULL_MSG: ERROR - Moving gromacs files to the ditectory 
-    force$forcename ++++++++"
-    echo "
-    ++++++++ SYS_PULL_MSG: VERBOSE - Force $force acting $pep finished ++++++++"
+        mv md_0_* force$forcename && \
+        mv *.ndx force$forcename && \
+        mv *.mdp force$forcename || fail "Moving gromacs files to the ditectory
+           force$forcename"
 
-    echo "
-    ++++++++ SYS_PULL_MSG: VERBOSE - Analysis of $pep and $force starts ++++++++"
+    verbose "Analysis of $pep and $force starts"
     cd force$forcename
     file=$( ls md_*.gro)
     name=${file%%.*}
-    $gromacs_tools/analysis.sh -f $name -g $gmx $analysis || \
-    fail "
-    ++++++++ SYS_PULL_MSG: ERROR - Equilibration Analysis. ++++++++"
+    $( myutils analysis ) -f $name -g $gmx $analysis || \
+        fail "Equilibration Analysis."
     cd ..
-    echo "
-    ++++++++ SYS_PULL_MSG: VERBOSE - Analysis of $pep and $force finishes ++++++++"
 done
 
-echo "
-    ++++++++ SYS_PULL_MSG: VERBOSE - $pep pulling finishes ++++++++"
-
+verbose "$pep pulling finishes"
+finish
 exit 0
