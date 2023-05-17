@@ -242,9 +242,15 @@ do
     verbose "Testing dofs"
     myutils log2xyz $pep-stretched${nameiplusone}.log || fail "Transforming
         log file to xyz"
-    # Add extra values to frozen
-    extrad=$( myutils diff_bonds $pep-stretched${namei}.xyz \
-        $pep-stretched${nameiplusone}.xyz )
+    
+    if [ $i -eq -1 ]
+    then
+        extrad=".."
+    else
+        # Add extra values to frozen
+        extrad=$( myutils diff_bonds $pep-stretched${namei}.xyz \
+            $pep-stretched${nameiplusone}.xyz )
+    fi
 
     if [ ${#extrad} -ne 2 ]
     then
@@ -254,6 +260,10 @@ do
         then
             mkdir rupture
         fi
+        bck_files=( $(ls $pep-stretched${nameiplusone}.*) )
+        cd rupture
+        create_bck ${bck_files[@]}
+        cd ..
         mv $pep-stretched${nameiplusone}.* rupture/
         continue
     else
