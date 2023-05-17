@@ -137,7 +137,7 @@ then
     # Creation of peptide
     pepgen $pep tmp -s flat $pep_options || fail "Creating peptide $pep"
     mv tmp/pep.pdb ./$pep-stretched00.pdb
-    $(myutils proline_mod) $pep-stretched00.pdb $endoexo
+    $(myutils proline_mod) $pep-stretched00.pdb $endoexo || fail "Proline estates configuration"
 
     rm -r tmp
 else
@@ -155,7 +155,7 @@ verbose "computing classical energies."
 $( myutils classical_energies )
 # compute forces
 verbose "submitting comptutation of forces."
-pwd
+
 sbatch $( myutils find_forces ) -c
 
 verbose "Workflow finished"
