@@ -1,5 +1,10 @@
 source $(myutils basics) proline_modes
 
+# ---- variables ----
+pdbfile=$1
+proline_state=$2
+
+
 verbose "starting"
 if [ $# -lt 2 ]
 then
@@ -10,15 +15,16 @@ then
     exit 1
 fi
 
-$( myutils classical_minimization ) $1 || fail "minimization before proline
+$( myutils classical_minimization )  $pdbfile || fail "minimization before proline
     definition of states"
 
-myutils proline_state $1 $2 || fail "defining proline states"
+verbose "define proline states"
+myutils proline_state $pdbfile $proline_state || fail "defining proline states"
 
-$( myutils classical_minimization ) ${name}modpro.pdb || fail "minimization
+$( myutils classical_minimization ) ${pdbfile%.*}modpro.pdb || fail "minimization
     after proline definition of states"
 
-mv ${name}modpro.pdb $1 
+mv ${pdbfile%.*}modpro.pdb $pdbfile
 
 finish
 exit 0
