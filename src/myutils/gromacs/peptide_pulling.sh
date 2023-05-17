@@ -9,7 +9,7 @@ This tool creates the trajectory of a given peptide pulled by an external force.
 Consider the next options:
    
     -a    properties you want to analyse. For example \"-d -r\". Default \"-d -l\".
-          For more information, check: utils/gromacs/analysis.sh -h
+          For more information, check: myutils analysis -h
     -f    forces to stretch the peptide in [kJ mol^-1 nm^-1]. Default 200
     -g    gromacs binary. For example gmx or gmx_mpi. Default gmx.
     -o    pepgen flags
@@ -44,10 +44,9 @@ pepgen -h &> /dev/null || fail "This code needs pepgen"
 $gmx -h &> /dev/null || fail "This code needs gromacs ($gmx failed)"
 # ----- set up finishes -------------------------------------------------------
 
-
 # create peptide
 verbose "Creation and equilibration of $pep starts"
-pepgen $pep equilibrate -gmx $gmx $pep_options || fail "Creating peptide $pep"
+pepgen $pep equilibrate -gmx $gmx $pep_options -e || fail "Creating peptide $pep"
 
 # pulling
 verbose "Pulling of $pep starts"
@@ -64,6 +63,8 @@ do
     verbose "Force $force acting $pep  starts"
     $( myutils pulling ) -g $gmx -f $force || fail "Pulling $pep with $force
         failed"
+    
+    create_bck force$forcename
     mkdir force$forcename && \
         mv md_0_* force$forcename && \
         mv *.ndx force$forcename && \

@@ -41,8 +41,8 @@ sh_executers = {
 }
 
 other_files = {
-    'pulling': './gromacs/pulling.mdp',
     'minim': './gromacs/minim.mdp',
+    'pulling_temp': './gromacs/pulling_temp.mdp',
 }
 
 

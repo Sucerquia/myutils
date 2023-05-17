@@ -20,6 +20,7 @@ you want to compute considering the next options:
    -k   keeps the copies of the files with the same name. Default: false.
    -l   extracts the largest configuration.
    -m   merges all data in one file.
+   -o   output file of the gromacs outputs.
    -r   computes ramachandran angles.
    -s   computes the energy of the subsystem in the trajectory, in this case,
         the protein.
@@ -42,11 +43,12 @@ merge='false'
 rama='false'
 sub='false'
 largest='false'
+output='/dev/null'
 
 header=()
 new_files=()
 
-while getopts 'acdef:g:klmrsh' flag; do
+while getopts 'acdef:g:klmo:rsh' flag; do
     case "${flag}" in
       a) all='true' ;;
       c) config='true' ;;
@@ -57,6 +59,7 @@ while getopts 'acdef:g:klmrsh' flag; do
       k) keep='true' ;;
       l) largest='true' ;;
       m) merge='true' ;;
+      o) pep_options=${OPTARG} ;;
       r) rama='true' ;;
       s) sub='true' ;;
 
@@ -87,7 +90,7 @@ then
     verbose "Compute energies"
     echo "12 0 \n" | \
     $gmx energy -f $name.edr \
-                -o analysis_potential-$name.xvg && \
+                -o analysis_potential-$name.xvg > $output 2>&1 && \
     sed "s/@/#/g" analysis_potential-$name.xvg > \
                   analysis_potential-$name.dat && \
     rm analysis_potential-$name.xvg || fail "Obtaining energy"
@@ -121,11 +124,15 @@ then
                -c $name.gro \
                -o tmp.tpr -n index.ndx \
                -p ../equilibrate/pep_out.top \
-               -maxwarn 5 && \
-        $gmx mdrun -v -nt 1 -s tmp.tpr -rerun $name.trr -e tmp.edr && \
-        echo -e "12 13 14 15 0\n" | $gmx energy -f tmp.edr \
-                                                -s tmp.tpr \
-                                                -o tmp_energies.xvg || \
+               -maxwarn 5 > $output 2>&1 && \
+        $gmx mdrun -v -nt 1 \
+                   -s tmp.tpr \
+                   -rerun $name.trr \
+                   -e tmp.edr > $output 2>&1 && \
+        echo -e "12 13 14 15 0\n" | 
+        $gmx energy -f tmp.edr \
+                    -s tmp.tpr \
+                    -o tmp_energies.xvg > $output 2>&1 || \
         fail "Extracting protein energies"
     sed "s/@/#/g" tmp_energies.xvg > analysis_protein_energies-$name.dat && \
     grep -v "#" analysis_protein_energies-$name.dat > tmp2_energies.dat && \
@@ -146,7 +153,7 @@ then
     $gmx distance -f $name.trr \
                   -s $name.gro \
                   -n index.ndx \
-                  -oall analysis_distance-$name.xvg && \
+                  -oall analysis_distance-$name.xvg > $output 2>&1 && \
         sed "s/@/#/g" analysis_distance-$name.xvg > \
             analysis_distance-$name.dat && \
         rm analysis_distance-$name.xvg || fail "Computing distances"
@@ -172,7 +179,8 @@ fi
 if $rama
 then
     verbose "Compute raman"
-    $gmx rama -f $name.trr -s $name.tpr -o analysis_ramal-$name.xvg && \
+    $gmx rama -f $name.trr -s $name.tpr \
+              -o analysis_ramal-$name.xvg > $output 2>&1 && \
         sed "s/@/#/g" analysis_ramal-$name.xvg > analysis_ramal-$name.dat && \
         rm analysis_ramal-$name.xvg || fail "Extracting raman data"
     new_files+=("analysis_ramal-$name.dat")
@@ -223,7 +231,8 @@ fi
 if $config
 then
     echo -e "1\n" | $gmx trjconv -s $name.tpr -f $name.trr -dump 500 -o \
-        analysis_lastconfig-$name.pdb -pbc mol
+        analysis_lastconfig-$name.pdb -pbc mol > $output 2>&1 || fail "extracting
+            last configuration"
     new_files+=("analysis_lastconfig.pdb")
 fi
 
@@ -242,7 +251,7 @@ then
                                  -f $name.trr \
                                  -dump $time_largest \
                                  -o analysis_largestconfig-$name.pdb \
-                                 -pbc mol || \
+                                 -pbc mol > $output 2>&1 || \
         fail "Extracting largest configuration"
     new_files+=("analysis_largestconfig-$name.pdb")
 fi
@@ -263,10 +272,9 @@ then
     defined in index.ndx"
     rm -f tmp*
 else
-    echo "
-    NOTE: This code didn't do anything. Please indicate what you want to do. 
+    warning "This code didn't do anything. Please indicate what you want to do. 
     For more information use myutils analysis -h"
-    exit 1
+    
 fi
 
 # clean
