@@ -10,14 +10,20 @@ for file in $( find -L -name "*.mdp" )
 do
     reverted=$( echo $file | rev )
     name=$( echo ${reverted#*.} | cut -d "/" -f 1 | rev )
-    sed -i "12a \ \ \ \ \'$name\': \'$file\'," cli/$output
+    if [ $( echo $file | grep '/tests/' | wc -l ) -ne 1 ]
+    then
+        sed -i "12a \ \ \ \ \'$name\': \'$file\'," cli/$output
+    fi
 done
 
 for file in $( find -L -name "*.sh" )
 do
     reverted=$( echo $file | rev )
     name=$( echo ${reverted#*.} | cut -d "/" -f 1 | rev )
-    sed -i "9a \ \ \ \ \'$name\': \'$file\'," cli/$output
+    if [ $( echo $file | grep '/tests/' | wc -l ) -ne 1 ]
+    then
+        sed -i "9a \ \ \ \ \'$name\': \'$file\'," cli/$output
+    fi
 done
 
 for file in $( find -L -name "*.py" )
