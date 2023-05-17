@@ -13,7 +13,7 @@ def standard(x, y=None, ax=None, fig=None, data_label=None, xlabel='',
              ylabel='', factor=10, figsize=10, xticks=None,
              yticks=None, color_labels=None, pstyle='-', color_plot=None,
              xminor=None, yminor=None, grid=False, mingrid=False, raxis=False,
-             fraclw=3, **kwargs):
+             fraclw=3, borders={}, showframe=False, **kwargs):
     """
     Parameters
     ==========
@@ -47,7 +47,7 @@ def standard(x, y=None, ax=None, fig=None, data_label=None, xlabel='',
         minor ticks to add to the y axis.
     color_labels: RGB array or matplotlib colors. default [0.4, 0.4, 0.4]
         color of the x and y labels
-    plotstyle: str. default='-'
+    pstyle: str. default='-'
         matplotlib line style.
     grid: bool. default False
         grid regarding the main ticks (major)
@@ -57,6 +57,13 @@ def standard(x, y=None, ax=None, fig=None, data_label=None, xlabel='',
         use the right axis.
     color_plot: color format. default None (namely matplotlib palette)
         define the color of the data you want to plot
+    borders: dictionary
+        set the space in each side, the keywords are 'left', 'right', 'top',
+        'bottom', 'wspace', 'hspace'. You can specify all of those keywords or
+        only some of them.
+    showframe: bool
+        True if you want to see the frame of the picture you would save with
+        plt.savefig.
 
     Output
     ======
@@ -88,7 +95,8 @@ def standard(x, y=None, ax=None, fig=None, data_label=None, xlabel='',
         ax.tick_params(axis='y', colors=p[0].get_color())
         color_labels = p[0].get_color()
     if data_label is not None:
-        ax.legend(fontsize=factor*2, frameon=False)
+        ax.legend(frameon=False, labelcolor=[0.4, 0.4, 0.4],
+                  prop={'weight': 'bold', 'size': factor*2}, )
 
     # ticks
     ax.tick_params(labelsize=factor*1.5)
@@ -117,6 +125,15 @@ def standard(x, y=None, ax=None, fig=None, data_label=None, xlabel='',
             raise ValueError(
                 "To add min grid you have to define xminticks or yminticks")
         ax.grid(True, which='minor')
+
+    # adjust frame
+    plt.subplots_adjust(**borders)
+    if showframe:
+        axtmp = fig.add_subplot()
+        axtmp.patch.set_alpha(0)
+        axtmp.set_xticks([])
+        axtmp.set_yticks([])
+        axtmp.set_position(Bbox([[0, 0], [1, 1]]), which='both')
 
     return fig, ax
 
