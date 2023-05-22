@@ -39,8 +39,8 @@ exit 0
 }
 
 resubmit () {
-    sleep 23h 59m ; \
-    sbatch $( myutils workflow ) -a $1 -c -r -s $2 | echo ; \
+    sleep 23h 58m ; \
+    sbatch $( myutils workflow ) -p $1 -c -r -s $2 -b $3 -s $4 | echo ; \
     echo "new JOB submitted"
 }
 # ----- definition of functions finishes --------------------------------------
@@ -101,7 +101,7 @@ fi
 
 if $cascade
 then
-    resubmit $pep $stretching_type &
+    resubmit $pep $stretching_type $breakages $size &
     echo " * This JOB will be run in the Node:"
     echo $SLURM_JOB_NODELIST
     cd $SLURM_SUBMIT_DIR
