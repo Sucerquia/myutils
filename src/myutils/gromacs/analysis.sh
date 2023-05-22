@@ -18,9 +18,9 @@ you want to compute considering the next options:
         the same name.
    -g   gromacs binary. usualy gmx.
    -k   keeps the copies of the files with the same name. Default: false.
-   -l   extracts the largest configuration.
+   -L   extracts the largest configuration.
+   -l   log file of the gromacs outputs.
    -m   merges all data in one file.
-   -o   output file of the gromacs outputs.
    -r   computes ramachandran angles.
    -s   computes the energy of the subsystem in the trajectory, in this case,
         the protein.
@@ -48,7 +48,7 @@ output='/dev/null'
 header=()
 new_files=()
 
-while getopts 'acdef:g:klmo:rsh' flag; do
+while getopts 'acdef:g:kLlmrsh' flag; do
     case "${flag}" in
       a) all='true' ;;
       c) config='true' ;;
@@ -57,9 +57,9 @@ while getopts 'acdef:g:klmo:rsh' flag; do
       f) name=${OPTARG} ;;
       g) gmx=${OPTARG} ;;
       k) keep='true' ;;
-      l) largest='true' ;;
+      L) largest='true' ;;
+      l) output=${OPTARG} ;;
       m) merge='true' ;;
-      o) pep_options=${OPTARG} ;;
       r) rama='true' ;;
       s) sub='true' ;;
 
