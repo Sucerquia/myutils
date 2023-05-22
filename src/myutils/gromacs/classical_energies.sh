@@ -7,6 +7,11 @@ print_help() {
 echo "
 Tool that computes the classical energy from a set of pdb files in the
 executing directory.
+   -l   log file of the gromacs outputs. Default /dev/null
+   -n   use this flag to NOT transform all xyz files into pdbs. In this case is
+        assumed that the pdbs already exist.
+
+   -h   prints this message.
 "
 exit 0
 }
@@ -15,8 +20,12 @@ exit 0
 # ----- set up starts ---------------------------------------------------------
 # general variables 
 counter=0
-while getopts 'h' flag; do
+all_xyz2pdb='true'
+output='/dev/null'
+while getopts 'l:nh' flag; do
     case "${flag}" in
+      l) output=${OPTARG} ;;
+      n) all_xyz2pdb='false' ;;
       h) print_help
     esac
 done
@@ -25,7 +34,11 @@ done
 # computation starts
 verbose "The classical energies of configurations in the next pdb files are
     going to be computed:"
-myutils all_xyz2pdb *-stretched00.pdb || fail "error creating pdbs"
+if $all_xyz2pdb
+then
+    myutils all_xyz2pdb *-stretched00.pdb || fail "error creating pdbs"
+fi
+
 echo "# counter bound angles dihedeal potential" > classical_energy.dat
 
 for pdbfile in *.pdb
@@ -34,18 +47,18 @@ do
         error creating gro file"
     gmx editconf -f minim.gro \
                  -o minim_box.gro \
-                 -c -d 5.0 -bt cubic &> /dev/null || fail "error creating box"
+                 -c -d 5.0 -bt cubic > $output 2>&1 || fail "error creating box"
     mv minim_box.gro minim.gro || fail "error changing name"
 
     gmx grompp -f $( myutils minim ) \
                -c minim.gro \
                -p topol.top \
-               -o em.tpr &> /dev/null || fail "error creating em"
+               -o em.tpr > $output 2>&1 || fail "error creating em"
 
-    gmx mdrun -v -deffnm em &> /dev/null || fail "error running em"
+    gmx mdrun -v -deffnm em > $output 2>&1 || fail "error running em"
 
-    echo -e "10 1 2 3 0\n" | gmx energy -f em.edr -o mini.xvg || fail "
-        error computing energy"
+    echo -e "10 1 2 3 0\n" | gmx energy -f em.edr -o mini.xvg \
+        > $output 2>&1|| fail "error computing energy"
 
     grep -v "@" mini.xvg | grep -v "#"| head -n 1 | \
         awk -v counter=$counter 'BEGIN{OFS="\t"}
@@ -61,5 +74,6 @@ rm mini*
 rm posre.itp
 rm topol.top
 
+verbose "Computation of energies completed."
 finish
 exit 0
