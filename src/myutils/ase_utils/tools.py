@@ -8,12 +8,17 @@ class MoleculeSetter:
 
     def rot_x(self, angle):
         """
-        Retuns the rotation matrix around x axis.
+        Rotation matrix around x axis.
 
         Parameters
         ==========
         angle: float[radians]
             angle to rotate around the x axis
+
+        Return
+        ======
+        Rotation: numpy.array[3x3]
+            matrix containing the rotation matrix
         """
         c = np.cos(angle)
         s = np.sin(angle)
@@ -30,6 +35,11 @@ class MoleculeSetter:
         ==========
         angle: float[radians]
             angle to rotate around the y axis
+
+        Return
+        ======
+        Rotation: numpy.array[3x3]
+            matrix containing the rotation matrix
         """
         c = np.cos(angle)
         s = np.sin(angle)
@@ -46,6 +56,11 @@ class MoleculeSetter:
         ==========
         angle: float[radians]
             angle to rotate around the z axis
+
+        Return
+        ======
+        Rotation: numpy.array[3x3]
+            matrix containing the rotation matrix
         """
         c = np.cos(angle)
         s = np.sin(angle)
@@ -63,6 +78,11 @@ class MoleculeSetter:
         ==========
         vector: array
             vector to be aligned.
+
+        Return
+        ======
+        Transformation: numpy.array[3x3]
+            matrix containing the transformation matrix.
         """
         xyproj = vector.copy()
         xyproj[2] = 0
@@ -81,6 +101,11 @@ class MoleculeSetter:
         ==========
         vector: array
             vector to be rotated to be in the xy plane.
+
+        Return
+        ======
+        Transformation: numpy.array[3x3]
+            matrix containing the transformation matrix.
         """
         reference = vector.copy()
         reference[0] = 0
@@ -97,6 +122,12 @@ class MoleculeSetter:
         ==========
         trans: array (3x3)
             transformation matrix to be applied to all atom positions.
+
+        Return
+        ======
+        new_positions: numpy.array[Nx3]
+            changes the positions in the self atoms object and returns an array
+            with the xyz positions of the N atoms.
         """
         new_positions = [np.dot(trans, atom.position) for atom in self.atoms]
         self.atoms.set_positions(new_positions)
@@ -113,15 +144,19 @@ class MoleculeSetter:
         index1 and index2: int
             indexes of the atoms to be aligned with the x-axis. The positive
             direction of x would go from atom 1 to atom 2.
-
         index 3: int (optional)
             The atom with index 3 would be in the xy plane in case to be given.
-
         Center: int (optional)
             It must be index1 or index2, that means the atom with this index
             will be placed in the origin. In case center=None (default), the
             origin would be in the geometrical center between atoms with index1
             and index2.
+
+        Return
+        ======
+        new_positions: numpy.array[Nx3]
+            changes the positions in the self atoms object and returns an array
+            with the xyz positions of the N atoms.
         """
         # Move the origin
         if center == index1:
@@ -156,6 +191,11 @@ class MoleculeSetter:
             distance.
         deltad: float
             amount to add to the distance between atoms.
+
+        Return
+        ======
+        self.atoms: Atoms (ASE object)
+            internal Atoms object with the corresponding modification
         """
         d1norm = self.atoms.get_distance(constraints[0][0], constraints[0][1])
         self.atoms.set_distance(constraints[0][0], constraints[0][1],
@@ -176,6 +216,11 @@ class MoleculeSetter:
             distance.
         deltad: float
             amount to add to the distance between atoms.
+
+        Return
+        ======
+        self.atoms: Atoms (ASE object)
+            internal Atoms object with the corresponding modification
         """
         self.xy_alignment(constraints[0][0], constraints[0][1])
         left = [constraints[0][0]]
@@ -224,6 +269,11 @@ class MoleculeSetter:
             distance.
         deltad: float
             amount to add to the distance between atoms.
+
+        Return
+        ======
+        self.atoms: Atoms (ASE object)
+            internal Atoms object with the corresponding modification
         """
         index1, index2 = constraints[0]
         d1norm = self.atoms.get_distance(index1, index2)
@@ -256,6 +306,11 @@ class MoleculeSetter:
             exchange correlation functional used in gaussian. Default bmk
         basis: str
             basis set used in gaussian. Default 6-31+g
+
+        Return
+        ======
+        calculator: calculator.Gaussian (ASE object)
+            calculator used to create the input.
         """
         if out is None:
             out = self.atoms.get_chemical_formula()
