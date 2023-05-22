@@ -10,7 +10,7 @@ carbon atoms of the NME and ACE caps. Consider the next options:
 
     -f    forces to stretch the peptide in [kJ mol^-1 nm^-1].
     -g    gromacs binary. For example gmx or gmx_mpi. Default gmx.
-    -o    output file of the gromacs outputs.
+    -l    log file of the gromacs outputs. Default /dev/null
     -s    steps in the MD pulling.
 
     -h    prints this message.
@@ -26,11 +26,11 @@ mine="/hits/basement/mbm/sucerquia/"
 gmx="gmx"
 steps="10000"
 
-while getopts 'f:g:s:h' flag; do
+while getopts 'f:g:l:s:h' flag; do
     case "${flag}" in
       f) force=${OPTARG} ;;
       g) gmx=${OPTARG} ;;
-      o) output=${OPTARG} ;;
+      l) output=${OPTARG} ;;
       s) steps=${OPTARG} ;;
 
       h) print_help
