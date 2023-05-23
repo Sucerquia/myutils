@@ -26,14 +26,16 @@ exit 0
 gmx='gmx'
 forces=()
 analysis="-d -l"
+steps="10000"
 
-while getopts 'oa:f:g:p:h' flag; do
+while getopts 'a:f:g:op:s:h' flag; do
     case "${flag}" in
       a) analysis=${OPTARG} ;;
       f) forces=${OPTARG} ;;
       g) gmx=${OPTARG} ;;
-      p) pep=${OPTARG} ;;
       o) pep_options=${OPTARG} ;;
+      p) pep=${OPTARG} ;;
+      s) steps=${OPTARG} ;;
 
       h) print_help
     esac
@@ -61,8 +63,8 @@ for force in $forces
 do
     forcename=$(printf "%04d" $force)
     verbose "Force $force acting $pep  starts"
-    $( myutils pulling ) -g $gmx -f $force || fail "Pulling $pep with $force
-        failed"
+    $( myutils pulling ) -g $gmx -f $force -s $steps || fail "Pulling $pep with
+        $force failed"
     
     create_bck force$forcename
     mkdir force$forcename && \

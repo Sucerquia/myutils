@@ -1,3 +1,6 @@
+#!/usr/bin/bash
+
+# ----- definition of functions starts ----------------------------------------
 source $(myutils basics) CLASSICAL_MIN
 
 print_help () {
@@ -31,6 +34,10 @@ then
     output_file=$pdbfile
 fi
 
+[ ${#pdbfile} -eq 0 ] && fail "You have to give at least one pdb file with the
+    structure you want to optimize. Please check
+    '\$(myutils classical_minimization) -h'"
+
 verbose "creating .gro file from $pdbfile"
 echo -e "4\n 7\n" | gmx pdb2gmx -f $pdbfile -o minim.gro -ignh > $output 2>&1\
     || fail "Creating gro file"
@@ -55,7 +62,7 @@ echo -e "0\n" | gmx trjconv -f em.gro -o $output_file -s em.tpr > \
     $output 2>&1 || fail "extracting pdb"
 
 
-rm \#*
+rm -f \#*
 rm em.*
 rm mdout.mdp
 rm mini*

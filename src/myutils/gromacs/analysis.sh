@@ -73,7 +73,7 @@ then
     distance='true'
     rama='true'
     merge='true'
-    config='tue'
+    config='true'
     sub='true'
     largest='true'
 fi

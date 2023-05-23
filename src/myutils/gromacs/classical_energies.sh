@@ -43,8 +43,8 @@ echo "# counter bound angles dihedeal potential" > classical_energy.dat
 
 for pdbfile in *.pdb
 do
-    echo -e "4\n 7\n" | gmx pdb2gmx -f $pdbfile -o minim.gro -ignh || fail "
-        error creating gro file"
+    echo -e "4\n 7\n" | gmx pdb2gmx -f $pdbfile -o minim.gro -ignh \
+        > $output 2>&1|| fail "error creating gro file"
     gmx editconf -f minim.gro \
                  -o minim_box.gro \
                  -c -d 5.0 -bt cubic > $output 2>&1 || fail "error creating box"
@@ -67,7 +67,7 @@ do
     counter=$(( $counter + 1 ))
 done
 
-rm \#*
+rm -f \#*
 rm em.*
 rm mdout.mdp
 rm mini*
