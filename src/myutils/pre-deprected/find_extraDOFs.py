@@ -4,7 +4,6 @@ import sys
 
 
 # DEPRECTED
-# add2executable
 def save_extradofs(drelaxed, dstretched):
     """"
     This code finds the degrees of freedom in the

@@ -17,7 +17,6 @@ def extract_DOFs(fchk_name):
 
 
 # DEPRECTED
-# add2executable
 def compare(fchk1, fchk2, constrain1, constrain2):
     """
     Compare the degrees of freedom of two configurations defined in fchk files.

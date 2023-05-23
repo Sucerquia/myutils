@@ -4,7 +4,6 @@ import sys
 
 
 pymodules = {
-    'change_distance': 'myutils.ase_utils.change_distance',
     'min_profile_from_several': 'myutils.miscellaneous',
     'optimized_e': 'myutils.miscellaneous',
     'format_to_pdb': 'myutils.miscellaneous',
@@ -12,37 +11,36 @@ pymodules = {
     'log2xyz': 'myutils.sith.trans_xyz',
     'sith_analysis': 'myutils.sith.sith_analysis',
     'proline_state': 'myutils.sith.set_proline_state',
-    'compare': 'myutils.sith.compare_DOFs',
     'gen_randpep': 'myutils.sith.generate_random_peptide',
-    'save_extradofs': 'myutils.sith.find_extraDOFs',
-    'all_xyz2pdb': 'myutils.sith.xyz2pdb',
-    'xyz2pdb': 'myutils.sith.xyz2pdb',
+    'all_xyz2pdb': 'myutils.ase_utils.tools',
+    'xyz2pdb': 'myutils.ase_utils.tools',
+    'change_distance': 'myutils.ase_utils.change_distance',
     'diff_bonds': 'myutils.analysis',
     'distance': 'myutils.analysis',
 }
 
 sh_executers = {
+    'workflow': './sith/workflow.sh',
+    'single-optimization': './sith/single-optimization.sh',
+    'find_forces': './sith/find_forces.sh',
+    'proline_mod': './sith/proline_mod.sh',
+    'extract_forces': './sith/extract_forces.sh',
+    'stretching': './sith/stretching.sh',
     'peptide_pulling': './gromacs/peptide_pulling.sh',
     'pulling': './gromacs/pulling.sh',
     'classical_minimization': './gromacs/classical_minimization.sh',
-    'classical_energies': './gromacs/classical_energies.sh',
     'analysis': './gromacs/analysis.sh',
-    'generate_main': './cli/generate_main.sh',
-    'basics': './basics.sh',
-    'find_forces': './sith/find_forces.sh',
-    'single-optimization': './sith/single-optimization.sh',
-    'proline_mod': './sith/proline_mod.sh',
-    'remove': './sith/remove.sh',
-    'stretching': './sith/stretching.sh',
-    'workflow': './sith/workflow.sh',
-    'extract_forces': './sith/extract_forces.sh',
+    'classical_energies': './gromacs/classical_energies.sh',
     'doc_pythonfile': './doc_scripts/doc_pythonfile.sh',
     'doc_modules': './doc_scripts/doc_modules.sh',
+    'generate_main': './cli/generate_main.sh',
+    'remove': './remove.sh',
+    'basics': './basics.sh',
 }
 
 other_files = {
-    'minim': './gromacs/minim.mdp',
     'pulling_temp': './gromacs/pulling_temp.mdp',
+    'minim': './gromacs/minim.mdp',
 }
 
 
