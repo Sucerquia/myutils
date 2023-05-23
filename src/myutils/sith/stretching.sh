@@ -134,7 +134,7 @@ then
     $retake && \
         myutils log2xyz $pep-stretched${nameiplusone}.log 2> /dev/null && \
         mv_stretching_files $pep-stretched${nameiplusone} bck1 &&
-        myutils sep_w_cons $pep-stretched${nameiplusone}-bck1.xyz \
+        myutils change_distance $pep-stretched${nameiplusone}-bck1.xyz \
             $pep-stretched${nameiplusone} frozen_dofs.dat 0 $charge \
             $method && \
         retake='false' && \
