@@ -12,6 +12,11 @@ def gen_randpep(n):
     ==========
     n: int
         number of peptides to be picked randomly
+
+    Returns
+    =======
+    peptide: str
+        chain of n aminoacis.
     """
     n = int(n)
     aa_letters = np.array(['A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L',
@@ -20,7 +25,3 @@ def gen_randpep(n):
     peptide = ''.join(a)
 
     return peptide
-
-
-if __name__ == '__main__':
-    gen_pep(sys.argv[1])
