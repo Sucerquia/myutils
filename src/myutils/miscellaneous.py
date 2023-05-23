@@ -2,9 +2,10 @@ import numpy as np
 import subprocess
 from ase.io import read, write
 import glob
+import sys
 
 
-def output_terminal(cmd, print_output=False, **kwargs):
+def output_terminal(cmd, print_output=False, print_error=False, **kwargs):
     """
     Runs a command in a terminal and save the output in a list
     of strings
@@ -29,6 +30,8 @@ def output_terminal(cmd, print_output=False, **kwargs):
 
     if print_output and out:
         print(out)
+    if print_error and out:
+        print(err, file=sys.stderr)
 
     assert not p.returncode, "ERROR executing the function output_terminal \
         with the next message:\n" + err
