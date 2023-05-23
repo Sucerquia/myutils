@@ -185,6 +185,29 @@ def le_same_aminoacids(sith, aminos_info, atoms_types, kind_aminoacid):
     return all_le
 
 
+# add2executable
+def diff_bonds(file1, file2, file='frozen_dofs.dat'):
+    """
+    This function returns the bonds that are in one file (first argument) but
+    not in the other (second argument).
+    """
+
+    bonds1 = extract_bonds(file1)
+    bonds2 = extract_bonds(file2)
+
+    different_bonds = []
+    for bond in bonds1:
+        if bond not in bonds2:
+            different_bonds.append(bond)
+
+    with open(file, 'a') as fdofs:
+        for bond in different_bonds:
+            for index in bond:
+                fdofs.write(str(index) + ' ')
+            fdofs.write('F\n')
+    return different_bonds
+
+
 # ------------------ remove ---------------------------------------------------
 def cap_hydrogen_atoms(pdb_file):
     """"
@@ -220,24 +243,3 @@ def extract_bonds(readable_file):
     return bonds
 
 
-# add2executable
-def diff_bonds(file1, file2, file='frozen_dofs.dat'):
-    """
-    This function returns the bonds that are in one file (first argument) but
-    not in the other (second argument).
-    """
-
-    bonds1 = extract_bonds(file1)
-    bonds2 = extract_bonds(file2)
-
-    different_bonds = []
-    for bond in bonds1:
-        if bond not in bonds2:
-            different_bonds.append(bond)
-
-    with open(file, 'a') as fdofs:
-        for bond in different_bonds:
-            for index in bond:
-                fdofs.write(str(index) + ' ')
-            fdofs.write('F\n')
-    return different_bonds
