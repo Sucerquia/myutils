@@ -39,10 +39,9 @@ finish () {
 
 # Function that returns the error message and stops the run if something fails.
 fail () {
-    adjust "ERROR" $1
+    adjust "ERROR" $1 >&2
     finish
     exit "${2-1}"
-    name=$name_bck
 }
 
 # Function to rename all the files of interest
