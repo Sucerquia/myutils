@@ -1,20 +1,44 @@
+#!/usr/bin/bash
+
+# ----- definition of functions starts ----------------------------------------
 source $(myutils basics) proline_modes
+print_help() {
+echo "
+Changes the state of the proline to endo, exo or random.
+    -f    <path> pdb file.
+    -s    <state> proline state. So far, random, endo and exo are accepted.
 
-# ---- variables ----
-pdbfile=$1
-proline_state=$2
+    -h   prints this message.
+"
+exit 0
+}
+# ----- definition of functions finishes --------------------------------------
 
+# ----- set up starts ---------------------------------------------------------
+# General variables
+proline_state='random'
 
+while getopts 'd:h' flag;
+do
+    case "${flag}" in
+      f) pdbfile=${OPTARG} ;;
+      s) proline_state=${OPTARG} ;;
+
+      h) print_help
+    esac
+done
+
+# checking dependencies
 verbose "starting"
-if [ $# -lt 2 ]
+if [ ${#pdbfile} -lt 0  ]
 then
     echo "
-       To use proline modification, you have to provide the pdb file and to
-       define which state you want to have in your prolines, either endo or
-       exo. You could also use 'random'."
+       To use proline modification, you have to provide the pdb file. use
+       'myutils proline_mod -h' to see your options."
     exit 1
 fi
 
+# changing proline states.
 $( myutils classical_minimization )  $pdbfile || fail "minimization before proline
     definition of states"
 

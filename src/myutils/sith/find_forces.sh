@@ -8,6 +8,10 @@
 #SBATCH --error=compute_forces-%j.e
 #SBATCH --exclusive
 
+
+# ----- definition of functions starts ----------------------------------------
+source $(myutils basics) EXTR_FORCES
+
 print_help() {
 echo "
 This tool computes the forces in all chk files and store them in a directory
@@ -20,34 +24,6 @@ called forces.
     -h    prints this message.
 "
 exit 0
-}
-
-# Function that adjustes the text to 80 characters
-adjust () {
-    text=$( echo "++++++++ FORCES: $@ " )
-    addchar=$( expr 80 - ${#text} % 80 )
-    text=$( echo $text $( perl -E "say '+' x $addchar" ))
-    nlines=$( expr ${#text} / 80 )
-    w=0
-    while [ $w -le $(( nlines - 1 )) ]
-    do
-        echo ${text:$(( w * 79 )):79}
-        w=$(( w + 1 ))
-    done
-    echo
-}
-# Function that returns the error message and stops the run if something fails.
-fail () {
-    adjust "ERROR" $1
-    exit "${2-1}"
-}
-# prints some text adjusted to 80 characters per line, filling empty spaces
-# with +
-verbose () {
-    adjust "VERBOSE" $1
-}
-warning () {
-    adjust "WARNING" $1
 }
 
 compute_forces () {
@@ -65,12 +41,13 @@ cascade='false'
 directory='./'
 while getopts 'd:ch' flag; do
     case "${flag}" in
-      d) directory=${OPTARG} ;;
       c) cascade='true' ;;
+      d) directory=${OPTARG} ;;
 
       h) print_help
     esac
 done
+
 cd $directory
 
 if $cascade
@@ -86,7 +63,8 @@ then
     conda activate myutils
 fi
 
-verbose "Create forces directory"
+verbose "Create forces directory and extrating forces"
+create_bck forces
 mkdir forces
 mkdir bck
 mv *-bck*.* bck
@@ -96,11 +74,14 @@ chks=( $( ls *.chk ) )
 
 for chkfile in ${chks[@]}
 do
+    echo $chkfile
     compute_forces $chkfile
     name=$( echo $chkfile | sed "s/stretched/force/g" )
     verbose "Moving result to forces/${name%.*}.log"
     mv forces.log forces/${name%.*}.log
 done
 
-rm forces.dat
 mv forces.com forces/input_template.com
+
+finish
+exit 0

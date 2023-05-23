@@ -11,13 +11,16 @@
 if [ $1 == '-h' ]
 then
     echo "
-    This code runs one optimization using gaussian. You have to create the
-    input file and give it as first argument when run this code."
+    This code runs one optimization using gaussian in one of the clusters. You
+    have to create the input file and give it as first argument when run this
+    code."
+    exit 0
+fi
 
 echo "This JOB will be run in the Node:"
 echo $SLURM_JOB_NODELIST
 cd $SLURM_SUBMIT_DIR
-# check dependencies
+
 module purge
 source $HOME/.bashrc
 source /etc/profile.d/modules.sh
