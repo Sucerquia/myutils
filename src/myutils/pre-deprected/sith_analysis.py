@@ -4,7 +4,6 @@ from ase.io import read
 import numpy as np
 
 
-# add2executable
 def sith_analysis(drelaxed, dstreched, xyz_file):
     """
     Creates the sith analysis.
