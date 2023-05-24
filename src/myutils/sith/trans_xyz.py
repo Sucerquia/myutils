@@ -54,8 +54,8 @@ def getCoordinates(dataList):
 # add2executable
 def log2xyz(finput, foutput=None):
     """
-    Extract the configuration of minumum energy in optimization process in a
-    xyz file from a .log gaussian file.
+    Extract the configuration of minumum energy from a .log gaussian file of an
+    optimization process in a xyz file.
 
     Parameters
     ==========

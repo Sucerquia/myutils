@@ -5,7 +5,19 @@ from myutils.sith.xyz2pdb import xyz2pdb
 
 
 # add2executable
-def proline_state(pdb, state, prolines=None):
+def proline_state(pdb, state):
+    """
+    Changes the state of all prolines to endo or exo. There is also de option
+    to set it randomly but always the final state of one proline will be one of
+    those.
+    
+    Parameters
+    ==========
+    - pdb: str
+        path to the pdb file that contains the prolines to be modified.
+    - state: str
+        state to set up the prolines. It could be 'endo', 'exo' or 'random'.
+    """
     pep_info = info(pdb, withx=-1)
     prolines = np.where(np.array(list(pep_info.amino_name.values()))
                         == 'PRO')[0] + 1

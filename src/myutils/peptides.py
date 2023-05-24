@@ -1,6 +1,6 @@
 import numpy as np
 from ase.io import read
-from myutils.sith2.visualization import MoleculeViewer
+from myutils.sith.visualization import MoleculeViewer
 
 
 class info:

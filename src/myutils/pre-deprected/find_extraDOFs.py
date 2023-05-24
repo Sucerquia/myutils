@@ -1,5 +1,5 @@
 from SITH.SITH import SITH
-from myutils.sith2.sith2 import Sith
+from myutils.sith.sith import Sith
 import sys
 
 
