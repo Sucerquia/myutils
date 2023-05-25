@@ -11,6 +11,16 @@ from ase import Atoms
 import numpy as np
 
 
+def test_xyz2pdb():
+    pdb_output = xyz2pdb(gpa_endo_xyz, gpa_opti_pdb,
+                         pdboutput='./remove-endo.pdb')
+    atoms = read(pdb_output)
+    refer = read(gpa_endo_xyz)
+    assert atoms.get_chemical_symbols() == refer.get_chemical_symbols()
+    assert (atoms.arrays['atomtypes'] == gpa_atoms).all()
+    assert (atoms.arrays['residuenames'] == gpa_residues).all()
+
+
 def initialize_ms():
     atoms = read(gpa_endo_xyz)
     ms = MoleculeSetter(atoms)
