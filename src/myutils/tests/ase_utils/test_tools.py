@@ -1,15 +1,18 @@
 from myutils.ase_utils.tools import MoleculeSetter
+from myutils.ase_utils.tools import xyz2pdb
+from myutils.tests.variables4tests import (gpa_endo_xyz,
+                                           gpa_opti_pdb,
+                                           gpa_atoms,
+                                           gpa_residues)
+from myutils.miscellaneous import output_terminal
 from pytest import approx
-from pathlib import Path
 from ase.io import read
 from ase import Atoms
 import numpy as np
 
 
 def initialize_ms():
-    references = str(Path(__file__).parent) + "/../references"
-    molecule = f"{references}/GPA-endo.xyz"
-    atoms = read(molecule)
+    atoms = read(gpa_endo_xyz)
     ms = MoleculeSetter(atoms)
     return ms
 
@@ -95,3 +98,8 @@ def test_create_gaussian_input():
     atoms = read('remove.com')
     assert atoms.positions == approx(ms.atoms.positions)
     assert atoms.get_chemical_symbols() == ms.atoms.get_chemical_symbols()
+
+
+def test_remove():
+    output_terminal('rm remove*')
+    assert True

@@ -1,8 +1,10 @@
-import numpy as np
 from myutils.miscellaneous import output_terminal
+from myutils.tests.variables4tests import (frozendofs_dat,
+                                           gpa_endo_xyz)
 from ase.io import read
 from pathlib import Path
 from pytest import approx
+import numpy as np
 
 
 def read_configs(molecule, comfile, frozen_dofs_file):
@@ -18,15 +20,12 @@ def read_configs(molecule, comfile, frozen_dofs_file):
 
 
 def test_scale_distance():
-    references = str(Path(__file__).parent) + "/../references"
-    frozen_dofs = f"{references}/frozen_dofs.dat"
-    molecule = f"{references}/GPA-endo.xyz"
-    output_terminal(f"myutils change_distance {molecule} remove " +
-                    f"{frozen_dofs} 1 0 scale_distance")
+    output_terminal(f"myutils change_distance {gpa_endo_xyz} remove " +
+                    f"{frozendofs_dat} 1 0 scale_distance")
 
-    atoms_i, atoms_e, frozen_dofs, indexes = read_configs(molecule,
+    atoms_i, atoms_e, frozen_dofs, indexes = read_configs(gpa_endo_xyz,
                                                           'remove.com',
-                                                          frozen_dofs)
+                                                          frozendofs_dat)
     assert atoms_i.get_distance(frozen_dofs[0][0], frozen_dofs[0][1]) + 1 == \
            approx(atoms_e.get_distance(frozen_dofs[0][0], frozen_dofs[0][1]))
 
@@ -35,15 +34,11 @@ def test_scale_distance():
 
 
 def test_increase_distance():
-    references = str(Path(__file__).parent) + "/../references"
-    frozen_dofs = f"{references}/frozen_dofs.dat"
-    molecule = f"{references}/GPA-endo.xyz"
-
-    output_terminal(f"myutils change_distance {molecule} remove " +
-                    f"{frozen_dofs} 1 0 increase_distance")
-    atoms_i, atoms_e, frozen_dofs, indexes = read_configs(molecule,
+    output_terminal(f"myutils change_distance {gpa_endo_xyz} remove " +
+                    f"{frozendofs_dat} 1 0 increase_distance")
+    atoms_i, atoms_e, frozen_dofs, indexes = read_configs(gpa_endo_xyz,
                                                           'remove.com',
-                                                          frozen_dofs)
+                                                          frozendofs_dat)
 
     assert atoms_i.get_distance(frozen_dofs[0][0], frozen_dofs[0][1]) + 1 == \
         approx(atoms_e.get_distance(frozen_dofs[0][0], frozen_dofs[0][1]))
@@ -52,16 +47,12 @@ def test_increase_distance():
 
 
 def test_increase_distance_with_constraints():
-    references = str(Path(__file__).parent) + "/../references"
-    frozen_dofs = f"{references}/frozen_dofs.dat"
-    molecule = f"{references}/GPA-endo.xyz"
-
-    output_terminal(f"myutils change_distance {molecule} remove " +
-                    f"{frozen_dofs} 1 0 increase_distance_with_constraints",
+    output_terminal(f"myutils change_distance {gpa_endo_xyz} remove " +
+                    f"{frozendofs_dat} 1 0 increase_distance_with_constraints",
                     print_output=True)
-    atoms_i, atoms_e, frozen_dofs, indexes = read_configs(molecule,
-                                                          'remove.com',
-                                                          frozen_dofs)
+    atoms_i, atoms_e, frozen_dofs, _ = read_configs(gpa_endo_xyz,
+                                                    'remove.com',
+                                                    frozendofs_dat)
 
     assert atoms_i.get_distance(frozen_dofs[0][0], frozen_dofs[0][1]) + 1 == \
            approx(atoms_e.get_distance(frozen_dofs[0][0], frozen_dofs[0][1]))
@@ -69,3 +60,8 @@ def test_increase_distance_with_constraints():
            approx(atoms_e.get_distance(frozen_dofs[1][0], frozen_dofs[1][1]))
     assert atoms_i.get_distance(frozen_dofs[2][0], frozen_dofs[2][1]) == \
            approx(atoms_e.get_distance(frozen_dofs[2][0], frozen_dofs[2][1]))
+
+
+def test_remove():
+    output_terminal('rm remove*')
+    assert True
