@@ -1,11 +1,11 @@
 import numpy as np
 from ase.calculators.gaussian import Gaussian
-from ase.io import read
+from ase.io import read, write
 import glob
 
 
 # add2executable
-def xyz2pdb(xyzfile, pdbtemplate, pdbfile=None, withx=0):
+def xyz2pdb(xyzfile, pdbtemplate, pdboutput=None):
     """
     Transform a xyz file into a pdb using a pdb file as template.
 
@@ -27,37 +27,22 @@ def xyz2pdb(xyzfile, pdbtemplate, pdbfile=None, withx=0):
         the pdb file must contain the same atoms in the same order than the xyz
         file, this file only would change the coordinates.
     """
-    if pdbfile is None:
-        pdbfile = xyzfile.split('.')[0] + '.pdb'
-    atoms = read(xyzfile)
-    positions = atoms.positions
-    with open(pdbtemplate) as f:
-        lines = f.readlines()
+    if pdboutput is None:
+        pdboutput = xyzfile.split('.')[0] + '.pdb'
 
-    i_atom = 0
-    for index in range(len(lines)):
-        line_split = lines[index].split()
-        if 'ATOM' in line_split[0]:
-            atomposition = positions[i_atom]
-            i_atom += 1
-            for i in [0, 1, 2]:
-                toreplace = line_split[6+withx+i]
-                n2dot_toreplace = len(toreplace.split('.')[0])
-                replacefor = "{:.3f}".format(atomposition[i])
-                n2dot_replacefor = len(replacefor.split('.')[0])
-
-                if n2dot_replacefor > n2dot_toreplace:
-                    toreplace = ' '*(n2dot_replacefor - n2dot_toreplace) + \
-                        toreplace
-                if n2dot_toreplace > n2dot_replacefor:
-                    replacefor = ' '*(n2dot_toreplace - n2dot_replacefor) + \
-                        replacefor
-                lines[index] = lines[index].replace(toreplace, replacefor)
-
-    with open(pdbfile, "w") as f:
-        [f.write(line) for line in lines]
+    atoms_ref = read(pdbtemplate)
+    atoms_xyz = read(xyzfile)
+    assert len(atoms_ref) == len(atoms_xyz), "The number of atoms in the" + \
+        " reference and the template does not coincide"
+    assert \
+        atoms_ref.get_chemical_symbols() == atoms_xyz.get_chemical_symbols(), \
+            "The atoms in the reference and the template does not coincide"
+    new_positions = atoms_xyz.positions.copy()
     
-    return pdbfile
+    atoms_ref.set_positions(new_positions)
+    write(pdboutput, atoms_ref)
+
+    return pdboutput
 
 
 # add2executable
@@ -83,7 +68,6 @@ def all_xyz2pdb(template):
     """
     configs = glob.glob('*.xyz')
     configs.sort()
-    configs.pop(0)
     for config in configs:
         yield xyz2pdb(config, template)
 
