@@ -5,9 +5,10 @@ from pathlib import Path
 from pytest import approx
 
 
-def test_output():
+def test_peptide_pulling():
     u = output_terminal("$(myutils peptide_pulling) -p GPA " +
                         "-a '' -f '100 300'", print_error=True)
+
     assert 'process finished successfully **' in u
     assert 'Pulling of GPA starts' in u
     assert 'VERBOSE Force 100 acting GPA starts' in u
@@ -16,13 +17,14 @@ def test_output():
     assert 'Pulling finished correctly of 300' in u
     assert 'GPA pulling finishes' in u
 
+
 def test_analysis():
     output_terminal("cd force0100 ; $(myutils analysis) -a -m -f md_0_0100",
                     print_error=True)
     with open('force0100/analysis_merged_table-md_0_0100.dat', 'r') as an:
         total_lines = an.readlines()
-        head=total_lines[0]
-        first_line=total_lines[1]
+        head = total_lines[0]
+        first_line = total_lines[1]
     values = first_line.split()
     float(values[1])
     float(values[2])
@@ -33,10 +35,7 @@ def test_analysis():
     assert 'distance' in head
     assert float(values[0]) == approx(0)
 
-def test_remove():
-    output_terminal('rm -r force* equilibrate')
-    assert True
 
-test_output()
-test_analysis()
-test_remove()
+def test_remove():
+    output_terminal('rm -r force* equilibrate*')
+    assert True
