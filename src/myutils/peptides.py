@@ -4,22 +4,13 @@ from myutils.sith.visualization import MoleculeViewer
 
 
 class info:
-    def __init__(self, pdb_file, withx=0):
+    def __init__(self, pdb_file):
         self.atoms = read(pdb_file)
-        pdb_header = ['END',
-                      'MODEL',
-                      'CRYST1',
-                      'REMARK',
-                      'TITLE',
-                      'TER']
-        indexes_aminos = np.loadtxt(pdb_file, comments=pdb_header,
-                                    usecols=5+withx, dtype=int)
-        names_aminos = np.loadtxt(pdb_file, comments=pdb_header,
-                                  usecols=3, dtype=str)
-        indexes_atoms = np.loadtxt(pdb_file, comments=pdb_header,
-                                   usecols=1, dtype=int)
-        self.name_atoms_raw = np.loadtxt(pdb_file, comments=pdb_header,
-                                         usecols=2, dtype=str)
+        indexes_aminos = self.atoms.arrays['residuenumbers']
+        names_aminos = self.atoms.arrays['residuenames']
+        indexes_atoms = np.arange(len(self.atoms)) + 1
+        self.name_atoms_raw = self.atoms.arrays['atomtypes']
+
         self.atom_names = {}
         self.amino_name = {}
         self.atom_indexes = {}
