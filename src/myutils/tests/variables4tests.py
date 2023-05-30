@@ -3,6 +3,8 @@ from pathlib import Path
 import numpy as np
 
 
+gpa_endo_pdb = str(Path(__file__).parent) + "/references/GPA-endo.pdb"
+gpa_exo_pdb = str(Path(__file__).parent) + "/references/GPA-exo.pdb"
 gpa_endo_xyz = str(Path(__file__).parent) + "/references/GPA-endo.xyz"
 gpa_opti_pdb = str(Path(__file__).parent) +  "/references/GPA-stretched00.pdb"
 gpa_stre_pdb = str(Path(__file__).parent) +  "/references/GPA-stretched30.pdb"
