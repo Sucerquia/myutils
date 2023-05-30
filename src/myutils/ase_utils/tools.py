@@ -184,14 +184,18 @@ class MoleculeSetter:
             angle *= -1
         return self.rot_x(-angle)
 
-    def apply_trans(self, trans):
+    def apply_trans(self, trans, indexes=None):
         """
-        Apply a transformation to all vector positions of the atoms object.
+        Apply a transformation to all vector positions of some atoms.
 
         Parameters
         ==========
         trans: array (3x3)
             transformation matrix to be applied to all atom positions.
+        indexes: list or array (optional)
+            indexes of the atoms to apply the transformation. Default None
+            that means the transformation is applied to the positions of all
+            the atoms.
 
         Return
         ======
@@ -199,9 +203,19 @@ class MoleculeSetter:
             changes the positions in the self atoms object and returns an array
             with the xyz positions of the N atoms.
         """
-        new_positions = [np.dot(trans, atom.position) for atom in self.atoms]
+        if indexes is None:
+            indexes = list(range(len(self.atoms)))
+
+        new_positions = []
+        for i, atom in enumerate(self.atoms):
+            if i in indexes:
+                new_positions.append(np.dot(trans, atom.position))
+            else:
+                new_positions.append(atom.position)
         self.atoms.set_positions(new_positions)
+
         return new_positions
+
 
     def xy_alignment(self, index1, index2, index3=None, center=None):
         """
