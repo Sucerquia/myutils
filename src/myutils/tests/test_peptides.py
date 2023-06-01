@@ -43,3 +43,12 @@ def test_build_proline_state():
     angles = gpa.endo_exo_proline()
     assert angles[0][0]*180/np.pi < -10
     assert abs(angles[0][1]*180/np.pi) < 10
+
+
+def test_rama_phi_psi():
+    gpa = PepSetter(gpa_endo_pdb)
+    phi_psi = gpa.rama_phi_psi()
+    #values obtained with MDanalysis
+    assert phi_psi.flatten() == approx([-178.181, 177.326,
+                                        -65.584, 170.310,
+                                        -173.158, 179.590], rel=1e-3)
