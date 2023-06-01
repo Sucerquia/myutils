@@ -1,36 +1,7 @@
-from MDAnalysis.analysis.dihedrals import Ramachandran
-import MDAnalysis as ma
 from ase.io import read
 import numpy as np
 from ase.geometry.analysis import Analysis
 from ase.io import read
-
-
-def ramachandran(sith, pdb_file):
-    """
-    Returns the ramachandran angles of several stretched configurations.
-    each compoe
-
-    Parameters
-    ==========
-    sith:
-        sith object.
-    pdb_file:
-        pdb file that contains the structural information. It doesn't matter if
-        the coordinates don't correspond to something relevant. The importance
-        are in the structural description (aminoacids, number of residue...)
-    """
-    u = ma.Universe(pdb_file)
-    r = Ramachandran(u.select_atoms('protein')).run()
-    rama_angles = []
-    u = ma.Universe(pdb_file)
-    for conf in sith._deformed:
-        u.load_new(conf.atoms.positions)
-        r = Ramachandran(u.select_atoms('protein')).run()
-        rama_angles.extend(r.results.angles.copy())
-    rama_angles = np.array(rama_angles)
-
-    return rama_angles
 
 
 # add2executable
@@ -65,22 +36,6 @@ def distance(file, index1, index2):
     d = atoms.get_distance(index1, index2)
 
     return d
-
-
-# DEPRECTED
-# now this function is in peptides
-def indexes_per_aminoacid(pdb_file):
-    with open(pdb_file, 'r') as file:
-        lines = file.readlines()
-    atoms = [line for line in lines if 'ATOM' in line]
-    aminoacids = np.genfromtxt(atoms, usecols=5, dtype=int)
-    indexes = np.genfromtxt(atoms, usecols=1, dtype=int)
-    atoms_per_aminoacids = {}
-    for i in range(1, max(aminoacids) + 1):
-        atoms_per_aminoacids[i] = []
-    for i in range(len(indexes)):
-        atoms_per_aminoacids[aminoacids[i]].append(indexes[i])
-    return atoms_per_aminoacids
 
 
 def all_hydrogen_atoms(mol):
