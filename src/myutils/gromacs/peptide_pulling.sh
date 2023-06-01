@@ -25,8 +25,9 @@ exit 0
 # General variables
 gmx='gmx'
 forces=()
-analysis="-d -l"
+analysis="-d -L"
 steps="10000"
+pep_options=""
 
 while getopts 'a:f:g:op:s:h' flag; do
     case "${flag}" in
