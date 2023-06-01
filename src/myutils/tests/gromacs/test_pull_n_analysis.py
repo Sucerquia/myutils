@@ -1,7 +1,4 @@
-import numpy as np
 from myutils.miscellaneous import output_terminal
-from ase.io import read
-from pathlib import Path
 from pytest import approx
 
 
@@ -13,8 +10,8 @@ def test_peptide_pulling():
     assert 'Pulling of GPA starts' in u
     assert 'VERBOSE Force 100 acting GPA starts' in u
     assert 'VERBOSE Force 300 acting GPA starts' in u
-    assert 'Pulling finished correctly of 100' in u
-    assert 'Pulling finished correctly of 300' in u
+    assert 'Pulling finished correctly of F=100' in u
+    assert 'Pulling finished correctly of F=300' in u
     assert 'GPA pulling finishes' in u
 
 

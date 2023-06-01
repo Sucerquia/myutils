@@ -64,7 +64,6 @@ create_bck () {
     for to_bck in $@
     do
         # in case creating backup directory
-        echo $to_bck
         new_dir=$to_bck
         bck=$new_dir-bck_1
         if [ -d $new_dir ]
