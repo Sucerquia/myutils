@@ -117,7 +117,7 @@ class PepSetter(MoleculeSetter):
             set of angles 1 and 2 in each proline.
         """
         prolines = np.where(np.array(
-                            list(self.amino_name.values())) == 'PRO')[0]
+                            list(self.amino_name.values())) == 'PRO ')[0]
         angles = np.array([[0, 0]])
         for i in prolines:
             isolated_proline = self.amino_info[i + 1]

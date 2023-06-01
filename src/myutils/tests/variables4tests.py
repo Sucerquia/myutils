@@ -16,10 +16,10 @@ gpa_atoms = np.array(['CH3', '1HH3', '2HH3', '3HH3', 'C', 'O', 'N', 'H', 'CA',
                       'N', 'H', 'CA', 'HA', 'CB', 'HB1', 'HB2', 'HB3', 'C',
                       'O', 'N', 'H', 'CH3', '1HH3', '2HH3', '3HH3'])
 
-gpa_residues = np.array(['ACE', 'ACE', 'ACE', 'ACE', 'ACE', 'ACE', 'GLY',
-                         'GLY', 'GLY', 'GLY', 'GLY', 'GLY', 'GLY', 'PRO',
-                         'PRO', 'PRO', 'PRO', 'PRO', 'PRO', 'PRO', 'PRO',
-                         'PRO', 'PRO', 'PRO', 'PRO', 'PRO', 'PRO', 'ALA',
-                         'ALA', 'ALA', 'ALA', 'ALA', 'ALA', 'ALA', 'ALA',
-                         'ALA', 'ALA', 'NME', 'NME', 'NME', 'NME', 'NME',
-                         'NME'])
+gpa_residues = np.array(['ACE ', 'ACE ', 'ACE ', 'ACE ', 'ACE ', 'ACE ', 'GLY ',
+                         'GLY ', 'GLY ', 'GLY ', 'GLY ', 'GLY ', 'GLY ', 'PRO ',
+                         'PRO ', 'PRO ', 'PRO ', 'PRO ', 'PRO ', 'PRO ', 'PRO ',
+                         'PRO ', 'PRO ', 'PRO ', 'PRO ', 'PRO ', 'PRO ', 'ALA ',
+                         'ALA ', 'ALA ', 'ALA ', 'ALA ', 'ALA ', 'ALA ', 'ALA ',
+                         'ALA ', 'ALA ', 'NME ', 'NME ', 'NME ', 'NME ', 'NME ',
+                         'NME '])
