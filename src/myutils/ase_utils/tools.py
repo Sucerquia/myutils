@@ -1,7 +1,3 @@
-"""
-Organize functions
-"""
-
 import numpy as np
 from ase.calculators.gaussian import Gaussian
 from ase.io import read, write
@@ -12,7 +8,7 @@ import glob
 # add2executable
 def extract_bonds(readable_file):
     """
-    Guesses the bonds in a molecule according to 
+    Guesses the bonds in a molecule according to
     ase.neighborlist.natural_cutoffs.
 
     Parameters
@@ -83,25 +79,31 @@ def diff_bonds(conf1, conf2, frozen_dofs='frozen_dofs.dat'):
 # add2executable
 def conf2pdb(confile, pdbtemplate, pdboutput=None):
     """
-    Transform a xyz file into a pdb using a pdb file as template.
+    Transform a configuration in a file (xyz, log...) into a pdb using a pdb
+    file as template.
 
     Parameters
     ==========
-    xyzfile: str
-        path to the xyz file to be transformed to pdb.
+    confile: str
+        path to the config file to be transformed to pdb.
     pdbtemplate: str
         path to the pdb template for the output.
     pdbfile: str (optional)
+        name of trasnformed config file with pdb format. The default name is
+        the same than the confile but with pdb extension.
 
     Return
     ======
-    pdboutput: str
-       The name of the output pdb file.
+    (str) The name of the output pdb file.
 
     Note
     ====
         the pdb file must contain the same atoms in the same order than the xyz
         file, this file only would change the coordinates.
+
+    E.g.
+    myutils optimization.log template.pdb
+    myutils optimization.xyz template.pdb
     """
     if pdboutput is None:
         pdboutput = confile.split('.')[0] + '.pdb'
@@ -112,9 +114,9 @@ def conf2pdb(confile, pdbtemplate, pdboutput=None):
         " reference and the template does not coincide"
     assert \
         atoms_ref.get_chemical_symbols() == atoms_xyz.get_chemical_symbols(), \
-            "The atoms in the reference and the template does not coincide"
+        "The atoms in the reference and the template does not coincide"
     new_positions = atoms_xyz.positions.copy()
-    
+
     atoms_ref.set_positions(new_positions)
     write(pdboutput, atoms_ref)
 
@@ -134,32 +136,36 @@ def all_xyz2pdb(template):
 
     Return
     ======
-    pdboutput: str
-       The name of the outputs of each pdb file.
+    (str) The name of the outputs of each pdb file.
 
     Note
     ====
         the pdb file must contain the same atoms in the same order than the xyz
         file, this file only would change the coordinates.
+
+    E.g.
+    cd dir_with_xyz_files ; myutils all_xyz2pdb
     """
     configs = glob.glob('*.xyz')
     configs.sort()
     for config in configs:
         yield conf2pdb(config, template)
 
+
 def all_hydrogen_atoms(mol):
     """"
-    find the indexes of all the hydrogen atoms in the peptide from an ASE.Atoms
+    Finds the indexes of all the hydrogen atoms in the peptide from Atoms
     object.
 
     Parameters
     ==========
-    mol: string
+    mol: string to config file or ase.Atoms object
         ASE.Atoms object to extract the hydrogen indexes.
 
     Return
     ======
-    list of indexes.
+    (list) [#h_atoms(int)] Indexes corresponding to Hydrogen atoms in g09
+        convention.
     """
     if type(mol) is str:
         mol = read(mol)
@@ -180,16 +186,13 @@ def distance(file, index1, index2):
         name of the file that contains the trajectory.
     index1: int
         index of the first atom to compute distances
-    arg2: int
+    index2: int
         index of the second atom to compute distances
 
     Return
     ======
     (float)  Distance between atoms corresponding with atom with index1 and
     index2.
-
-    Execute from terminal using:
-    myutils distance arg1 arg2 arg3
 
     E.g.
     myutils distance optimization.log 1 20
@@ -217,8 +220,7 @@ class MoleculeSetter:
 
         Return
         ======
-        Rotation: numpy.array[3x3]
-            matrix containing the rotation matrix
+        (numpy.array) [3float x 3float] Rotation matrix.
         """
         c = np.cos(angle)
         s = np.sin(angle)
@@ -238,8 +240,7 @@ class MoleculeSetter:
 
         Return
         ======
-        Rotation: numpy.array[3x3]
-            matrix containing the rotation matrix
+        (numpy.array) [3float x 3float] Rotation matrix.
         """
         c = np.cos(angle)
         s = np.sin(angle)
@@ -259,8 +260,7 @@ class MoleculeSetter:
 
         Return
         ======
-        Rotation: numpy.array[3x3]
-            matrix containing the rotation matrix
+        (numpy.array) [3float x 3float] Rotation matrix.
         """
         c = np.cos(angle)
         s = np.sin(angle)
@@ -281,8 +281,7 @@ class MoleculeSetter:
 
         Return
         ======
-        Transformation: numpy.array[3x3]
-            matrix containing the transformation matrix.
+        (numpy.array) [3float x 3float] Transformation matrix.
         """
         xyproj = vector.copy()
         xyproj[2] = 0
@@ -304,8 +303,7 @@ class MoleculeSetter:
 
         Return
         ======
-        Transformation: numpy.array[3x3]
-            matrix containing the transformation matrix.
+        (numpy.array) [3float x 3float] Transformation matrix.
         """
         reference = vector.copy()
         reference[0] = 0
@@ -329,9 +327,8 @@ class MoleculeSetter:
 
         Return
         ======
-        new_positions: numpy.array[Nx3]
-            changes the positions in the self atoms object and returns an array
-            with the xyz positions of the N atoms.
+        (numpy.array)[#natoms x 3float] new xyz positions of the N atoms. It
+            changes the positions of the internal atoms object.
         """
         if indexes is None:
             indexes = list(range(len(self.atoms)))
@@ -345,7 +342,6 @@ class MoleculeSetter:
         self.atoms.set_positions(new_positions)
 
         return new_positions
-
 
     def xy_alignment(self, index1, index2, index3=None, center=None):
         """
@@ -368,9 +364,8 @@ class MoleculeSetter:
 
         Return
         ======
-        new_positions: numpy.array[Nx3]
-            changes the positions in the self atoms object and returns an array
-            with the xyz positions of the N atoms.
+        (numpy.array)[#natoms x 3float] new xyz positions of the N atoms. It
+            changes the positions of the internal atoms object.
         """
         # Move the origin
         if center == index1:
@@ -408,8 +403,7 @@ class MoleculeSetter:
 
         Return
         ======
-        self.atoms: Atoms (ASE object)
-            internal Atoms object with the corresponding modification
+        (ase.Atoms) Internal Atoms object with the corresponding modification.
         """
         d1norm = self.atoms.get_distance(constraints[0][0], constraints[0][1])
         self.atoms.set_distance(constraints[0][0], constraints[0][1],
@@ -433,8 +427,7 @@ class MoleculeSetter:
 
         Return
         ======
-        self.atoms: Atoms (ASE object)
-            internal Atoms object with the corresponding modification
+        (ase.Atoms) Internal Atoms object with the corresponding modification.
         """
         self.xy_alignment(constraints[0][0], constraints[0][1])
         left = [constraints[0][0]]
@@ -486,8 +479,7 @@ class MoleculeSetter:
 
         Return
         ======
-        self.atoms: Atoms (ASE object)
-            internal Atoms object with the corresponding modification
+        (ase.Atoms) Internal Atoms object with the corresponding modification.
         """
         index1, index2 = constraints[0]
         d1norm = self.atoms.get_distance(index1, index2)
@@ -512,19 +504,19 @@ class MoleculeSetter:
 
         Parameters
         ==========
-        out: str
-            name of the gaussian file (.com) without extension.
-        charge: int [e]
+        out: str (optional)
+            name of the gaussian file (.com) without extension. Default
+            chemical formula.
+        charge: int (optional)
             charge of the molecule in electron units. Default 0.
-        xc: str
+        xc: str (optional)
             exchange correlation functional used in gaussian. Default bmk
-        basis: str
+        basis: str (optional)
             basis set used in gaussian. Default 6-31+g
 
         Return
         ======
-        calculator: calculator.Gaussian (ASE object)
-            calculator used to create the input.
+        (ase.calculator.Gaussian) Calculator used to create the input.
         """
         if out is None:
             out = self.atoms.get_chemical_formula()

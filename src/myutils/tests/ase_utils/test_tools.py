@@ -30,7 +30,7 @@ def test_diff_bonds():
 
 def test_conf2pdb():
     pdb_output = conf2pdb(gpa_endo_xyz, gpa_opti_pdb,
-                         pdboutput='./remove-endo.pdb')
+                          pdboutput='./remove-endo.pdb')
     atoms = read(pdb_output)
     refer = read(gpa_endo_xyz)
     assert atoms.get_chemical_symbols() == refer.get_chemical_symbols()
