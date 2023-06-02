@@ -1,3 +1,7 @@
+"""
+Organize functions
+"""
+
 import numpy as np
 from ase.calculators.gaussian import Gaussian
 from ase.io import read, write
@@ -70,6 +74,60 @@ def all_xyz2pdb(template):
     configs.sort()
     for config in configs:
         yield xyz2pdb(config, template)
+
+def all_hydrogen_atoms(mol):
+    """"
+    find the indexes of all the hydrogen atoms in the peptide from an ASE.Atoms
+    object.
+
+    Parameters
+    ==========
+    mol: string
+        ASE.Atoms object to extract the hydrogen indexes.
+
+    Return
+    ======
+    list of indexes.
+    """
+    if type(mol) is str:
+        mol = read(mol)
+    indexes = np.where(mol.get_atomic_numbers() == 1)[0]
+
+    return indexes + 1
+
+
+# add2executable
+def distance(file, index1, index2):
+    """
+    Computes the distance between two atoms in the last configuration
+    of a trajectory file (e.g. .log file from gaussian).
+
+    Parameters
+    ==========
+    file: str
+        name of the file that contains the trajectory.
+    index1: int
+        index of the first atom to compute distances
+    arg2: int
+        index of the second atom to compute distances
+
+    Return
+    ======
+    (float)  Distance between atoms corresponding with atom with index1 and
+    index2.
+
+    Execute from terminal using:
+    myutils distance arg1 arg2 arg3
+
+    E.g.
+    myutils distance optimization.log 1 20
+    """
+    index1 = int(index1)
+    index2 = int(index2)
+    atoms = read(file)
+    d = atoms.get_distance(index1, index2)
+
+    return d
 
 
 class MoleculeSetter:
