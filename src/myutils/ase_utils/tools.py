@@ -5,10 +5,81 @@ Organize functions
 import numpy as np
 from ase.calculators.gaussian import Gaussian
 from ase.io import read, write
+from ase.geometry.analysis import Analysis
 import glob
 
 
 # add2executable
+def extract_bonds(readable_file):
+    """
+    Guesses the bonds in a molecule according to 
+    ase.neighborlist.natural_cutoffs.
+
+    Parameters
+    ==========
+    readable_file: str
+        string to the configuration file in any of the ASE readable formats.
+
+    Return
+    ======
+    (list) [#bonds x 2(int)] Bonds in the molecule.
+
+    E.g.
+    myutils extract_bonds optimization.xyz
+    """
+    atoms = read(readable_file)
+    ana = Analysis(atoms)
+    bonds_zm = ana.unique_bonds
+
+    bonds = []
+    for i, pairs in enumerate(bonds_zm[0]):
+        if len(pairs) != 0:
+            for pair in pairs:
+                bonds.append([i+1, pair+1])
+    return bonds
+
+
+# add2executable
+def diff_bonds(conf1, conf2, frozen_dofs='frozen_dofs.dat'):
+    """
+    This function returns the bonds that are in one conf but not in the other.
+
+    Parameters
+    ==========
+    conf11: str
+        first configuration file to be compared.
+    conf2: str
+        second configuration file to be compared.
+    frozen_dofs: (optional)
+        file with the frozen DOFs. If a rupture is obtained, it will be
+        added to this file.
+
+    Return
+    ======
+    (list) [#brocken_bonds x 2(int)] pair of brocken bonds
+
+    Note
+    ====
+    The comparison is only in one direction, namely, this function does not
+    find the bonds in conf2 that are not in conf1.
+    """
+
+    bonds1 = extract_bonds(conf1)
+    bonds2 = extract_bonds(conf2)
+
+    different_bonds = []
+    for bond in bonds1:
+        if bond not in bonds2:
+            different_bonds.append(bond)
+
+    with open(frozen_dofs, 'a') as fdofs:
+        for bond in different_bonds:
+            for index in bond:
+                fdofs.write(str(index) + ' ')
+            fdofs.write('F\n')
+    return different_bonds
+
+
 # add2executable
 def conf2pdb(confile, pdbtemplate, pdboutput=None):
     """
