@@ -141,28 +141,6 @@ def le_same_aminoacids(sith, aminos_info, atoms_types, kind_aminoacid):
     return all_le
 
 
-# ------------------ remove ---------------------------------------------------
-def cap_hydrogen_atoms(pdb_file):
-    """"
-    find the indexes of the hydrogen atoms of the caps parts in the peptide.
-
-    Parameters
-    ==========
-    pdb_file: string
-        name of the pdb file with the molecule of interest.
-
-    Return
-    ======
-    list of indexes.
-    """
-    output = output_terminal(f'grep ATOM {pdb_file} | grep -n ATOM | grep -e \
-                               ACE -e NME | grep HH')
-    output = output.split('\n')[:-1]
-    indexes = [int(line.split(':')[0]) for line in output]
-
-    return indexes
-
-
 def extract_bonds(readable_file):
     atoms = read(readable_file)
     ana = Analysis(atoms)
@@ -174,7 +152,6 @@ def extract_bonds(readable_file):
             for pair in pairs:
                 bonds.append([i+1, pair+1])
     return bonds
-
 
 # add2executable
 def diff_bonds(file1, file2, file='frozen_dofs.dat'):
