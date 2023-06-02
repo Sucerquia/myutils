@@ -9,7 +9,8 @@ import glob
 
 
 # add2executable
-def xyz2pdb(xyzfile, pdbtemplate, pdboutput=None):
+# add2executable
+def conf2pdb(confile, pdbtemplate, pdboutput=None):
     """
     Transform a xyz file into a pdb using a pdb file as template.
 
@@ -32,10 +33,10 @@ def xyz2pdb(xyzfile, pdbtemplate, pdboutput=None):
         file, this file only would change the coordinates.
     """
     if pdboutput is None:
-        pdboutput = xyzfile.split('.')[0] + '.pdb'
+        pdboutput = confile.split('.')[0] + '.pdb'
 
     atoms_ref = read(pdbtemplate)
-    atoms_xyz = read(xyzfile)
+    atoms_xyz = read(confile)
     assert len(atoms_ref) == len(atoms_xyz), "The number of atoms in the" + \
         " reference and the template does not coincide"
     assert \
@@ -73,7 +74,7 @@ def all_xyz2pdb(template):
     configs = glob.glob('*.xyz')
     configs.sort()
     for config in configs:
-        yield xyz2pdb(config, template)
+        yield conf2pdb(config, template)
 
 def all_hydrogen_atoms(mol):
     """"

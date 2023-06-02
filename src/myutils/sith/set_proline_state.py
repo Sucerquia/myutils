@@ -1,7 +1,7 @@
 from ase.io import write
 from myutils.peptides import info
 import numpy as np
-from myutils.sith.xyz2pdb import xyz2pdb
+from myutils.ase_utils.tools import conf2pdb
 
 
 # add2executable
@@ -33,4 +33,4 @@ def proline_state(pdb, state):
     name_woe = pdb[:pdb.find('.')]
 
     write(name_woe + '.xyz', pep_info.atoms)
-    xyz2pdb(name_woe + '.xyz', pdb, name_woe + 'modpro.pdb', withx=-1)
+    conf2pdb(name_woe + '.xyz', pdb, name_woe + 'modpro.pdb', withx=-1)

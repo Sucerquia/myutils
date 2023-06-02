@@ -2,7 +2,6 @@ from myutils.miscellaneous import output_terminal
 from myutils.tests.variables4tests import (frozendofs_dat,
                                            gpa_endo_xyz)
 from ase.io import read
-from pathlib import Path
 from pytest import approx
 import numpy as np
 

@@ -11,8 +11,8 @@ from ase import Atoms
 import numpy as np
 
 
-def test_xyz2pdb():
-    pdb_output = xyz2pdb(gpa_endo_xyz, gpa_opti_pdb,
+def test_conf2pdb():
+    pdb_output = conf2pdb(gpa_endo_xyz, gpa_opti_pdb,
                          pdboutput='./remove-endo.pdb')
     atoms = read(pdb_output)
     refer = read(gpa_endo_xyz)
