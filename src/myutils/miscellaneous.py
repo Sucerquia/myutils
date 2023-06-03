@@ -1,7 +1,5 @@
 import numpy as np
 import subprocess
-from ase.io import read, write
-import glob
 import sys
 
 
@@ -17,7 +15,7 @@ def output_terminal(cmd, print_output=False, print_error=False, **kwargs):
 
     Return
     ======
-    out = list[str] output of the executed command.
+    (list) [#lines - str] output of the executed command, line by line.
     """
     p = subprocess.Popen(cmd,
                          shell=True,
@@ -39,6 +37,10 @@ def output_terminal(cmd, print_output=False, print_error=False, **kwargs):
 
 
 def _time(keyword, logfile):
+    """
+    Used in myutils.miscellaneous.time_09. It extracts the time from a
+    line of gaussian.
+    """
     out = output_terminal("grep '"+keyword+"' "+logfile)
     out = out.split()
     start = out.index('at')
@@ -66,7 +68,7 @@ def time_g09(logfile):
 
     Return
     ======
-    Time in seconds although the time in minutes, seconds and hours are
+    (float) Time in seconds although the time in minutes, seconds and hours are
     printed.
     """
     t_i = _time('Leave Link    1', logfile)
@@ -98,24 +100,13 @@ def optimized_e(file):
 
     Parameters
     ==========
-
     file: str
         log gaussian file.
 
     Return
     ======
-    Potential energy in eV units.
+    (float) Potential energy in eV units.
     """
-    out, _ = output_terminal('grep "E(RBMK) =" '+file)
+    out = output_terminal('grep "E(RBMK) =" '+file)
     energy = float(out.split()[-5])
     return energy * 27.21  # energy in eV
-
-
-def classical_energies(file):
-    "Return the classical energies in Hartrees"
-    potential_energy = np.loadtxt(file, usecols=4)
-    potential_energy = (potential_energy)*1/2600  # 1Ha=2600kJ/mol
-    DOFs_energy = np.loadtxt(file, usecols=[1, 2, 3])*1/2600  # 1Ha=2600kJ/mol
-    appr_eDOF = np.sum(DOFs_energy, axis=1)
-    appr_eDOF = (appr_eDOF)
-    return potential_energy, appr_eDOF
