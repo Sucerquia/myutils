@@ -4,6 +4,7 @@ import numpy as np
 
 
 gpa_endo_pdb = str(Path(__file__).parent) + "/references/GPA-endo.pdb"
+gpa_endo_log = str(Path(__file__).parent) + "/references/GPA-endo.log"
 gpa_exo_pdb = str(Path(__file__).parent) + "/references/GPA-exo.pdb"
 gpa_endo_xyz = str(Path(__file__).parent) + "/references/GPA-endo.xyz"
 gpa_opti_pdb = str(Path(__file__).parent) +  "/references/GPA-stretched00.pdb"
