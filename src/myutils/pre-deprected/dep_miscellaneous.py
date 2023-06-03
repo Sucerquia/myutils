@@ -68,3 +68,15 @@ def min_profile_from_several(files, num_ranges=20):
             continue
 
     return time, var, ener
+
+
+# Deprected
+# I cannot remember what kind of file this function reads.
+def classical_energies(file):
+    "Return the classical energies in Hartrees"
+    potential_energy = np.loadtxt(file, usecols=4)
+    potential_energy = (potential_energy)*1/2600  # 1Ha=2600kJ/mol
+    DOFs_energy = np.loadtxt(file, usecols=[1, 2, 3])*1/2600  # 1Ha=2600kJ/mol
+    appr_eDOF = np.sum(DOFs_energy, axis=1)
+    appr_eDOF = (appr_eDOF)
+    return potential_energy, appr_eDOF
