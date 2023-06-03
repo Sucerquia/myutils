@@ -91,49 +91,6 @@ def time_g09(logfile):
 
 
 # add2executable
-def format_to_pdb(name_input, name_output=None):
-    """
-    This function takes the last configuration of one file (e.g. one gaussian
-    \*.log file) and saves the last configuration in a pdb file.
-
-    Parameters
-    ==========
-    name_input: string
-        Name of files to be modified (e.g. './\*.log' ).
-
-    name_output: string
-        Output name. Default: same name as input but with pdb extension.
-
-    Return
-    ======
-    List of output names of pdb files.
-    """
-
-    to_modify = glob.glob(name_input)
-    to_modify.sort()
-    n_files_to_modify = len(to_modify)
-
-    if name_output is not None > 1:  # there is an output name
-        if n_files_to_modify > 1:  # there are several files to be modified
-            output = [name_output+str(i)+'.pdb' for i in range(len(to_modify))]
-        else:
-            output = [name_output+'.pdb']
-    else:
-        output = list()
-        for name in to_modify:
-            index_rename = name.rfind('.')
-            rename = name[:index_rename]
-            output.append(rename+'.pdb')
-
-    for i in range(n_files_to_modify):
-        a = read(to_modify[i], index=-1)
-        write(output[i], a)
-        print(f" {to_modify[i]} ---> {output[i]} ")
-
-    return output
-
-
-# add2executable
 def optimized_e(file):
     """
     This code finds the last energy in a log file of gaussian computed using
