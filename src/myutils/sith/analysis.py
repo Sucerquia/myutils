@@ -16,7 +16,7 @@ def dof_classificator_all(dofs_indexes, atoms_per_aminoacids):
 
     Return
     ======
-    (dict) [keys: Residues (int), values: (list) [#DOFsPerResidue (int)]]
+    (dict) [keys: Residues (int), values: (array) [#DOFsPerResidue (int)]]
     Indexes of the degrees of freedom containing all atoms of each residue.
 
     Note
@@ -51,7 +51,7 @@ def dof_classificator_one(dofs_indexes, atoms_per_aminoacids):
 
     Return
     ======
-    (dict) [keys: Residues (str), values: (list) [#DOFsPerResidue (int)]]
+    (dict) [keys: Residues (str), values: (array) [#DOFsPerResidue (int)]]
     Indexes of the degrees of freedom containing at least one atom of each
     residue.
 
@@ -130,8 +130,8 @@ def le_same_aminoacids(sith, peptides_info, atom_types, kind_amino):
     atom_types: str
         name of the atoms inside the aminoacid that will be studied,
         example ['CA', 'CB'].
-    kind_amino:
-        name of the amino acid.
+    kind_amino: (list) [(str)]
+        name of the amino acids.
 
     Return
     ======
