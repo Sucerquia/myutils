@@ -24,7 +24,14 @@ def output_terminal(cmd, print_output=False, print_error=False, **kwargs):
                          **kwargs)
 
     out1, err1 = p.communicate()
-    out, err = out1.decode('ascii'), err1.decode('ascii')
+    try:
+        out = out1.decode('ascii')
+        err = err1.decode('ascii')
+    except UnicodeDecodeError:
+        print(type(out))
+        print(type(err))
+        out = out1.decode('utf-8')
+        err = err1.decode('utf-8')
 
     if print_output and out:
         print(out)
