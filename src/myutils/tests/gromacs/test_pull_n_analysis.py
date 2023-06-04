@@ -3,16 +3,16 @@ from pytest import approx
 
 
 def test_peptide_pulling():
-    u = output_terminal("$(myutils peptide_pulling) -p GPA " +
-                        "-a '' -f '100 300'", print_error=True)
-
+    u = output_terminal("$(myutils peptide_pulling) -p G " +
+                        "-a '' -f '100 300' -s 10", print_output=True,
+                        print_error=True)
     assert 'process finished successfully **' in u
-    assert 'Pulling of GPA starts' in u
-    assert 'VERBOSE Force 100 acting GPA starts' in u
-    assert 'VERBOSE Force 300 acting GPA starts' in u
+    assert 'Pulling of G starts' in u
+    assert 'VERBOSE Force 100 acting G starts' in u
+    assert 'VERBOSE Force 300 acting G starts' in u
     assert 'Pulling finished correctly of F=100' in u
     assert 'Pulling finished correctly of F=300' in u
-    assert 'GPA pulling finishes' in u
+    assert 'G pulling finishes' in u
 
 
 def test_analysis():
