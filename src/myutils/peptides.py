@@ -204,37 +204,42 @@ class PepSetter(MoleculeSetter):
                          indexes=[cg, hg1, hg2])
 
         return self.atoms
-    
+
     def rama_phi_psi(self):
         """
-        Returns the ramachandran angles of the peptide in degrees. It assumes
+        Compute ramachandran angles of the peptide in degrees. It assumes
         there are ACE and NME capping atoms.
+
+        Return
+        ======
+        (array) [#CA x 2float] dihedral angles per alpha carbon for
+        Ramachandran plot.
         """
-        angles =[]
+        angles = []
         if self.amino_name[1] == 'ACE':
-            for i in range(2,len(self.amino_info)):
+            for i in range(2, len(self.amino_info)):
                 phi = self.compute_dihedrals(self.amino_info[i-1]['C'],
-                                            self.amino_info[i]['N'],
-                                            self.amino_info[i]['CA'],
-                                            self.amino_info[i]['C'])
+                                             self.amino_info[i]['N'],
+                                             self.amino_info[i]['CA'],
+                                             self.amino_info[i]['C'])
 
                 psi = self.compute_dihedrals(self.amino_info[i+1]['N'],
-                                            self.amino_info[i]['C'],
-                                            self.amino_info[i]['CA'],
-                                            self.amino_info[i]['N'])
+                                             self.amino_info[i]['C'],
+                                             self.amino_info[i]['CA'],
+                                             self.amino_info[i]['N'])
                 angles.append([phi * 180/np.pi, psi * 180/np.pi])
 
         elif self.amino_name[1] == 'NME':
-            for i in range(2,len(self.amino_info)):
+            for i in range(2, len(self.amino_info)):
                 phi = self.compute_dihedrals(self.amino_info[i]['C'],
-                                            self.amino_info[i]['N'],
-                                            self.amino_info[i]['CA'],
-                                            self.amino_info[i+1]['C'])
+                                             self.amino_info[i]['N'],
+                                             self.amino_info[i]['CA'],
+                                             self.amino_info[i+1]['C'])
 
                 psi = self.compute_dihedrals(self.amino_info[i-1]['N'],
-                                            self.amino_info[i]['C'],
-                                            self.amino_info[i]['CA'],
-                                            self.amino_info[i]['N'])
+                                             self.amino_info[i]['C'],
+                                             self.amino_info[i]['CA'],
+                                             self.amino_info[i]['N'])
                 angles.append([phi * 180/np.pi, psi * 180/np.pi])
 
         return np.array(angles)

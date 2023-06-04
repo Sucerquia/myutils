@@ -7,7 +7,7 @@ print_help() {
 echo "
 This tool creates the trajectory of a given peptide pulled by an external force.
 Consider the next options:
-   
+
     -a    properties you want to analyse. For example \"-d -r\". Default \"-d -L\".
           For more information, check: myutils analysis -h
     -f    forces to stretch the peptide in [kJ mol^-1 nm^-1]. Default 200
@@ -66,9 +66,9 @@ do
     verbose "Force $force acting $pep  starts"
     $( myutils pulling ) -g $gmx -f $force -s $steps || fail "Pulling $pep with
         $force failed"
-    
+
     create_bck force$forcename || fail "creating bck"
-    
+
     mkdir force$forcename && \
         mv md_0_* force$forcename && \
         mv *.ndx force$forcename && \

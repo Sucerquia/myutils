@@ -10,7 +10,7 @@ def proline_state(pdb, state):
     Changes the state of all prolines to endo or exo. There is also de option
     to set it randomly but always the final state of one proline will be one of
     those.
-    
+
     Parameters
     ==========
     - pdb: str
