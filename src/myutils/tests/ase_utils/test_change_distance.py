@@ -62,5 +62,5 @@ def test_increase_distance_with_constraints():
 
 
 def test_remove():
-    output_terminal('rm remove*')
+    output_terminal('rm -rf remove*')
     assert True

@@ -67,7 +67,7 @@ do
     $( myutils pulling ) -g $gmx -f $force -s $steps || fail "Pulling $pep with
         $force failed"
     
-    create_bck force$forcename
+    create_bck force$forcename || fail "creating bck"
     
     mkdir force$forcename && \
         mv md_0_* force$forcename && \

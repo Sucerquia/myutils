@@ -34,5 +34,5 @@ def test_analysis():
 
 
 def test_remove():
-    output_terminal('rm -r force* equilibrate*')
+    output_terminal('rm -rf remove* force* equilibrate*')
     assert True

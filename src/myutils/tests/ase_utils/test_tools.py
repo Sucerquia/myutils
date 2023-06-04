@@ -141,5 +141,5 @@ def test_create_gaussian_input():
 
 
 def test_remove():
-    output_terminal('rm remove*')
+    output_terminal('rm -rf remove*')
     assert True

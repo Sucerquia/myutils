@@ -24,5 +24,5 @@ def test_classic_energies():
 
 
 def test_remove():
-    output_terminal('rm remove*')
+    output_terminal('rm -rf remove*')
     assert True
