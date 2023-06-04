@@ -117,7 +117,7 @@ class PepSetter(MoleculeSetter):
             set of angles 1 and 2 in each proline.
         """
         prolines = np.where(np.array(
-                            list(self.amino_name.values())) == 'PRO ')[0]
+                            list(self.amino_name.values())) == 'PRO')[0]
         angles = np.array([[0, 0]])
         for i in prolines:
             isolated_proline = self.amino_info[i + 1]
@@ -211,7 +211,7 @@ class PepSetter(MoleculeSetter):
         there are ACE and NME capping atoms.
         """
         angles =[]
-        if self.amino_name[1] == 'ACE ':
+        if self.amino_name[1] == 'ACE':
             for i in range(2,len(self.amino_info)):
                 phi = self.compute_dihedrals(self.amino_info[i-1]['C'],
                                             self.amino_info[i]['N'],
@@ -224,7 +224,7 @@ class PepSetter(MoleculeSetter):
                                             self.amino_info[i]['N'])
                 angles.append([phi * 180/np.pi, psi * 180/np.pi])
 
-        elif self.amino_name[1] == 'NME ':
+        elif self.amino_name[1] == 'NME':
             for i in range(2,len(self.amino_info)):
                 phi = self.compute_dihedrals(self.amino_info[i]['C'],
                                             self.amino_info[i]['N'],
