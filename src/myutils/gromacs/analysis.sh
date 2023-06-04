@@ -48,7 +48,7 @@ output='/dev/null'
 header=()
 new_files=()
 
-while getopts 'acdef:g:kLlmrsh' flag; do
+while getopts 'acdef:g:kLl:mrsh' flag; do
     case "${flag}" in
       a) all='true' ;;
       c) config='true' ;;
