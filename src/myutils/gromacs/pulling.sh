@@ -54,7 +54,7 @@ echo -e "r ACE & a CH3 \n r NME & a CH3 \n \"ACE_&_CH3\" | \"NME_&_CH3\" \n q\n 
 sed -i "s/ACE_&_CH3_NME_&_CH3/distance/g" index.ndx && \
     cp $( myutils pulling_temp ) ./pulling.mdp && \
     sed -i "s/<force>/$force/g" pulling.mdp && \
-    sed "s/= 10000/= $steps/g" pulling.mdp || fail "setting the file
+    sed -i "s/= 10000/= $steps/g" pulling.mdp || fail "setting the file
         pulling.mdp"
 
 verbose "Creates MD executable of force $force"
