@@ -101,7 +101,7 @@ fi
 
 if $cascade
 then
-    resubmit $pep $stretching_type $breakages $size &
+    resubmit $pep $method $breakages $size &
     echo " * This JOB will be run in the Node:"
     echo $SLURM_JOB_NODELIST
     cd $SLURM_SUBMIT_DIR
