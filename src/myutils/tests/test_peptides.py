@@ -1,10 +1,27 @@
 from myutils.tests.variables4tests import (gpa_opti_pdb,
                                            gpa_endo_pdb,
                                            gpa_exo_pdb,
-                                           gpa_stre_pdb)
+                                           gpa_stre_pdb,
+                                           gpa_atoms)
 from myutils.peptides import PepSetter
 import numpy as np
 from pytest import approx
+from ase.io import read
+
+
+def test_PepSetter():
+    gpa = PepSetter(gpa_opti_pdb)
+    atoms = read(gpa_opti_pdb)
+    assert (gpa.atoms.positions == atoms.positions).all()
+    assert (gpa.name_atoms_raw == gpa_atoms).all()
+    assert (gpa.atom_names[1] == gpa_atoms[:6]).all()
+    assert len(gpa.atom_names) == 5
+    assert list(gpa.amino_name.values()) == ['ACE', 'GLY', 'PRO', 'ALA', 'NME']
+    assert gpa.atom_indexes[1] == [1, 2, 3, 4, 5, 6]
+    assert len(gpa.atom_indexes) == 5
+    assert (list(gpa.amino_info[1].keys()) == gpa_atoms[:6]).all()
+    assert list(gpa.amino_info[1].values()) == [1, 2, 3, 4, 5, 6]
+    assert len(gpa.amino_info) == 5
 
 
 def test_compute_dihedrals():
