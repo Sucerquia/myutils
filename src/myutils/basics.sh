@@ -3,15 +3,15 @@
 # Definition functions and variables that are used along the whole package.
 
 # ------ variables ------------------------------------------------------------
-pckg_name='myutils'
-names=( $1 ${names[@]} )
-name=${names[0]}
+pckg_basic_functions_name='myutils'
+array_bfnames=( $1 ${array_bfnames[@]} )
+basic_functions_name=${array_bfnames[0]}
 
 # ------ functions ------------------------------------------------------------
 
 # Function that adjustes the text to 80 characters
 adjust () {
-    text=$( echo "++++++++ $(echo $name): $@ " )
+    text=$( echo "++++++++ $(echo $basic_functions_name): $@ " )
     addchar=$( expr 80 - ${#text} % 80 )
     text=$( echo $text $( perl -E "say '+' x $addchar" ))
     nlines=$( expr ${#text} / 80 )
@@ -33,8 +33,8 @@ warning () {
 }
 
 finish () {
-    names=( ${names[@]:1} )
-    name=${names[0]}
+    array_bfnames=( ${array_bfnames[@]:1} )
+    basic_functions_name=${array_bfnames[0]}
 }
 
 # Function that returns the error message and stops the run if something fails.
@@ -44,7 +44,7 @@ fail () {
     exit "${2-1}"
 }
 
-# Function to rename all the files of interest
+# Function to rebasic_functions_name all the files of interest
 mv_stretching_files () {
     for ext in log com chk xyz
     do
@@ -57,7 +57,7 @@ mv_stretching_files () {
     return 0
 }
 
-# function that moves an existing file or directory to <name>-bck_n[.ext] where
+# function that moves an existing file or directory to <basic_functions_name>-bck_n[.ext] where
 # n is the number of the backup and ext is automatically extracted from the
 # original file
 create_bck () {
