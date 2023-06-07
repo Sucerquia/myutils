@@ -19,7 +19,7 @@ exit 0
 }
 
 output='/dev/null'
-while getopts 'i:o:l:h' flag; do
+while getopts 'f:o:l:h' flag; do
     case "${flag}" in
         f) pdbfile=${OPTARG} ;;
         o) output_file=${OPTARG} ;;
