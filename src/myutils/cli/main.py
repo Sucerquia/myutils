@@ -9,7 +9,7 @@ pymodules = {
     'conf2pdb': 'myutils.ase_utils.tools',
     'diff_bonds': 'myutils.ase_utils.tools',
     'extract_bonds': 'myutils.ase_utils.tools',
-    'change_distance': 'myutils.ase_utils.change_distance',
+    'change_distance': 'myutils.ase_utils.tools',
     'log2xyz': 'myutils.sith.trans_xyz',
     'gen_randpep': 'myutils.sith.generate_random_peptide',
     'proline_state': 'myutils.sith.set_proline_state',
