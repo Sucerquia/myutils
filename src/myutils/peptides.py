@@ -1,6 +1,6 @@
 import numpy as np
 from ase.io import read
-from myutils.ase_utils.tools import MoleculeSetter
+from myutils.ase_utils.molecules import MoleculeSetter
 
 
 class PepSetter(MoleculeSetter):
