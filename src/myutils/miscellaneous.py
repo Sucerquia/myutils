@@ -11,10 +11,16 @@ def output_terminal(cmd, print_output=False, print_error=False, **kwargs):
     ==========
     cmd: str
         bash command to be executed in the terminal.
+    print_output: bool (optional)
+        True for printing the output besides of returning it. Default False.
+    print_error: bool (optional)
+        True for printing the std_error. Default False.
+    **kwargs:
+        additional options for subprocess.Popen
 
     Return
     ======
-    (list) [#lines - str] output of the executed command, line by line.
+    (list) [#linesStr] output of the executed command, line by line.
     """
     p = subprocess.Popen(cmd,
                          shell=True,

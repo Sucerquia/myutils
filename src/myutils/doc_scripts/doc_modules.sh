@@ -23,11 +23,10 @@ for ign_dir in ${ignore_dirs[@]}
 do
     bool_ign="$bool_ign  -path '*$ign_dir*' -o"
 done
-# the names of subdirectories in the package respect to the package directory: the
-# documentation will have the same structure:
+# the names of subdirectories in the documentation respect to the package
+# directory will have the same structure:
 pck_dirs=$( eval "find . -type d -not \(" "${bool_ign::-2}" \
                                    "-prune \)" )
-
 
 # create modules directory it doesn't already exist.
 if [ ! -d $mod_doc ]
@@ -83,9 +82,11 @@ cd $mod_doc
 # create rst files
 for fil in $pck_fils
 do
+    # Python files
     ext=$(echo $fil | cut -d '.' -f3 )
     if [ $ext == 'py' ]
     then
         $(myutils doc_pythonfile) ${fil%.*} $mod_path $mod_doc $pkg_name
     fi
+    # here must be the commands for other kind of files.
 done
