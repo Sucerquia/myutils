@@ -163,11 +163,6 @@ do
 	verbose "Stretched ${nameiplusone} starts"
     if [ $(($i + 1)) -eq 0 ]
     then
-        # 0 corresponds to the optimized config without constraints
-        # classical optimization
-        $( myutils classical_minimization ) $pep-stretched00.pdb || fail "
-            Classical minimization"
-
         # initial g09 optimization
         verbose "The first g09 process is an optimization"
         myutils change_distance $pep-stretched00.pdb \

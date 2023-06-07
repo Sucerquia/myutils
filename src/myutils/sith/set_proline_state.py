@@ -1,5 +1,5 @@
 from ase.io import write
-from myutils.peptides import info
+from myutils.peptides import PepSetter
 import numpy as np
 from myutils.ase_utils.tools import conf2pdb
 
@@ -18,7 +18,7 @@ def proline_state(pdb, state):
     - state: str
         state to set up the prolines. It could be 'endo', 'exo' or 'random'.
     """
-    pep_info = info(pdb, withx=-1)
+    pep_info = PepSetter(pdb, withx=-1)
     prolines = np.where(np.array(list(pep_info.amino_name.values()))
                         == 'PRO')[0] + 1
     if state == 'random':
