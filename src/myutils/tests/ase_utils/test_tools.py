@@ -9,7 +9,9 @@ from myutils.tests.variables4tests import (gpa_endo_xyz,
                                            gpa_atoms,
                                            gpa_residues,
                                            gpa_bonds,
-                                           gpa_broken_xyz)
+                                           gpa_broken_xyz,
+                                           frozendofs_dat,
+                                           com_head)
 from myutils.miscellaneous import output_terminal
 from pytest import approx
 from ase.io import read
@@ -49,9 +51,17 @@ def test_distance():
     assert distance(gpa_endo_xyz, 0, 39) == approx(9.749, rel=1e-4)
 
 
+def test_change_distance():
+    change_distance(gpa_endo_xyz, 'remove', frozendofs_dat, 1, 0, 'scale_distance')
+    ini_atoms = read(gpa_endo_xyz)
+    fini_atoms = read('remove.com')
+    with open('remove.com', 'r') as p:
+        l = p.read().split('\n')
+    
+    assert abs(ini_atoms.get_distance(0, 39) - fini_atoms.get_distance(0, 39)) == approx(1)
+    assert l[:6] == approx(com_head)
+
+
 def test_remove():
     output_terminal('rm -rf remove*')
     assert True
-
-def test_change_distance():
-    change_distance(gpa_endo_xyz)
