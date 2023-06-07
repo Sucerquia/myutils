@@ -8,7 +8,7 @@ echo "
 This tool optimizes a configuration from an initial pdb file, which must be the
 first argument.
 
-   -i   pdb file with the configuration to be minimized.
+   -f   pdb file with the configuration to be minimized.
    -o   name of the output file with the optimized structure. Default same
         input (replaces the pdb of the input).
    -l   log file of the gromacs outputs. Default /dev/null
@@ -21,7 +21,7 @@ exit 0
 output='/dev/null'
 while getopts 'i:o:l:h' flag; do
     case "${flag}" in
-        i) pdbfile=${OPTARG} ;;
+        f) pdbfile=${OPTARG} ;;
         o) output_file=${OPTARG} ;;
         l) output=${OPTARG} ;;
 

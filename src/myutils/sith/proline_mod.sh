@@ -18,7 +18,7 @@ exit 0
 # General variables
 proline_state='random'
 
-while getopts 'd:h' flag;
+while getopts 'f:s:h' flag;
 do
     case "${flag}" in
       f) pdbfile=${OPTARG} ;;
