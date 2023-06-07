@@ -20,6 +20,67 @@ def initialize_ms():
     return ms
 
 
+def test_rot_x():
+    ms = initialize_ms()
+
+    # first alignment, center in 5
+    trans = ms.rot_x(np.pi/2)
+    assert trans.shape == approx((3, 3))
+    assert trans.flatten() == approx([1, 0, 0, 0, 0, -1, 0, 1, 0])
+
+
+def test_rot_y():
+    ms = initialize_ms()
+
+    # first alignment, center in 5
+    trans = ms.rot_y(np.pi/2)
+    assert trans.shape == approx((3, 3))
+    assert trans.flatten() == approx([0, 0, 1, 0, 1, 0, -1, 0, 0])
+
+
+def test_rot_z():
+    ms = initialize_ms()
+    trans = ms.rot_z(np.pi/2)
+    assert trans.shape == approx((3, 3))
+    assert trans.flatten() == approx([0, -1, 0, 1, 0, 0, 0, 0, 1])
+
+
+def test_align_axis():
+    vec = np.random.random(3)
+    ms = initialize_ms()
+    trans = ms.align_axis(vec)
+    align = np.dot(trans, vec)
+    assert np.linalg.norm(align) == approx(np.linalg.norm(vec))
+    assert align[1:] == approx([0, 0])
+
+
+def test_align_plane():
+    vec = np.random.random(3)
+    ms = initialize_ms()
+    trans = ms.align_plane(vec)
+    align = np.dot(trans, vec)
+    assert np.linalg.norm(align) == approx(np.linalg.norm(vec))
+    assert np.dot(align, [0, 0, 1]) == approx(0)
+
+
+def test_apply_trans():
+    ms = initialize_ms()
+    inipos = ms.atoms.positions.copy()
+    trans = [[1, 0, 0], [0, 0, 0], [0, 0, 0]]
+    ms.apply_trans(trans)
+    assert ms.atoms.positions.shape == approx(inipos.shape)
+    assert ms.atoms.positions[:,0].flatten() == approx(inipos[:,0].flatten())
+    assert ms.atoms.positions[:,1:].flatten() == approx(inipos[:,1:].flatten()*0)
+
+    ms = initialize_ms()
+    inipos = ms.atoms.positions.copy()
+    trans = [[-1, 0, 0], [0, -1, 0], [0, 0, -1]]
+    ms.apply_trans(trans, indexes=[0, 1, 2, 3])
+    assert ms.atoms.positions.shape == approx(inipos.shape)
+    assert ms.atoms.positions[:4].flatten() == approx(-inipos[:4].flatten())
+    assert ms.atoms.positions[4:].flatten() == approx(inipos[4:].flatten())
+    
+    
 def test_xy_alignment():
     ms = initialize_ms()
 
