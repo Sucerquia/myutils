@@ -12,7 +12,7 @@ pymodules = {
     'change_distance': 'myutils.ase_utils.tools',
     'log2xyz': 'myutils.sith.trans_xyz',
     'gen_randpep': 'myutils.sith.generate_random_peptide',
-    'proline_state': 'myutils.sith.set_proline_state',
+    'log2xyz': 'myutils.sith.g09_xyz',
     'optimized_e': 'myutils.miscellaneous',
     'time_g09': 'myutils.miscellaneous',
 }

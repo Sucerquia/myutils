@@ -1,6 +1,7 @@
-# Code taken from:
+# Code modified from:
 # https://github.com/chunxiangzheng/gaussian_log_file_converter/
 import re
+from ase import Atoms
 
 
 code = {"1": "H", "2": "He", "3": "Li", "4": "Be", "5": "B",
@@ -29,7 +30,7 @@ code = {"1": "H", "2": "He", "3": "Li", "4": "Be", "5": "B",
         "116": "Uuh", "117": "Uus", "118": "Uuo"}
 
 
-def getEnergy(structure):
+def _getEnergy(structure):
     for line in structure.split("\n"):
         if line.startswith(" SCF Done:"):
             arr = line.split("=")
@@ -37,17 +38,17 @@ def getEnergy(structure):
     return 1000.0
 
 
-def findInList(dataList, target):
+def _findInList(dataList, target):
     for i in range(0, len(dataList)):
         if dataList[i].find(target) != -1:
             return i
     return -1
 
 
-def getCoordinates(dataList):
-    start = findInList(dataList, "Standard orientation")
+def _getCoordinates(dataList):
+    start = _findInList(dataList, "Standard orientation")
     dataList = dataList[start + 5:]
-    dataList = dataList[: findInList(dataList, "-----")]
+    dataList = dataList[: _findInList(dataList, "-----")]
     return dataList
 
 
@@ -81,7 +82,7 @@ def log2xyz(finput, foutput=None):
                 if isInfo:
                     isInfo = False
                 if currentStructure != "":
-                    structures.append((getEnergy(currentStructure),
+                    structures.append((_getEnergy(currentStructure),
                                        currentStructure))
                     currentStructure = ""
                 isStructure = not isStructure
@@ -97,7 +98,7 @@ def log2xyz(finput, foutput=None):
             optimized_structure = currentStructure
         else:
             if currentStructure != "":
-                structures.append((getEnergy(currentStructure),
+                structures.append((_getEnergy(currentStructure),
                                    currentStructure))
             structures = sorted(structures, key=lambda item: item[0])
             optimized_structure = structures[0][1]
@@ -110,10 +111,17 @@ def log2xyz(finput, foutput=None):
 
     with open(foutput, "w") as fout:
         dataList = optimized_structure.split("\n")
-        atoms = getCoordinates(dataList)
+        atoms = _getCoordinates(dataList)
         fout.write(str(len(atoms)) + "\n\n")
+        mol_pos = []
+        mol_anames = []
         for atom in atoms:
             arr = atom.split()
             symbol = code.get(arr[1], 'X')
             fout.write("  %s %16.7f %16.7f %16.7f\n" % (symbol, float(arr[3]),
                        float(arr[4]), float(arr[5])))
+            mol_pos.append([float(arr[3]), float(arr[4]), float(arr[5])])
+            mol_anames.append(symbol)
+    atoms = Atoms(mol_anames, mol_pos)
+
+    return atoms
