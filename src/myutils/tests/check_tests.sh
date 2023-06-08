@@ -34,10 +34,18 @@ cd tests
 for fil in $pck_fils
 do
     ext=$(echo $fil | cut -d '.' -f3 )
-    if [ $ext == 'py' ] || [ $ext == 'sh' ]
+    if [ $ext == 'py' ]
     then
         [ -f ${fil%/*}/test_${fil##*/} ] && \
-            with_test+=( $fil ) ||
+            with_test+=( $fil ) || \
+            without_test+=( $fil )
+    elif [ $ext == 'sh' ]
+    then
+        namefile=${fil##*/}
+        namewoext=$( echo $namefile | cut -d '.' -f 1 )
+        exist=$( grep "def test_$namewoext("  ${fil%/*}/test_*.py | wc -l )
+        [ $exist -eq 1 ] && \
+            with_test+=( $fil ) || \
             without_test+=( $fil )
     fi
 done

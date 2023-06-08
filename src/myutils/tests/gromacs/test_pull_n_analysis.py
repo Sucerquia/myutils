@@ -2,6 +2,15 @@ from myutils.miscellaneous import output_terminal
 from pytest import approx
 
 
+def test_pulling():
+    u = output_terminal("pepgen G equilibrate $pep_options -e ; " +
+                        "$( myutils pulling ) -f 1 -s 100 ;" +
+                        "rm -rf equilibrate md* index* pulling.mdp",
+                        print_output=True,
+                        print_error=True)
+    assert "Pulling finished correctly of F=1" in u
+
+
 def test_peptide_pulling():
     u = output_terminal("$(myutils peptide_pulling) -p G " +
                         "-a '' -f '100 300' -s 100", print_output=True,

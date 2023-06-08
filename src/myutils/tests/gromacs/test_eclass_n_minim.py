@@ -4,7 +4,7 @@ from pytest import approx
 from myutils.tests.variables4tests import (gpa_stre_pdb)
 
 
-def test_classic_minimization():
+def test_classical_minimization():
     u = output_terminal(f"cp {gpa_stre_pdb} ./remove-stretched.pdb ; " +
                         "$(myutils classical_minimization)" +
                         " -f remove-stretched.pdb -o remove-minimized.pdb",
@@ -13,7 +13,7 @@ def test_classic_minimization():
     assert "Minimization finished." in u
 
 
-def test_classic_energies():
+def test_classical_energies():
     u = output_terminal(f"$(myutils classical_energies) -n && " +
                         "mv classical_energy.dat remove.dat", print_error=True)
 
