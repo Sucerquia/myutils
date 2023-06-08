@@ -171,7 +171,7 @@ def conf2pdb(confile, pdbtemplate, pdboutput=None):
 
 
 # add2executable
-def all_xyz2pdb(template):
+def all_xyz2pdb(template, output_patern=None, xyzdir=''):
     """
     Transform all xyz files of the directory where it is executed into a pdb
     using a pdb file as template.
@@ -180,6 +180,9 @@ def all_xyz2pdb(template):
     ==========
     pdbtemplate: str
         path to the pdb template for the output.
+    output_patern: str (optional)
+        the name of the output will be <this string>-<n>.pdb, where is is an
+        increasing index, from 1 to the number of xyz files.
 
     Return
     ======
@@ -193,10 +196,16 @@ def all_xyz2pdb(template):
     E.g.
     cd dir_with_xyz_files ; myutils all_xyz2pdb
     """
-    configs = glob.glob('*.xyz')
+    configs = glob.glob(xyzdir + '*.xyz')
     configs.sort()
+    n=1
     for config in configs:
-        yield conf2pdb(config, template)
+        if output_patern is None:
+            pdboutput = config.split('.')[0] + '.pdb'
+        else:
+            pdboutput = output_patern + f'-{n}.pdb'
+            n += 1
+        yield conf2pdb(config, template, pdboutput=pdboutput)
 
 
 def all_hydrogen_atoms(mol):
