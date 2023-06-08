@@ -1,6 +1,7 @@
 from myutils.ase_utils.tools import (extract_bonds,
                                      diff_bonds,
                                      conf2pdb,
+                                     all_xyz2pdb,
                                      all_hydrogen_atoms,
                                      distance,
                                      change_distance)
@@ -11,10 +12,12 @@ from myutils.tests.variables4tests import (gpa_endo_xyz,
                                            gpa_bonds,
                                            gpa_broken_xyz,
                                            frozendofs_dat,
-                                           com_head)
+                                           com_head,
+                                           ref_dir)
 from myutils.miscellaneous import output_terminal
 from pytest import approx
 from ase.io import read
+from os.path import isfile
 
 
 def test_extract_bonds():
@@ -36,6 +39,12 @@ def test_conf2pdb():
     assert atoms.get_chemical_symbols() == refer.get_chemical_symbols()
     assert (atoms.arrays['atomtypes'] == gpa_atoms).all()
     assert (atoms.arrays['residuenames'] == gpa_residues).all()
+
+
+def test_all_xyz2pdb():
+    all_xyz2pdb(gpa_opti_pdb, output_patern='remove', xyzdir=ref_dir)
+    assert isfile('remove-1.pdb')
+    assert isfile('remove-2.pdb')
 
 
 def test_all_hydrogen_atoms():

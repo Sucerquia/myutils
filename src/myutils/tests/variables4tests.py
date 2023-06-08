@@ -3,15 +3,16 @@ from pathlib import Path
 import numpy as np
 
 
-sith_master_dir = str(Path(__file__).parent) + "/references/GPA-forces"
-gpa_endo_pdb = str(Path(__file__).parent) + "/references/GPA-endo.pdb"
-gpa_endo_log = str(Path(__file__).parent) + "/references/GPA-endo.log"
-gpa_exo_pdb = str(Path(__file__).parent) + "/references/GPA-exo.pdb"
-gpa_endo_xyz = str(Path(__file__).parent) + "/references/GPA-endo.xyz"
-gpa_opti_pdb = str(Path(__file__).parent) + "/references/GPA-stretched00.pdb"
-gpa_stre_pdb = str(Path(__file__).parent) + "/references/GPA-stretched30.pdb"
-gpa_broken_xyz = str(Path(__file__).parent) + "/references/GPA-broken.xyz"
-frozendofs_dat = str(Path(__file__).parent) + "/references/frozen_dofs.dat"
+ref_dir = str(Path(__file__).parent) + "/references/"
+sith_master_dir = ref_dir + "GPA-forces"
+gpa_endo_pdb = ref_dir + "GPA-endo.pdb"
+gpa_endo_log = ref_dir + "GPA-endo.log"
+gpa_exo_pdb = ref_dir + "GPA-exo.pdb"
+gpa_endo_xyz = ref_dir + "GPA-endo.xyz"
+gpa_opti_pdb = ref_dir + "GPA-stretched00.pdb"
+gpa_stre_pdb = ref_dir + "GPA-stretched30.pdb"
+gpa_broken_xyz = ref_dir + "GPA-broken.xyz"
+frozendofs_dat = ref_dir + "frozen_dofs.dat"
 
 gpa_atoms = np.array(['CH3', '1HH3', '2HH3', '3HH3', 'C', 'O', 'N', 'H', 'CA',
                       'HA1', 'HA2', 'C', 'O', 'N', 'CD', 'HD1', 'HD2', 'CG',
