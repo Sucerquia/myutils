@@ -19,29 +19,32 @@ adjust () {
     do
         echo ${text:$(( w * 79 )):79}
     done
-    echo
 }
 
 # prints some text adjusted to 80 characters per line, filling empty spaces
 # with +
 verbose () {
-    adjust "VERBOSE" $1
+    adjust "VERBOSE" $@
 }
 
 warning () {
-    adjust "WARNING" $1
+    adjust "WARNING" $@
 }
 
 finish () {
     array_bfnames=( ${array_bfnames[@]:1} )
     basic_functions_name=${array_bfnames[0]}
+    if [ ${#@} -ne 0 ]
+    then
+        adjust $@
+    fi
 }
 
 # Function that returns the error message and stops the run if something fails.
 fail () {
-    adjust "ERROR" $1 >&2
+    adjust "ERROR" $@ >&2
     finish
-    exit "${2-1}"
+    exit 1
 }
 
 # Function to rebasic_functions_name all the files of interest
@@ -98,4 +101,3 @@ create_bck () {
         fi
     done
 }
-

@@ -43,8 +43,8 @@ def output_terminal(cmd, print_output=False, print_error=False, **kwargs):
     if print_error and out:
         print(err, file=sys.stderr)
 
-    assert not p.returncode, "ERROR executing the function output_terminal \
-        with the next message:\n" + err
+    assert not p.returncode, "ERROR executing the function output_terminal " +\
+        "with the next message:\n" + err
     return out
 
 
