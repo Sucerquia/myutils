@@ -199,13 +199,16 @@ def all_xyz2pdb(template, output_patern=None, xyzdir=''):
     configs = glob.glob(xyzdir + '*.xyz')
     configs.sort()
     n=1
+    outfiles = []
     for config in configs:
         if output_patern is None:
             pdboutput = config.split('.')[0] + '.pdb'
         else:
             pdboutput = output_patern + f'-{n}.pdb'
+            print(pdboutput)
             n += 1
-        yield conf2pdb(config, template, pdboutput=pdboutput)
+        outfiles.append(conf2pdb(config, template, pdboutput=pdboutput))
+    return outfiles
 
 
 def all_hydrogen_atoms(mol):
