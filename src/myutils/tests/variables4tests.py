@@ -3,6 +3,7 @@ import numpy as np
 
 
 ref_dir = str(Path(__file__).parent) + "/references/"
+basics_bash = ref_dir + "basics.sh"
 sith_master_dir = ref_dir + "GPA-forces"
 gpa_endo_pdb = ref_dir + "GPA-endo.pdb"
 gpa_endo_log = ref_dir + "GPA-endo.log"
