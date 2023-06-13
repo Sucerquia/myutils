@@ -3,7 +3,7 @@ from myutils.tests.variables4tests import gpa_endo_log
 from ase.io import read
 
 
-def test_g09_xyz():
+def test_log2xyz():
     outatoms = log2xyz(gpa_endo_log, foutput='remove')
     atoms = read(gpa_endo_log)
     assert (atoms.positions == outatoms.positions).all()
