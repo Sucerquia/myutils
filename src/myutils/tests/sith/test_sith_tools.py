@@ -1,8 +1,8 @@
 from myutils.peptides import PepSetter
 from myutils.sith.sith_tools import (gen_randpep,
                                      proline_state)
-from myutils.tests.variables4tests import (sith_master_dir,
-                                           gpa_opti_pdb)
+from myutils.tests.variables4tests import (gpa_opti_pdb,
+                                           gpa_exo_pdb)
 import numpy as np
 
 def test_gen_randpep():
