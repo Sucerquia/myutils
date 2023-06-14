@@ -1,8 +1,8 @@
 # ==== General variables ======================================================
 pkg_name='myutils'
-mod_path=$($pkg_name path)   # path to the files to be documented
+mod_path=$( $pkg_name path )   # path to the files to be documented
 # directories to be ignore during documentation.
-ignore_dirs=( 'pycache' 'tests' 'cli' 'examples' 'doc_scripts' 'pre-deprected')
+ignore_dirs=( 'pycache' 'tests' 'cli' 'examples' 'doc_scripts' 'pre-deprected' )
 # files to be ignore during documentation.
 ignore_files=( '__init__.' )
 
@@ -43,8 +43,10 @@ do
     then
         namefile=${fil##*/}
         namewoext=$( echo $namefile | cut -d '.' -f 1 )
-        exist=$( grep "def test_$namewoext("  ${fil%/*}/test_*.py | wc -l )
-        [ $exist -eq 1 ] && \
+        # search function
+        exist_fun=$( grep "def test_$namewoext("  ${fil%/*}/test_*.py | wc -l )
+        # second option in the next "or" searches test file
+        [ $exist_fun -eq 1 ] || [ -f ${fil%/*}/test_$namewoext.py ] && \
             with_test+=( $fil ) || \
             without_test+=( $fil )
     fi
