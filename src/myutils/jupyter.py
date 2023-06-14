@@ -1,6 +1,10 @@
 from IPython.display import HTML
 
 def hide_code():
+    """
+    This function hides the code cells in a jupyter notebook. It helps to a
+    cleaner in visualization of results.
+    """
     html = HTML('''<script>
     code_show=true; 
     function code_toggle() {
@@ -17,8 +21,7 @@ def hide_code():
     return html
 
 """
-
-tips
+tips:
 
 to have interactive plots:
    %matplotlib notebook
