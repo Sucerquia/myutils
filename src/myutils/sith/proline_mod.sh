@@ -7,6 +7,7 @@ echo "
 Changes the state of the proline to endo, exo or random.
     -f    <path> pdb file.
     -s    <state> proline state. So far, random, endo and exo are accepted.
+    -l   log file of the gromacs outputs. Default /dev/null
 
     -h   prints this message.
 "
@@ -17,38 +18,42 @@ exit 0
 # ----- set up starts ---------------------------------------------------------
 # General variables
 proline_state='random'
-
-while getopts 'f:s:h' flag;
+outfile=''
+pdbfile=''
+outgromacs='/dev/null'
+while getopts 'f:o:l:s:h' flag;
 do
     case "${flag}" in
       f) pdbfile=${OPTARG} ;;
       s) proline_state=${OPTARG} ;;
+      o) outfile=${OPTARG} ;;
+      l) outgromacs=${OPTARG} ;;
 
       h) print_help
     esac
 done
 
-# checking dependencies
-verbose "starting"
-if [ ${#pdbfile} -lt 0  ]
+if [ ${#outfile} -eq 0 ]
 then
-    echo "
-       To use proline modification, you have to provide the pdb file. use
-       'myutils proline_mod -h' to see your options."
-    exit 1
+    outfile=$(echo ${pdbfile%.*}modpro.pdb)
 fi
 
+# checking dependencies
+verbose "starting"
+[ ${#pdbfile} -eq 0  ] && fail "To use proline modification, you have to
+    provide the pdb file. use 'myutils proline_mod -h' to see your options."
+
 # changing proline states.
-$( myutils classical_minimization )  $pdbfile || fail "minimization before proline
-    definition of states"
+$( myutils classical_minimization )  -f $pdbfile -o $outfile  -l $outgromacs \
+   || fail "minimization before proline definition of states"
 
 verbose "define proline states"
-myutils proline_state $pdbfile $proline_state || fail "defining proline states"
+myutils proline_state $outfile $proline_state || fail "defining proline states"
 
-$( myutils classical_minimization ) ${pdbfile%.*}modpro.pdb || fail "minimization
-    after proline definition of states"
+$( myutils classical_minimization ) -f ${outfile%.*}modpro.pdb -l $outgromacs \
+   || fail "minimization after proline definition of states"
 
-mv ${pdbfile%.*}modpro.pdb $pdbfile
+mv ${outfile%.*}modpro.pdb $outfile
 
 finish
 exit 0

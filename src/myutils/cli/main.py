@@ -32,6 +32,7 @@ sh_executers = {
     'workflow': './sith/workflow.sh',
     'find_forces': './sith/find_forces.sh',
     'stretching': './sith/stretching.sh',
+    'single-optimization': './sith/single-optimization.sh',
     'basics': './basics.sh',
 }
 
