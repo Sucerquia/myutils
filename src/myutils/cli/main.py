@@ -26,12 +26,12 @@ sh_executers = {
     'pulling': './gromacs/pulling.sh',
     'peptide_pulling': './gromacs/peptide_pulling.sh',
     'generate_main': './cli/generate_main.sh',
+    'single_optimization': './sith/single_optimization.sh',
     'extract_forces': './sith/extract_forces.sh',
     'proline_mod': './sith/proline_mod.sh',
     'workflow': './sith/workflow.sh',
     'find_forces': './sith/find_forces.sh',
     'stretching': './sith/stretching.sh',
-    'single-optimization': './sith/single-optimization.sh',
     'basics': './basics.sh',
 }
 
