@@ -534,10 +534,10 @@ def hessian_blocks(hessian, dims, decis=[2, 2, 2, 2], orientation='vertical',
     return im
 
 
-def add_color_per_amino(sith, pdb_file, ax=None, withx=0):
+def add_color_per_amino(sith, pdb_file, ax=None):
     if ax is None:
         fig, ax = plt.subplots(1, 1)
-    pep_inf = peptide_info(pdb_file, withx=withx)
+    pep_inf = peptide_info(pdb_file)
     atoms_per_aminoacids = pep_inf.atom_indexes
     dofs_classified = dof_classificator(sith._deformed[0].dimIndices,
                                         atoms_per_aminoacids)

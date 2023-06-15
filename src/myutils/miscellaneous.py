@@ -33,8 +33,6 @@ def output_terminal(cmd, print_output=False, print_error=False, **kwargs):
         out = out1.decode('ascii')
         err = err1.decode('ascii')
     except UnicodeDecodeError:
-        print(type(out))
-        print(type(err))
         out = out1.decode('utf-8')
         err = err1.decode('utf-8')
 

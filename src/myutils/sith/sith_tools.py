@@ -59,7 +59,7 @@ def proline_state(pdb, state, outputwoext=None):
     
     if outputwoext is None:
         # name without extension:
-        outputwoext = pdb[:pdb.find('.')]
+        outputwoext = pdb[:pdb.rfind('.')]
 
     write(outputwoext + 'modpro.pdb', pep_info.atoms)
 

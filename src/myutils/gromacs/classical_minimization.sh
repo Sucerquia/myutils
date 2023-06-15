@@ -21,7 +21,7 @@ exit 0
 output='/dev/null'
 while getopts 'f:o:l:h' flag; do
     case "${flag}" in
-        f) pdbfile=${OPTARG} ;;
+        f) pdbfile_min=${OPTARG} ;;
         o) output_file=${OPTARG} ;;
         l) output=${OPTARG} ;;
 
@@ -31,15 +31,15 @@ done
 
 if [ ${#output_file} -eq 0 ]
 then
-    output_file=$pdbfile
+    output_file=$pdbfile_min
 fi
 
-[ ${#pdbfile} -eq 0 ] && fail "You have to give at least one pdb file with the
+[ ${#pdbfile_min} -eq 0 ] && fail "You have to give at least one pdb file with the
     structure you want to optimize. Please check
     '\$(myutils classical_minimization) -h'"
 
-verbose "creating .gro file from $pdbfile"
-echo -e "4\n 7\n" | gmx pdb2gmx -f $pdbfile -o minim.gro -ignh > $output 2>&1\
+verbose "creating .gro file from $pdbfile_min"
+echo -e "4\n 7\n" | gmx pdb2gmx -f $pdbfile_min -o minim.gro -ignh > $output 2>&1\
     || fail "Creating gro file"
 
 gmx editconf -f minim.gro \
