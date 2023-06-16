@@ -39,10 +39,12 @@ compute_forces () {
 
 cascade='false'
 directory='./'
-while getopts 'd:ch' flag; do
+pattern=''
+while getopts 'd:cp:h' flag; do
     case "${flag}" in
       c) cascade='true' ;;
       d) directory=${OPTARG} ;;
+      p) pattern=${OPTARG} ;;
 
       h) print_help
     esac
@@ -70,7 +72,7 @@ mkdir bck
 mv *-bck*.* bck
 mv *-a.* bck
 
-chks=( $( ls *.chk ) )
+chks=( $( ls $pattern*.chk ) )
 
 for chkfile in ${chks[@]}
 do
