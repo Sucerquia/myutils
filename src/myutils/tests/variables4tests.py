@@ -13,6 +13,7 @@ gpa_opti_pdb = ref_dir + "GPA-stretched00.pdb"
 gpa_stre_pdb = ref_dir + "GPA-stretched30.pdb"
 gpa_broken_xyz = ref_dir + "GPA-broken.xyz"
 frozendofs_dat = ref_dir + "frozen_dofs.dat"
+g_dir = ref_dir + "/G/"
 
 gpa_atoms = np.array(['CH3', '1HH3', '2HH3', '3HH3', 'C', 'O', 'N', 'H', 'CA',
                       'HA1', 'HA2', 'C', 'O', 'N', 'CD', 'HD1', 'HD2', 'CG',

@@ -3,7 +3,9 @@ from myutils.sith.sith_tools import (gen_randpep,
                                      proline_state)
 from myutils.tests.variables4tests import (gpa_opti_pdb,
                                            gpa_exo_pdb)
+from myutils.miscellaneous import output_terminal
 import numpy as np
+
 
 def test_gen_randpep():
     np.random.seed(0)
@@ -55,3 +57,8 @@ def test_endo_exo_proline():
     angles = gpa.endo_exo_proline()
     assert angles[0][0]*180/np.pi < -10
     assert abs(angles[0][1]*180/np.pi) < 10
+
+
+def test_remove():
+    output_terminal('rm -rf remove*')
+    assert True
