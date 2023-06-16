@@ -12,8 +12,8 @@ if [ $1 == '-h' ]
 then
     echo "
     This code runs one optimization using gaussian in one of the clusters. You
-    have to create the input file and give it as first argument when run this
-    code."
+    have to create the input file and give it (without .com extension) as first
+    argument when run this code."
     exit 0
 fi
 

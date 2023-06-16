@@ -30,6 +30,10 @@ def change_distance(inp, out, file_cons, deltad, charge, method):
         method defined in myutils.ase_utils.tools. So far, the methods already
         implemented are: 'scale_distance', 'increase_distance',
         'increase_distance_with_constraints'.
+
+    Return
+    ======
+    (str) name of the output.
     """
     methods = ['scale_distance', 'increase_distance',
                'increase_distance_with_constraints']
@@ -49,7 +53,7 @@ def change_distance(inp, out, file_cons, deltad, charge, method):
     eval(f'manipulator.{method}(cons, deltad)')
     manipulator.create_gaussian_input(out=out, charge=charge)
 
-    return f"{out}.com file created"
+    return f"{out}.com"
 
 
 # add2executable
