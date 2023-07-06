@@ -121,8 +121,8 @@ then
 	nameiplusone=$(printf "%02d" $(($i + 1)))
     # searching advances in i+1a
     myutils log2xyz $pep-stretched${nameiplusone}-a.log 2> /dev/null && \
-        mv_stretching_files $pep-stretched${nameiplusone} bck1 && \
-        mv_stretching_files $pep-stretched${nameiplusone}-a bck2 && \
+        create_bck $pep-stretched${nameiplusone} && \
+        create_bck $pep-stretched${nameiplusone}-a && \
         myutils change_distance $pep-stretched${nameiplusone}-a-bck2.xyz \
             $pep-stretched${nameiplusone} frozen_dofs.dat 0 $charge  \
             $method && \
@@ -133,7 +133,7 @@ then
     # searching advances in i+1
     $retake && \
         myutils log2xyz $pep-stretched${nameiplusone}.log 2> /dev/null && \
-        mv_stretching_files $pep-stretched${nameiplusone} bck1 &&
+        create_bck $pep-stretched${nameiplusone} &&
         myutils change_distance $pep-stretched${nameiplusone}-bck1.xyz \
             $pep-stretched${nameiplusone} frozen_dofs.dat 0 $charge \
             $method && \
@@ -211,7 +211,7 @@ do
                 $pep-stretched${nameiplustwo} frozen_dofs.dat 0 $charge \
                 $method
             # save the failed files in ...-stretched<number>a.*
-            mv_stretching_files $pep-stretched${nameiplusone} a
+            create_bck $pep-stretched${nameiplusone}
             # then restart the optimization
             mv $pep-stretched${nameiplustwo}.com $pep-stretched${nameiplusone}.com
             sed -i "s/stretched${nameiplustwo}/stretched${nameiplusone}/g" \
