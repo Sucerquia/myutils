@@ -102,12 +102,12 @@ class Sith:
             self.xyz_files = glob.glob(master_directory + '/*force*.xyz')
         assert len(self.forces_files) == len(self.xyz_files), "Different " + \
             "number of forces and xyz files."
-        # # Create forces files
+
+        # Create forces files
         if (len(self.forces_files) == 0):
             if (len(glob.glob(self.master_directory+'/*force*.log')) == 0):
                 raise OSError(f"{self.master_directory} does not exist or " +
-                              "does not contain *force*.log files the " +
-                              "forces_xyz_files is empty.")
+                              "does not contain *force*.log")
             else:
                 self.create_files()
 
@@ -115,39 +115,7 @@ class Sith:
         self.forces_files.sort()
         self.xyz_files.sort()
 
-        # create Geometries shape=(n_def, 1)
-        self._deformed = [Geometry(i, j)
-                          for i, j in zip(self.xyz_files, self.forces_files)]
-        # number of deformed configs
-        self.n_deformed = len(self._deformed)
-
-        # debug: test the DOFs in all force files
-        self.check_dofs()
-
-        # Create matrices
-        # # DFT energies for each configuration shape=(n_def, 1)
-        self.deformationEnergy = np.array([defo.energy
-                                           for defo in self._deformed])
-        # # ric values matrix shape=(n_def, n_dofs)
-        self.qF = np.array([defo.ric for defo in self._deformed])
-        # # matrix changes shape=(n_def, n_dofs)
-        self.all_rics = self.rics()
-        self.deltaQ = self.extract_changes()
-        # # all forces shape=(n_def, n_dofs)
-        self.all_forces = np.array([defo.internal_forces
-                                    for defo in self._deformed])
-
-        # # energies per DOF shape=(n_def, n_dofs)
-        # # and computed energy shape=(n_def, 1)
-        if self.method == 1:
-            self.energies, self.configs_ener = self.analysis()
-        elif self.method == 2:
-            self.energies, self.configs_ener = self.analysis_classical()
-        else:
-            raise ValueError("Non-recognized method")
-
-        self.killer(killAtoms, killDOFs, killElements)
-        self.rem_first_last(rem_first_def, rem_last_def)
+        return self.forces_files, self.xyz_files
 
     def create_files(self):
         """"
