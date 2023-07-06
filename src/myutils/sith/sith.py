@@ -197,7 +197,23 @@ class Sith:
 
         return delta_rics
 
-    def analysis(self):
+    def trapezoid_integration(self):
+        """
+        Numerical integration using trapezoid rule algorithm. Method 1 in this
+        class (see Sith parameters).
+
+        Return
+        ======
+        (tuple) [energies, total_ener] energies computed by SITH
+        method.
+        """
+        added_forces = (self.all_forces[1:] + self.all_forces[:-1])/2
+        all_values = added_forces * self.deltaQ[1:]
+        energies = np.cumsum(all_values, axis=0)
+        total_ener = np.sum(energies, axis=1)
+
+        return energies, total_ener
+
         all_ener = [np.zeros(len(self.all_forces[0]))]
         # next loop is a nasty cummulative integration. Maybe it could
         # be improved
