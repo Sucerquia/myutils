@@ -56,8 +56,9 @@ class Geometry:
 class Sith:
     def __init__(self, forces_xyz_files=None, master_directory='./',
                  killAtoms=None, killDOFs=None, killElements=None,
-                 rem_first_def=0, rem_last_def=0, method=2):
-
+        # Define files
+        self.setting_force_xyz_files(forces_xyz_files, master_directory)
+        self.check_dofs()
         # Numerical integration
         # # energies per DOF shape=(n_def, n_dofs)
         # # and computed energy shape=(n_def, 1)
@@ -67,8 +68,10 @@ class Sith:
         self.integration_method = implemented_methods[integration_method]
         self.energies, self.configs_ener = self.integration_method()
 
-        # Define files
-        self.setting_force_xyz_files(forces_xyz_files, master_directory)
+        # remove atoms, dofs and last or first configurations
+        self.killer(killAtoms, killDOFs, killElements)
+        self.rem_first_last(rem_first_def, rem_last_def)
+
     def setting_force_xyz_files(self, forces_xyz_files=None,
                                 master_directory='./'):
         """
