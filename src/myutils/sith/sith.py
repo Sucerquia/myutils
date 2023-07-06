@@ -58,7 +58,15 @@ class Sith:
                  killAtoms=None, killDOFs=None, killElements=None,
                  rem_first_def=0, rem_last_def=0, method=2):
 
-        # General variabales
+        # Numerical integration
+        # # energies per DOF shape=(n_def, n_dofs)
+        # # and computed energy shape=(n_def, 1)
+        implemented_methods = [self.rectangle_integration,
+                               self.trapezoid_integration,
+                               self.simpson_integration]
+        self.integration_method = implemented_methods[integration_method]
+        self.energies, self.configs_ener = self.integration_method()
+
         # Define files
         self.setting_force_xyz_files(forces_xyz_files, master_directory)
     def setting_force_xyz_files(self, forces_xyz_files=None,
@@ -165,6 +173,22 @@ class Sith:
 
         return delta_rics
 
+    def rectangle_integration(self):
+        """
+        Numerical integration using rectangle rule algorithm. Method 0 in this
+        class (see Sith parameters).
+
+        Return
+        ======
+        (tuple) [energies, total_ener] energies computed by SITH
+        method.
+        """
+        all_values = - self.all_forces * self.deltaQ
+        energies = np.cumsum(all_values, axis=0)
+        total_ener = np.sum(energies, axis=1)
+
+        return energies, total_ener
+
     def trapezoid_integration(self):
         """
         Numerical integration using trapezoid rule algorithm. Method 1 in this
@@ -182,6 +206,16 @@ class Sith:
 
         return energies, total_ener
 
+    def simpson_integration(self):
+        """
+        Numerical integration using simpson algorithm. Method 2 in this class
+        (see Sith parameters).
+
+        Return
+        ======
+        (tuple) [energies, total_ener] energies computed by SITH
+        method.
+        """
         all_ener = [np.zeros(len(self.all_forces[0]))]
         # next loop is a nasty cummulative integration. Maybe it could
         # be improved
@@ -194,13 +228,6 @@ class Sith:
         total_ener = np.sum(all_ener, axis=1)
 
         return all_ener, total_ener
-
-    def analysis_classical(self):
-        all_values = - self.all_forces * self.deltaQ
-        energies = np.cumsum(all_values, axis=0)
-        total_ener = np.sum(energies, axis=1)
-
-        return energies, total_ener
 
     def compareEnergies(self):
         """
