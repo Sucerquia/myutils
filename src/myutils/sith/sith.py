@@ -59,7 +59,27 @@ class Sith:
                  rem_first_def=0, rem_last_def=0, method=2):
 
         # General variabales
-        self.method = method
+        # Define files
+        self.setting_force_xyz_files(forces_xyz_files, master_directory)
+    def setting_force_xyz_files(self, forces_xyz_files=None,
+                                master_directory='./'):
+        """
+        Creates the list of forces and xyz files.
+
+        Parameters
+        ==========
+        master_directory: str
+            path to the directory containing all the necessary files.
+        forces_xyz_files: list[2 str] (optional)
+            path to the forces files and the xyz files.
+            Default=['master_directory/*force*.dat,
+                     'master_directory/*force*.xyz]
+
+        Return
+        ======
+        (tuple) [2list, #deformed] List of forces files (first element) and
+        list of xyz files (second element).
+        """
         if forces_xyz_files is None:
             forces_xyz_files = [None, None]
         if killAtoms is None:
