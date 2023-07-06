@@ -8,6 +8,17 @@ from scipy.integrate import simpson
 
 class Geometry:
     def __init__(self, xyz_file, force_file):
+        """
+        A class that contains the information of one stretched configuration
+        for the sith analysis.
+
+        Parameters
+        ==========
+        xyz_file: str
+            config file of the stretched config.
+        force_file: str
+            forces data file of the stretched config.
+        """
         self.name = force_file
         self.atoms = read(xyz_file)
         self.nAtoms = len(self.atoms)
@@ -31,8 +42,17 @@ class Geometry:
 
     def _killDOFs(self, dofis):
         """
-        Takes a list of indices of degrees of freedom to remove, Removes DOFs
-        from ric, dimIndices, and internal_forces, updates dims
+        Takes a list of indices of degrees of freedom to be removed and removes
+        them from ric, dimIndices, and internal_forces, and updates dims.
+
+        Parameters
+        ==========
+        dofis: list[int]
+            list of indexes to be removed.
+
+        Return
+        ======
+        (tuple) [DIFs, dims, intertanl_forces] removing the desired DOFs.
         """
         self.ric = np.delete(self.ric, dofis)
         # counter of the number of DOF removed arranged in
@@ -57,6 +77,40 @@ class Sith:
     def __init__(self, forces_xyz_files=None, master_directory='./',
                  killAtoms=None, killDOFs=None, killElements=None,
                  rem_first_def=0, rem_last_def=0, integration_method=0):
+        """
+        A class to calculate & house SITH analysis data.
+
+        Parameters
+        ==========
+        master_directory: str
+            path to the directory containing all the necessary files.
+        forces_xyz_files: list[2 str]
+            path to the forces files and the xyz files.
+            Default=['master_directory/*force*.dat,
+                     'master_directory/*force*.xyz]
+        killAtoms: list[ints]
+            List of indices of atoms to be removed of the analysis. Typically
+            light atoms. Default=None
+        killDOFs: list[ int ]
+            indexes of degrees of freedom to be removed of the analysis.
+            Default=None
+        killElements: list[str]
+            chemical symbols of atoms to be removed of the analysis.
+            Default=None
+        rem_first_def: int
+            number of first deformations to be removed. Used when the system
+            suffer large changes at the begining. Default=0
+        rem_last_def: int
+            number of last deformations to be removed. Used when a rupture is
+            produced. Default=0
+        integration_method: int
+            Index of numertical integration method according to the list
+            [self.rectangle_integration, self.trapezoid_integration,
+            self.simpson_integration]. Default=0
+
+        Note: this code is done such that the deformation is sorted in
+        alphabetic order.
+        """
         # Define files
         self.setting_force_xyz_files(forces_xyz_files, master_directory)
 
@@ -81,7 +135,7 @@ class Sith:
         # # all forces shape=(n_def, n_dofs)
         self.all_forces = np.array([defo.internal_forces
                                     for defo in self.deformed])
-        
+
         # Numerical integration
         # # energies per DOF shape=(n_def, n_dofs)
         # # and computed energy shape=(n_def, 1)
@@ -104,6 +158,7 @@ class Sith:
         ==========
         master_directory: str
             path to the directory containing all the necessary files.
+            Default='./'
         forces_xyz_files: list[2 str] (optional)
             path to the forces files and the xyz files.
             Default=['master_directory/*force*.dat,
@@ -154,7 +209,12 @@ class Sith:
     def create_files(self):
         """"
         Uses \"myutils extract_forces\" to get the forces, coordinates and
-        coordinates in xyz format.
+        coordinates in xyz format from the master directory.
+
+        Return
+        ======
+        (tuple) [2list, #deformed] List of forces files (first element) and
+        list of xyz files (second element).
         """
         get_forces_exec = output_terminal("myutils extract_forces")
         output_terminal(get_forces_exec.replace("\n", "") +
@@ -165,8 +225,15 @@ class Sith:
         return self.forces_files, self.xyz_files
 
     def check_dofs(self):
-        referece = self._deformed[0].dimIndices
-        for defo in self._deformed[1:]:
+        """
+        Checks the DOFs if all forces files are the same.
+
+        Return
+        ======
+        (bool) [True] In case it is successful. If it fails, it raises an
+        assert error.
+        """
+        referece = self.deformed[0].dimIndices
         for defo in self.deformed[1:]:
             to_compare = defo.dimIndices
             assert len(to_compare) == len(referece), \
@@ -180,6 +247,15 @@ class Sith:
         return True
 
     def rics(self):
+        """
+        Extract and concatenate the DOFs values in a matrix. Angles are given
+        in degrees.
+
+        Return
+        ======
+        (np.array) [#def, #dofs] matrix of DOFs values per deformed
+        configuration.
+        """
         rics = list()
         for defo in self.deformed:
             ric = defo.ric
@@ -189,6 +265,15 @@ class Sith:
         return np.array(rics)
 
     def extract_changes(self):
+        """
+        Extract and concatenate the DOFs changes in a matrix. Angles are given
+        in degrees.
+
+        Return
+        ======
+        (np.array) [#def, #dofs] matrix of DOFs changes per deformed
+        configuration.
+        """
         delta_rics = self.all_rics - np.insert(self.all_rics[:-1], 0,
                                                self.all_rics[0],
                                                axis=0)
@@ -258,15 +343,12 @@ class Sith:
 
     def compareEnergies(self):
         """
-        Takes in SITH object sith, Returns Tuple of expected stress energy,
-        stress energy error, and %Error
+        computes the difference between the expected and the obtained change on
+        energy.
 
-        Notes
-        -----
-        Expected Stress Energy: Total E deformed structure from input .fchk -
-        total E reference structure from input .fchk
-        Stress Energy Error: calculated stress energy - Expected Stress Energy
-        %Error: Stress Energy Error / Expected Stress Energy
+        Return
+        ======
+        (np.array)[energy, expected energy, error, percentage of error]
         """
         obtainedDE = self.configs_ener
         expectedDE = self.deformationEnergy - self.deformationEnergy[0]
@@ -281,6 +363,10 @@ class Sith:
 # --------------------------- killer ------------------------------------------
     def killer(self, killAtoms=[], killDOFs=[], killElements=[]):
         """
+        Removes all DOFs who contain atoms, DOFs and elements to be removed.
+
+        Parameters
+        ==========
         killAtoms:
             list of indexes of atoms to be killed
         killDOFs:
@@ -288,6 +374,10 @@ class Sith:
         killElements:
             list of strings with the elements to be killed. So, if you want to
             remove all hydrogens and carbons, use killElements=['H', 'C'].
+
+        Return
+        ======
+        (list) [int] indexes of the removed DOFs.
         """
 
         self.dims_to_kill = killDOFs
@@ -339,8 +429,23 @@ class Sith:
 
 # ---------------------- remove deformations ----------------------------------
     def rem_first_last(self, rem_first_def=0, rem_last_def=0):
-        self._deformed = self._deformed[rem_first_def:self.n_deformed -
-                                        rem_last_def]
+        """
+        Removes first and last deformation configs and data from all the
+        attributes of the Sith object.
+
+        Parameters
+        ==========
+        rem_first_def: int
+            number of configuration to remove in the first stretched
+            configuration.
+        rem_last_def: int
+            number of configuration to remove in the last stretching
+            configuration
+
+        Return
+        ======
+        (list) Deformed Geometry objects. self.deformed.
+        """
         self.deformed = self.deformed[rem_first_def:self.n_deformed -
                                       rem_last_def]
         self.qF = self.qF[rem_first_def:self.n_deformed -
