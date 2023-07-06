@@ -56,9 +56,32 @@ class Geometry:
 class Sith:
     def __init__(self, forces_xyz_files=None, master_directory='./',
                  killAtoms=None, killDOFs=None, killElements=None,
+                 rem_first_def=0, rem_last_def=0, integration_method=0):
         # Define files
         self.setting_force_xyz_files(forces_xyz_files, master_directory)
+
+        # create Geometries shape=(n_def, 1)
+        self.deformed = [Geometry(i, j)
+                         for i, j in zip(self.xyz_files, self.forces_files)]
+        # number of deformed configs
+        self.n_deformed = len(self.deformed)
+
+        # debug: test the DOFs in all force files
         self.check_dofs()
+
+        # Create matrices
+        # # DFT energies for each configuration shape=(n_def, 1)
+        self.deformationEnergy = np.array([defo.energy
+                                           for defo in self.deformed])
+        # # ric values matrix shape=(n_def, n_dofs)
+        self.qF = np.array([defo.ric for defo in self.deformed])
+        self.all_rics = self.rics()
+        # # matrix changes shape=(n_def, n_dofs)
+        self.deltaQ = self.extract_changes()
+        # # all forces shape=(n_def, n_dofs)
+        self.all_forces = np.array([defo.internal_forces
+                                    for defo in self.deformed])
+        
         # Numerical integration
         # # energies per DOF shape=(n_def, n_dofs)
         # # and computed energy shape=(n_def, 1)
@@ -144,6 +167,7 @@ class Sith:
     def check_dofs(self):
         referece = self._deformed[0].dimIndices
         for defo in self._deformed[1:]:
+        for defo in self.deformed[1:]:
             to_compare = defo.dimIndices
             assert len(to_compare) == len(referece), \
                 "The number of DOFs in the first force file and in " + \
@@ -157,7 +181,7 @@ class Sith:
 
     def rics(self):
         rics = list()
-        for defo in self._deformed:
+        for defo in self.deformed:
             ric = defo.ric
             ric[:defo.dims[1]] = ric[:defo.dims[1]]
             ric[defo.dims[1]:] = ric[defo.dims[1]:] * np.pi/180
@@ -270,7 +294,7 @@ class Sith:
         self.atoms_to_kill = killAtoms
 
         # concatenate elements in atoms to be killed
-        molecule = np.array(self._deformed[0].atoms.get_chemical_symbols())
+        molecule = np.array(self.deformed[0].atoms.get_chemical_symbols())
 
         for element in killElements:
             indexes_element = np.where(molecule == element)[0] + 1
@@ -279,16 +303,16 @@ class Sith:
         # concatenate atoms in DOFs to be killed
         for atom in self.atoms_to_kill:
             self.dims_to_kill.extend(
-                [dim for dim in self._deformed[0].dimIndices if atom in dim])
+                [dim for dim in self.deformed[0].dimIndices if atom in dim])
         # remove repetitions
         self.dims_to_kill = list(dict.fromkeys(self.dims_to_kill))
 
         # remove DOFs
         self.__killDOFs(self.dims_to_kill)
 
-        if self.method == 1:
+        if self.integration_method == 1:
             self.energies, self.configs_ener = self.analysis()
-        elif self.method == 2:
+        elif self.integration_method == 2:
             self.energies, self.configs_ener = self.analysis_classical()
         else:
             raise ValueError("Non-recognized method")
@@ -298,11 +322,11 @@ class Sith:
     def __killDOFs(self, dofs):
         rIndices = list()
         for dof in dofs:
-            rIndices.extend([i for i in range(self._deformed[0].dims[0])
-                            if self._deformed[0].dimIndices[i] == dof])
+            rIndices.extend([i for i in range(self.deformed[0].dims[0])
+                            if self.deformed[0].dimIndices[i] == dof])
 
         # kill DOFs in Geometries
-        for defo in self._deformed:
+        for defo in self.deformed:
             defo._killDOFs(rIndices)
 
         # kill DOFs in sith
@@ -317,6 +341,8 @@ class Sith:
     def rem_first_last(self, rem_first_def=0, rem_last_def=0):
         self._deformed = self._deformed[rem_first_def:self.n_deformed -
                                         rem_last_def]
+        self.deformed = self.deformed[rem_first_def:self.n_deformed -
+                                      rem_last_def]
         self.qF = self.qF[rem_first_def:self.n_deformed -
                           rem_last_def]
         self.deltaQ = self.deltaQ[rem_first_def: self.n_deformed -
@@ -334,4 +360,4 @@ class Sith:
                                       self.n_deformed -
                                       rem_last_def]
 
-        return self._deformed
+        return self.deformed
