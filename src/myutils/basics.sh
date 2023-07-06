@@ -67,25 +67,24 @@ create_bck () {
     for to_bck in $@
     do
         # in case creating backup directory
-        new_dir=$to_bck
-        bck=$new_dir-bck_1
-        if [ -d $new_dir ]
+        bck=$to_bck-bck_1
+        if [ -d $to_bck ]
         then
             bck_i=2
             while [ -d $bck ]
             do
-                bck=$new_dir-bck_$bck_i
+                bck=$to_bck-bck_$bck_i
                 bck_i=$(( $bck_i + 1 ))
             done
-            warning "$new_dir directory already exist. This directory will be
+            warning "$to_bck directory already exist. This directory will be
                 backed up in $bck"
-            mv $new_dir $bck
+            mv $to_bck $bck
         fi
 
         # in case creating backup file
         tmp=$to_bck
-        new_fil=${tmp%.*}
-        ext=${tmp##*.}
+        new_fil=${to_bck%.*} # file name
+        ext=${to_bck##*.}    # file extension
         bck=$new_fil-bck_1.$ext
         if [ -f $to_bck ]
         then
@@ -95,7 +94,7 @@ create_bck () {
                 bck=$new_fil-bck_$bck_i.$ext
                 bck_i=$(( $bck_i + 1 ))
             done
-            warning "$new_dir directory already exist. This directory will be
+            warning "$to_bck file already exist. This directory will be
                 backed up in $bck"
             mv $to_bck $bck
         fi
