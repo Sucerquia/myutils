@@ -119,6 +119,7 @@ class Sith:
                          for i, j in zip(self.xyz_files, self.forces_files)]
         # number of deformed configs
         self.n_deformed = len(self.deformed)
+        self.dims = self.deformed[0].dims
 
         # debug: test the DOFs in all force files
         self.check_dofs()
@@ -146,6 +147,13 @@ class Sith:
         self.energies, self.configs_ener = self.integration_method()
 
         # remove atoms, dofs and last or first configurations
+        if killAtoms is None:
+            killAtoms = []
+        if killDOFs is None:
+            killDOFs = []
+        if killElements is None:
+            killElements = []
+
         self.killer(killAtoms, killDOFs, killElements)
         self.rem_first_last(rem_first_def, rem_last_def)
 
@@ -171,12 +179,6 @@ class Sith:
         """
         if forces_xyz_files is None:
             forces_xyz_files = [None, None]
-        if killAtoms is None:
-            killAtoms = []
-        if killDOFs is None:
-            killDOFs = []
-        if killElements is None:
-            killElements = []
 
         # files path
         self.forces_files = forces_xyz_files[0]
@@ -249,7 +251,7 @@ class Sith:
     def rics(self):
         """
         Extract and concatenate the DOFs values in a matrix. Angles are given
-        in degrees.
+        in radians.
 
         Return
         ======
@@ -259,7 +261,6 @@ class Sith:
         rics = list()
         for defo in self.deformed:
             ric = defo.ric
-            ric[:defo.dims[1]] = ric[:defo.dims[1]]
             ric[defo.dims[1]:] = ric[defo.dims[1]:] * np.pi/180
             rics.append(defo.ric)
         return np.array(rics)
@@ -267,7 +268,7 @@ class Sith:
     def extract_changes(self):
         """
         Extract and concatenate the DOFs changes in a matrix. Angles are given
-        in degrees.
+        in radians.
 
         Return
         ======
@@ -311,9 +312,12 @@ class Sith:
         (tuple) [energies, total_ener] energies computed by SITH
         method.
         """
+        # energy for the optimized config must be the reference
+
         added_forces = (self.all_forces[1:] + self.all_forces[:-1])/2
         all_values = added_forces * self.deltaQ[1:]
-        energies = np.cumsum(all_values, axis=0)
+        all_values = np.insert(all_values, 0, np.zeros(self.dims[0]), axis=0)
+        energies = -np.cumsum(all_values, axis=0)
         total_ener = np.sum(energies, axis=1)
 
         return energies, total_ener
@@ -399,13 +403,6 @@ class Sith:
 
         # remove DOFs
         self.__killDOFs(self.dims_to_kill)
-
-        if self.integration_method == 1:
-            self.energies, self.configs_ener = self.analysis()
-        elif self.integration_method == 2:
-            self.energies, self.configs_ener = self.analysis_classical()
-        else:
-            raise ValueError("Non-recognized method")
 
         return self.dims_to_kill
 
