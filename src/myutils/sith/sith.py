@@ -332,17 +332,27 @@ class Sith:
         (tuple) [energies, total_ener] energies computed by SITH
         method.
         """
-        all_ener = [np.zeros(len(self.all_forces[0]))]
-        # next loop is a nasty cummulative integration. Maybe it could
-        # be improved
-        for i in range(1, len(self.all_forces) + 1):
-            ener_def = -simpson(self.all_forces[:i + 1],
-                                x=self.all_rics[:i + 1],
-                                axis=0)
-            all_ener.append(ener_def)
-        all_ener = np.array(all_ener)
-        total_ener = np.sum(all_ener, axis=1)
+        rics = self.all_rics.copy().T
 
+        for angle in rics[self.dims[1]:]:
+            for i in range(self.n_deformed-1):
+                while angle[i+1] - angle[i] > np.pi:
+                    angle[i+1:] -= 2*np.pi
+                while angle[i+1] - angle[i] < -np.pi:
+                    angle[i+1:] += 2*np.pi
+        rics = rics.T
+
+        # first array counts the  energy in the dofs for the optimized
+        # configuration. that's why it is zero
+        all_ener = np.array([[0]*self.dims[0]])
+        # next loop is a 'nasty' cummulative integration. Maybe it could
+        # be improved
+        for i in range(1, self.n_deformed):
+            ener_def = -simpson(self.all_forces[: i +1],
+                                x=rics[: i + 1],
+                                axis=0)
+            all_ener = np.append(all_ener, np.array([ener_def]), axis=0)
+        total_ener = np.sum(all_ener, axis=1)
         return all_ener, total_ener
 
     def compareEnergies(self):
