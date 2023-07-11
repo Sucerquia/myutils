@@ -50,8 +50,6 @@ while getopts 'd:cp:h' flag; do
     esac
 done
 
-cd $directory
-
 if $cascade
 then
     echo " * This JOB will be run in the Node:"
@@ -65,7 +63,9 @@ then
     conda activate myutils
 fi
 
-verbose "Create forces directory and extrating forces"
+cd $directory
+verbose "Finding forces in the directory $( pwd )" 
+verbose "Create forces directory and extracting forces"
 create_bck forces
 mkdir forces
 mkdir bck
