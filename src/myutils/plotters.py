@@ -5,7 +5,7 @@ import numpy as np
 
 
 class StandardPlotter:
-    def __init__(self, x=None, y=None, ax=None, fig=None, figsize=10,
+    def __init__(self, x=None, y=None, ax=None, fig=None, figsize=8,
                  ax_pref=None, plot_pref=None):
         """
         Parameters
@@ -55,6 +55,8 @@ class StandardPlotter:
         if plot_pref is None:
             plot_pref = {}
 
+        plt.tight_layout()
+
         for ax in self.ax:
             self.axis_setter(ax, **ax_pref)
         
@@ -62,21 +64,22 @@ class StandardPlotter:
             self.plot_data(x, y=y, **plot_pref)
 
     def axis_setter(self, ax=0, xlabel='', ylabel='',
-                       factor=10, xticks=None, yticks=None,
-                       color_labels=None, xminor=None, yminor=None, grid=False,
-                       mingrid=False):
+                    factor=10, xticks=None, yticks=None,
+                    color_labels=None, xminor=None, yminor=None, grid=False,
+                    mingrid=False, color_grid=None):
         """
         Parameters
         ==========
-        ax: int or axes. default=int
-            plt.axes object. In case it is not given, a new one will be created.
+        ax: int or axes. default=0
+            plt.axes object or index of the axis. In case it is not given, a
+            new one will be created.
         xlabel: str. default=''
             label for the x axis.
         ylabel: str. default=''
             label for the y axis.
-        xticks: array. default=None
+        xticks: array. default=automatic
             numbers to appear in the x axis.
-        yticks: array. default=None
+        yticks: array. default=automatic
             numbers to appear in the y axis.
         xminor: array. default=None
             minor ticks to add to the x axis.
@@ -90,17 +93,8 @@ class StandardPlotter:
             grid regarding the main ticks (major)
         mingrid: bool. default False
             grid regarding the secundary ticks (minor)
-        raxis: bool. default False
-            use the right axis.
-        color_plot: color format. default None (namely matplotlib palette)
-            define the color of the data you want to plot
-        borders: dictionary
-            set the space in each side, the keywords are 'left', 'right', 'top',
-            'bottom', 'wspace', 'hspace'. You can specify all of those keywords or
-            only some of them.
-        showframe: bool
-            True if you want to see the frame of the picture you would save with
-            plt.savefig.
+        color_grid: RGB array or matplotlib colors. default [0.4, 0.4, 0.4]
+            color for minor and major grid.
 
         Output
         ======
@@ -111,6 +105,8 @@ class StandardPlotter:
 
         if color_labels is None:
             color_labels = [0.4, 0.4, 0.4]
+        if color_grid is None:
+            color_grid = [0.8, 0.8, 0.8]
 
         # ==== axis setup ====
         ax.tick_params(labelsize=factor*1.5)
@@ -125,15 +121,16 @@ class StandardPlotter:
         if yminor is not None:
             ax.set_yticks(yminor, minor=True)
         # == grids
+
         # = major ticks
         if grid:
-            ax.grid(True)
+            ax.grid(True, color=color_grid)
         # = minor ticks
         if mingrid:
             if (xminor is None) and (yminor is None):
                 raise ValueError(
                     "To add min grid you have to define xminticks or yminticks")
-            ax.grid(True, which='minor')
+            ax.grid(True, which='minor', color=color_grid)
         # == axis labels
         ax.set_xlabel(xlabel, fontsize=factor*2.5, color=color_labels,
                     weight='bold', labelpad=factor)
@@ -158,8 +155,12 @@ class StandardPlotter:
 
         return p
 
-    def plot_data(self, x, y=None, ax=0, data_label=None, factor=10, pstyle='-',
+    def plot_data(self, x, y=None, ax=0, data_label=None, factor=10, pstyle='-o',
                   color_plot=None, fraclw=3,raxis=False, **kwargs):
+        """
+        color_plot: color format. default None (namely matplotlib palette)
+            define the color of the data you want to plot
+        """
         if isinstance(ax, int):
             ax = self.ax[ax]
 
@@ -171,7 +172,7 @@ class StandardPlotter:
             # in case of only one curve
             else:
                 y = [x]
-                x = np.arange(len(y)) + 1
+                x = [np.arange(len(x)) + 1]
         else:
             if isinstance(y[0], (np.ndarray, list, tuple)):
                 # in case a set of xs for each set of ys
@@ -200,7 +201,8 @@ class StandardPlotter:
         
         plots = []
         for i in range(len(x)):
-            p = self._plot_one_curve(x, y, ax=ax, data_label=data_label, factor=factor,
+            print("x is : ", x, "\n y is: ", y)
+            p = self._plot_one_curve(x[i], y[i], ax=ax, data_label=data_label, factor=factor,
                         pstyle=pstyle, color_plot=color_plot, fraclw=fraclw, **kwargs)
             plots.append(p)
 
@@ -228,26 +230,51 @@ class StandardPlotter:
                          mingrid=mingrid)
         return ax
 
-    def setting_borders(self, borders=None, showframe=False):
+    def setting_borders(self, borders=None, showframe=False,
+                        majordelta=None, minordelta=None, color=None):
+        """
+        borders: dictionary
+            set the space in each side, the keywords are 'left', 'right', 'top',
+            'bottom', 'wspace', 'hspace'. You can specify all of those keywords or
+            only some of them.
+        """
+        # == Default
+        if majordelta is None:
+            majorticks = []
+            minorticks = []
+        else:
+            majorticks = np.arange(0,1.00001, majordelta)
+            minorticks = np.arange(0,1.00001, minordelta)
+        
+        if color is None:
+            color = [1, 0, 0]
+
         # ==== setting borders ====
         if borders is None:
             borders = {}
+
         # == borders
-        plt.subplots_adjust(**borders) #check in this can be applied to fig instead of plt
+        plt.subplots_adjust(**borders) # check if this can be applied to fig instead of plt
         # == show external box of the final figure
         if showframe:
             axtmp = self.fig.add_subplot()
             self.axis_setter(ax=axtmp,
-                             xticks=np.arange(0,1.1, 0.1),
-                             yticks=np.arange(0,1.1, 0.1),
-                             xminor=np.arange(0,1.01, 0.01),
-                             yminor=np.arange(0,1.01, 0.01),
-                             grid=True, mingrid=True)
+                             xticks=majorticks,
+                             yticks=majorticks,
+                             xminor=minorticks,
+                             yminor=minorticks,
+                             grid=True,
+                             mingrid=True,
+                             color_grid=[1, 0, 0])
             axtmp.patch.set_alpha(0)
             axtmp.set_position(Bbox([[0, 0], [1, 1]]), which='both')
+            axtmp.tick_params(colors=color)
+            for side in ['bottom', 'right', 'top', 'left']:
+                axtmp.spines[side].set_color(color)
+
+            return axtmp
         return borders
 
-        
     def show(self):
         plt.show()
 
