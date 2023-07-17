@@ -1,20 +1,265 @@
 import matplotlib.ticker as mticker
 import matplotlib.pyplot as plt
-import matplotlib as mpl
-import numpy as np
 from matplotlib.transforms import Bbox
-from myutils.analysis import indexes_per_aminoacid
-from myutils.analysis import dof_classificator
-import matplotlib.patches as mpatches
-from myutils.peptides import info as peptide_info
+import numpy as np
 
 
-def standard(x, y=None, ax=None, fig=None, data_label=None, xlabel='',
-             ylabel='', factor=10, figsize=10, xticks=None,
-             yticks=None, color_labels=None, pstyle='-', color_plot=None,
-             xminor=None, yminor=None, grid=False, mingrid=False, raxis=False,
-             fraclw=3, borders={}, showframe=False, **kwargs):
-    """
+class StandardPlotter:
+    def __init__(self, x=None, y=None, ax=None, fig=None, figsize=10,
+                 ax_pref=None, plot_pref=None):
+        """
+        Parameters
+        ==========
+        x: list or array. Default=None
+            data to be plotted. It will correspond to the data in the y axis if no
+            y is given, or x data in case y is given.
+        y: list or array. Default=None
+            data to be plotted. It will correspond to the data in the y. It has to
+            have the same dimension than the x list.
+        ax: axes. Default=None
+            plt.axes object. In case it is not given, a new one will be created.
+        fig: figure. Default=None
+            plt.figure object. In case it is not given, a new one will be created.
+        figsize: int. Default=10
+            size of the side in an square figure created in case 
+        ax_pref: dict. Default=None
+            argument preferences for 'axis_setter'. For more details about
+            options, check StandardPlotter.axis_setter
+        plot_pref: dict. Default=None
+            argument preferences for 'plot_data'. For more details about
+            options, check StandardPlotter.plot_data
+        """
+        # ==== Axis and Figure setup ====
+        if ax is None and fig is None:
+            self.fig, self.ax = plt.subplots(1, 1, figsize=(figsize, figsize))
+        elif fig is not None and ax is None:
+            self.fig = fig
+            self.ax = fig.add_subplot()
+        elif fig is None and ax is not None:
+            self.fig = ax.figure
+            self.ax = ax
+        else:
+            self.fig = fig
+            self.ax = ax
+
+        if isinstance(self.ax, np.ndarray):
+            self.ax = self.ax.flatten()
+        else:
+            self.ax = np.array([self.ax])
+
+        self.plots = []
+
+        # ==== Default ====
+        if ax_pref is None:
+            ax_pref = {}
+        if plot_pref is None:
+            plot_pref = {}
+
+        for ax in self.ax:
+            self.axis_setter(ax, **ax_pref)
+        
+        if x is not None:
+            self.plot_data(x, y=y, **plot_pref)
+
+    def axis_setter(self, ax=0, xlabel='', ylabel='',
+                       factor=10, xticks=None, yticks=None,
+                       color_labels=None, xminor=None, yminor=None, grid=False,
+                       mingrid=False):
+        """
+        Parameters
+        ==========
+        ax: int or axes. default=int
+            plt.axes object. In case it is not given, a new one will be created.
+        xlabel: str. default=''
+            label for the x axis.
+        ylabel: str. default=''
+            label for the y axis.
+        xticks: array. default=None
+            numbers to appear in the x axis.
+        yticks: array. default=None
+            numbers to appear in the y axis.
+        xminor: array. default=None
+            minor ticks to add to the x axis.
+        yminor: array. default=None
+            minor ticks to add to the y axis.
+        color_labels: RGB array or matplotlib colors. default [0.4, 0.4, 0.4]
+            color of the x and y labels
+        pstyle: str. default='-'
+            matplotlib line style.
+        grid: bool. default False
+            grid regarding the main ticks (major)
+        mingrid: bool. default False
+            grid regarding the secundary ticks (minor)
+        raxis: bool. default False
+            use the right axis.
+        color_plot: color format. default None (namely matplotlib palette)
+            define the color of the data you want to plot
+        borders: dictionary
+            set the space in each side, the keywords are 'left', 'right', 'top',
+            'bottom', 'wspace', 'hspace'. You can specify all of those keywords or
+            only some of them.
+        showframe: bool
+            True if you want to see the frame of the picture you would save with
+            plt.savefig.
+
+        Output
+        ======
+        figure, axes.
+        """
+        if isinstance(ax, int):
+            ax = self.ax[ax]
+
+        if color_labels is None:
+            color_labels = [0.4, 0.4, 0.4]
+
+        # ==== axis setup ====
+        ax.tick_params(labelsize=factor*1.5)
+        # == major ticks
+        if xticks is not None:
+            ax.set_xticks(xticks)
+        if yticks is not None:
+            ax.set_yticks(yticks)
+        # == minor ticks
+        if xminor is not None:
+            ax.set_xticks(xminor, minor=True)
+        if yminor is not None:
+            ax.set_yticks(yminor, minor=True)
+        # == grids
+        # = major ticks
+        if grid:
+            ax.grid(True)
+        # = minor ticks
+        if mingrid:
+            if (xminor is None) and (yminor is None):
+                raise ValueError(
+                    "To add min grid you have to define xminticks or yminticks")
+            ax.grid(True, which='minor')
+        # == axis labels
+        ax.set_xlabel(xlabel, fontsize=factor*2.5, color=color_labels,
+                    weight='bold', labelpad=factor)
+        ax.set_ylabel(ylabel, fontsize=factor*2.5, color=color_labels,
+                    weight='bold', labelpad=factor)
+        # == scientific notation for numbers with more than 2 decimals
+        ax.yaxis.offsetText.set_fontsize(factor*1.5)
+        formatter = mticker.ScalarFormatter(useMathText=True)
+        formatter.set_powerlimits((-2, 2))
+        ax.yaxis.set_major_formatter(formatter)
+
+        return ax
+
+    def _plot_one_curve(self, x, y=None, ax=None, data_label=None, factor=10,
+                        pstyle='-', color_plot=None, fraclw=3,raxis=False,
+                        **kwargs):
+        if ax is None:
+            raise ValueError("the function _plot_one_curve requieres a " +
+                             "predefined axis")
+        p = ax.plot(x, y, pstyle, linewidth=factor/fraclw, label=data_label,
+                    color=color_plot, **kwargs)
+
+        return p
+
+    def plot_data(self, x, y=None, ax=0, data_label=None, factor=10, pstyle='-',
+                  color_plot=None, fraclw=3,raxis=False, **kwargs):
+        if isinstance(ax, int):
+            ax = self.ax[ax]
+
+        if y is None:
+            # in case of several curves
+            if isinstance(x[0], (np.ndarray, list, tuple)):
+                y = x
+                x = [np.arange(len(data)) + 1 for data in y]
+            # in case of only one curve
+            else:
+                y = [x]
+                x = np.arange(len(y)) + 1
+        else:
+            if isinstance(y[0], (np.ndarray, list, tuple)):
+                # in case a set of xs for each set of ys
+                if isinstance(x[0], (np.ndarray, list, tuple)):
+                    assert len(x) == len(y), "x and y has to have the same " +\
+                        f"number of data, but x has {len(x)} sets and y has" +\
+                        f" {len(y)} sets"
+                    for i in range(len(x)):
+                        assert len(x[i]) == len(y[i]), "the amount of data " +\
+                            "of each subset of x-y data has to be the same," +\
+                            f" but in this case, the {i} set of x has " +\
+                            f"{len(x[i])} and y has {len(x[i])}."
+                # x one list of data, y a list of lists
+                else:
+                    assert np.array(y).shape[-1] == len(x), "if you give a " +\
+                        "set of list in y and only one list in x, all the " +\
+                        "sublist in y has to have the same lenght than x"
+                    x = [x for _ in len(y)]
+            # In case of one list of data in x and one list of data in y
+            else:
+                assert len(x) == len(y), "x and y have to have the same " +\
+                    f"length, but in this case the length of x is {len(x)} " +\
+                    f"an the length of y is {len(y)}"
+                x = [x]
+                y = [y]
+        
+        plots = []
+        for i in range(len(x)):
+            p = self._plot_one_curve(x, y, ax=ax, data_label=data_label, factor=factor,
+                        pstyle=pstyle, color_plot=color_plot, fraclw=fraclw, **kwargs)
+            plots.append(p)
+
+        self.plots = plots #change for extend
+
+        return self.plots
+
+    def raxis(self, ax, ylabel='', color_label=None, factor=10,
+              yticks=None, yminor=None, mingrid=False, grid=False):
+        # ==== right y-axis ====
+        #         |
+        #         |
+        #  --------
+        if isinstance(ax, int):
+            ax = self.ax[ax]
+        ax2 = ax.twinx()
+        ax = ax2
+        ax.tick_params(axis='y', colors=color_label)
+
+        if color_labels is None:
+            color_labels = [0.4, 0.4, 0.4]
+        
+        self.axis_setter(ax, ylabel=ylabel, factor=factor, yticks=yticks,
+                         color_label=color_label, yminor=yminor, grid=grid,
+                         mingrid=mingrid)
+        return ax
+
+    def setting_borders(self, borders=None, showframe=False):
+        # ==== setting borders ====
+        if borders is None:
+            borders = {}
+        # == borders
+        plt.subplots_adjust(**borders) #check in this can be applied to fig instead of plt
+        # == show external box of the final figure
+        if showframe:
+            axtmp = self.fig.add_subplot()
+            self.axis_setter(ax=axtmp,
+                             xticks=np.arange(0,1.1, 0.1),
+                             yticks=np.arange(0,1.1, 0.1),
+                             xminor=np.arange(0,1.01, 0.01),
+                             yminor=np.arange(0,1.01, 0.01),
+                             grid=True, mingrid=True)
+            axtmp.patch.set_alpha(0)
+            axtmp.set_position(Bbox([[0, 0], [1, 1]]), which='both')
+        return borders
+
+        
+    def show(self):
+        plt.show()
+
+
+
+
+
+
+
+
+
+"""
     Parameters
     ==========
     x: list or array
@@ -70,73 +315,26 @@ def standard(x, y=None, ax=None, fig=None, data_label=None, xlabel='',
     figure, axes.
     """
 
-    if color_labels is None:
-        color_labels = [0.4, 0.4, 0.4]
 
-    if ax is None and fig is None:
-        fig, ax = plt.subplots(1, 1, figsize=(figsize, figsize))
-    if fig is None:
-        fig.add_subplot()
 
-    # right y-axis
-    if raxis:
-        ax2 = ax.twinx()
-        ax = ax2
 
-    # plot!
-    if y is None:
-        p = ax.plot(x, pstyle, linewidth=factor/3, label=data_label,
-                    color=color_plot, **kwargs)
-    else:
-        p = ax.plot(x, y, pstyle, linewidth=factor/fraclw, label=data_label,
-                    color=color_plot, **kwargs)
-    # color axis
-    if raxis:
-        ax.tick_params(axis='y', colors=p[0].get_color())
-        color_labels = p[0].get_color()
-    if data_label is not None:
-        ax.legend(frameon=False, labelcolor=[0.4, 0.4, 0.4],
-                  prop={'weight': 'bold', 'size': factor*2}, )
 
-    # ticks
-    ax.tick_params(labelsize=factor*1.5)
-    if xticks is not None:
-        ax.set_xticks(xticks)
-    if yticks is not None:
-        ax.set_yticks(yticks)
 
-    if xminor is not None:
-        ax.set_xticks(xminor, minor=True)
-    if yminor is not None:
-        ax.set_yticks(yminor, minor=True)
 
-    ax.set_xlabel(xlabel, fontsize=factor*2.5, color=color_labels,
-                  weight='bold', labelpad=factor)
-    ax.set_ylabel(ylabel, fontsize=factor*2.5, color=color_labels,
-                  weight='bold', labelpad=factor)
-    ax.yaxis.offsetText.set_fontsize(factor*1.5)
-    formatter = mticker.ScalarFormatter(useMathText=True)
-    formatter.set_powerlimits((-2, 2))
-    ax.yaxis.set_major_formatter(formatter)
-    if grid:
-        ax.grid(True)
-    if mingrid:
-        if (xminor is None) and (yminor is None):
-            raise ValueError(
-                "To add min grid you have to define xminticks or yminticks")
-        ax.grid(True, which='minor')
 
-    # adjust frame
-    plt.subplots_adjust(**borders)
-    if showframe:
-        axtmp = fig.add_subplot()
-        axtmp.patch.set_alpha(0)
-        axtmp.set_xticks([])
-        axtmp.set_yticks([])
-        axtmp.set_position(Bbox([[0, 0], [1, 1]]), which='both')
 
-    return fig, ax
 
+
+
+
+'''
+import matplotlib as mpl
+import numpy as np
+
+from myutils.analysis import indexes_per_aminoacid
+from myutils.analysis import dof_classificator
+import matplotlib.patches as mpatches
+from myutils.peptides import info as peptide_info
 
 def plot_gradient(axes, x, y, cmap=None, markersize=1):
     """
@@ -809,3 +1007,4 @@ def plot_energy_in_lenght(all_le, title, axis=None, fig=None):
     axis.set_ylabel('Energy [Ha]', fontsize=15)
 
     return fig, axis
+'''
