@@ -287,10 +287,10 @@ class Sith:
                                                self.all_rics[0],
                                                axis=0)
 
-        with np.nditer(delta_rics, op_flags=['readwrite']) as dqit:
-            for dq in dqit:
-                dq[...] = dq - 2*np.pi if dq > np.pi \
-                    else (dq + 2*np.pi if dq < -np.pi else dq)
+        delta_rics[:, self.dims[1]:][delta_rics[:, self.dims[1]:]
+                                     > np.pi] -= 2*np.pi
+        delta_rics[:, self.dims[1]:][delta_rics[:, self.dims[1]:]
+                                     < -np.pi] += 2*np.pi
 
         return delta_rics
 
