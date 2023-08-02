@@ -32,6 +32,9 @@ done
 
 verbose "extracting forces starts"
 
+# store original location
+extract_forces_fl=$(pwd)
+
 # moves to the forces directory
 cd $forces_directory || fail "$forces_directory doesn't exist"
 
@@ -63,7 +66,7 @@ do
     tail -n +$(( head + 1 )) $file | head -n $(( end - 2 )) | awk '{print $2}' > tmp2.txt
     awk 'NR==FNR{file1[++u]=$0} NR!=FNR{file2[++n]=$0}END{for (i=1;i<=n;i++) printf "%s %s\n", file1[i], file2[i]}' tmp1.txt tmp2.txt >> $output
     output=${file%.*}
-    myutils log2xyz $file
+    myutils log2xyz $file > /dev/null
     # Compare the order of the atoms
     if [ $file == ${log_files[0]} ]
     then
@@ -82,6 +85,9 @@ done
 rm -f tmp*
 rm -f indexes.dat
 rm -f reference.dat
+
+# going back to the former location
+cd $extract_forces_fl
 
 verbose "extracting of forces finished"
 finish
