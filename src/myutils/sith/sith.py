@@ -84,10 +84,10 @@ class Sith:
         Parameters
         ==========
         master_directory: str
-            path to the directory containing all the necessary files.
+            path to the directory containing all the forces.dat files
         forces_xyz_files: list[2 str]
             path to the forces files and the xyz files.
-            Default=['master_directory/*force*.dat,
+            Default =['master_directory/*force*.dat,
                      'master_directory/*force*.xyz]
         killAtoms: list[ints]
             List of indices of atoms to be removed of the analysis. Typically
@@ -107,7 +107,10 @@ class Sith:
         integration_method: int
             Index of numertical integration method according to the list
             [self.rectangle_integration, self.trapezoid_integration,
-            self.simpson_integration]. Default=0
+            self.simpson_integration]. Default=1 (namely, trapezoid)
+        name: str
+            name of the molecule to be analyze. This is completely arbitrary
+            and up to the user. Default=master_directory
 
         Note: this code is done such that the deformation is sorted in
         alphabetic order.
@@ -460,7 +463,7 @@ class Sith:
 
         Return
         ======
-        (list) Deformed Geometry objects. self.deformed.
+        (list) Deformed Geometry objects. self._deformed.
         """
         self._deformed = self._deformed[rem_first_def:self.n_deformed -
                                         rem_last_def]
