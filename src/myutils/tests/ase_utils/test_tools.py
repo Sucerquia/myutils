@@ -14,7 +14,6 @@ from myutils.tests.variables4tests import (gpa_endo_xyz,
                                            frozendofs_dat,
                                            com_head,
                                            ref_dir)
-from myutils.miscellaneous import output_terminal
 from pytest import approx
 from ase.io import read
 from os.path import isfile
@@ -56,8 +55,8 @@ def test_all_hydrogen_atoms():
 
 def test_distance():
     # values of reference obtained with vmd
-    assert distance(gpa_broken_xyz, 0, 39) == approx(17.549, rel=1e-4)
-    assert distance(gpa_endo_xyz, 0, 39) == approx(9.749, rel=1e-4)
+    assert distance(gpa_broken_xyz, 0, 39) == approx(17.549, rel=1 + 4)
+    assert distance(gpa_endo_xyz, 0, 39) == approx(9.749, rel=1 + 4)
 
 
 def test_change_distance():

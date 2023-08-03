@@ -204,7 +204,7 @@ class Sith:
 
         # Create forces files
         if (len(self.forces_files) == 0):
-            if (len(glob.glob(self.master_directory+'/*force*.log')) == 0):
+            if (len(glob.glob(self.master_directory + '/*force*.log')) == 0):
                 raise OSError(f"{self.master_directory} does not exist or " +
                               "does not contain *force*.log")
             else:
@@ -272,7 +272,7 @@ class Sith:
         rics = list()
         for defo in self._deformed:
             ric = defo.ric.copy()
-            ric[defo.dims[1]:] = ric[defo.dims[1]:] * np.pi/180
+            ric[defo.dims[1]:] = ric[defo.dims[1]:] * np.pi / 180
             rics.append(ric)
         return np.array(rics)
 
@@ -291,9 +291,9 @@ class Sith:
                                                axis=0)
 
         delta_rics[:, self.dims[1]:][delta_rics[:, self.dims[1]:]
-                                     > np.pi] -= 2*np.pi
+                                     > np.pi] -= 2 * np.pi
         delta_rics[:, self.dims[1]:][delta_rics[:, self.dims[1]:]
-                                     < -np.pi] += 2*np.pi
+                                     < -np.pi] += 2 * np.pi
 
         return delta_rics
 
@@ -325,7 +325,7 @@ class Sith:
         """
         # energy for the optimized config must be the reference
 
-        added_forces = (self.all_forces[1:] + self.all_forces[:-1])/2
+        added_forces = (self.all_forces[1:] + self.all_forces[:-1]) / 2
         all_values = added_forces * self.deltaQ[1:]
         all_values = np.insert(all_values, 0, np.zeros(self.dims[0]), axis=0)
         energies = -np.cumsum(all_values, axis=0)
@@ -346,16 +346,16 @@ class Sith:
         rics = self.all_rics.copy().T
 
         for angle in rics[self.dims[1]:]:
-            for i in range(self.n_deformed-1):
-                while angle[i+1] - angle[i] > np.pi:
-                    angle[i+1:] -= 2*np.pi
-                while angle[i+1] - angle[i] < -np.pi:
-                    angle[i+1:] += 2*np.pi
+            for i in range(self.n_deformed - 1):
+                while angle[i + 1] - angle[i] > np.pi:
+                    angle[i + 1:] -= 2 * np.pi
+                while angle[i + 1] - angle[i] < -np.pi:
+                    angle[i + 1:] += 2 * np.pi
         rics = rics.T
 
         # first array counts the  energy in the dofs for the optimized
         # configuration. that's why it is zero
-        all_ener = np.array([[0]*self.dims[0]])
+        all_ener = np.array([[0] * self.dims[0]])
         # next loop is a 'nasty' cummulative integration. Maybe it could
         # be improved
         for i in range(1, self.n_deformed):
@@ -439,10 +439,10 @@ class Sith:
             defo._killDOFs(rIndices)
 
         # kill DOFs in sith
-        self.qF = np.delete(self.qF,  rIndices, axis=1)
-        self.all_rics = np.delete(self.all_rics,  rIndices, axis=1)
-        self.deltaQ = np.delete(self.deltaQ,  rIndices, axis=1)
-        self.all_forces = np.delete(self.all_forces,  rIndices, axis=1)
+        self.qF = np.delete(self.qF, rIndices, axis=1)
+        self.all_rics = np.delete(self.all_rics, rIndices, axis=1)
+        self.deltaQ = np.delete(self.deltaQ, rIndices, axis=1)
+        self.all_forces = np.delete(self.all_forces, rIndices, axis=1)
 
         return rIndices
 

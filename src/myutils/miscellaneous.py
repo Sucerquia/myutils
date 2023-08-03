@@ -51,13 +51,13 @@ def _time(keyword, logfile):
     Used in myutils.miscellaneous.time_09. It extracts the time from a
     line of gaussian.
     """
-    out = output_terminal("grep '"+keyword+"' "+logfile)
+    out = output_terminal("grep '" + keyword + "' " + logfile)
     out = out.split()
     start = out.index('at')
 
-    month = out[start+2]
-    day = int(out[start+3])
-    time = out[start+4].split(':')
+    month = out[start + 2]
+    day = int(out[start + 3])
+    time = out[start + 4].split(':')
     hour = int(time[0])
     minu = int(time[1])
     seco = int(time[2])
@@ -85,17 +85,17 @@ def time_g09(logfile):
     t_f = _time('Normal termination of Gaussian', logfile)
 
     if t_i[0] == t_f[0]:
-        days = (t_f[1]-t_i[1])*24*3600
-        hours = (t_f[2]-t_i[2])*3600
-        minus = (t_f[3]-t_i[3])*60
-        secos = t_f[4]-t_i[4]
+        days = (t_f[1] - t_i[1]) * 24 * 3600
+        hours = (t_f[2] - t_i[2]) * 3600
+        minus = (t_f[3] - t_i[3]) * 60
+        secos = t_f[4] - t_i[4]
         total = days + hours + minus + secos
 
         print("Time in seconds= ", total)
-        print("Time in minutes= ", total/60)
-        print("Time in hours= ", total/3600)
+        print("Time in minutes= ", total / 60)
+        print("Time in hours= ", total / 3600)
 
-        return total/60
+        return total / 60
 
     else:
         print('sorry, I cannot help you, modify me to compute \
@@ -117,6 +117,6 @@ def optimized_e(file):
     ======
     (float) Potential energy in eV units.
     """
-    out = output_terminal('grep "E(RBMK) =" '+file)
+    out = output_terminal('grep "E(RBMK) =" ' + file)
     energy = float(out.split()[-5])
     return energy * 27.21  # energy in eV

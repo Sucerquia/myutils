@@ -1,12 +1,13 @@
 from IPython.display import HTML
 
+
 def hide_code():
     """
     This function hides the code cells in a jupyter notebook. It helps to a
     cleaner in visualization of results.
     """
     html = HTML('''<script>
-    code_show=true; 
+    code_show=true;
     function code_toggle() {
     if (code_show){
     $('div.input').hide();
@@ -14,11 +15,13 @@ def hide_code():
     $('div.input').show();
     }
     code_show = !code_show
-    } 
+    }
     $( document ).ready(code_toggle);
     </script>
-    <form action="javascript:code_toggle()"><input type="submit" value="Click here to toggle on/off the raw code."></form>''')
+    <form action="javascript:code_toggle()"><input type="submit"
+    value="Click here to toggle on/off the raw code."></form>''')
     return html
+
 
 """
 tips:

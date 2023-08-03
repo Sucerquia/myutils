@@ -75,8 +75,8 @@ class MoleculeViewer:
         name = ''.join(str(i).zfill(3) for i in indexes)
 
         self.remove_bond(atom1index, atom2index)
-        b = self.shape.add_cylinder(atoms[atom1index-1].position,
-                                    atoms[atom2index-1].position,
+        b = self.shape.add_cylinder(atoms[atom1index - 1].position,
+                                    atoms[atom2index - 1].position,
                                     color,
                                     radius)
 
@@ -221,10 +221,10 @@ class MoleculeViewer:
         """
 
         triangles = []
-        for i in range(len(arcdots)-1):
+        for i in range(len(arcdots) - 1):
             vertexes = np.hstack((vertex,
                                   vertex + arcdots[i],
-                                  vertex + arcdots[i+1]))
+                                  vertex + arcdots[i + 1]))
             t = self.shape.add_mesh(vertexes, color)
             triangles.append(t)
 
@@ -263,14 +263,14 @@ class MoleculeViewer:
         self.remove_angle(atom1index, atom2index, atom3index)
         self.angles[name] = []
 
-        vertex = atoms[atom2index-1].position
-        side1 = atoms[atom1index-1].position - vertex
-        side2 = atoms[atom3index-1].position - vertex
+        vertex = atoms[atom2index - 1].position
+        side1 = atoms[atom1index - 1].position - vertex
+        side2 = atoms[atom3index - 1].position - vertex
         lenside1 = np.linalg.norm(side1)
         lenside2 = np.linalg.norm(side2)
         lensides = min(lenside1, lenside2)
-        side1 = 0.7 * lensides * side1/lenside1
-        side2 = 0.7 * lensides * side2/lenside2
+        side1 = 0.7 * lensides * side1 / lenside1
+        side2 = 0.7 * lensides * side2 / lenside2
 
         arcdots = [side1, side2]
         color = color * 3
@@ -311,16 +311,16 @@ class MoleculeViewer:
         lenc = np.linalg.norm(c)
         lend = min(lena, lenb)
 
-        theta_total = np.arccos(np.dot(a, b)/(lena * lenb))
-        beta = np.arccos(np.dot(a, c)/(lena * lenc))
+        theta_total = np.arccos(np.dot(a, b) / (lena * lenb))
+        beta = np.arccos(np.dot(a, c) / (lena * lenc))
         intermedia = []
 
         for i in range(1, n):
-            theta = i * theta_total/n
+            theta = i * theta_total / n
             gamma = beta - theta
-            factor = (lena * np.sin(theta))/(lenc * np.sin(gamma))
+            factor = (lena * np.sin(theta)) / (lenc * np.sin(gamma))
             dird = a + factor * c
-            d = lend * dird/np.linalg.norm(dird)
+            d = lend * dird / np.linalg.norm(dird)
             intermedia.append(d)
         return intermedia
 
@@ -331,7 +331,7 @@ class MoleculeViewer:
         Parameters
         ==========
 
-        atom1index (and atom2/3index): int
+        atom1index (and atom2 / 3index): int
             Indexes of the three atoms that defines the angle
             to remove.
 
@@ -392,23 +392,22 @@ class MoleculeViewer:
         indexes.sort()
         name = ''.join(str(i).zfill(3) for i in indexes)
 
-        axis = (atoms[atom3index-1].position -
-                atoms[atom2index-1].position)
-        vertex = 0.5 * (atoms[atom3index-1].position +
-                        atoms[atom2index-1].position)
-        axis1 = (atoms[atom1index-1].position -
-                 atoms[atom2index-1].position)
-        axis2 = (atoms[atom4index-1].position -
-                 atoms[atom3index-1].position)
-
-        side1 = axis1 - axis * (np.dot(axis, axis1)/np.dot(axis, axis))
-        side2 = axis2 - axis * (np.dot(axis, axis2)/np.dot(axis, axis))
+        axis = (atoms[atom3index - 1].position -
+                atoms[atom2index - 1].position)
+        vertex = 0.5 * (atoms[atom3index - 1].position +
+                        atoms[atom2index - 1].position)
+        axis1 = (atoms[atom1index - 1].position -
+                 atoms[atom2index - 1].position)
+        axis2 = (atoms[atom4index - 1].position -
+                 atoms[atom3index - 1].position)
+        side1 = axis1 - axis * (np.dot(axis, axis1) / np.dot(axis, axis))
+        side2 = axis2 - axis * (np.dot(axis, axis2) / np.dot(axis, axis))
 
         lenside1 = np.linalg.norm(side1)
         lenside2 = np.linalg.norm(side2)
         lensides = min(lenside1, lenside2)
-        side1 = 0.7 * lensides * side1/lenside1
-        side2 = 0.7 * lensides * side2/lenside2
+        side1 = 0.7 * lensides * side1 / lenside1
+        side2 = 0.7 * lensides * side2 / lenside2
 
         arcdots = [side1, side2]
         color = color * 3
@@ -479,7 +478,7 @@ class MoleculeViewer:
         for i in range(3):
             a = self.shape.add_cylinder([0, 0, 0],
                                         unit_vectors[i],
-                                        unit_vectors[i]/length,
+                                        unit_vectors[i] / length,
                                         radius)
             self.axis[str(i)] = a
 
@@ -530,8 +529,8 @@ class MoleculeViewer:
         """
         xyproj = vector.copy()
         xyproj[2] = 0
-        phi = np.arcsin(vector[2]/np.linalg.norm(vector))
-        theta = np.arccos(vector[0]/np.linalg.norm(xyproj))
+        phi = np.arcsin(vector[2] / np.linalg.norm(vector))
+        theta = np.arccos(vector[0] / np.linalg.norm(xyproj))
         if vector[1] < 0:
             theta *= -1
         trans = np.dot(self.rot_y(phi), self.rot_z(-theta))
@@ -543,7 +542,7 @@ class MoleculeViewer:
         """
         reference = vector.copy()
         reference[0] = 0
-        angle = np.arccos(reference[1]/np.linalg.norm(reference))
+        angle = np.arccos(reference[1] / np.linalg.norm(reference))
         if reference[2] < 0:
             angle *= -1
         return self.rot_x(-angle)

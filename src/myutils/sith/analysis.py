@@ -146,7 +146,7 @@ def le_same_aminoacids(sith, peptides_info, atom_types, kind_amino):
     indexes = []
     for j, amino_name in enumerate(peptides_info.amino_name.values()):
         if amino_name in kind_amino:
-            indexes.append(j+1)
+            indexes.append(j + 1)
     all_le = []
     for index in indexes:
         values = length_energy(sith, peptides_info.amino_info[index],
