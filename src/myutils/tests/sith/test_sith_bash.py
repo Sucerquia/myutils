@@ -50,9 +50,9 @@ def test_proline_mod():
 def test_single_optimization():
     output_terminal(f"cp -r {g_dir} ./remove ; cd remove ; " +
                     "for ext in log com xyz chk ; " +
-                    " do mv G-stretched08.$ext remove-stretched08.$ext ; " +
+                    "do mv G-stretched08.$ext remove-stretched08.$ext ; " +
                     "done ; " +
-                    "cp remove-stretched08.$ext ../remove.com ; cd .." +
+                    "cp remove-stretched08.com ../remove.com ; cd ..; " +
                     '$( myutils single_optimization ) remove')
     atoms1 = read('./remove/reference.log')
     atoms2 = read('./remove.log')
@@ -62,15 +62,15 @@ def test_single_optimization():
 
 @pytest.mark.toolong
 def test_find_forces():
-# I removed chk, I have to get it back again to run this part independenly.
-    output_terminal("$( myutils find_forces ) -d remove -p remove")
+    output_terminal(f"cp -r {g_dir} ./remove;" +
+                    "$( myutils find_forces ) -d remove -p remove")
     assert isdir('remove/forces')
     assert isdir('remove/bck')
 
 
 @pytest.mark.toolong
 def test_stretching():
-    #this file generates a rupture that most coincide with reference
+    # this file generates a rupture that most coincide with reference
     # the rupture must happen in the bond 1 5
     output_terminal("$( myutils stretching ) -p remove -r")
     assert np.loadtxt('remove/frozen_dofs.dat',

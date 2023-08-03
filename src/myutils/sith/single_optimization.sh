@@ -27,4 +27,3 @@ source /etc/profile.d/modules.sh
 source /hits/basement/mbm/sucerquia/exec/load_g09.sh
 
 g09 $1.com $1.log
-
