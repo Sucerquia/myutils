@@ -82,7 +82,7 @@ def extract_bonds(readable_file):
     for i, pairs in enumerate(bonds_zm[0]):
         if len(pairs) != 0:
             for pair in pairs:
-                bonds.append([i+1, pair+1])
+                bonds.append([i + 1, pair + 1])
     return bonds
 
 
@@ -202,7 +202,7 @@ def all_xyz2pdb(template, output_patern=None, xyzdir=''):
     """
     configs = glob.glob(xyzdir + '*.xyz')
     configs.sort()
-    n=1
+    n = 1
     outfiles = []
     for config in configs:
         if output_patern is None:

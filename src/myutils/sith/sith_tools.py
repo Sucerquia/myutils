@@ -56,7 +56,7 @@ def proline_state(pdb, state, outputwoext=None):
 
     for j, proi in enumerate(prolines):
         pep_info.build_proline_state(proi, states[j])
-    
+
     if outputwoext is None:
         # name without extension:
         outputwoext = pdb[:pdb.rfind('.')]

@@ -1,5 +1,5 @@
 from pytest import approx
-from myutils.sith.sith import Sith
+from myutils.sith.sith import Sith, Geometry
 from myutils.tests.variables4tests import (energies_dofs_sqr,
                                            energies_dofs_tra,
                                            energies_dofs_sim,
@@ -14,11 +14,15 @@ def sith():
     return Sith(master_directory=ggg_dir)
 
 
-def test_sith(sith):
+def test_Sith(sith):
     assert isinstance(sith, Sith)
 
 
-def test_setting_xyz_files(sith):
+def test_Geometry(sith):
+    assert isinstance(sith._deformed[0], Geometry)
+
+
+def test_setting_force_xyz_files(sith):
     fc_files = sith.setting_force_xyz_files(master_directory=ggg_dir)
     assert fc_files[0] == \
            [ggg_dir + '/GGG-force00.dat', ggg_dir + '/GGG-force03.dat',
@@ -60,7 +64,7 @@ def test_rics(sith):
     dofs_last = np.loadtxt(ggg_dir + '/GGG-force12.dat', usecols=3)
 
     assert dofs[-1][:sith.dims[1]] == approx(dofs_last[:sith.dims[1]])
-    assert dofs[-1][sith.dims[1]:]*180/np.pi == \
+    assert dofs[-1][sith.dims[1]:] * 180 / np.pi == \
            approx(dofs_last[sith.dims[1]:])
 
 
@@ -69,11 +73,11 @@ def test_extract_changes(sith):
     dofs_init = np.loadtxt(ggg_dir + '/GGG-force09.dat', usecols=3)
     dofs_final = np.loadtxt(ggg_dir + '/GGG-force12.dat', usecols=3)
     last_changes = (dofs_final - dofs_init)
-    last_changes[sith.dims[1]:] *= np.pi/180
+    last_changes[sith.dims[1]:] *= np.pi / 180
     last_changes[sith.dims[1]:][last_changes[sith.dims[1]:]
-                                > np.pi] -= 2*np.pi
+                                > np.pi] -= 2 * np.pi
     last_changes[sith.dims[1]:][last_changes[sith.dims[1]:]
-                                < -np.pi] += 2*np.pi
+                                < -np.pi] += 2 * np.pi
     assert changes[-1] == approx(last_changes)
 
 

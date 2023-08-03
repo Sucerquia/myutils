@@ -78,13 +78,10 @@ def test_create_bck():
     # file
     output_terminal(f"{basics_bash} create_bck remove-test.log " +
                     "remove-test.com")
-    output_terminal("touch remove-test.com; " +\
+    output_terminal("touch remove-test.com; " +
                     f"{basics_bash} create_bck remove-test.com")
     assert exists('remove-test-bck_1.com')
     assert exists('remove-test-bck_2.com')
     assert exists('remove-test-bck_1.log')
     assert not exists('remove-test.com')
     assert not exists('remove-test.log')
-
-
-

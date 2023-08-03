@@ -24,7 +24,7 @@ def test_rot_x():
     ms = initialize_ms()
 
     # first alignment, center in 5
-    trans = ms.rot_x(np.pi/2)
+    trans = ms.rot_x(np.pi / 2)
     assert trans.shape == approx((3, 3))
     assert trans.flatten() == approx([1, 0, 0, 0, 0, -1, 0, 1, 0])
 
@@ -33,14 +33,14 @@ def test_rot_y():
     ms = initialize_ms()
 
     # first alignment, center in 5
-    trans = ms.rot_y(np.pi/2)
+    trans = ms.rot_y(np.pi / 2)
     assert trans.shape == approx((3, 3))
     assert trans.flatten() == approx([0, 0, 1, 0, 1, 0, -1, 0, 0])
 
 
 def test_rot_z():
     ms = initialize_ms()
-    trans = ms.rot_z(np.pi/2)
+    trans = ms.rot_z(np.pi / 2)
     assert trans.shape == approx((3, 3))
     assert trans.flatten() == approx([0, -1, 0, 1, 0, 0, 0, 0, 1])
 
@@ -69,8 +69,9 @@ def test_apply_trans():
     trans = [[1, 0, 0], [0, 0, 0], [0, 0, 0]]
     ms.apply_trans(trans)
     assert ms.atoms.positions.shape == approx(inipos.shape)
-    assert ms.atoms.positions[:,0].flatten() == approx(inipos[:,0].flatten())
-    assert ms.atoms.positions[:,1:].flatten() == approx(inipos[:,1:].flatten()*0)
+    assert ms.atoms.positions[:, 0].flatten() == approx(inipos[:, 0].flatten())
+    assert ms.atoms.positions[:, 1:].flatten() == \
+           approx(inipos[:, 1:].flatten() * 0)
 
     ms = initialize_ms()
     inipos = ms.atoms.positions.copy()
@@ -79,8 +80,8 @@ def test_apply_trans():
     assert ms.atoms.positions.shape == approx(inipos.shape)
     assert ms.atoms.positions[:4].flatten() == approx(-inipos[:4].flatten())
     assert ms.atoms.positions[4:].flatten() == approx(inipos[4:].flatten())
-    
-    
+
+
 def test_xy_alignment():
     ms = initialize_ms()
 
@@ -157,6 +158,3 @@ def test_create_gaussian_input():
     atoms = read('remove.com')
     assert atoms.positions == approx(ms.atoms.positions)
     assert atoms.get_chemical_symbols() == ms.atoms.get_chemical_symbols()
-
-
-

@@ -40,6 +40,3 @@ def test_analysis():
     assert 'e_pot_pep' in head
     assert 'distance' in head
     assert float(values[0]) == approx(0)
-
-
-

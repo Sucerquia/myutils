@@ -12,8 +12,8 @@ from os.path import isdir
 
 
 def test_extract_forces():
-    output_terminal("mkdir remove-forces ; " +\
-                    f"cp {sith_master_dir}/* remove-forces ;" + \
+    output_terminal("mkdir remove-forces ; " +
+                    f"cp {sith_master_dir}/* remove-forces ;" +
                     "$( myutils extract_forces ) -d ./remove-forces")
     # reference
     dofref, forref, valref = np.loadtxt(f'{sith_master_dir}/GPA-force02.dat',
@@ -38,12 +38,12 @@ def test_extract_forces():
 
 
 def test_proline_mod():
-    output_terminal(f"cp {gpa_opti_pdb} ./remove.pdb ; " +\
+    output_terminal(f"cp {gpa_opti_pdb} ./remove.pdb ; " +
                     "$( myutils proline_mod ) -f ./remove.pdb -s exo")
     gpa = PepSetter('removemodpro.pdb')
     angles = gpa.endo_exo_proline()
-    assert angles[0][0]*180/np.pi < -10
-    assert abs(angles[0][1]*180/np.pi) < 10
+    assert angles[0][0] * 180 / np.pi < -10
+    assert abs(angles[0][1] * 180 / np.pi) < 10
 
 
 @pytest.mark.runincluster
@@ -82,6 +82,3 @@ def test_stretching():
 @pytest.mark.toolong
 def test_workflow():
     output_terminal("$( myutils workflow ) -p remove -b 0 -r")
-
-
-

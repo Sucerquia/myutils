@@ -574,7 +574,7 @@ class MoleculeViewer:
 
         the atom 3 is in the xy plane"""
         # center
-        center = (atoms[index1].position+atoms[index2].position)/2
+        center = (atoms[index1].position + atoms[index2].position) / 2
         atoms.set_positions(atoms.positions - center)
         axis = atoms[index2].position
         self.apply_trans(atoms, self.align_axis(axis))
@@ -664,7 +664,7 @@ class VisualizeEnergies(MoleculeViewer):
             color = [0.5, 0.5, 0.5]
 
         types = ["bond", "angle", "dihedral"]
-        type_dof = types[len(dof)-2]
+        type_dof = types[len(dof) - 2]
 
         if type_dof == "bond":
             index1, index2 = dof
@@ -718,7 +718,7 @@ class VisualizeEnergies(MoleculeViewer):
 
         optional kwargs for energies_some_dof
         """
-        dofs = self.sith._deformed[0].dimIndices[self.nbonds+self.nangles:]
+        dofs = self.sith._deformed[0].dimIndices[self.nbonds + self.nangles:]
         return self.energies_some_dof(dofs, **kwargs)
 
     def energies_all_dof(self, **kwargs):
@@ -780,7 +780,7 @@ class VisualizeEnergies(MoleculeViewer):
         else:
             rotation = 90
 
-        boundaries = np.linspace(minval, maxval, div+1)
+        boundaries = np.linspace(minval, maxval, div + 1)
         normalize = mpl.colors.BoundaryNorm(boundaries, cmap.N)
 
         self.fig, self.ax = plt.subplots(figsize=(0.5, 7))
@@ -791,7 +791,7 @@ class VisualizeEnergies(MoleculeViewer):
                                  cax=self.ax, orientation='vertical',
                                  format='%1.{}f'.format(deci))
         cbar.set_label(label=label, fontsize=labelsize)
-        cbar.ax.tick_params(labelsize=0.8*labelsize, rotation=rotation)
+        cbar.ax.tick_params(labelsize=0.8 * labelsize, rotation=rotation)
 
         # Insert colorbar in view
         self.viewer.view._remote_call("setSize", targe="Widget",
@@ -821,7 +821,7 @@ class VisualizeEnergies(MoleculeViewer):
         unique: Bool. default False.
             True if you want to remove all the other bonds and only keeping
             these ones.
-        color: list[int]\*3. default R G B for angles, distances, dihedrals.
+        color: list[3(int)]. default R G B for angles, distances, dihedrals.
             color that you want to use in this dof.
         """
         dof_indices = self.sith._deformed[0].dimIndices[dof]
@@ -830,7 +830,7 @@ class VisualizeEnergies(MoleculeViewer):
             color = colors[len(dof_indices) - 2]
         atoms1 = []
         atoms2 = []
-        for i in range(len(dof_indices)-1):
+        for i in range(len(dof_indices) - 1):
             atoms1.append(dof_indices[i])
             atoms2.append(dof_indices[i + 1])
         if unique:
@@ -876,7 +876,8 @@ class VisualizeEnergies(MoleculeViewer):
 
     def aminoacids(self, pdb_file):
         comments = ['REMARK', 'TITLE', 'CRYST', 'MODEL', 'TER', 'END']
-        residues = np.loadtxt(pdb_file, comments=comments, usecols=5, dtype=int)
+        residues = np.loadtxt(pdb_file, comments=comments, usecols=5,
+                              dtype=int)
         index_aminos = {}
 
         for m in residues:
@@ -891,7 +892,7 @@ class VisualizeEnergies(MoleculeViewer):
         labels_aminos = []
         for indexes in aminos.values():
             numbers = [str(i) for i in indexes]
-            labels_aminos.append('@'+','.join(numbers))
+            labels_aminos.append('@' + ','.join(numbers))
         self.viewer.view.clear_representations()
         for i, label in enumerate(labels_aminos):
             self.viewer.view.add_surface(label, probeRadius=0.001,

@@ -61,14 +61,13 @@ def test_distance():
 
 
 def test_change_distance():
-    change_distance(gpa_endo_xyz, 'remove', frozendofs_dat, 1, 0, 'scale_distance')
+    change_distance(gpa_endo_xyz, 'remove', frozendofs_dat, 1, 0,
+                    'scale_distance')
     ini_atoms = read(gpa_endo_xyz)
     fini_atoms = read('remove.com')
     with open('remove.com', 'r') as p:
-        l = p.read().split('\n')
-    
-    assert abs(ini_atoms.get_distance(0, 39) - fini_atoms.get_distance(0, 39)) == approx(1)
-    assert l[:6] == approx(com_head)
+        fil = p.read().split('\n')
 
-
-
+    assert abs(ini_atoms.get_distance(0, 39) - fini_atoms.get_distance(0, 39)
+               ) == approx(1)
+    assert fil[:6] == approx(com_head)

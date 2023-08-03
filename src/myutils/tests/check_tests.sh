@@ -2,7 +2,7 @@
 pkg_name='myutils'
 mod_path=$( $pkg_name path )   # path to the files to be documented
 # directories to be ignore during documentation.
-ignore_dirs=( 'pycache' 'tests' 'cli' 'examples' 'doc_scripts' 'pre-deprected' )
+ignore_dirs=( 'pycache' 'tests' 'cli' 'examples' 'doc_scripts' 'pre-deprected' 'tutorials')
 # files to be ignore during documentation.
 ignore_files=( '__init__.' )
 

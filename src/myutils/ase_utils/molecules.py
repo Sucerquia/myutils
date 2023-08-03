@@ -82,8 +82,8 @@ class MoleculeSetter:
         """
         xyproj = vector.copy()
         xyproj[2] = 0
-        phi = np.arcsin(vector[2]/np.linalg.norm(vector))
-        theta = np.arccos(vector[0]/np.linalg.norm(xyproj))
+        phi = np.arcsin(vector[2] / np.linalg.norm(vector))
+        theta = np.arccos(vector[0] / np.linalg.norm(xyproj))
         if vector[1] < 0:
             theta *= -1
         trans = np.dot(self.rot_y(phi), self.rot_z(-theta))
@@ -104,7 +104,7 @@ class MoleculeSetter:
         """
         reference = vector.copy()
         reference[0] = 0
-        angle = np.arccos(reference[1]/np.linalg.norm(reference))
+        angle = np.arccos(reference[1] / np.linalg.norm(reference))
         if reference[2] < 0:
             angle *= -1
         return self.rot_x(-angle)
@@ -173,7 +173,7 @@ class MoleculeSetter:
             index1 = center
         else:
             center = (self.atoms[index1].position +
-                      self.atoms[index2].position)/2
+                      self.atoms[index2].position) / 2
 
         self.atoms.set_positions(self.atoms.positions - center)
         # set index1 and index2 along x axis
@@ -204,7 +204,7 @@ class MoleculeSetter:
         """
         d1norm = self.atoms.get_distance(constraints[0][0], constraints[0][1])
         self.atoms.set_distance(constraints[0][0], constraints[0][1],
-                                d1norm+deltad)
+                                d1norm + deltad)
         return self.atoms
 
     def increase_distance_with_constraints(self, constraints, deltad):
@@ -250,10 +250,10 @@ class MoleculeSetter:
         for i, atom in enumerate(self.atoms):
             if i in right:
                 new_positions.append(atom.position +
-                                     np.array([deltad/2, 0, 0]))
+                                     np.array([deltad / 2, 0, 0]))
             elif i in left:
                 new_positions.append(atom.position +
-                                     np.array([-deltad/2, 0, 0]))
+                                     np.array([-deltad / 2, 0, 0]))
             else:
                 new_positions.append(atom.position)
 
@@ -284,7 +284,7 @@ class MoleculeSetter:
         # aligned with the +x axis:
         self.xy_alignment(index1, index2, center=index1)
         new_positions = [atom.position *
-                         np.array([(d1norm + deltad)/d1norm, 1, 1])
+                         np.array([(d1norm + deltad) / d1norm, 1, 1])
                          for atom in self.atoms]
         self.atoms.set_positions(new_positions)
         if index3 is not None:
