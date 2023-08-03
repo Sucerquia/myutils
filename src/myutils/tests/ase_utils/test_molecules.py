@@ -159,6 +159,4 @@ def test_create_gaussian_input():
     assert atoms.get_chemical_symbols() == ms.atoms.get_chemical_symbols()
 
 
-def test_remove():
-    output_terminal('rm -rf remove*')
-    assert True
+

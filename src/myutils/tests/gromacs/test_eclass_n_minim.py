@@ -19,10 +19,5 @@ def test_classical_energies():
 
     energies = np.loadtxt("remove.dat", usecols=1)
     assert "Computation of energies completed." in u
-    assert energies[0] == approx(744.904480)
-    assert energies[1] == approx(4319.294922)
-
-
-def test_remove():
-    output_terminal('rm -rf remove*')
-    assert True
+    assert energies[-2] == approx(744.904480)
+    assert energies[-1] == approx(4319.294922)

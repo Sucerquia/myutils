@@ -59,6 +59,4 @@ def test_endo_exo_proline():
     assert abs(angles[0][1]*180/np.pi) < 10
 
 
-def test_remove():
-    output_terminal('rm -rf remove*')
-    assert True
+

@@ -13,7 +13,7 @@ from os.path import isdir
 
 def test_extract_forces():
     output_terminal("mkdir remove-forces ; " +\
-                    f"cp {sith_master_dir}/*.log remove-forces ;" + \
+                    f"cp {sith_master_dir}/* remove-forces ;" + \
                     "$( myutils extract_forces ) -d ./remove-forces")
     # reference
     dofref, forref, valref = np.loadtxt(f'{sith_master_dir}/GPA-force02.dat',
@@ -84,9 +84,4 @@ def test_workflow():
     output_terminal("$( myutils workflow ) -p remove -b 0 -r")
 
 
-def test_remove():
-    output_terminal('rm -rf remove*')
-    assert True
 
-
-test_remove()

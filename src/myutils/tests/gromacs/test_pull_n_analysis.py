@@ -42,6 +42,4 @@ def test_analysis():
     assert float(values[0]) == approx(0)
 
 
-def test_remove():
-    output_terminal('rm -rf remove* force* equilibrate*')
-    assert True
+

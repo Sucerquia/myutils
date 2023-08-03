@@ -71,6 +71,4 @@ def test_change_distance():
     assert l[:6] == approx(com_head)
 
 
-def test_remove():
-    output_terminal('rm -rf remove*')
-    assert True
+

@@ -87,6 +87,4 @@ def test_create_bck():
     assert not exists('remove-test.log')
 
 
-def test_remove():
-    output_terminal('rm -rf remove*')
-    assert True
+
