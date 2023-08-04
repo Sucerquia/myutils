@@ -37,8 +37,8 @@ def output_terminal(cmd, print_output=False, print_error=False, **kwargs):
         err = err1.decode('utf-8')
 
     if print_output and out:
-        print(out)
-    if print_error and out:
+        print(out[:-2])
+    if print_error and err:
         print(err, file=sys.stderr)
 
     assert not p.returncode, "ERROR executing the function output_terminal " +\
