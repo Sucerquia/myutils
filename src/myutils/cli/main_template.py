@@ -1,4 +1,5 @@
 from importlib import import_module
+from myutils.miscellaneous import output_terminal
 from pathlib import Path
 import sys
 
@@ -55,7 +56,14 @@ def main():
 
     # bash codes
     elif sys.argv[1] in sh_executers.keys():
-        print(str(Path(__file__).parent)[:-3] + sh_executers[sys.argv[1]][2:])
+        if '-path' in sys.argv[2:]:
+            print(str(Path(__file__).parent)[:-3] +
+                  sh_executers[sys.argv[1]][2:])
+        else:
+            output_terminal(str(Path(__file__).parent)[:-3] +
+                            sh_executers[sys.argv[1]][2:] + ' ' +
+                            ' '.join(sys.argv[2:]), print_error=True,
+                            print_output=True)
 
     # other files
     elif sys.argv[1] in other_files.keys():

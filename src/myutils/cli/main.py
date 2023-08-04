@@ -1,37 +1,40 @@
 from importlib import import_module
+from myutils.miscellaneous import output_terminal
 from pathlib import Path
 import sys
 
 
 pymodules = {
-    'optimized_e': 'myutils.miscellaneous',
-    'time_g09': 'myutils.miscellaneous',
-    'log2xyz': 'myutils.sith.g09_xyz',
-    'proline_state': 'myutils.sith.sith_tools',
-    'gen_randpep': 'myutils.sith.sith_tools',
     'distance': 'myutils.ase_utils.tools',
     'all_xyz2pdb': 'myutils.ase_utils.tools',
     'conf2pdb': 'myutils.ase_utils.tools',
     'diff_bonds': 'myutils.ase_utils.tools',
     'extract_bonds': 'myutils.ase_utils.tools',
     'change_distance': 'myutils.ase_utils.tools',
+    'proline_state': 'myutils.sith.sith_tools',
+    'gen_randpep': 'myutils.sith.sith_tools',
+    'log2xyz': 'myutils.sith.g09_xyz',
+    'optimized_e': 'myutils.miscellaneous',
+    'time_g09': 'myutils.miscellaneous',
 }
 
 sh_executers = {
+    'classical_minimization': './gromacs/classical_minimization.sh',
+    'classical_energies': './gromacs/classical_energies.sh',
+    'analysis': './gromacs/analysis.sh',
+    'pulling': './gromacs/pulling.sh',
+    'peptide_pulling': './gromacs/peptide_pulling.sh',
+    'generate_main': './cli/generate_main.sh',
+    'doc_pythonfile': './cli/pkg_structure/doc_pythonfile.sh',
+    'doc_modules': './cli/pkg_structure/doc_modules.sh',
+    'check_tests': './cli/pkg_structure/check_tests.sh',
+    'check_structure': './cli/pkg_structure/check_structure.sh',
     'single_optimization': './sith/single_optimization.sh',
+    'extract_forces': './sith/extract_forces.sh',
+    'proline_mod': './sith/proline_mod.sh',
     'workflow': './sith/workflow.sh',
     'find_forces': './sith/find_forces.sh',
-    'proline_mod': './sith/proline_mod.sh',
-    'extract_forces': './sith/extract_forces.sh',
     'stretching': './sith/stretching.sh',
-    'peptide_pulling': './gromacs/peptide_pulling.sh',
-    'pulling': './gromacs/pulling.sh',
-    'classical_minimization': './gromacs/classical_minimization.sh',
-    'analysis': './gromacs/analysis.sh',
-    'classical_energies': './gromacs/classical_energies.sh',
-    'doc_pythonfile': './doc_scripts/doc_pythonfile.sh',
-    'doc_modules': './doc_scripts/doc_modules.sh',
-    'generate_main': './cli/generate_main.sh',
     'basics': './basics.sh',
 }
 
@@ -83,7 +86,14 @@ def main():
 
     # bash codes
     elif sys.argv[1] in sh_executers.keys():
-        print(str(Path(__file__).parent)[:-3] + sh_executers[sys.argv[1]][2:])
+        if '-path' in sys.argv[2:]:
+            print(str(Path(__file__).parent)[:-3] +
+                  sh_executers[sys.argv[1]][2:])
+        else:
+            output_terminal(str(Path(__file__).parent)[:-3] +
+                            sh_executers[sys.argv[1]][2:] + ' ' +
+                            ' '.join(sys.argv[2:]), print_error=True,
+                            print_output=True)
 
     # other files
     elif sys.argv[1] in other_files.keys():

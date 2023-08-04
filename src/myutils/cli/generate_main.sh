@@ -6,26 +6,9 @@ output='main.py'
 
 cp main_template.py $output
 cd ../
-for file in $( find -L -name "*.mdp" )
-do
-    reverted=$( echo $file | rev )
-    name=$( echo ${reverted#*.} | cut -d "/" -f 1 | rev )
-    if [ $( echo $file | grep '/tests/' | wc -l ) -ne 1 ]
-    then
-        sed -i "12a \ \ \ \ \'$name\': \'$file\'," cli/$output
-    fi
-done
 
-for file in $( find -L -name "*.sh" )
-do
-    reverted=$( echo $file | rev )
-    name=$( echo ${reverted#*.} | cut -d "/" -f 1 | rev )
-    if [ $( echo $file | grep '/tests/' | wc -l ) -ne 1 ]
-    then
-        sed -i "9a \ \ \ \ \'$name\': \'$file\'," cli/$output
-    fi
-done
-
+# python modules
+line2add=$(grep -n "pymodules = {" cli/$output | cut -d ":" -f 1)
 for file in $( find -L -name "*.py" )
 do
     file=$( echo ${file#*/} )
@@ -33,6 +16,28 @@ do
     names=$( grep -A 1 "# add2executable" $file | grep def | awk '{print $2}' )
     for name in ${names[@]}
     do
-        sed -i "6a \ \ \ \ \'${name%(*}\': \'myutils.$importer\'," cli/$output
+        sed -i "${line2add}a \ \ \ \ \'${name%(*}\': \'myutils.$importer\'," cli/$output
     done
+done
+
+line2add=$(grep -n "sh_executers = {" cli/$output | cut -d ":" -f 1)
+for file in $( find -L -name "*.sh" )
+do
+    reverted=$( echo $file | rev )
+    name=$( echo ${reverted#*.} | cut -d "/" -f 1 | rev )
+    if [ $( echo $file | grep '/tests/' | wc -l ) -ne 1 ]
+    then
+        sed -i "${line2add}a \ \ \ \ \'$name\': \'$file\'," cli/$output
+    fi
+done
+
+line2add=$(grep -n "other_files = {" cli/$output | cut -d ":" -f 1)
+for file in $( find -L -name "*.mdp" )
+do
+    reverted=$( echo $file | rev )
+    name=$( echo ${reverted#*.} | cut -d "/" -f 1 | rev )
+    if [ $( echo $file | grep '/tests/' | wc -l ) -ne 1 ]
+    then
+        sed -i "${line2add}a \ \ \ \ \'$name\': \'$file\'," cli/$output
+    fi
 done
