@@ -24,11 +24,11 @@ adjust () {
 # prints some text adjusted to 80 characters per line, filling empty spaces
 # with +
 verbose () {
-    adjust "VERBOSE" $@
+    adjust "VERBOSE" $@ $( date )
 }
 
 warning () {
-    adjust "WARNING" $@
+    adjust "WARNING" $@ $( date )
 }
 
 finish () {
@@ -42,7 +42,7 @@ finish () {
 
 # Function that returns the error message and stops the run if something fails.
 fail () {
-    adjust "ERROR" $@ >&2
+    adjust "ERROR" $@ $( date ) >&2
     finish
     exit 1
 }
