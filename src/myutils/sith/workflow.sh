@@ -72,7 +72,8 @@ do
       R) random=${OPTARG} ;;
       s) size=${OPTARG} ;;
 
-      h) print_help
+      h) print_help ;;
+      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
 

@@ -10,7 +10,8 @@ Consider the next options:
 
     -a    properties you want to analyse. For example \"-d -r\". Default \"-d -L\".
           For more information, check: myutils analysis -h
-    -f    forces to stretch the peptide in [kJ mol^-1 nm^-1]. Default 200
+    -f    forces to stretch the peptide in [kJ mol^-1 nm^-1]. eg 100,200.
+          Default 200
     -g    gromacs binary. For example gmx or gmx_mpi. Default gmx.
     -o    pepgen flags
     -p    peptide.
@@ -38,10 +39,12 @@ while getopts 'a:f:g:op:s:h' flag; do
       p) pep=${OPTARG} ;;
       s) steps=${OPTARG} ;;
 
-      h) print_help
+      h) print_help ;;
+      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
 
+forces=$( echo "$forces" | awk 'BEGIN{ RS = ","}{print $0}' )
 # check dependencies
 pepgen -h &> /dev/null || fail "This code needs pepgen"
 $gmx -h &> /dev/null || fail "This code needs gromacs ($gmx failed)"
@@ -60,13 +63,13 @@ then
     forces="200"
 fi
 
-for force in $forces
+for force in ${forces[@]}
 do
     forcename=$(printf "%04d" $force)
-    verbose "Force $force acting $pep  starts"
+    verbose "Force $force acting $pep starts"
     myutils pulling -g $gmx -f $force -s $steps || fail "Pulling $pep with
         $force failed"
-    
+
     create_bck force$forcename || fail "creating bck"
 
     mkdir force$forcename && \

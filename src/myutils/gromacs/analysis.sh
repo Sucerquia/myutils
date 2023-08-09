@@ -63,7 +63,8 @@ while getopts 'acdef:g:kLl:mrsh' flag; do
       r) rama='true' ;;
       s) sub='true' ;;
 
-      h) print_help
+      h) print_help ;;
+      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
 

@@ -33,7 +33,8 @@ do
       n) pkg_name=${OPTARG} ;;
       t) test_directory=${OPTARG} ;;
 
-      h) print_help
+      h) print_help ;;
+      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
 

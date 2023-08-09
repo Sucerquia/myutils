@@ -26,7 +26,9 @@ while getopts 'l:nh' flag; do
     case "${flag}" in
       l) output=${OPTARG} ;;
       n) all_xyz2pdb='false' ;;
-      h) print_help
+
+      h) print_help ;;
+      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
 # ----- set up finishes -------------------------------------------------------

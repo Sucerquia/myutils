@@ -29,7 +29,8 @@ do
       o) outfile=${OPTARG} ;;
       l) outgromacs=${OPTARG} ;;
 
-      h) print_help
+      h) print_help ;;
+      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
 

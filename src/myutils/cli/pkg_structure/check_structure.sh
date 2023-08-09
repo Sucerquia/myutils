@@ -8,4 +8,3 @@ ign_fils='__init__.'
 
 
 myutils check_tests -n myutils -d $ign_dirs -f $ign_fils
-
