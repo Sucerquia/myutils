@@ -22,6 +22,8 @@ Consider the next options:
     -b    <number of breakages> The simulation will run until get this number of
               ruptures.
     -c    run in cascade. (modules are loaded)
+    -d    <reference document> file containing the existing peptides to avoid
+              repetition.
     -e    <endo> or <exo> states for initial state of proline. Default <random>.
     -m    <method>. stretching method. To see the options, use
               'myutils change_distance -h'
@@ -54,12 +56,14 @@ method=0
 pep=''
 restart=''
 size=0.2
+ref_doc='00-aminos.txt'
 
-while getopts 'b:ce:m:n:p:rR:s:h' flag;
+while getopts 'd:b:ce:m:n:p:rR:s:h' flag;
 do
     case "${flag}" in
       b) breakages=${OPTARG} ;;
       c) cascade='true' ;;
+      d) ref_doc=${OPTARG} ;;
       e) endoexo=${OPTARG} ;;
       m) method=${OPTARG} ;;
       n) pep_options=${OPTARG} ;;
@@ -79,26 +83,6 @@ date
 echo " * Command:"
 echo $0 $@
 
-# random peptide
-if [ ! ${#random} -eq 0 ]
-then
-    warning "The code will create a random peptide, even if you also passed -p
-        argument."
-    pep=$( myutils gen_randpep $random ) || fail "Creating random peptide"
-    while [ -d $pep ]
-    do
-        pep=$( myutils gen_randpep $random ) || fail "Creating
-            random peptide"
-    done
-fi
-
-if [ ${#pep} -eq 0 ]
-then 
-    fail "This code needs one peptide. Please, define it using the flag -p or
-        -R. For more info, use \"myutils workflow -h\""
-fi
-
-
 if $cascade
 then
     resubmit $pep $method $breakages $size &
@@ -112,15 +96,35 @@ then
     module purge
     module use /hits/sw/its/doserbd/haswell/modules/all/GROMACS
     module load 2020.3-fosscuda-2019b
-
-    ase -h &> /dev/null || fail "This code needs ASE"
-    command -V g09 &> /dev/null || fail "This code needs gaussian"
-    gmx -h &> /dev/null || fail "This code needs gmx"
-    myutils -h &> /dev/null || fail "This code needs myutils"
 fi
+ase -h &> /dev/null || fail "This code needs ASE"
+command -V g09 &> /dev/null || fail "This code needs gaussian"
+gmx -h &> /dev/null || fail "This code needs gmx"
+myutils -h &> /dev/null || fail "This code needs myutils"
 perl -E "say '+' x 80"
 
 # ----- set up finishes -------------------------------------------------------
+
+# random peptide
+if [ ! ${#random} -eq 0 ]
+then
+    [ -f $ref_doc ] || fail "Non-recognized $ref_doc, check flag -d"
+    warning "The code will create a random peptide, even if you also passed -p
+        argument."
+    pep=$( myutils gen_randpep $random ) || fail "Creating random peptide"
+    while awk '!/^#/ {print $1}' $ref_doc | grep -q $pep
+    do
+        pep=$( myutils gen_randpep $random ) || fail "Creating
+            random peptide"
+    done
+    echo $pep "   R" >> $ref_doc
+fi
+
+if [ ${#pep} -eq 0 ]
+then 
+    fail "This code needs one peptide. Please, define it using the flag -p or
+        -R. For more info, use \"myutils workflow -h\""
+fi
 
 # ---- firstly, backup previous directories with the same name
 if [[ $restart != '-r' ]]
