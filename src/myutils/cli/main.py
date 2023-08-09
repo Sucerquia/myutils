@@ -28,6 +28,7 @@ sh_executers = {
     'doc_pythonfile': './cli/pkg_structure/doc_pythonfile.sh',
     'doc_modules': './cli/pkg_structure/doc_modules.sh',
     'check_tests': './cli/pkg_structure/check_tests.sh',
+    'bash_style': './cli/pkg_structure/bash_style.sh',
     'check_structure': './cli/pkg_structure/check_structure.sh',
     'single_optimization': './sith/single_optimization.sh',
     'extract_forces': './sith/extract_forces.sh',

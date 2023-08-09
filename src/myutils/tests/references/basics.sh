@@ -1,4 +1,4 @@
 #!/usr/bin/bash
 
-source $(myutils basics) test-basics;
-$@
+source "$(myutils basics -path)" test-basics;
+"$@"
