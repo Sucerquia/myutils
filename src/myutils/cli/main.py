@@ -34,6 +34,7 @@ sh_executers = {
     'proline_mod': './sith/proline_mod.sh',
     'workflow': './sith/workflow.sh',
     'find_forces': './sith/find_forces.sh',
+    'clean_ds': './sith/clean_ds.sh',
     'stretching': './sith/stretching.sh',
     'basics': './basics.sh',
 }
