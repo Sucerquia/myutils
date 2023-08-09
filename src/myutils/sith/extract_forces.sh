@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source $(myutils basics) EXTR_FORCES
+source $(myutils basics -path) EXTR_FORCES
 print_help() {
 echo "
 Extract the forces and indexes of the DOFs from the log files (g09). The output

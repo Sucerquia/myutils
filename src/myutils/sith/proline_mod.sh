@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source $(myutils basics) proline_modes
+source $(myutils basics -path) proline_modes
 print_help() {
 echo "
 Changes the state of the proline to endo, exo or random.
@@ -44,13 +44,13 @@ verbose "starting"
     provide the pdb file. use 'myutils proline_mod -h' to see your options."
 
 # changing proline states.
-$( myutils classical_minimization )  -f $pdbfile -o $outfile  -l $outgromacs \
+myutils classical_minimization  -f $pdbfile -o $outfile  -l $outgromacs \
    || fail "minimization before proline definition of states"
 
 verbose "define proline states"
 myutils proline_state $outfile $proline_state || fail "defining proline states"
 
-$( myutils classical_minimization ) -f ${outfile%.*}modpro.pdb -l $outgromacs \
+myutils classical_minimization -f ${outfile%.*}modpro.pdb -l $outgromacs \
    || fail "minimization after proline definition of states"
 
 mv ${outfile%.*}modpro.pdb $outfile

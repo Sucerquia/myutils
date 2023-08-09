@@ -4,7 +4,7 @@ from pytest import approx
 
 def test_pulling():
     u = output_terminal("pepgen G equilibrate $pep_options -e ; " +
-                        "$( myutils pulling ) -f 1 -s 100 ;" +
+                        "myutils pulling -f 1 -s 100 ;" +
                         "rm -rf equilibrate md* index* pulling.mdp",
                         print_output=True,
                         print_error=True)
@@ -12,7 +12,7 @@ def test_pulling():
 
 
 def test_peptide_pulling():
-    u = output_terminal("$(myutils peptide_pulling) -p G " +
+    u = output_terminal("myutils peptide_pulling -p G " +
                         "-a '' -f '100 300' -s 100", print_output=True,
                         print_error=True)
     assert 'process finished successfully **' in u
@@ -25,7 +25,7 @@ def test_peptide_pulling():
 
 
 def test_analysis():
-    output_terminal("cd force0100 ; $(myutils analysis) -a -m -f md_0_0100",
+    output_terminal("cd force0100 ; myutils analysis -a -m -f md_0_0100",
                     print_error=True)
     with open('force0100/analysis_merged_table-md_0_0100.dat', 'r') as an:
         total_lines = an.readlines()

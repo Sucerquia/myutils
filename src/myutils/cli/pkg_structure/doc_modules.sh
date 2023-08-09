@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # code that explores the files in the package and automatically create the
 # documentation of all classes and functions that finds.
 
@@ -13,7 +15,7 @@ ignore_files=( '__init__.' )
 
 
 
-source $(myutils basics) BasicModDoc
+source $(myutils basics -path) BasicModDoc
 
 # ==== Directories ============================================================
 # search directories in the package
@@ -86,7 +88,7 @@ do
     ext=$(echo $fil | cut -d '.' -f3 )
     if [ $ext == 'py' ]
     then
-        $(myutils doc_pythonfile) ${fil%.*} $mod_path $mod_doc $pkg_name
+        myutils doc_pythonfile ${fil%.*} $mod_path $mod_doc $pkg_name
     fi
     # here must be the commands for other kind of files.
 done

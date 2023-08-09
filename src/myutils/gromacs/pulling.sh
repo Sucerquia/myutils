@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source $(myutils basics) PULLING
+source $(myutils basics -path) PULLING
 
 print_help() {
 echo "

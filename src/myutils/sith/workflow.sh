@@ -11,7 +11,7 @@
 
 
 # ----- definition of functions starts ----------------------------------------
-source $(myutils basics) STRETCHING_MSG
+source $(myutils basics -path) STRETCHING_MSG
 
 print_help() {
 echo "
@@ -40,7 +40,7 @@ exit 0
 
 resubmit () {
     sleep 23h 58m ; \
-    sbatch $( myutils workflow ) -p $1 -c -r -s $2 -b $3 -s $4 | echo ; \
+    sbatch $( myutils workflow -path) -p $1 -c -r -s $2 -b $3 -s $4 | echo ; \
     echo "new JOB submitted"
 }
 # ----- definition of functions finishes --------------------------------------
@@ -137,7 +137,7 @@ then
     # Creation of peptide
     pepgen $pep tmp -s flat $pep_options || fail "Creating peptide $pep"
     mv tmp/pep.pdb ./$pep-stretched00.pdb
-    $(myutils proline_mod) $pep-stretched00.pdb $endoexo || fail "Proline estates configuration"
+    myutils proline_mod $pep-stretched00.pdb $endoexo || fail "Proline estates configuration"
 
     rm -r tmp
 else
@@ -146,17 +146,17 @@ else
     warning "restarted"
 fi
 
-$( myutils stretching ) -b $breakages -p $pep $restart -m $method \ 
+myutils stretching -b $breakages -p $pep $restart -m $method \ 
     -s $size || fail "Stretching of $pep failed"
 
 # Compute classical energies
 verbose "computing classical energies."
 
-$( myutils classical_energies )
+myutils classical_energies
 # compute forces
 verbose "submitting comptutation of forces."
 
-sbatch $( myutils find_forces ) -c
+sbatch $(myutils find_forces -path) -c
 
 verbose "Workflow finished"
 

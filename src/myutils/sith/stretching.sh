@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source $(myutils basics) STRETCHING_MSG
+source $(myutils basics -path) STRETCHING_MSG
 
 print_help() {
 echo "

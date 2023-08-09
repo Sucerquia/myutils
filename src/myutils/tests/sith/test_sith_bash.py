@@ -14,7 +14,7 @@ from os.path import isdir
 def test_extract_forces():
     output_terminal("mkdir remove-forces ; " +
                     f"cp {sith_master_dir}/* remove-forces ;" +
-                    "$( myutils extract_forces ) -d ./remove-forces")
+                    "myutils extract_forces -d ./remove-forces")
     # reference
     dofref, forref, valref = np.loadtxt(f'{sith_master_dir}/GPA-force02.dat',
                                         usecols=[0, 2, 3], unpack=True)
@@ -39,7 +39,7 @@ def test_extract_forces():
 
 def test_proline_mod():
     output_terminal(f"cp {gpa_opti_pdb} ./remove.pdb ; " +
-                    "$( myutils proline_mod ) -f ./remove.pdb -s exo")
+                    "myutils proline_mod -f ./remove.pdb -s exo")
     gpa = PepSetter('removemodpro.pdb')
     angles = gpa.endo_exo_proline()
     assert angles[0][0] * 180 / np.pi < -10
@@ -63,7 +63,7 @@ def test_single_optimization():
 @pytest.mark.toolong
 def test_find_forces():
     output_terminal(f"cp -r {g_dir} ./remove;" +
-                    "$( myutils find_forces ) -d remove -p remove")
+                    "myutils find_forces -d remove -p remove")
     assert isdir('remove/forces')
     assert isdir('remove/bck')
 
@@ -72,7 +72,7 @@ def test_find_forces():
 def test_stretching():
     # this file generates a rupture that most coincide with reference
     # the rupture must happen in the bond 1 5
-    output_terminal("$( myutils stretching ) -p remove -r")
+    output_terminal("myutils stretching -p remove -r")
     assert np.loadtxt('remove/frozen_dofs.dat',
                       usecols=[0, 1],
                       unpack=True) == [[1, 1], [16, 5]]
@@ -81,4 +81,4 @@ def test_stretching():
 
 @pytest.mark.toolong
 def test_workflow():
-    output_terminal("$( myutils workflow ) -p remove -b 0 -r")
+    output_terminal("myutils workflow -p remove -b 0 -r")

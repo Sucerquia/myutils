@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source $(myutils basics) CLASSICAL_E
+source $(myutils basics -path) CLASSICAL_E
 
 print_help() {
 echo "

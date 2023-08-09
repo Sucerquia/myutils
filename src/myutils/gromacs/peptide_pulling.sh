@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source $(myutils basics) peptide_pulling
+source $(myutils basics -path) peptide_pulling
 
 print_help() {
 echo "
@@ -64,9 +64,9 @@ for force in $forces
 do
     forcename=$(printf "%04d" $force)
     verbose "Force $force acting $pep  starts"
-    $( myutils pulling ) -g $gmx -f $force -s $steps || fail "Pulling $pep with
+    myutils pulling -g $gmx -f $force -s $steps || fail "Pulling $pep with
         $force failed"
-
+    
     create_bck force$forcename || fail "creating bck"
 
     mkdir force$forcename && \
@@ -79,7 +79,7 @@ do
     cd force$forcename
     file=$( ls md_*.gro)
     name=${file%%.*}
-    $( myutils analysis ) -f $name -g $gmx $analysis || \
+    myutils analysis -f $name -g $gmx $analysis || \
         fail "Equilibration Analysis."
     cd ..
 done

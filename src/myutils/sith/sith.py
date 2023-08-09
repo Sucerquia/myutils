@@ -226,8 +226,7 @@ class Sith:
         (tuple) [2list, #deformed] List of forces files (first element) and
         list of xyz files (second element).
         """
-        get_forces_exec = output_terminal("myutils extract_forces")
-        output_terminal(get_forces_exec.replace("\n", "") +
+        output_terminal("myutils extract_forces" +
                         f" -d {self.master_directory}")
         self.forces_files = glob.glob(self.master_directory + '/*force*.dat')
         self.xyz_files = glob.glob(self.master_directory + '/*force*.xyz')

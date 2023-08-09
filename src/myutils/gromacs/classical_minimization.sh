@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source $(myutils basics) CLASSICAL_MIN
+source $(myutils basics -path) CLASSICAL_MIN
 
 print_help () {
 echo "
@@ -36,15 +36,15 @@ fi
 
 [ ${#pdbfile_min} -eq 0 ] && fail "You have to give at least one pdb file with the
     structure you want to optimize. Please check
-    '\$(myutils classical_minimization) -h'"
+    'myutils classical_minimization -h'"
 
 verbose "creating .gro file from $pdbfile_min"
-echo -e "4\n 7\n" | gmx pdb2gmx -f $pdbfile_min -o minim.gro -ignh > $output 2>&1\
+echo -e "4\n 7\n" | gmx pdb2gmx -f "$pdbfile_min" -o minim.gro -ignh > "$output" 2>&1\
     || fail "Creating gro file"
 
 gmx editconf -f minim.gro \
              -o minim_box.gro \
-             -c -d 5.0 -bt cubic > $output 2>&1 || \
+             -c -d 5.0 -bt cubic > "$output" 2>&1 || \
     fail "creating simulation box"
 
 mv minim_box.gro minim.gro
@@ -53,13 +53,13 @@ gmx grompp -f $( myutils minim ) \
            -c minim.gro \
            -p topol.top \
            -o em.tpr  \
-           -maxwarn 10 > $output 2>&1 || fail "creating em"
+           -maxwarn 10 > "$output" 2>&1 || fail "creating em"
 
 verbose "run minimization"
-gmx mdrun -v -deffnm em > $output 2>&1 || fail "computing energy"
+gmx mdrun -v -deffnm em > "$output" 2>&1 || fail "computing energy"
 
-echo -e "0\n" | gmx trjconv -f em.gro -o $output_file -s em.tpr > \
-    $output 2>&1 || fail "extracting pdb"
+echo -e "0\n" | gmx trjconv -f em.gro -o "$output_file" -s em.tpr > \
+    "$output" 2>&1 || fail "extracting pdb"
 
 
 rm -f \#*

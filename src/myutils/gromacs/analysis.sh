@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source $(myutils basics) Analysis
+source $(myutils basics -path) Analysis
 
 print_help() {
 echo "
