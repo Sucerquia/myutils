@@ -13,7 +13,7 @@ def test_pulling():
 
 def test_peptide_pulling():
     u = output_terminal("myutils peptide_pulling -p G " +
-                        "-a '' -f '100 300' -s 100", print_output=True,
+                        '-a "." -f 100,300 -s 100', print_output=True,
                         print_error=True)
     assert 'process finished successfully **' in u
     assert 'Pulling of G starts' in u
