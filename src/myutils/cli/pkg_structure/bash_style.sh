@@ -2,6 +2,8 @@
 
 source "$(myutils basics -path)" BASH_CHECKER
 
+adjust "Starts"
+
 bsoriginal_dir=$(pwd)
 
 cd "$(myutils path)" || fail "moving to package directory"
@@ -12,6 +14,5 @@ for fil in "${bash_files[@]}"
 do
     shellcheck -e SC1090,SC2015 "$fil"
 done
-verbose
 
 cd "$bsoriginal_dir" || fail "original directory lost"

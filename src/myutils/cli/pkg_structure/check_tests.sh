@@ -3,6 +3,7 @@
 # ----- definition of functions starts ----------------------------------------
 source "$(myutils basics -path)" TestChecker
 
+adjust "Starts"
 print_help() {
 echo "
 Check that all scripts are already tested. So far, only python and bash scripts
@@ -168,7 +169,6 @@ do
     fi
 done
 
-echo
 adjust "python classes"
 for fil in "${with_test[@]}"
 do
@@ -194,7 +194,7 @@ do
         done
     fi
 done
-echo
+
 adjust "NEXT FILES DO NOT HAVE A TEST (.\_/.)"
 
 for fil in "${without_test[@]}"
