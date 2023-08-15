@@ -47,19 +47,6 @@ fail () {
     exit 1
 }
 
-# Function to rebasic_functions_name all the files of interest
-mv_stretching_files () {
-    for ext in log com chk xyz
-    do
-        if [ -f $1.$ext ]
-        then
-            verbose "moving $1.$ext to $1-$2.$ext"
-            mv $1.$ext $1-$2.$ext || fail "error moving files"
-        fi
-    done
-    return 0
-}
-
 # function that moves an existing file or directory to <basic_functions_name>-bck_n[.ext] where
 # n is the number of the backup and ext is automatically extracted from the
 # original file

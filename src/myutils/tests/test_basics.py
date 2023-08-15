@@ -6,8 +6,10 @@ from os.path import exists
 
 def test_adjust():
     outcome = output_terminal(f"{basics_bash} " +
-                              "adjust simple trial")
+                              "adjust simple trial", print_output=True,
+                              print_error=True)
     outcome = outcome.split("\n")
+
     assert outcome[0][:21] == '++++++++ test-basics:'
     assert 'simple trial' in outcome[0]
     assert len(outcome[0]) == 79
@@ -57,26 +59,10 @@ def test_fail():
     assert len(outcome[1]) == 79
     assert len(outcome[-1]) == 0
 
-
-def test_mv_stretching_files():
-    output_terminal("touch remove.log ; " +
-                    "touch remove.com ; " +
-                    "touch remove.chk ; " +
-                    "touch remove.xyz ; " +
-                    f"{basics_bash} mv_stretching_files remove test")
-    assert exists('remove-test.log')
-    assert not exists('remove.log')
-    assert exists('remove-test.com')
-    assert not exists('remove.com')
-    assert exists('remove-test.chk')
-    assert not exists('remove.chk')
-    assert exists('remove-test.xyz')
-    assert not exists('remove.xyz')
-
-
 def test_create_bck():
     # file
-    output_terminal(f"{basics_bash} create_bck remove-test.log " +
+    output_terminal("touch remove-test.log remove-test.com; "
+                    f"{basics_bash} create_bck remove-test.log "
                     "remove-test.com")
     output_terminal("touch remove-test.com; " +
                     f"{basics_bash} create_bck remove-test.com")
