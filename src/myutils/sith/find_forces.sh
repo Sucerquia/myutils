@@ -10,7 +10,7 @@
 
 
 # ----- definition of functions starts ----------------------------------------
-source $(myutils basics -path) EXTR_FORCES
+source "$(myutils basics -path)" EXTR_FORCES
 
 print_help() {
 echo "
@@ -28,7 +28,7 @@ exit 0
 
 compute_forces () {
     verbose "construct Z-matrix for $1"
-    newzmat -ichk -ozmat -rebuildzmat -bmodel $1 forces.com || fail "
+    newzmat -ichk -ozmat -rebuildzmat -bmodel "$1" forces.com || fail "
     Error creating the matrix"
     sed -i "s/#P bmk\/6-31+g opt(modredun,calcfc)/%NProcShared=8\n#P bmk\/6-31+g force/g" forces.com
     verbose "executes g09 computation of forces for $1"
@@ -54,34 +54,37 @@ done
 if $cascade
 then
     echo " * This JOB will be run in the Node:"
-    echo $SLURM_JOB_NODELIST
-    cd $SLURM_SUBMIT_DIR
+    echo "$SLURM_JOB_NODELIST"
+    cd "$SLURM_SUBMIT_DIR" || fail "Moving to the directory from where the job
+        was submitted $SLURM_SUBMIT_DIR"
     # check dependencies
     module purge
-    source $HOME/.bashrc
+    source "$HOME/.bashrc"
+    # shellcheck disable=SC1091
     source /etc/profile.d/modules.sh
+    # shellcheck disable=SC1091
     source /hits/basement/mbm/sucerquia/exec/load_g09.sh
     conda activate myutils
 fi
 
-cd $directory
+cd "$directory" || fail "moving to $directory"
 verbose "Finding forces in the directory $( pwd )" 
 verbose "Create forces directory and extracting forces"
 create_bck forces
 mkdir forces
 mkdir bck
-mv *-bck*.* bck
-mv *-a.* bck
+mv ./*-bck*.* bck
+mv ./*-a.* bck
 
-chks=( $( ls $pattern*.chk ) )
+mapfile -t chks < <(ls "$pattern"*.chk)
 
-for chkfile in ${chks[@]}
+for chkfile in "${chks[@]}"
 do
-    echo $chkfile
-    compute_forces $chkfile
-    name=$( echo $chkfile | sed "s/stretched/force/g" )
+    echo "$chkfile"
+    compute_forces "$chkfile"
+    name=${chkfile//stretched/force}
     verbose "Moving result to forces/${name%.*}.log"
-    mv forces.log forces/${name%.*}.log
+    mv forces.log "forces/${name%.*}.log"
 done
 
 mv forces.com forces/input_template.com

@@ -11,7 +11,7 @@
 
 
 # ----- definition of functions starts ----------------------------------------
-source $(myutils basics -path) STRETCHING_MSG
+source "$(myutils basics -path)" STRETCHING_MSG
 
 print_help() {
 echo "
@@ -42,7 +42,7 @@ exit 0
 
 resubmit () {
     sleep 23h 58m ; \
-    sbatch $( myutils workflow -path) -p $1 -c -r -s $2 -b $3 -s $4 | echo ; \
+    sbatch "$( myutils workflow -path)" -p "$1" -c -r -s "$2" -b "$3" -s "$4" ; \
     echo "new JOB submitted"
 }
 # ----- definition of functions finishes --------------------------------------
@@ -82,16 +82,17 @@ verbose "JOB information"
 echo " * Date:"
 date
 echo " * Command:"
-echo $0 $@
+echo "$0" "$@"
 
 if $cascade
 then
-    resubmit $pep $method $breakages $size &
+    resubmit "$pep" "$method" "$breakages" "$size" &
     echo " * This JOB will be run in the Node:"
-    echo $SLURM_JOB_NODELIST
-    cd $SLURM_SUBMIT_DIR
+    echo "$SLURM_JOB_NODELIST"
+    cd "$SLURM_SUBMIT_DIR" || fail "moving to execution directory: $SLURM_SUBMIT_DIR"
     # check dependencies
-    source $HOME/.bashrc
+    source "$HOME/.bashrc"
+    # shellcheck disable=SC1091
     source /hits/basement/mbm/sucerquia/exec/load_g09.sh
     conda activate myutils
     module purge
@@ -107,52 +108,52 @@ perl -E "say '+' x 80"
 # ----- set up finishes -------------------------------------------------------
 
 # random peptide
-if [ ! ${#random} -eq 0 ]
+if [ ! "${#random}" -eq 0 ]
 then
-    [ -f $ref_doc ] || fail "Non-recognized $ref_doc, check flag -d"
+    [ -f "$ref_doc" ] || fail "Non-recognized $ref_doc, check flag -d"
     warning "The code will create a random peptide, even if you also passed -p
         argument."
-    pep=$( myutils gen_randpep $random ) || fail "Creating random peptide"
-    while awk '!/^#/ {print $1}' $ref_doc | grep -q $pep
+    pep=$( myutils gen_randpep "$random" ) || fail "Creating random peptide"
+    while awk '!/^#/ {print $1}' "$ref_doc" | grep -q "$pep"
     do
-        pep=$( myutils gen_randpep $random ) || fail "Creating
+        pep=$( myutils gen_randpep "$random" ) || fail "Creating
             random peptide"
     done
-    echo $pep "   R" >> $ref_doc
+    echo "$pep" "   R" >> "$ref_doc"
 fi
 
-if [ ${#pep} -eq 0 ]
+if [ "${#pep}" -eq 0 ]
 then 
     fail "This code needs one peptide. Please, define it using the flag -p or
         -R. For more info, use \"myutils workflow -h\""
 fi
 
 # ---- firstly, backup previous directories with the same name
-if [[ $restart != '-r' ]]
+if [[ "$restart" != "-r" ]]
 then
     # check pepgen
     pepgen -h &> /dev/null || fail "This code needs pepgen"
 
     # create back up
-    create_bck $pep
+    create_bck "$pep"
 
     # Creation of the peptide directory and moving inside.
-    mkdir $pep
-    cd $pep
+    mkdir "$pep"
+    cd "$pep" || fail "directory $pep does not exist"
     # Creation of peptide
-    pepgen $pep tmp -s flat $pep_options || fail "Creating peptide $pep"
-    mv tmp/pep.pdb ./$pep-stretched00.pdb
-    myutils proline_mod $pep-stretched00.pdb $endoexo || fail "Proline estates configuration"
+    pepgen "$pep" tmp -s flat "$pep_options" || fail "Creating peptide $pep"
+    mv tmp/pep.pdb "./$pep-stretched00.pdb"
+    myutils proline_mod "$pep-stretched00.pdb" "$endoexo" || fail "Proline estates configuration"
 
     rm -r tmp
 else
     # moving to the peptide directory
-    cd $pep
+    cd "$pep" || fail "directory $pep does not exist"
     warning "restarted"
 fi
 
-myutils stretching -b $breakages -p $pep $restart -m $method \ 
-    -s $size || fail "Stretching of $pep failed"
+myutils stretching -b "$breakages" -p "$pep" "$restart" -m "$method" \
+                   -s "$size" || fail "Stretching of $pep failed" 
 
 # Compute classical energies
 verbose "computing classical energies."
@@ -161,7 +162,7 @@ myutils classical_energies
 # compute forces
 verbose "submitting comptutation of forces."
 
-sbatch $(myutils find_forces -path) -c
+sbatch "$(myutils find_forces -path)" -c
 
 verbose "Workflow finished"
 

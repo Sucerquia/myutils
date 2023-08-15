@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source $(myutils basics -path) PULLING
+source "$(myutils basics -path)" PULLING
 
 print_help() {
 echo "
@@ -22,7 +22,6 @@ exit 0
 # ----- set up starts ---------------------------------------------------------
 # General variables
 output='/dev/null'
-mine="/hits/basement/mbm/sucerquia/"
 gmx="gmx"
 steps="10000"
 
@@ -49,17 +48,17 @@ $gmx -h &> /dev/null || fail "This code needs gromacs ($gmx failed)"
 verbose "Creates index file of force $force"
 
 echo -e "r ACE & a CH3 \n r NME & a CH3 \n \"ACE_&_CH3\" | \"NME_&_CH3\" \n q\n " \
-    | $gmx make_ndx -f ./equilibrate/npt.gro > $output 2>&1 || \
+    | $gmx make_ndx -f ./equilibrate/npt.gro > "$output" 2>&1 || \
     fail "Creation of index file the pulling for force $force"
 
 sed -i "s/ACE_&_CH3_NME_&_CH3/distance/g" index.ndx && \
-    cp $( myutils pulling_temp ) ./pulling.mdp && \
+    cp "$( myutils pulling_temp )" ./pulling.mdp && \
     sed -i "s/<force>/$force/g" pulling.mdp && \
     sed -i "s/= 10000/= $steps/g" pulling.mdp || fail "setting the file
         pulling.mdp"
 
 verbose "Creates MD executable of force $force"
-forcename=$(printf "%04d" $force)
+forcename=$(printf "%04d" "$force")
 
 $gmx grompp -f pulling.mdp \
             -c ./equilibrate/npt.gro \
@@ -67,11 +66,11 @@ $gmx grompp -f pulling.mdp \
             -p ./equilibrate/pep_out.top \
             -n index.ndx \
             -maxwarn 5 \
-            -o md_0_$forcename.tpr > $output 2>&1 || \
+            -o "md_0_$forcename.tpr" > "$output" 2>&1 || \
     fail "grompp step of the pulling for force $force"
 
 verbose "MD run for force $force"
-$gmx mdrun -deffnm md_0_$forcename > $output 2>&1 || fail "Execution step of
+$gmx mdrun -deffnm "md_0_$forcename" > "$output" 2>&1 || fail "Execution step of
     the pulling for force $force"
 
 rm -f \#*

@@ -1,17 +1,17 @@
 #!/bin/bash
 
-source $(myutils basics -path) BASH_CHECKER
+source "$(myutils basics -path)" BASH_CHECKER
 
-original_dir=$(pwd)
+bsoriginal_dir=$(pwd)
 
-cd $(myutils path)
+cd "$(myutils path)" || fail "moving to package directory"
 
-bash_files=$( find . -name "*.sh")
+mapfile -t bash_files < <(find . -name "*.sh")
+
 for fil in "${bash_files[@]}"
 do
-    verbose $fil
-    shellcheck -e SC1090 $fil
+    shellcheck -e SC1090,SC2015 "$fil"
 done
 verbose
 
-cd $original_dir
+cd "$bsoriginal_dir" || fail "original directory lost"

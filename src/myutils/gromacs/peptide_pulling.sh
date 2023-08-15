@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source $(myutils basics -path) peptide_pulling
+source "$(myutils basics -path)" peptide_pulling
 
 print_help() {
 echo "
@@ -24,11 +24,11 @@ exit 0
 
 # ----- set up starts ---------------------------------------------------------
 # General variables
-gmx='gmx'
-forces=()
+gmx="gmx"
+read_forces="200"
 analysis="-d -L"
 steps="10000"
-pep_options=""
+pep_options="-silent"
 
 while getopts 'a:f:g:op:s:h' flag; do
     case "${flag}" in
@@ -52,39 +52,40 @@ $gmx -h &> /dev/null || fail "This code needs gromacs ($gmx failed)"
 
 # create peptide
 verbose "Creation and equilibration of $pep starts"
-pepgen $pep equilibrate -gmx $gmx $pep_options -e || fail "Creating peptide $pep"
+echo -e "\n $pep $gmx"
+pepgen "$pep" equilibrate -gmx "$gmx" "$pep_options" -e || fail "Creating peptide $pep"
 
 # pulling
 verbose "Pulling of $pep starts"
-if [ ${#forces[@]} -eq 0 ]
+if [ "${#forces[@]}" -eq 0 ]
 then
     warning "You didn't specify which forces you want to use. Then the pulling
         will be done using the value by default: 200 [kJ mol^-1 nm^-1]"
-    forces="200"
+    forces=( "200" )
 fi
 
-for force in ${forces[@]}
+for force in "${forces[@]}"
 do
-    forcename=$(printf "%04d" $force)
+    forcename="$(printf "%04d" "$force")"
     verbose "Force $force acting $pep starts"
-    myutils pulling -g $gmx -f $force -s $steps || fail "Pulling $pep with
-        $force failed"
+    myutils pulling -g "$gmx" -f "$force" -s "$steps" || fail "Pulling $pep
+        with $force failed"
 
-    create_bck force$forcename || fail "creating bck"
+    create_bck "force$forcename" || fail "creating bck"
 
-    mkdir force$forcename && \
-        mv md_0_* force$forcename && \
-        mv *.ndx force$forcename && \
-        mv *.mdp force$forcename || fail "Moving gromacs files to the ditectory
-           force$forcename"
+    mkdir "force$forcename" && \
+        mv md_0_* "force$forcename" && \
+        mv ./*.ndx "force$forcename" && \
+        mv ./*.mdp "force$forcename" || fail "Moving gromacs files to the
+           ditectory force$forcename"
 
     verbose "Analysis of $pep and $force starts"
-    cd force$forcename
-    file=$( ls md_*.gro)
-    name=${file%%.*}
-    myutils analysis -f $name -g $gmx $analysis || \
-        fail "Equilibration Analysis."
-    cd ..
+    ( cd "force$forcename" && \
+    file=$( ls md_*.gro) && \
+    name=${file%%.*} && \
+    myutils analysis -f "$name" -g "$gmx" "$analysis" || \
+        fail "Equilibration Analysis." && \
+    cd .. )
 done
 
 verbose "$pep pulling finishes"

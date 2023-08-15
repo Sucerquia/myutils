@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source $(myutils basics -path) CLASSICAL_MIN
+source "$(myutils basics -path)" CLASSICAL_MIN
 
 print_help () {
 echo "
@@ -50,7 +50,7 @@ gmx editconf -f minim.gro \
 
 mv minim_box.gro minim.gro
 
-gmx grompp -f $( myutils minim ) \
+gmx grompp -f "$( myutils minim )" \
            -c minim.gro \
            -p topol.top \
            -o em.tpr  \
