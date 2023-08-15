@@ -172,8 +172,9 @@ class MoleculeSetter:
             index2 = index1
             index1 = center
         else:
-            center = (self.atoms[index1].position +
-                      self.atoms[index2].position) / 2
+            pos1 = self.atoms[index1].position
+            pos2 = self.atoms[index2].position
+            center = (pos1 + pos2) / 2
 
         self.atoms.set_positions(self.atoms.positions - center)
         # set index1 and index2 along x axis
@@ -249,11 +250,11 @@ class MoleculeSetter:
         new_positions = []
         for i, atom in enumerate(self.atoms):
             if i in right:
-                new_positions.append(atom.position +
-                                     np.array([deltad / 2, 0, 0]))
+                deltapos = np.array([deltad / 2, 0, 0])
+                new_positions.append(atom.position + deltapos)
             elif i in left:
-                new_positions.append(atom.position +
-                                     np.array([-deltad / 2, 0, 0]))
+                deltapos = np.array([-deltad / 2, 0, 0])
+                new_positions.append(atom.position + deltapos)
             else:
                 new_positions.append(atom.position)
 
@@ -283,8 +284,8 @@ class MoleculeSetter:
         # Move atom1 to the origin and rotate the molecule such that atom2 is
         # aligned with the +x axis:
         self.xy_alignment(index1, index2, center=index1)
-        new_positions = [atom.position *
-                         np.array([(d1norm + deltad) / d1norm, 1, 1])
+        scale_factor = np.array([(d1norm + deltad) / d1norm, 1, 1])
+        new_positions = [atom.position * scale_factor
                          for atom in self.atoms]
         self.atoms.set_positions(new_positions)
         if index3 is not None:

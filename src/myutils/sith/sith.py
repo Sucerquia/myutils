@@ -68,7 +68,7 @@ class Geometry:
         self.dims[2] -= tdofremoved[1]
         self.dims[3] -= tdofremoved[2]
         # change for forces
-        if(self.internal_forces is not None):
+        if (self.internal_forces is not None):
             self.internal_forces = np.delete(self.internal_forces, dofis)
         return self.ric, self.dims, self.internal_forces
 
@@ -195,17 +195,18 @@ class Sith:
 
         # default set-up
         if self.forces_files is None:
-            self.forces_files = glob.glob(self.master_directory +
-                                          '/*force*.dat')
+            forcedat = self.master_directory + '/*force*.dat'
+            self.forces_files = glob.glob(forcedat)
         if self.xyz_files is None:
-            self.xyz_files = glob.glob(master_directory + '/*force*.xyz')
+            forcexyz = master_directory + '/*force*.xyz'
+            self.xyz_files = glob.glob(forcexyz)
         assert len(self.forces_files) == len(self.xyz_files), "Different " + \
             "number of forces and xyz files."
 
         # Create forces files
         if (len(self.forces_files) == 0):
             if (len(glob.glob(self.master_directory + '/*force*.log')) == 0):
-                raise OSError(f"{self.master_directory} does not exist or " +
+                raise OSError(f"{self.master_directory} does not exist or "
                               "does not contain *force*.log")
             else:
                 self.create_files()
@@ -226,7 +227,7 @@ class Sith:
         (tuple) [2list, #deformed] List of forces files (first element) and
         list of xyz files (second element).
         """
-        output_terminal("myutils extract_forces" +
+        output_terminal("myutils extract_forces"
                         f" -d {self.master_directory}")
         self.forces_files = glob.glob(self.master_directory + '/*force*.dat')
         self.xyz_files = glob.glob(self.master_directory + '/*force*.xyz')
@@ -289,10 +290,10 @@ class Sith:
                                                self.all_rics[0],
                                                axis=0)
 
-        delta_rics[:, self.dims[1]:][delta_rics[:, self.dims[1]:]
-                                     > np.pi] -= 2 * np.pi
-        delta_rics[:, self.dims[1]:][delta_rics[:, self.dims[1]:]
-                                     < -np.pi] += 2 * np.pi
+        condition = delta_rics[:, self.dims[1]:] > np.pi
+        delta_rics[:, self.dims[1]:][condition] -= 2 * np.pi
+        condition = delta_rics[:, self.dims[1]:] < -np.pi
+        delta_rics[:, self.dims[1]:][condition] += 2 * np.pi
 
         return delta_rics
 
@@ -464,25 +465,16 @@ class Sith:
         ======
         (list) Deformed Geometry objects. self._deformed.
         """
-        self._deformed = self._deformed[rem_first_def:self.n_deformed -
-                                        rem_last_def]
-        self.qF = self.qF[rem_first_def:self.n_deformed -
-                          rem_last_def]
-        self.deltaQ = self.deltaQ[rem_first_def: self.n_deformed -
-                                  rem_last_def]
-        self.all_forces = self.all_forces[rem_first_def: self.n_deformed -
-                                          rem_last_def]
-        self.energies = self.energies[rem_first_def: self.n_deformed -
-                                      rem_last_def]
-        self.deformationEnergy = self.deformationEnergy[rem_first_def:
-                                                        self.n_deformed -
-                                                        rem_last_def]
-        self.scf_energy = self.scf_energy[rem_first_def:
-                                          self.n_deformed -
-                                          rem_last_def]
-        self.all_rics = self.all_rics[rem_first_def:
-                                      self.n_deformed -
-                                      rem_last_def]
+        ini_index = rem_first_def
+        last_index = self.n_deformed - rem_last_def
+        self._deformed = self._deformed[ini_index: last_index]
+        self.qF = self.qF[ini_index: last_index]
+        self.deltaQ = self.deltaQ[ini_index: last_index]
+        self.all_forces = self.all_forces[ini_index: last_index]
+        self.energies = self.energies[ini_index: last_index]
+        self.deformationEnergy = self.deformationEnergy[ini_index: last_index]
+        self.scf_energy = self.scf_energy[ini_index: last_index]
+        self.all_rics = self.all_rics[ini_index: last_index]
         self.n_deformed -= rem_first_def + rem_last_def
 
         return self._deformed

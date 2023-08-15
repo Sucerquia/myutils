@@ -12,8 +12,8 @@ from os.path import isdir
 
 
 def test_extract_forces():
-    output_terminal("mkdir remove-forces ; " +
-                    f"cp {sith_master_dir}/* remove-forces ;" +
+    output_terminal("mkdir remove-forces ; "
+                    f"cp {sith_master_dir}/* remove-forces ;"
                     "myutils extract_forces -d ./remove-forces")
     # reference
     dofref, forref, valref = np.loadtxt(f'{sith_master_dir}/GPA-force02.dat',
@@ -38,7 +38,7 @@ def test_extract_forces():
 
 
 def test_proline_mod():
-    output_terminal(f"cp {gpa_opti_pdb} ./remove.pdb ; " +
+    output_terminal(f"cp {gpa_opti_pdb} ./remove.pdb ; "
                     "myutils proline_mod -f ./remove.pdb -s exo")
     gpa = PepSetter('removemodpro.pdb')
     angles = gpa.endo_exo_proline()
@@ -48,11 +48,11 @@ def test_proline_mod():
 
 @pytest.mark.runincluster
 def test_single_optimization():
-    output_terminal(f"cp -r {g_dir} ./remove ; cd remove ; " +
-                    "for ext in log com xyz chk ; " +
-                    "do mv G-stretched08.$ext remove-stretched08.$ext ; " +
-                    "done ; " +
-                    "cp remove-stretched08.com ../remove.com ; cd ..; " +
+    output_terminal(f"cp -r {g_dir} ./remove ; cd remove ; "
+                    "for ext in log com xyz chk ; "
+                    "do mv G-stretched08.$ext remove-stretched08.$ext ; "
+                    "done ; "
+                    "cp remove-stretched08.com ../remove.com ; cd ..; "
                     "myutils single_optimization remove")
     atoms1 = read('./remove/reference.log')
     atoms2 = read('./remove.log')
@@ -62,7 +62,7 @@ def test_single_optimization():
 
 @pytest.mark.toolong
 def test_find_forces():
-    output_terminal(f"cp -r {g_dir} ./remove;" +
+    output_terminal(f"cp -r {g_dir} ./remove;"
                     "myutils find_forces -d remove -p remove")
     assert isdir('remove/forces')
     assert isdir('remove/bck')

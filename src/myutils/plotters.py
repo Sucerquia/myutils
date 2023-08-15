@@ -130,7 +130,7 @@ class StandardPlotter:
         # = minor ticks
         if mingrid:
             if (xminor is None) and (yminor is None):
-                raise ValueError("To add min grid you have to define " +
+                raise ValueError("To add min grid you have to define "
                                  "xminticks or yminticks")
             ax.grid(True, which='minor', color=color_grid)
         # == axis labels
@@ -149,7 +149,7 @@ class StandardPlotter:
     def _plot_one_curve(self, x, y=None, ax=None, data_label=None, factor=10,
                         pstyle='-', color_plot=None, fraclw=3, **kwargs):
         if ax is None:
-            raise ValueError("the function _plot_one_curve requieres a " +
+            raise ValueError("the function _plot_one_curve requieres a "
                              "predefined axis")
         p = ax.plot(x, y, pstyle, linewidth=factor / fraclw, label=data_label,
                     color=color_plot, **kwargs)

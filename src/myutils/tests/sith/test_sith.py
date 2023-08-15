@@ -74,10 +74,11 @@ def test_extract_changes(sith):
     dofs_final = np.loadtxt(ggg_dir + '/GGG-force12.dat', usecols=3)
     last_changes = (dofs_final - dofs_init)
     last_changes[sith.dims[1]:] *= np.pi / 180
-    last_changes[sith.dims[1]:][last_changes[sith.dims[1]:]
-                                > np.pi] -= 2 * np.pi
-    last_changes[sith.dims[1]:][last_changes[sith.dims[1]:]
-                                < -np.pi] += 2 * np.pi
+
+    condition = last_changes[sith.dims[1]:] > np.pi
+    last_changes[sith.dims[1]:][condition] -= 2 * np.pi
+    condition = last_changes[sith.dims[1]:] < -np.pi
+    last_changes[sith.dims[1]:][condition] += 2 * np.pi
     assert changes[-1] == approx(last_changes)
 
 

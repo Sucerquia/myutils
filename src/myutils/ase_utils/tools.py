@@ -38,7 +38,7 @@ def change_distance(inp, out, file_cons, deltad, charge, method):
     methods = ['scale_distance', 'increase_distance',
                'increase_distance_with_constraints']
     if method not in methods:
-        raise ValueError("Non-recognized stretching method. To see the " +
+        raise ValueError("Non-recognized stretching method. To see the "
                          "options, check 'myutils change_distance -h'")
     # -1 to transform into python convention
     cons = np.loadtxt(file_cons, usecols=[0, 1], dtype=int) - 1

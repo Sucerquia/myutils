@@ -20,7 +20,6 @@ def test_peptide_pulling():
     assert 'Pulling finished correctly of F=300' in u
     assert 'G pulling finishes' in u
 
-test_peptide_pulling()
 
 def test_analysis():
     output_terminal("cd force0100 ; myutils analysis -a -m -f md_0_0100",

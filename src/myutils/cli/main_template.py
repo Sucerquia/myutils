@@ -23,22 +23,22 @@ def main():
         functions = list(pymodules.keys())
         functions.sort()
 
-        print("\n" +
-              "This code contains a set of tools you can use for different\n" +
-              "functions. \n To execute python tools from terminal use:\n" +
-              "    myutils <function> <arg1> <arg2> ... \n" +
+        print("\n"
+              "This code contains a set of tools you can use for different\n"
+              "functions. \n To execute python tools from terminal use:\n"
+              "    myutils <function> <arg1> <arg2> ... \n"
               "where <function> can be one of the next options:")
         for function in functions:
             print("    -   " + function)
-        print("\nTo execute bash script codes, use:\n    $( myutils " +
-              "<function> ) <arg1> <arg2> ... \nwhere <function> " +
+        print("\nTo execute bash script codes, use:\n    $( myutils "
+              "<function> ) <arg1> <arg2> ... \nwhere <function> "
               "can be one of the next options:")
 
         functions = list(sh_executers.keys())
         functions.sort()
         for function in functions:
             print("    -   " + function)
-        print("\nFor detailed information of any bash or python function, " +
+        print("\nFor detailed information of any bash or python function, "
               "use \"-h\" as first argument (<arg1>).")
 
     # python module from terminal
@@ -57,12 +57,15 @@ def main():
     # bash codes
     elif sys.argv[1] in sh_executers.keys():
         if '-path' in sys.argv[2:]:
-            print(str(Path(__file__).parent)[:-3] +
-                  sh_executers[sys.argv[1]][2:])
+            path = str(Path(__file__).parent)[:-3] + \
+                sh_executers[sys.argv[1]][2:]
+            print(path)
         else:
-            output_terminal(str(Path(__file__).parent)[:-3] +
-                            sh_executers[sys.argv[1]][2:] + ' ' +
-                            ' '.join(sys.argv[2:]), print_error=True,
+            command = str(Path(__file__).parent)[:-3] + \
+                sh_executers[sys.argv[1]][2:] + ' ' + \
+                ' '.join(sys.argv[2:])
+
+            output_terminal(command, print_error=True,
                             print_output=True)
 
     # other files
@@ -75,7 +78,7 @@ def main():
 
     # Not recognized keyword
     else:
-        print(f"ERROR: keyword {sys.argv[1]} not recognized as part of" +
+        print(f"ERROR: keyword {sys.argv[1]} not recognized as part of"
               " myutils. Use 'myutils -h' to see the options you can use.")
 
 

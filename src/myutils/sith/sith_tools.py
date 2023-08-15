@@ -47,8 +47,8 @@ def proline_state(pdb, state, outputwoext=None):
     (list) [#prolines(str)] list of proline states.
     """
     pep_info = PepSetter(pdb)
-    prolines = np.where(np.array(list(pep_info.amino_name.values()))
-                        == 'PRO')[0] + 1
+    amino_names = np.array(list(pep_info.amino_name.values()))
+    prolines = np.where(amino_names == 'PRO')[0] + 1
     if state == 'random':
         states = np.random.choice(['endo', 'exo'], len(prolines))
     else:

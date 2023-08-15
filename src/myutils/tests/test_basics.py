@@ -5,7 +5,7 @@ from os.path import exists
 
 
 def test_adjust():
-    outcome = output_terminal(f"{basics_bash} " +
+    outcome = output_terminal(f"{basics_bash} "
                               "adjust simple trial", print_output=True,
                               print_error=True)
     outcome = outcome.split("\n")
@@ -17,7 +17,7 @@ def test_adjust():
 
 
 def test_verbose():
-    outcome = output_terminal(f"{basics_bash} " +
+    outcome = output_terminal(f"{basics_bash} "
                               "verbose simple trial")
     outcome = outcome.split("\n")
     assert outcome[0][:29] == '++++++++ test-basics: VERBOSE'
@@ -27,7 +27,7 @@ def test_verbose():
 
 
 def test_warning():
-    outcome = output_terminal(f"{basics_bash} " +
+    outcome = output_terminal(f"{basics_bash} "
                               "warning simple trial")
     outcome = outcome.split("\n")
     assert outcome[0][:29] == '++++++++ test-basics: WARNING'
@@ -37,7 +37,7 @@ def test_warning():
 
 
 def test_finish():
-    outcome = output_terminal(f"{basics_bash} " +
+    outcome = output_terminal(f"{basics_bash} "
                               "finish simple trial")
     outcome = outcome.split("\n")
     assert outcome[0][:10] == '++++++++ :'
@@ -48,7 +48,7 @@ def test_finish():
 
 def test_fail():
     with raises(Exception) as e_info:
-        output_terminal(f"{basics_bash} " +
+        output_terminal(f"{basics_bash} "
                         "fail simple trial")
     outcome = str(e_info.value).split("\n")
     print(outcome)
@@ -59,12 +59,13 @@ def test_fail():
     assert len(outcome[1]) == 79
     assert len(outcome[-1]) == 0
 
+
 def test_create_bck():
     # file
     output_terminal("touch remove-test.log remove-test.com; "
                     f"{basics_bash} create_bck remove-test.log "
                     "remove-test.com")
-    output_terminal("touch remove-test.com; " +
+    output_terminal("touch remove-test.com; "
                     f"{basics_bash} create_bck remove-test.com")
     assert exists('remove-test-bck_1.com')
     assert exists('remove-test-bck_2.com')
