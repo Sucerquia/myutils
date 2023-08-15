@@ -53,7 +53,7 @@ def test_single_optimization():
                     "do mv G-stretched08.$ext remove-stretched08.$ext ; " +
                     "done ; " +
                     "cp remove-stretched08.com ../remove.com ; cd ..; " +
-                    '$( myutils single_optimization ) remove')
+                    "myutils single_optimization remove")
     atoms1 = read('./remove/reference.log')
     atoms2 = read('./remove.log')
     assert atoms1.get_potential_energy() == atoms2.get_potential_energy()
