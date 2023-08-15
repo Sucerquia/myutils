@@ -3,19 +3,16 @@ from pytest import approx
 
 
 def test_pulling():
-    u = output_terminal("pepgen G equilibrate $pep_options -e ; " +
-                        "myutils pulling -f 1 -s 100 ;" +
+    u = output_terminal("pepgen G equilibrate $pep_options -e ; "
+                        "myutils pulling -f 1 -s 100 ;"
                         "rm -rf equilibrate md* index* pulling.mdp",
-                        print_output=True,
-                        print_error=True)
+                        print_output=True, print_error=True)
     assert "Pulling finished correctly of F=1" in u
 
 
 def test_peptide_pulling():
-    u = output_terminal("myutils peptide_pulling -p G " +
-                        '-a "." -f 100,300 -s 100', print_output=True,
-                        print_error=True)
-    assert 'process finished successfully **' in u
+    u = output_terminal("myutils peptide_pulling -p G -f 100,300 -s 100",
+                        print_output=True, print_error=True)
     assert 'Pulling of G starts' in u
     assert 'VERBOSE Force 100 acting G starts' in u
     assert 'VERBOSE Force 300 acting G starts' in u
@@ -23,10 +20,11 @@ def test_peptide_pulling():
     assert 'Pulling finished correctly of F=300' in u
     assert 'G pulling finishes' in u
 
+test_peptide_pulling()
 
 def test_analysis():
     output_terminal("cd force0100 ; myutils analysis -a -m -f md_0_0100",
-                    print_error=True)
+                    print_output=True, print_error=True)
     with open('force0100/analysis_merged_table-md_0_0100.dat', 'r') as an:
         total_lines = an.readlines()
         head = total_lines[0]

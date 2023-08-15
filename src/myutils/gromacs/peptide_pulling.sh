@@ -33,7 +33,7 @@ pep_options=""
 while getopts 'a:f:g:op:s:h' flag; do
     case "${flag}" in
       a) analysis=${OPTARG} ;;
-      f) forces=${OPTARG} ;;
+      f) read_forces=${OPTARG} ;;
       g) gmx=${OPTARG} ;;
       o) pep_options=${OPTARG} ;;
       p) pep=${OPTARG} ;;
@@ -44,7 +44,7 @@ while getopts 'a:f:g:op:s:h' flag; do
     esac
 done
 
-forces=$( echo "$forces" | awk 'BEGIN{ RS = ","}{print $0}' )
+IFS=',' read -ra forces <<< "$read_forces"
 # check dependencies
 pepgen -h &> /dev/null || fail "This code needs pepgen"
 $gmx -h &> /dev/null || fail "This code needs gromacs ($gmx failed)"
