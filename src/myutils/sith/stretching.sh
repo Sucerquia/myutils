@@ -84,8 +84,8 @@ command -V g09 &> /dev/null || fail "This code needs gaussian"
 index1=$( grep ACE "$pep-stretched00.pdb" | grep CH3 | awk '{print $2}' )
 index2=$( grep NME "$pep-stretched00.pdb" | grep CH3 | awk '{print $2}' )
 # check that the indexes were read properly:
-[ "$index1" -eq 0 ] && [ "$index2" -eq 0 ] && fail "Not recognized indexes"
-[ "$index1" -eq 1 ] && [ "$index2" -eq 1 ] && fail "Not recognized indexes"
+[[ "$index1" -eq 0 && "$index2" -eq 0 ]] && fail "Not recognized indexes"
+[[ "$index1" -eq 1 && "$index2" -eq 1 ]] && fail "Not recognized indexes"
 if ! [[ -f 'frozen_dofs.dat' ]]
 then
     echo "$index1 $index2 F" > frozen_dofs.dat
@@ -106,17 +106,17 @@ verbose "The charge is $charge"
 if $restart
 then
     # extracting last i with xyz file already created
-    mapfile -t previous < <( find . -maxdepth 1 -type f -name "*.xyz" \
+    mapfile -t previous < <( find . -maxdepth 1 -type f -name "*$pep*.xyz" \
                                     -not -name "*bck*" )
     wext=${previous[-1]}
-    last=${wext%%.*}
+    last=${wext%.*}
     if [ "${last: -1}" == 'a' ]
     then
         last=${last::-2}
     fi
     i=$(( 10#${last:0-2} ))
-    verbose "Restarting, searching last optimization, $i is the last stretching
-             detected"
+    verbose "Restarting $pep, searching last optimization, $i is the last
+             stretching detected"
 
     # searching incomplete optimization trials
 	nameiplusone=$(printf "%02d" "$(( i + 1))")
@@ -154,7 +154,7 @@ fi
 verbose "Stretching of $pep starts and will run until getting $breakages
     ruptures"
 
-while [[ "$( wc -l frozen_dofs.dat )" -le "$breakages" ]]
+while [[ "$( wc -l < "frozen_dofs.dat" )" -le "$breakages" ]]
 do
     # names by index
 	namei=$(printf "%02d" "$i")

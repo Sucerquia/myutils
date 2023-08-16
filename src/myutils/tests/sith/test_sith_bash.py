@@ -62,9 +62,13 @@ def test_single_optimization():
 
 @pytest.mark.toolong
 def test_find_forces():
-    output_terminal(f"cp -r {g_dir} ./remove;"
-                    "myutils find_forces -d remove -p remove")
-    assert isdir('remove/forces')
+    output_terminal(f"cp -r {g_dir} ./remove ; cd remove ; "
+                    "for ext in log com xyz chk ; "
+                    "do mv G-stretched08.$ext remove-stretched08.$ext ; "
+                    "done ; mv G-stretched00.pdb remove-stretched00.pdb ; "
+                    "cd .. ; "
+                    "myutils find_forces -d remove; cp -r remove delete")
+    assert isfile('remove/forces/remove-force08.log')
     assert isdir('remove/bck')
 
 
@@ -72,10 +76,10 @@ def test_find_forces():
 def test_stretching():
     # this file generates a rupture that most coincide with reference
     # the rupture must happen in the bond 1 5
-    output_terminal("myutils stretching -p remove -r")
-    assert np.loadtxt('remove/frozen_dofs.dat',
-                      usecols=[0, 1],
-                      unpack=True) == [[1, 1], [16, 5]]
+    output_terminal("cd remove ; myutils stretching -p remove -r")
+    assert (np.loadtxt('remove/frozen_dofs.dat',
+                       usecols=[0, 1],
+                       unpack=True) == [[1, 1], [16, 5]]).all()
     assert isdir('remove/rupture')
 
 

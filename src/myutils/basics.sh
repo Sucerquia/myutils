@@ -23,11 +23,13 @@ adjust () {
 # prints some text adjusted to 80 characters per line, filling empty spaces
 # with +
 verbose () {
-    adjust "VERBOSE" "$@" "$( date )"
+    # shellcheck disable=SC2068
+    adjust "VERBOSE" $@ "$( date )"
 }
 
 warning () {
-    adjust "WARNING" "$@" "$( date )"
+    # shellcheck disable=SC2068
+    adjust "WARNING" $@ "$( date )"
 }
 
 finish () {
