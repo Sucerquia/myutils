@@ -65,8 +65,7 @@ def main():
                 sh_executers[sys.argv[1]][2:] + ' ' + \
                 ' '.join(sys.argv[2:])
 
-            output_terminal(command, print_error=True,
-                            print_output=True)
+            output_terminal(command, print_output=True)
 
     # other files
     elif sys.argv[1] in other_files.keys():

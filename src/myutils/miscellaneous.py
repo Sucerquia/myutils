@@ -2,7 +2,7 @@ import subprocess
 import sys
 
 
-def output_terminal(cmd, print_output=False, print_error=False, **kwargs):
+def output_terminal(cmd, print_output=True, **kwargs):
     """
     Runs a command in a terminal and save the output in a list
     of strings
@@ -26,23 +26,21 @@ def output_terminal(cmd, print_output=False, print_error=False, **kwargs):
                          shell=True,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE,
+                         text=True,
                          **kwargs)
 
-    out1, err1 = p.communicate()
-    try:
-        out = out1.decode('ascii')
-        err = err1.decode('ascii')
-    except UnicodeDecodeError:
-        out = out1.decode('utf-8')
-        err = err1.decode('utf-8')
+    out = ""
+    output = ""
+    while not (output == '' and p.poll() is not None):
+        output = p.stdout.readline()
+        if output:
+            out += output
+            if print_output:
+                print(output.strip())
+    return_code = p.wait()
 
-    if print_output and out:
-        print(out[:-2])
-    if print_error and err:
-        print(err, file=sys.stderr)
-
-    assert not p.returncode, "ERROR executing the function output_terminal " +\
-        "with the next message:\n" + err
+    assert not return_code, "ERROR executing the function output_terminal " +\
+        "with the next message:\n" + p.stderr.read().strip()
     return out
 
 
