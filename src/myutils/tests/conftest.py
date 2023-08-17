@@ -9,7 +9,9 @@ def remove_created_files():
     output_terminal('rm -rf equilibrate force* index.ndx md_*'
                     'rm -rf gromacs/equilibrate gromacs/force* '
                     'gromacs/index.ndx gromacs/md_* pulling.mdp')
-    output_terminal('find $path -name "remove*"'
+    output_terminal('find $path -type f -name "remove*"'
+                    ' -exec rm {} +;')
+    output_terminal('find $path -type d -name "remove*"'
                     ' -exec rm -r {} +;')
 
 

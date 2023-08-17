@@ -7,15 +7,14 @@ from myutils.tests.variables4tests import (gpa_stre_pdb)
 def test_classical_minimization():
     u = output_terminal(f"cp {gpa_stre_pdb} ./remove-stretched.pdb ; "
                         "myutils classical_minimization"
-                        " -f remove-stretched.pdb -o remove-minimized.pdb",
-                        print_error=True)
+                        " -f remove-stretched.pdb -o remove-minimized.pdb")
 
     assert "Minimization finished." in u
 
 
 def test_classical_energies():
     u = output_terminal("myutils classical_energies -n && "
-                        "mv classical_energy.dat remove.dat", print_error=True)
+                        "mv classical_energy.dat remove.dat")
 
     energies = np.loadtxt("remove.dat", usecols=1)
     assert "Computation of energies completed." in u

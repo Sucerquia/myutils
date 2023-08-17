@@ -1,5 +1,4 @@
 import subprocess
-import sys
 
 
 def output_terminal(cmd, print_output=True, **kwargs):
