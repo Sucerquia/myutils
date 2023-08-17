@@ -33,12 +33,12 @@ warning () {
 }
 
 finish () {
-    array_bfnames=( "${array_bfnames[@]:1}" )
-    basic_functions_name=${array_bfnames[0]}
     if [ "$#" -ne 0 ]
     then
-        adjust "$@"
+        adjust $@
     fi
+    array_bfnames=( "${array_bfnames[@]:1}" )
+    basic_functions_name=${array_bfnames[0]}
 }
 
 # Function that returns the error message and stops the run if something fails.
