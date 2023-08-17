@@ -5,8 +5,8 @@ import numpy as np
 
 
 class StandardPlotter:
-    def __init__(self, x=None, y=None, ax=None, fig=None, figsize=8,
-                 ax_pref=None, plot_pref=None):
+    def __init__(self, x=None, y=None, ax=None, fig=None, figwidth=8.57,
+                 figheight=11.43, ax_pref=None, plot_pref=None):
         """
         Parameters
         ==========
@@ -22,8 +22,10 @@ class StandardPlotter:
         fig: figure. Default=None
             plt.figure object. In case it is not given, a new one will be
             created.
-        figsize: int. Default=10
-            size of the side in an square figure created in case.
+        figwidth: int. Default=8.57
+            width of the figure in centimeters.
+        figheight: int. Default=11.43
+            height of the figure in centimeters.
         ax_pref: dict. Default=None
             argument preferences for 'axis_setter'. For more details about
             options, check StandardPlotter.axis_setter
@@ -33,7 +35,9 @@ class StandardPlotter:
         """
         # ==== Axis and Figure setup ====
         if ax is None and fig is None:
-            self.fig, self.ax = plt.subplots(1, 1, figsize=(figsize, figsize))
+            self.fig, self.ax = plt.subplots(1, 1, figsize=(figwidth / 2.54,
+                                                            figheight / 2.54),
+                                             dpi=300)
         elif fig is not None and ax is None:
             self.fig = fig
             self.ax = fig.add_subplot()
