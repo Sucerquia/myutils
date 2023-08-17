@@ -107,7 +107,7 @@ if $restart
 then
     # extracting last i with xyz file already created
     mapfile -t previous < <( find . -maxdepth 1 -type f -name "*$pep*.xyz" \
-                                    -not -name "*bck*" )
+                                    -not -name "*bck*" | sort )
     wext=${previous[-1]}
     last=${wext%.*}
     if [ "${last: -1}" == 'a' ]
@@ -122,9 +122,9 @@ then
 	nameiplusone=$(printf "%02d" "$(( i + 1))")
     # searching advances in i+1a
     myutils log2xyz "$pep-stretched${nameiplusone}-a.log" 2> /dev/null && \
-        create_bck "$pep-stretched${nameiplusone}" && \
-        create_bck "$pep-stretched${nameiplusone}-a" && \
-        myutils change_distance "$pep-stretched${nameiplusone}-a-bck2.xyz" \
+        create_bck "$pep-stretched${nameiplusone}"* && \
+        create_bck "$pep-stretched${nameiplusone}-a"* && \
+        myutils change_distance "$pep-stretched${nameiplusone}-a-bck_1.xyz" \
             "$pep-stretched${nameiplusone}" frozen_dofs.dat 0 "$charge" \
             "$method" && \
         retake='false' && \
@@ -134,8 +134,8 @@ then
     # searching advances in i+1
     $retake && \
         myutils log2xyz "$pep-stretched${nameiplusone}.log" 2> /dev/null && \
-        create_bck "$pep-stretched${nameiplusone}" &&
-        myutils change_distance "$pep-stretched${nameiplusone}-bck1.xyz" \
+        create_bck "$pep-stretched${nameiplusone}"* &&
+        myutils change_distance "$pep-stretched${nameiplusone}-bck_1.xyz" \
             "$pep-stretched${nameiplusone}" frozen_dofs.dat 0 "$charge" \
             "$method" && \
         retake='false' && \
@@ -213,7 +213,7 @@ do
                     "$pep-stretched${nameiplustwo}" frozen_dofs.dat 0 "$charge" \
                     "$method" || fail "changing distance"
             # save the failed files in ...-stretched<number>a.*
-            create_bck "$pep-stretched${nameiplusone}"
+            create_bck "$pep-stretched${nameiplusone}"*
             # then restart the optimization
             mv "$pep-stretched${nameiplustwo}.com" "$pep-stretched${nameiplusone}.com"
             sed -i "s/stretched${nameiplustwo}/stretched${nameiplusone}/g" \
@@ -257,11 +257,11 @@ do
         then
             mkdir rupture
         fi
-        mapfile -t bck_files < <(ls "$pep-stretched${nameiplusone}."*)
+        mapfile -t bck_files < <(ls "./rupture/$pep-stretched${nameiplusone}."*)
         cd rupture || fail "rupture directory not found"
         create_bck "${bck_files[@]}"
         cd .. || fail "moving to back directory"
-        mv "$pep-stretched${nameiplusone}."* rupture/
+        mv "$pep-stretched${nameiplusone}"* rupture/
         continue
     else
        verbose "Non-rupture detected in stretched ${nameiplusone}"

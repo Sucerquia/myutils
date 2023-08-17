@@ -10,7 +10,7 @@
 
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" EXTR_FORCES
+source "$(myutils basics -path)" FIND_FORCES
 
 print_help() {
 echo "
@@ -84,10 +84,12 @@ do
     compute_forces "$chkfile"
     name=${chkfile//stretched/force}
     verbose "Moving result to forces/${name%.*}.log"
-    mv forces.log "forces/${name%.*}.log"
+    mv forces.log "forces/${name%.*}.log" || fail "moving results to forces
+        directory."
 done
 
-mv forces.com forces/input_template.com
+mv forces.com forces/input_template.com || fail "moving template to forces
+    directory"
 
-finish
+finish "finish"
 exit 0

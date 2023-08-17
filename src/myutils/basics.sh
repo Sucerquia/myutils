@@ -44,7 +44,7 @@ finish () {
 # Function that returns the error message and stops the run if something fails.
 fail () {
     adjust "ERROR" "$@" "$( date )" >&2
-    finish "@"
+    finish
     exit 1
 }
 
