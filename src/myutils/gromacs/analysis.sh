@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" Analysis
+source "$(myutils basics -path)" ANALYSIS
 
 print_help() {
 echo "
@@ -294,6 +294,5 @@ then
     fi
 fi
 
-verbose "analysis finished"
-finish
+finish "finished"
 exit 0

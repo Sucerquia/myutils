@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" proline_modes
+source "$(myutils basics -path)" PROLINE_MODE
 print_help() {
 echo "
 Changes the state of the proline to endo, exo or random.
@@ -40,7 +40,6 @@ then
 fi
 
 # checking dependencies
-verbose "starting"
 [ "${#pdbfile}" -eq 0  ] && fail "To use proline modification, you have to
     provide the pdb file. use 'myutils proline_mod -h' to see your options."
 
@@ -56,5 +55,5 @@ myutils classical_minimization -f "${outfile%.*}modpro.pdb" -l "$outgromacs" \
 
 mv "${outfile%.*}modpro.pdb" "$outfile"
 
-finish
+finish "finished"
 exit 0

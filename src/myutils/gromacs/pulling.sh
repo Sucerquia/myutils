@@ -75,6 +75,5 @@ $gmx mdrun -deffnm "md_0_$forcename" > "$output" 2>&1 || fail "Execution step of
 
 rm -f \#*
 
-verbose "Pulling finished correctly of F=$force"
-finish
+finish "F=$force finished"
 exit 0

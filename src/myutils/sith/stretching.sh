@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" STRETCHING_MSG
+source "$(myutils basics -path)" STRETCHING
 
 print_help() {
 echo "
@@ -275,8 +275,6 @@ do
     i=$(( i + 1 ))
 done
 
-verbose "$pep streching finished"
 # ----- stretching finishes ---------------------------------------------------
-
-finish
+finish "$pep finished"
 exit 0

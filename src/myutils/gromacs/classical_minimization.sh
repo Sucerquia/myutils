@@ -70,6 +70,5 @@ rm mini*
 rm posre.itp
 rm topol.top
 
-verbose "Minimization finished."
-finish
+finish "finished"
 exit 0

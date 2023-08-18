@@ -134,5 +134,5 @@ echo "completed Jobs: $(grep -c "  C" 00-aminos.txt )"
 echo "running Jobs: $(grep -c "  R" 00-aminos.txt )"
 echo "failed Jobs: $(grep -c "  E" 00-aminos.txt )"
 
-finish
+finish "finished"
 echo

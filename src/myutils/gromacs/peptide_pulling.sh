@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" peptide_pulling
+source "$(myutils basics -path)" PEP_PULL
 
 print_help() {
 echo "
@@ -88,6 +88,5 @@ do
     cd .. )
 done
 
-verbose "$pep pulling finishes"
-finish
+finish "$pep finished"
 exit 0

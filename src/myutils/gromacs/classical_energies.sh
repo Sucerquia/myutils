@@ -76,6 +76,5 @@ rm mini*
 rm posre.itp
 rm topol.top
 
-verbose "Computation of energies completed."
-finish
+finish "finished"
 exit 0

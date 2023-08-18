@@ -1,8 +1,6 @@
 #!/bin/bash
 
-source "$(myutils basics -path)" BASH_CHECKER
-
-adjust "Starts"
+source "$(myutils basics -path)" BashChecker
 
 bsoriginal_dir=$(pwd)
 

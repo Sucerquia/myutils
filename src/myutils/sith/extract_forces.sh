@@ -92,6 +92,5 @@ rm -f reference.dat
 # going back to the former location
 cd "$extract_forces_fl" || fail "moving to former location"
 
-verbose "extracting of forces finished"
-finish
+finish "finished"
 exit 0

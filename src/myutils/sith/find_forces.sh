@@ -91,5 +91,5 @@ done
 mv forces.com forces/input_template.com || fail "moving template to forces
     directory"
 
-finish "finish"
+finish "finished"
 exit 0

@@ -35,6 +35,7 @@ warning () {
 finish () {
     if [ "$#" -ne 0 ]
     then
+        # shellcheck disable=SC2068
         adjust $@
     fi
     array_bfnames=( "${array_bfnames[@]:1}" )
@@ -43,8 +44,9 @@ finish () {
 
 # Function that returns the error message and stops the run if something fails.
 fail () {
-    adjust "ERROR" "$@" "$( date )" >&2
-    finish
+    # shellcheck disable=SC2068
+    adjust "ERROR" $@ "$( date )" >&2
+    finish ""
     exit 1
 }
 
@@ -87,3 +89,5 @@ create_bck () {
         fi
     done
 }
+
+verbose "starts"

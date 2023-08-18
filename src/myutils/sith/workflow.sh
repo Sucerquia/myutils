@@ -11,7 +11,7 @@
 
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" STRETCHING_MSG
+source "$(myutils basics -path)" WORKFLOW_MSG
 
 print_help() {
 echo "
@@ -164,7 +164,5 @@ verbose "submitting comptutation of forces."
 
 sbatch "$(myutils find_forces -path)" -c
 
-verbose "Workflow finished"
-
-finish
+finish "finished"
 exit 0
