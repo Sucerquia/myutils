@@ -1,7 +1,7 @@
 import subprocess
 
 
-def output_terminal(cmd, print_output=True, **kwargs):
+def output_terminal(cmd, print_output=True, skip_error=False, **kwargs):
     """
     Runs a command in a terminal and save the output in a list
     of strings
@@ -37,9 +37,12 @@ def output_terminal(cmd, print_output=True, **kwargs):
             if print_output:
                 print(output.strip())
     return_code = p.wait()
+    
+    if not skip_error:
+        assert not return_code, f"ERROR executing the command \"{cmd}\"  " + \
+            "with output_terminal with the next message:\n" + \
+            p.stderr.read().strip()
 
-    assert not return_code, "ERROR executing the function output_terminal " +\
-        "with the next message:\n" + p.stderr.read().strip()
     return out
 
 
