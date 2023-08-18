@@ -5,6 +5,11 @@ on: [push]
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    env:
+      GITHUB_USERNAME: Sucerquia
+      GITHUB_TOKEN: ${{ secrets.pass }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -24,7 +29,8 @@ jobs:
         run: |
           pip install git+https://gitlab.com/ase/ase.git
           conda install -c conda-forge pymol-open-source
-          pip install git+git://github.com/hits-mbm-dev/pepgen.git
+          pip install git+https://github.com/hits-mbm-dev/pepgen.git
+        
 
       - name: Run pytest
         run: pytest   # Replace with the command to run your tests
