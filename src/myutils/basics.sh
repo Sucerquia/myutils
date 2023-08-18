@@ -45,8 +45,9 @@ finish () {
 # Function that returns the error message and stops the run if something fails.
 fail () {
     # shellcheck disable=SC2068
-    adjust "ERROR" $@ "$( date )" >&2
-    finish ""
+    adjust "ERROR" $@ "$( date )"
+    # shellcheck disable=SC2068
+    finish "ERROR" $@ "$( date )" >&2
     exit 1
 }
 
@@ -90,4 +91,4 @@ create_bck () {
     done
 }
 
-verbose "starts"
+adjust "STARTS"
