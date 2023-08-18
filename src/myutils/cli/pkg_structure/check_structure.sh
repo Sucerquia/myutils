@@ -53,10 +53,9 @@ then
     original_cs=$(pwd)
     cd "$(myutils path)" || fail "myutils path does not exist"
     echo ; echo
-    adjust "Starts"
-    pycodestyle . --exclude=pre-deprected --ignore W605
+    pycodestyle . --exclude=pre-deprected --ignore W605 || fail "failed"
     cd "$original_cs" || fail "returning to former directory"
-    finish
+    finish "finish"
 fi
 
 if $shellcheck
