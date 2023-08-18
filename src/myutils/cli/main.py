@@ -51,27 +51,26 @@ def main():
     This function run each time myutils is called from the terminal.
     """
     # Help menu of this code
-    if sys.argv[1] == '-h':
-        functions = list(pymodules.keys())
+    if sys.argv[1] == '-h' or sys.argv[1] == '--help' or sys.argv[1] == 'help':
+        functions = list(pymodules.keys()) + list(sh_executers.keys())
+        functions.append('tests')
         functions.sort()
 
         print("\n"
-              "This code contains a set of tools you can use for different\n"
-              "functions. \n To execute python tools from terminal use:\n"
-              "    myutils <function> <arg1> <arg2> ... \n"
+              "This package contains a set of tools you can use for different"
+              "functions. \n To use any function from the terminal, use"
+              "    myutils <function> <arg1> <arg2> ... "
               "where <function> can be one of the next options:")
         for function in functions:
             print("    -   " + function)
-        print("\nTo execute bash script codes, use:\n    $( myutils "
-              "<function> ) <arg1> <arg2> ... \nwhere <function> "
-              "can be one of the next options:")
 
-        functions = list(sh_executers.keys())
-        functions.sort()
-        for function in functions:
-            print("    -   " + function)
-        print("\nFor detailed information of any bash or python function, "
-              "use \"-h\" as first argument (<arg1>).")
+        print("\nFor detailed information of any function, use \"-h\" as first"
+              " argument (<arg1>).")
+
+    elif sys.argv[1] == 'tests':
+        testdir = Path(__file__).parent
+        output_terminal(f"cd {str(testdir)}/../tests ; pytest -v --color=yes"
+                        ' '.join(sys.argv[2:]), skip_error=True)
 
     # python module from terminal
     elif sys.argv[1] in pymodules.keys():

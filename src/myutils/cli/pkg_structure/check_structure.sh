@@ -53,7 +53,8 @@ then
     original_cs=$(pwd)
     cd "$(myutils path)" || fail "myutils path does not exist"
     echo ; echo
-    pycodestyle . --exclude=pre-deprected --ignore W605 || fail "failed"
+    pycodestyle -h > /dev/null || fail "You need to install pycodestyle"
+    pycodestyle . --exclude=pre-deprected --ignore W605
     cd "$original_cs" || fail "returning to former directory"
     finish "finish"
 fi

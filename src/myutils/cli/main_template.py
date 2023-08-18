@@ -20,23 +20,24 @@ def main():
     """
     # Help menu of this code
     if sys.argv[1] == '-h' or sys.argv[1] == '--help' or sys.argv[1] == 'help':
-        functions = list(pymodules.keys()) + list(sh_executers.keys()) + ['tests']
+        functions = list(pymodules.keys()) + list(sh_executers.keys())
+        functions.append('tests')
         functions.sort()
 
         print("\n"
-              "This package contains a set of tools you can use for different\n"
-              "functions. \n To use any function from the terminal, use\n"
-              "    myutils <function> <arg1> <arg2> ... \n"
-              "where <function> can be one of the next options:\n")
+              "This package contains a set of tools you can use for different"
+              "functions. \n To use any function from the terminal, use"
+              "    myutils <function> <arg1> <arg2> ... "
+              "where <function> can be one of the next options:")
         for function in functions:
             print("    -   " + function)
-        
-        print("\nFor detailed information of any function, use \"-h\" as first "
-              "argument (<arg1>).")
-    
+
+        print("\nFor detailed information of any function, use \"-h\" as first"
+              " argument (<arg1>).")
+
     elif sys.argv[1] == 'tests':
         testdir = Path(__file__).parent
-        output_terminal(f"cd {str(testdir)}/../tests ; pytest -v --color=yes" + \
+        output_terminal(f"cd {str(testdir)}/../tests ; pytest -v --color=yes"
                         ' '.join(sys.argv[2:]), skip_error=True)
 
     # python module from terminal
