@@ -11,7 +11,7 @@ def test_pulling():
     u = output_terminal("pepgen G equilibrate $pep_options -e ; "
                         "myutils pulling -f 1 -s 100 ;"
                         "rm -rf equilibrate md* index* pulling.mdp")
-    assert "Pulling finished correctly of F=1" in u
+    assert "F=1 finished" in u
 
 
 def test_peptide_pulling(previous_test_state):
@@ -29,9 +29,10 @@ def test_peptide_pulling(previous_test_state):
     assert 'Pulling of G starts' in u
     assert 'VERBOSE Force 100 acting G starts' in u
     assert 'VERBOSE Force 300 acting G starts' in u
-    assert 'Pulling finished correctly of F=100' in u
-    assert 'Pulling finished correctly of F=300' in u
-    assert 'G pulling finishes' in u
+    assert 'F=100 finished' in u
+    assert 'F=300 finished' in u
+    assert 'G finished' in u
+
 
 def test_analysis(previous_test_state):
     if previous_test_state["passed"] is not True:

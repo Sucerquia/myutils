@@ -16,7 +16,7 @@ def remove_created_files():
                     "classical_energy.dat"]
     directories2remove = ["equilibrate",
                           "force"]
-    
+
     print("\n TESTS END: removing created files and directories.")
     for file in files2remove:
         output_terminal(f'find . -type f -name "{file}" -exec rm ' + '{} +')
@@ -24,7 +24,6 @@ def remove_created_files():
         output_terminal(f'find . -type f -name "{dir}" -exec rm -rf ' + '{} +')
     output_terminal('find . -type f -name "remove*" -exec rm {} +;')
     output_terminal('find . -type d -name "remove*" -exec rm -r {} +;')
-    
 
 
 def pytest_unconfigure(config):

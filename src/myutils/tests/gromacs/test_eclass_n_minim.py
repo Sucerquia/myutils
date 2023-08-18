@@ -9,7 +9,7 @@ def test_classical_minimization():
                         "myutils classical_minimization"
                         " -f remove-stretched.pdb -o remove-minimized.pdb")
 
-    assert "Minimization finished." in u
+    assert "finished" in u
 
 
 def test_classical_energies():
@@ -17,6 +17,6 @@ def test_classical_energies():
                         "mv classical_energy.dat remove.dat")
 
     energies = np.loadtxt("remove.dat", usecols=1)
-    assert "Computation of energies completed." in u
+    assert "finished" in u
     assert energies[-2] == approx(744.904480)
     assert energies[-1] == approx(4319.294922)

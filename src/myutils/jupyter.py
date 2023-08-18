@@ -5,6 +5,10 @@ def hide_code():
     """
     This function hides the code cells in a jupyter notebook. It helps to a
     cleaner in visualization of results.
+
+    Note: this requires
+    ipython
+    ipywidgets
     """
     html = HTML('''<script>
     code_show=true;

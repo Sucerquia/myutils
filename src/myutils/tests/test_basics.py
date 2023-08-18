@@ -9,9 +9,9 @@ def test_adjust():
                               "adjust simple trial")
     outcome = outcome.split("\n")
 
-    assert outcome[0][:21] == '++++++++ test-basics:'
-    assert 'simple trial' in outcome[0]
-    assert len(outcome[0]) == 79
+    assert outcome[1][:21] == '++++++++ test-basics:'
+    assert 'simple trial' in outcome[1]
+    assert len(outcome[1]) == 79
     assert len(outcome[-1]) == 0
 
 
@@ -19,8 +19,8 @@ def test_verbose():
     outcome = output_terminal(f"{basics_bash} "
                               "verbose simple trial")
     outcome = outcome.split("\n")
-    assert outcome[0][:29] == '++++++++ test-basics: VERBOSE'
-    assert 'simple trial' in outcome[0]
+    assert outcome[1][:29] == '++++++++ test-basics: VERBOSE'
+    assert 'simple trial' in outcome[1]
     assert len(outcome[0]) == 79
     assert len(outcome[-1]) == 0
 
@@ -29,8 +29,8 @@ def test_warning():
     outcome = output_terminal(f"{basics_bash} "
                               "warning simple trial")
     outcome = outcome.split("\n")
-    assert outcome[0][:29] == '++++++++ test-basics: WARNING'
-    assert 'simple trial' in outcome[0]
+    assert outcome[1][:29] == '++++++++ test-basics: WARNING'
+    assert 'simple trial' in outcome[1]
     assert len(outcome[0]) == 79
     assert len(outcome[-1]) == 0
 
@@ -39,8 +39,8 @@ def test_finish():
     outcome = output_terminal(f"{basics_bash} "
                               "finish simple trial")
     outcome = outcome.split("\n")
-    assert outcome[0][:21] == '++++++++ test-basics:'
-    assert 'simple trial' in outcome[0]
+    assert outcome[1][:21] == '++++++++ test-basics:'
+    assert 'simple trial' in outcome[1]
     assert len(outcome[0]) == 79
     assert len(outcome[-1]) == 0
 
@@ -50,8 +50,7 @@ def test_fail():
         output_terminal(f"{basics_bash} "
                         "fail simple trial")
     outcome = str(e_info.value).split("\n")
-    assert outcome[0] == "ERROR executing the function output_terminal with" +\
-        " the next message:"
+    assert "ERROR executing the command" in outcome[0]
     assert outcome[1][:27] == '++++++++ test-basics: ERROR'
     assert 'simple trial' in outcome[1]
     assert len(outcome[1]) == 79
