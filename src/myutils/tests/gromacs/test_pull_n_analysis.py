@@ -2,6 +2,10 @@ from myutils.miscellaneous import output_terminal
 import pytest
 
 
+@pytest.fixture(scope="module")
+def previous_test_state():
+    return {"passed": None}
+
 
 def test_pulling():
     u = output_terminal("pepgen G equilibrate $pep_options -e ; "
@@ -10,9 +14,18 @@ def test_pulling():
     assert "Pulling finished correctly of F=1" in u
 
 
-@pytest.mark.dependency()
-def test_peptide_pulling():
-    u = output_terminal("myutils peptide_pulling -p G -f 100,300 -s 100")
+def test_peptide_pulling(previous_test_state):
+    try:
+        u = output_terminal("myutils peptide_pulling -p G -f 100,300 -s 100")
+        previous_test_state["passed"] = True
+
+    except AssertionError as error:
+        # for some reason
+        if "Input/ouput error" in str(error):
+            previous_test_state["passed"] = False
+            raise SystemError("Input/Output error")
+        raise BufferError(str(error))
+
     assert 'Pulling of G starts' in u
     assert 'VERBOSE Force 100 acting G starts' in u
     assert 'VERBOSE Force 300 acting G starts' in u
@@ -20,9 +33,10 @@ def test_peptide_pulling():
     assert 'Pulling finished correctly of F=300' in u
     assert 'G pulling finishes' in u
 
+def test_analysis(previous_test_state):
+    if previous_test_state["passed"] is not True:
+        pytest.skip("Previous test failed")
 
-@pytest.mark.dependency(depends=["test_peptide_pulling"])
-def test_analysis():
     output_terminal("cd force0100 ; myutils analysis -a -m -f md_0_0100")
     with open('force0100/analysis_merged_table-md_0_0100.dat', 'r') as an:
         total_lines = an.readlines()

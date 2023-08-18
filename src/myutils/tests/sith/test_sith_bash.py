@@ -70,7 +70,6 @@ def test_find_forces():
 
 
 @pytest.mark.toolong
-#@pytest.mark.dependency(depends=["test_single_optimization"])
 def test_stretching():
     # this file generates a rupture that most coincide with reference
     # the rupture must happen in the bond 1 5
