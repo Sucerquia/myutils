@@ -16,7 +16,7 @@ jobs:
 
       - name: Create Conda environment
         run: |
-          conda env create -f environment.yml
+          conda env create -f .github/workflows/environment.yml
           conda activate myutils-env
       
       - name: Install additional packages
