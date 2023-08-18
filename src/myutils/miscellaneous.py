@@ -12,8 +12,8 @@ def output_terminal(cmd, print_output=True, skip_error=False, **kwargs):
         bash command to be executed in the terminal.
     print_output: bool (optional)
         True for printing the output besides of returning it. Default False.
-    print_error: bool (optional)
-        True for printing the std_error. Default False.
+    skip_error: bool (optional)
+        True for continuing running although the command fails. Default False.
     **kwargs:
         additional options for subprocess.Popen
 
@@ -37,7 +37,7 @@ def output_terminal(cmd, print_output=True, skip_error=False, **kwargs):
             if print_output:
                 print(output.strip())
     return_code = p.wait()
-    
+
     if not skip_error:
         assert not return_code, f"ERROR executing the command \"{cmd}\"  " + \
             "with output_terminal with the next message:\n" + \
