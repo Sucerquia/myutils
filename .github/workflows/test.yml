@@ -16,6 +16,7 @@ jobs:
 
       - name: Create Conda environment
         run: |
+          source $(conda info | grep -i 'base environment' | awk '{print $4}')/etc/profile.d/conda.sh
           conda env create -f .github/workflows/environment.yml
           conda activate myutils-env
       
