@@ -1,27 +1,36 @@
 # Intro
-set of tools for different aims. Created by Daniel Sucerquia, PhD student at HITS.
+set of tools for different aims. Created by Daniel Sucerquia, PhD student at HITS, 2023.
 
-Twittwe: @sucer6
-
-# Notes for developers
-definition:2COMPLETE is a marker for the developers to know what is incomplete. please add
-those parts also as en issue in the github repository.
+Twitter (X): @sucer6
 
 # Requirements
 - python >= 3.9
-- Numpy
 - pytest
 - ASE
-- pymol and pepgen (optional: only for sith sources codes)
-- ngl_view (optional: only for molecules visualization.)
-- mathplotlib (optional: only for plottlers and molecules visualization)
+- pymol
+- pepgen
+- ngl_view
+
+Optional:
+- sphinx
+- sphinx_rtd_theme
+
 
 # Installation with conda
+
+```bash
 conda create --name myutils python=3.9
 conda activate myutils
-pip install -e .
+pip install git+https://gitlab.com/ase/ase.git
 conda install -c conda-forge pymol-open-source
-pip install -e .
+pip install git+https://github.com/hits-mbm-dev/pepgen.git
+
+pip install git+https://github.com/Sucerquia/myutils.git
+```
+
+Note: all the codes that are made to run in a cluster asume that the
+environment "myutils" exist and has this package already installed.
+
 
 # Tests
 2COMPLETE define a direct way to run the internal tests.

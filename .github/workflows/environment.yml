@@ -1,0 +1,7 @@
+name: myutils-env
+channels:
+  - defaults
+dependencies:
+  - python=3.9   # Replace with your desired Python version
+  - pytest
+  # Add any other dependencies your tests require
