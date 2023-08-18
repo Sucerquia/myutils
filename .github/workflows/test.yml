@@ -1,14 +1,10 @@
 name: Run pytest with Conda
 
-on:
-  push:
-    branches:
-      - main   # Change this to your default branch name or the desired branch
+on: [push]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -23,11 +19,11 @@ jobs:
           conda env create -f environment.yml
           conda activate myutils-env
       
-      -name: Install additional packages
+      - name: Install additional packages
         run: |
           pip install git+https://gitlab.com/ase/ase.git
           conda install -c conda-forge pymol-open-source
           pip install git+https://github.com/hits-mbm-dev/pepgen.git
 
-      -name: Run pytest
+      - name: Run pytest
         run: pytest   # Replace with the command to run your tests
