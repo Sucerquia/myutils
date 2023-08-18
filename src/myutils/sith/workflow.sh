@@ -141,9 +141,11 @@ then
     mkdir "$pep"
     cd "$pep" || fail "directory $pep does not exist"
     # Creation of peptide
-    pepgen "$pep" tmp -s flat "$pep_options" || fail "Creating peptide $pep"
+    # shellcheck disable=SC2086
+    pepgen "$pep" tmp -s flat $pep_options || fail "Creating peptide $pep"
     mv tmp/pep.pdb "./$pep-stretched00.pdb"
-    myutils proline_mod "$pep-stretched00.pdb" "$endoexo" || fail "Proline estates configuration"
+    myutils proline_mod -f "$pep-stretched00.pdb" -s "$endoexo" || \
+        fail "Proline estates configuration"
 
     rm -r tmp
 else
