@@ -63,59 +63,78 @@ echo "# amino state (R:running, C: completed, E: error)" > 00-aminos.txt
 running_pep=( )
 for id in "${job_ids[@]}"
 do
-
-    if  ! find . -type f -name "*$id.o" > /dev/null 2>&1
+    if  ! find . -maxdepth 1 -type f -name "*$id.o" > /dev/null 2>&1
     then
         fail "non peptide output found. This code is expeting to find a file
         with the id of each job in the running directory"
     else
-        pep=$(grep ".com file created" "peptides_analysis-$id.o" | tail -n 1 | cut -d '-' -f 1)
+        random="$(grep -A 1 Command "peptides_analysis-$id.o" | tail -n 1 | grep -c "\-R")"
+        if [ "$random" -eq 0 ]
+        then
+            com="$(grep -A 1 Command "peptides_analysis-$id.o" | tail -n 1 )"
+            pep=$(echo "${com##*p}" | cut -d ' ' -f 1)
+        else
+            string=$(grep "WARNING The code created the random peptide " \
+                          "peptides_analysis-$id.o" )
+            pep=$(echo "${string#*peptide }" | cut -d ',' -f 1)
+        fi
+
         if [ "${#pep}" -eq 0 ]
         then
-            fail "$id  is running but the output (peptides_analysis-<id>.o) does not exist"
+            fail "$id  is running but the output (peptides_analysis-<id>.o)
+                does not exist or does not show the peptide yet."
         fi
         running_pep+=( "$pep" )
         echo "$pep" "   R" >> 00-aminos.txt
+        # move other files
+        mapfile -t other_files < <(find . -maxdepth 1 -type f -name "*.o" -exec grep -l "$pep" {} \;)
+        for fil in "${other_files[@]}"
+        do
+            if [ "$fil" !=  "./peptides_analysis-$id.o" ]
+            then
+                verbose "moving $fil into $pep"
+                mv "$fil" "$pep"
+                mv "${fil%*.o}.e" "$pep"
+            fi
+        done
     fi
 done
 
-# ---- collect non-running peptides
-mapfile -t all_outputs < <( find . -type f -name "peptide*.o" )
-non_running=( )
-for output in "${all_outputs[@]}"
+# add  peptides already in dataset
+mapfile -t completed_pep < <(ls "$dataset")
+for pep in "${completed_pep[@]}"
 do
-    pep=$(grep ".com file created" "$output" | tail -n 1 | cut -d '-' -f 1 | \
-            tr -d '\n')
+    echo "$pep" "   C" >> 00-aminos.txt
+done
+
+
+
+# ---- collect non-running peptides
+verbose "Non running peptides"
+mapfile -t peps_here < <( find . -maxdepth 1 -type d | tail -n +2)
+
+for pep in "${peps_here[@]}"
+do
     # shellcheck disable=SC2199
-    if [[ ! "${running_pep[@]}" =~ ${pep} ]];
+    if [[ ! "${running_pep[@]}" =~ ${pep:2} ]]
     then
-        # shellcheck disable=SC2199
-        if [[ ! "${non_running[@]}" =~ ${pep} ]];
+        # move files into the proper directory
+        mapfile -t out_files < <(find . -maxdepth 1 -type f -name "*.o" -exec grep -l "${pep:2}" {} \;)
+        for fil in "${out_files[@]}"
+        do
+            mv "$fil" "$pep"
+            mv "${fil%*.o}.e" "$pep"
+        done
+
+        if [ -d "$pep/rupture" ]
         then
-            non_running+=( "$pep" )
-            # shellcheck disable=SC2126
-            ends=$(grep "$pep streching finished" ./*.o | wc -l)
-            if [ "$ends" -eq 1 ]
-            then
-                # move output to peptide directory
-                mapfile -t out < <( find "$running_directory" -type f \
-                                                              -name "*.o" \
-                                                              -exec grep \
-                                                              -l "$pep" {} +)
-                for fil in "${out[@]}"; do mv "$fil" "$pep"; done
-                # move error to peptide directory
-                mapfile -t err < <( find "$running_directory" -type f \
-                                                            -name "*.e" \
-                                                            -exec grep \
-                                                            -l "$pep" {} + )
-                for fil in "${err[@]}"; do mv "$fil" "$pep"; done
-                warning "moving $pep to the dataset directory"
-                mv "$pep" "$dataset" || fail "trying to move $pep to $dataset"
-            else
-                warning "something happened with the stretching of peptide
-                    $pep"
-                echo "$pep" "   E" >> 00-aminos.txt
-            fi
+            warning "moving $pep to the dataset directory"
+            mv "$pep" "$dataset" || fail "trying to move ${pep:2} to $dataset"
+            echo "${pep:2}" "   C" >> 00-aminos.txt
+        else
+            warning "something happened with the stretching of peptide
+                ${pep:2}"
+            echo "${pep:2}" "   E" >> 00-aminos.txt
         fi
     fi
 done
@@ -123,11 +142,6 @@ done
 # Now separates the non-running by completed and error. Understanding error as
 # anything that aviods to complete
 
-mapfile -t completed_pep < <(ls "$dataset")
-for pep in "${completed_pep[@]}"
-do
-    echo "$pep" "   C" >> 00-aminos.txt
-done
 
 verbose "summary"
 echo "completed Jobs: $(grep -c "  C" 00-aminos.txt )"
