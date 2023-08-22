@@ -11,7 +11,7 @@
 
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" WORKFLOW_MSG
+source "$(myutils basics -path)" WORKFLOW
 
 print_help() {
 echo "
@@ -84,6 +84,27 @@ date
 echo " * Command:"
 echo "$0" "$@"
 
+# random peptide
+if [ ! "${#random}" -eq 0 ]
+then
+    [ -f "$ref_doc" ] || fail "Non-recognized $ref_doc, check flag -d"
+    pep=$( myutils gen_randpep "$random" ) || fail "Creating random peptide"
+    while awk '!/^#/ {print $1}' "$ref_doc" | grep -q "$pep"
+    do
+        pep=$( myutils gen_randpep "$random" ) || fail "Creating
+            random peptide"
+    done
+    echo "$pep" "   R" >> "$ref_doc"
+    warning "The code created the random peptide $pep, the workflow will run
+        with this peptide even if you also passed -p argument."
+fi
+
+if [ "${#pep}" -eq 0 ]
+then 
+    fail "This code needs one peptide. Please, define it using the flag -p or
+        -R. For more info, use \"myutils workflow -h\""
+fi
+
 if $cascade
 then
     resubmit "$pep" "$method" "$breakages" "$size" &
@@ -106,27 +127,6 @@ myutils -h &> /dev/null || fail "This code needs myutils"
 perl -E "say '+' x 80"
 
 # ----- set up finishes -------------------------------------------------------
-
-# random peptide
-if [ ! "${#random}" -eq 0 ]
-then
-    [ -f "$ref_doc" ] || fail "Non-recognized $ref_doc, check flag -d"
-    warning "The code will create a random peptide, even if you also passed -p
-        argument."
-    pep=$( myutils gen_randpep "$random" ) || fail "Creating random peptide"
-    while awk '!/^#/ {print $1}' "$ref_doc" | grep -q "$pep"
-    do
-        pep=$( myutils gen_randpep "$random" ) || fail "Creating
-            random peptide"
-    done
-    echo "$pep" "   R" >> "$ref_doc"
-fi
-
-if [ "${#pep}" -eq 0 ]
-then 
-    fail "This code needs one peptide. Please, define it using the flag -p or
-        -R. For more info, use \"myutils workflow -h\""
-fi
 
 # ---- firstly, backup previous directories with the same name
 if [[ "$restart" != "-r" ]]
@@ -151,11 +151,11 @@ then
 else
     # moving to the peptide directory
     cd "$pep" || fail "directory $pep does not exist"
-    warning "restarted"
+    warning "$pep restarted"
 fi
 
 myutils stretching -b "$breakages" -p "$pep" "$restart" -m "$method" \
-                   -s "$size" || fail "Stretching of $pep failed" 
+                   -s "$size" || fail "Stretching of $pep failed"
 
 # Compute classical energies
 verbose "computing classical energies."
