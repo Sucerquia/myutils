@@ -1,6 +1,8 @@
 name: Run pytest with Conda
 
-on: [push]
+on: 
+  push:
+  workflow_dispatch:
 
 jobs:
   test:
@@ -23,7 +25,7 @@ jobs:
         run: |
           pip install git+https://gitlab.com/ase/ase.git
           conda install -c conda-forge pymol-open-source
-          pip install git+https://github.com/hits-mbm-dev/pepgen.git
+          pip install git+ssh://git@github.com/hits-mbm-dev/pepgen.git
 
       - name: Run pytest
         run: pytest   # Replace with the command to run your tests
