@@ -72,7 +72,7 @@ do
         if [ "$random" -eq 0 ]
         then
             com="$(grep -A 1 Command "peptides_analysis-$id.o" | tail -n 1 )"
-            pep=$(echo "${com##*p}" | cut -d ' ' -f 1)
+            pep=$(echo "${com##*p }" | cut -d ' ' -f 1)
         else
             string=$(grep "WARNING The code created the random peptide " \
                           "peptides_analysis-$id.o" )
@@ -106,8 +106,6 @@ for pep in "${completed_pep[@]}"
 do
     echo "$pep" "   C" >> 00-aminos.txt
 done
-
-
 
 # ---- collect non-running peptides
 verbose "Non running peptides"
