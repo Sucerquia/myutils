@@ -69,8 +69,8 @@ def main():
 
     elif sys.argv[1] == 'tests':
         testdir = Path(__file__).parent
-        output_terminal(f"cd {str(testdir)}/../tests ; pytest -v --color=yes"
-                        ' '.join(sys.argv[2:]), skip_error=True)
+        output_terminal(f"cd {str(testdir)}/../tests ; pytest -v --color=yes" +
+                        ' '.join(sys.argv[2:]))
 
     # python module from terminal
     elif sys.argv[1] in pymodules.keys():
