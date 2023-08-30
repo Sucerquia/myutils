@@ -3,6 +3,7 @@ import matplotlib as mpl
 from ipywidgets import HBox, Output
 import numpy as np
 from ase.visualize import view
+from myutils.peptides import PepSetter
 
 
 class MoleculeViewer:
@@ -887,7 +888,8 @@ class VisualizeEnergies(MoleculeViewer):
         return index_aminos
 
     def show_aminos(self, pdb_file, colors=[[1, 0, 0], [0, 1, 0], [0, 0, 1]]):
-        aminos = self.aminoacids(pdb_file)
+        peptide = PepSetter(pdb_file)
+        aminos = peptide.atom_indexes
         labels_aminos = []
         for indexes in aminos.values():
             numbers = [str(i) for i in indexes]
