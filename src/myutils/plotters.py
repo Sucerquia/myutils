@@ -53,6 +53,14 @@ class StandardPlotter:
         else:
             self.ax = np.array([self.ax])
 
+        self.layer = [0]
+        self.spaces = []
+        self.add_space(borders=[[0, 0], [1, 1]])
+        self.layer = [-1]
+        for i, ax in enumerate(self.ax):
+            self.layer += [i + 1]
+            ax.set_zorder(i + 1)
+
         self.plots = []
 
         # ==== Default ====
@@ -61,13 +69,29 @@ class StandardPlotter:
         if plot_pref is None:
             plot_pref = {}
 
-        plt.tight_layout()
-
         for ax in self.ax:
             self.axis_setter(ax, **ax_pref)
 
         if x is not None:
             self.plot_data(x, y=y, **plot_pref)
+
+    def add_space(self, **kwargs):
+        self.layer.insert(0, self.layer[0] - 1)
+        space = Space(sp=self, **kwargs)
+        self.spaces += [space]
+
+        return space
+
+    def add_axes(self, space=False):
+        newax = self.fig.add_subplot()
+        if space:
+            newax.set_zorder(self.layer[0])
+        else:
+            self.layer += [len(self.ax) + 1]
+            newax.set_zorder(self.layer[-1])
+            self.ax = np.append(self.ax, newax)
+
+        return newax
 
     def axis_setter(self, ax=0, xlabel='', ylabel='',
                     factor=10, xticks=None, yticks=None,
@@ -206,7 +230,6 @@ class StandardPlotter:
 
         plots = []
         for i in range(len(x)):
-            print("x is : ", x, "\n y is: ", y)
             p = self._plot_one_curve(x[i], y[i], ax=ax, data_label=data_label,
                                      factor=factor, pstyle=pstyle,
                                      color_plot=color_plot, fraclw=fraclw,
@@ -237,13 +260,52 @@ class StandardPlotter:
                          mingrid=mingrid)
         return ax
 
-    def setting_borders(self, borders=None, showframe=False,
-                        majordelta=None, minordelta=None, color=None):
+    def show(self):
+        plt.show()
+
+
+class Space:
+    def __init__(self, sp=None, borders=None, axes=None, show_frame=False,
+                 **kwargs):
         """
-        borders: dictionary
-            set the space in each side, the keywords are 'left', 'right',
-            'top', 'bottom', 'wspace', 'hspace'. You can specify all of those
-            keywords or only some of them.
+        Section of a figure that will be used to separate the complete figure
+        in squares. You will be able to define all the parameters respect to
+        the space of reference. And, to have an idea of which values to use,
+        you can use the method show_frame and create a kind of meassure rule.
+        """
+        if sp is None:
+            sp = StandardPlotter()
+        if borders is None:
+            borders = [[0, 0], [1, 1]]
+
+        if axes is None:
+            self.axes = sp.ax
+        elif isinstance(axes, (list, tuple, np.ndarray)):
+            self.axes = np.array(axes).flatten()
+        elif isinstance(axes, plt.Axes):
+            self.axes = [axes]
+        else:
+            raise ValueError("Non-supported axes structure, please, provide "
+                             "interable axes or a plt.Axes object")
+        self.borders = borders
+        self.sp = sp
+        self.frame = self.sp.add_axes(space=True)
+        self.frame.patch.set_alpha(0)
+        self.frame.set_position(Bbox(borders), which='both')
+
+        if show_frame:
+            self.show_frame(**kwargs)
+        else:
+            self.frame.set_yticks([])
+            self.frame.set_xticks([])
+            for side in ['bottom', 'right', 'top', 'left']:
+                self.frame.spines[side].set_color('none')
+
+    def show_frame(self, majordelta=None, minordelta=None, color=None,
+                   layer='top'):
+        """
+        Shows the frame of the space with the metrics you choose for the
+        measurement rule
         """
         # == Default
         if majordelta is None:
@@ -256,34 +318,105 @@ class StandardPlotter:
         if color is None:
             color = [1, 0, 0]
 
-        # ==== setting borders ====
-        if borders is None:
-            borders = {}
+        self.sp.axis_setter(ax=self.frame,
+                            xticks=majorticks,
+                            yticks=majorticks,
+                            xminor=minorticks,
+                            yminor=minorticks,
+                            grid=True,
+                            mingrid=True,
+                            color_grid=color)
 
-        # == borders
-        plt.subplots_adjust(**borders)
-        # == show external box of the final figure
-        if showframe:
-            axtmp = self.fig.add_subplot()
-            self.axis_setter(ax=axtmp,
-                             xticks=majorticks,
-                             yticks=majorticks,
-                             xminor=minorticks,
-                             yminor=minorticks,
-                             grid=True,
-                             mingrid=True,
-                             color_grid=[1, 0, 0])
-            axtmp.patch.set_alpha(0)
-            axtmp.set_position(Bbox([[0, 0], [1, 1]]), which='both')
-            axtmp.tick_params(colors=color)
-            for side in ['bottom', 'right', 'top', 'left']:
-                axtmp.spines[side].set_color(color)
+        self.frame.tick_params(colors=color)
 
-            return axtmp
+        for side in ['bottom', 'right', 'top', 'left']:
+            self.frame.spines[side].set_color(color)
+
+        if layer == 'front':
+            self.frame.set_zorder(len(self.sp.ax) + 1)
+        elif layer == 'back':
+            self.frame.set_zorder(0)
+        return self.frame
+
+    def add_axes(self, ax):
+        self.axes = np.append(self.axes, ax)
+        return self.axes
+
+    def locate_ax(self, borders=None, ax=None):
+        """
+        borders:
+            positions respect to the space coordinates specified as
+            [[left, bottom], [top, right]]
+        ax:
+            axis to locate. Default: Space.axes[0]
+        """
+        if ax is None and self.axes[0] is None:
+            raise ValueError("To locate an axis, you have to provide an axis"
+                             " or add at least one axis to the space")
+        if ax is None:
+            ax = self.axes[0]
+        if not isinstance(borders, (np.ndarray, list, tuple)):
+            raise ValueError("You have to provide the coordinates of the"
+                             "corners repect the space you are using.")
+        borders = self._space2fig(borders)
+        ax.set_position(Bbox(borders), which='both')
+
+        return ax
+
+    def _space2fig(self, borders):
+        """
+        change the borders reference from the space to the figure.
+        """
+        [[left, bottom], [right, top]] = self.borders
+
+        borders = [[left + (right - left) * borders[0][0],
+                    bottom + (top - bottom) * borders[0][1]],
+                   [left + (right - left) * borders[1][0],
+                    bottom + (top - bottom) * borders[1][1]]]
+
         return borders
 
-    def show(self):
-        plt.show()
+    def set_axis(self, axes=None, rows_cols=(1, 1), borders=None, spaces=None):
+        """
+        Arrange the spaces in the axis of the space. It is assumed that the
+        number of axis is equal to rows x columns and they are ordered in
+        ascendent order from left to right and from top to bottom
+        """
+        if borders is None:
+            borders = [[0.03, 0.03], [0.99, 0.99]]
+        if spaces is None:
+            spaces = [0.03, 0.03]
+        if axes is None:
+            if self.axes[0] is None:
+                raise ValueError("there are not axes to set up")
+            else:
+                axes = self.axes
+        [[left, bottom], [right, top]] = borders
+        [hspace, vspace] = spaces
+        n_rows, n_cols = rows_cols
+        assert len(axes) == n_rows * n_cols, f"axes has {len(axes)} axes " +\
+            f"and rows x cols is {n_rows * n_cols}"
+
+        l_horiz = self._measure_size(n_cols, hspace, right - left)
+        l_verti = self._measure_size(n_rows, vspace, top - bottom)
+        for i, ax in enumerate(axes):
+            row = (n_rows - 1) - (i // n_rows)
+            col = (i % n_cols)
+
+            borders = [[col * (l_horiz + hspace) + left,
+                        row * (l_verti + vspace) + bottom],
+                       [col * (l_horiz + hspace) + left + l_horiz,
+                        row * (l_verti + vspace) + bottom + l_horiz]]
+            self.locate_ax(borders=borders, ax=ax)
+        return axes
+
+    def _measure_size(self, n_elements=1, space_size=0.3, partial_size=1):
+        """
+        This method computes the lenght of each axis side such that they end up
+        separated by space_size.
+        """
+        l_side = (partial_size - (n_elements - 1) * space_size) / n_elements
+        return l_side
 
 
 """
@@ -748,151 +881,8 @@ def hessian_blocks(hessian, dims, decis=[2, 2, 2, 2], orientation='vertical',
     return im
 
 
-def add_color_per_amino(sith, pdb_file, ax=None):
-    if ax is None:
-        fig, ax = plt.subplots(1, 1)
-    pep_inf = peptide_info(pdb_file)
-    atoms_per_aminoacids = pep_inf.atom_indexes
-    dofs_classified = dof_classificator(sith._deformed[0].dimIndices,
-                                        atoms_per_aminoacids)
-    init = dofs_classified[1] + 0.5
-    final = dofs_classified[1] + 1.5
-
-    cmap = plt.colormaps['tab10_r']
-    boundaries = np.arange(1, 11, 1)
-    normalize = mpl.colors.BoundaryNorm(boundaries - 0.5, cmap.N)
-    patches = {}
-    for i in dofs_classified.keys():
-        init = dofs_classified[i] + 0.5
-        final = dofs_classified[i] + 1.5
-        for region in np.stack((init, final)).T:
-            ax.axvspan(region[0],
-                       region[1],
-                       color=cmap(normalize(i)),
-                       alpha=0.1)
-            patch = mpatches.Patch(facecolor=cmap(normalize(i)),
-                                   label=f'{i}-{pep_inf.amino_name[i]}',
-                                   alpha=0.1,
-                                   edgecolor="black", linewidth=1)
-            patches[i] = patch
-    return patches
 
 
-def plot_sith(dofs, xlabel, xlim, fig=None, ax=None,
-              cmap=None, orientation='vertical', labelsize=15, cbar=True,
-              axes=None, aspect=25, step=1, pstyle='-o',
-              ylabel=r'$\Delta$E$_{\rm{\bf i}}$'+f'Ha', **kwargs):
-    """
-    This function plots the energies per degrees of freedom from
-    sith_object.energies
-
-    Parameters
-    ==========
-
-    dofs: array
-        energies per degree of freedom. Usually a matrix where each component
-        contains the energies for each DOF for each deformed config
-
-        dof\\ deformed     0 1  2  3 ...
-          0             [[              ]]
-          1             [[              ]]
-          2             [[              ]]
-          .
-          .
-          .
-
-    xlabel: str
-        label of the xlabel indicating the represented DOFS
-    """
-
-    if cmap is None:
-        try:
-            import cmocean as cmo
-            cmap = cmo.cm.algae
-        except ImportError:
-            cmap = mpl.colormaps['viridis']
-
-    if ax is None:
-        fig, ax = plt.subplots(1, 1)
-    factor = fig.get_size_inches()[0]
-
-    if axes is None:
-        axes = np.array([ax])
-    ax.tick_params(axis='both', labelsize=15)
-
-    if orientation == 'v' or orientation == 'vertical':
-        rotation = 0
-    else:
-        rotation = 90
-
-    boundaries = np.arange(1, len(dofs[0])+2, 1)
-    normalize = mpl.colors.BoundaryNorm(boundaries - 0.5, cmap.N)
-    if cbar:
-        cbar = fig.colorbar(mpl.cm.ScalarMappable(norm=normalize,
-                                                  cmap=cmap),
-                            aspect=aspect,
-                            ax=axes.ravel().tolist(),
-                            orientation='vertical',)
-        cbar.set_ticks(boundaries[:-1])
-        cbar.set_label(label="Stretched", fontsize=factor * 1.5, rotation=90)
-        cbar.ax.tick_params(labelsize=factor * 1.5, rotation=rotation,
-        length=0)
-
-    [standard(xlim, dofs.T[i], ax=ax, fig=fig, pstyle=pstyle,
-              ylabel=ylabel, xlabel=xlabel,
-              color_plot=cmap(normalize(i + 0.5))[:3],
-              xticks=np.arange(xlim[0], xlim[-1]+1, step),
-              **kwargs)
-     for i in range(len(dofs[0]))]
-    ax.set_xlim([xlim[0]-0.5, xlim[-1]+0.5])
-
-    return fig, ax
-
-
-def plot_energies_in_DOFs(sith, steps=[1, 1, 1, 1],
-                          pdb_for_aminos=None,
-                          show_amino_legends=False, **kwargs):
-    fig, axes = plt.subplots(2, 2, figsize=(18, 15))
-
-    energies_per_DOF = sith.energies
-    dims = sith._deformed[0].dims
-
-    emin = min(energies_per_DOF.flatten())
-    emax = max(energies_per_DOF.flatten())
-    axes[0][0].plot([dims[1]+0.5, dims[1]+0.5], [emin, emax], '--',
-                    color='gray')
-    axes[0][0].plot([dims[1]+dims[2]+0.5, dims[1]+dims[2]+0.5], [emin, emax],
-                    '--', color='gray')
-    plot_sith(energies_per_DOF.T, 'all DOF',
-              np.arange(1, dims[0]+1), fig=fig, ax=axes[0][0],
-              cbar=False, step=steps[0], **kwargs)
-    plot_sith(energies_per_DOF.T[:dims[1]], 'Lengths DOF',
-              np.arange(1, dims[1]+1), fig=fig, ax=axes[0][1],
-              cbar=False, step=steps[1], **kwargs)
-    plot_sith(energies_per_DOF.T[dims[1]:dims[1]+dims[2]], 'Angles DOF',
-              np.arange(dims[1]+1, dims[1]+dims[2]+1), fig=fig, ax=axes[1][0],
-              cbar=False, step=steps[2], **kwargs)
-    plot_sith(energies_per_DOF.T[dims[1]+dims[2]:], 'Dihedral DOF',
-              np.arange(dims[1]+dims[2]+1, dims[0]+1), fig=fig, ax=axes[1][1],
-              cbar=True, axes=axes, aspect=40, step=steps[3],
-              **kwargs)
-
-    if pdb_for_aminos is not None:
-        # DEPRECTED
-        # the next line is not doing anything
-        #x_limits = [ax.get_xlim() for ax in axes.flatten()]
-        colors = [add_color_per_amino(sith, pdb_for_aminos, ax)
-         for ax in axes.flatten()]
-        if show_amino_legends:
-            axes[0][0].legend(colors)
-
-    plt.subplots_adjust(left=0.1,
-                        bottom=0.1,
-                        right=0.76,
-                        top=0.9,
-                        wspace=0.28,
-                        hspace=0.2)
-    return fig, axes
 
 
 def inner_ring_angles(angles, lim=[-180, 180]):
