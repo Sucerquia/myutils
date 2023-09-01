@@ -4,17 +4,47 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.patches as mpatches
-from matplotlib.transforms import Bbox
+from myutils.sith.sith import Sith
+from typing import Union, Tuple
 
 
 class SithPlotter(PepSetter):
-    def __init__(self, sith, pdb_template):
+    """
+    Object that plots the main graphs to analyze sith outcomes"""
+    def __init__(self, sith: Sith, pdb_template: str):
+        """
+        Parameters
+        ==========
+        sith:
+            sith object containing all information about the sith analyzis.
+        pdb_remplate:
+            path to .pdb file that has the peptide information.
+        """
         self.sith = sith
         PepSetter.__init__(self, pdb_template)
 
-    def plot_energies_in_DOFs(self, steps=[1, 1, 1, 1], **kwargs):
+    def plot_energies_in_DOFs(self, steps: list = None, **kwargs) -> \
+                              Tuple[plt.Figure, plt.Axes]:
+        """
+        Plot of distribution of energies in all degrees of freedom and in each
+        kind. Namely, distances, angles, dihedrals. Then, it creates a 2x2
+        plot.
+
+        Parameters
+        ==========
+        steps: list. Default=[1, 1, 1, 1]
+            size of steps separating the labels of the degrees of freedom.
+        **kwargs:
+            SithPlotter.plot_data arguments.
+
+        Return
+        ======
+        plt.figure.Figure, plt.Axes
+        """
+        if steps is None:
+            steps = [1, 1, 1, 1]
         fig, axes = plt.subplots(2, 2, figsize=(10, 10))
-        sp = StandardPlotter(fig=fig, ax=axes, **kwargs)
+        sp = StandardPlotter(fig=fig, ax=axes)
         plots_space = sp.add_space(borders=[[0, 0], [0.9, 1]])
         plots_space.set_axis(rows_cols=(2, 2), borders=[[0.12, 0.1],
                                                         [0.99, 0.97]],
@@ -49,18 +79,24 @@ class SithPlotter(PepSetter):
 
         return fig, axes
 
-    def plot_sith(self, dofs, e_dofs, xlabel, ax=0, sp=None,
-                  cmap=None, cbar=True,
-                  aspect=25, step=1, pstyle='-o',
-                  ylabel=r'$\Delta$E$_{\rm{\bf i}}$' + f'Ha',
-                  show_amino_legends=False, **kwargs):
+    def plot_sith(self, dofs: Union[list, tuple, np.ndarray] = None,
+                  e_dofs: Union[list, tuple, np.ndarray] = None,
+                  xlabel: str = '', ax: Union[plt.Axes, int] = 0,
+                  sp: StandardPlotter = None,
+                  cmap: mpl.colors.Colormap = None,
+                  cbar: bool = True,
+                  aspect: int = 25, step: int = 1, pstyle: str = '-o',
+                  ylabel: str = r'$\Delta$E$_{\rm{\bf i}}$[' + f'Ha]',
+                  show_amino_legends: bool = False, **kwargs) -> \
+                  Tuple[plt.Figure, plt.Axes]:
         """
         This function plots the energies per degrees of freedom from
-        sith_object.energies
+        SithPlotter.sith.energies
 
         Parameters
         ==========
-
+        e_dofs: array
+            labels of the degrees of freedom.
         dofs: array
             energies per degree of freedom. Usually a matrix where each
             component contains the energies for each DOF for each deformed
@@ -73,10 +109,33 @@ class SithPlotter(PepSetter):
             .
             .
             .
-
         xlabel: str
-            label of the xlabel indicating the represented DOFS
+            label of the xlabel indicating the represented DOFS.
+        sp: StandardPlotter
+            plotter object. if not given. It creates a new object with one
+            graph.
+        cmap: plt.color.Colormap. Default: cmocean.cm.algae or 'vidris'.
+            Color map for the deformations.
+        cbar: bool. Default=False
+            True to show the color bar.            
+        step: int. Default 1
+            size of steps separating the labels of the degrees of freedom.
+        pstryle: str. Default='-o'
+            style of the lines of energies
+        ylabel: str. Default={r'$\Delta$E$_{\\rm{\bf i}}$' + f'Ha'}
+            label in the y axis.
+        show_amino_legends: bool. Default=False
+            True to show the name of the aminoacids painting the background.
+
+        Return
+        ======
+        (plt.Figure, plt.Axes) plotting objects used to create the figure.
         """
+        if dofs is None:
+            dofs = np.arange(1, self.sith.dims[0] + 1)
+        if e_dofs is None:
+            e_dofs = self.sith.energies
+        
 
         # Setup default
         if cmap is None:
@@ -84,7 +143,7 @@ class SithPlotter(PepSetter):
                 import cmocean as cmo
                 cmap = cmo.cm.algae
             except ImportError:
-                cmap = mpl.colormaps['viridis']
+                cmap = mpl.get_cmap['viridis']
 
         if sp is None:
             sp = StandardPlotter()
@@ -105,7 +164,6 @@ class SithPlotter(PepSetter):
             space_bar = sp.add_space(borders=[[0.9, 0], [1, 1]], axes=ax_bar)
             cbar = sp.fig.colorbar(mpl.cm.ScalarMappable(norm=normalize,
                                                          cmap=cmap),
-                                   aspect=aspect,
                                    cax=ax_bar,
                                    orientation='vertical')
             cbar.set_ticks(boundaries[:-1])
@@ -130,7 +188,20 @@ class SithPlotter(PepSetter):
 
         return fig, ax
 
-    def add_color_per_amino(self, ax):
+    def add_color_per_amino(self, ax: plt.Axes) -> dict:
+        """
+        Add an colored rectangle in the background for every DOF belonging to
+        an aminoacid.
+
+        Paramenters
+        ===========
+        ax: plt.Axes
+            Axes of the graphics to add the colors
+
+        Return
+        ======
+        (dict) colors patches per amino acid labeled by indices.
+        """
         dofs_classified = self._dof_classificator()
         init = dofs_classified[1] + 0.5
         final = dofs_classified[1] + 1.5
@@ -155,6 +226,14 @@ class SithPlotter(PepSetter):
         return patches
 
     def _dof_classificator(self):
+        """"
+        classify the degrees of freedom according to the aminoacid del belong.
+
+        Return
+        ======
+        (dict) The keys are the index of the amino acid, the values are the
+        list of DOFs belonging to them.
+        """
         atoms_per_aminoacids = self.atom_indexes
         dofs_indexes = self.sith._deformed[0].dimIndices
         dof_per_amino = {}
