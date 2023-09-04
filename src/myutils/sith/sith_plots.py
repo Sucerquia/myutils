@@ -84,8 +84,7 @@ class SithPlotter(PepSetter):
                   xlabel: str = '', ax: Union[plt.Axes, int] = 0,
                   sp: StandardPlotter = None,
                   cmap: mpl.colors.Colormap = None,
-                  cbar: bool = True,
-                  aspect: int = 25, step: int = 1, pstyle: str = '-o',
+                  cbar: bool = True, step: int = 1, pstyle: str = '-o',
                   ylabel: str = r'$\Delta$E$_{\rm{\bf i}}$[' + f'Ha]',
                   show_amino_legends: bool = False, **kwargs) -> \
                   Tuple[plt.Figure, plt.Axes]:

@@ -2,11 +2,18 @@ import matplotlib.ticker as mticker
 import matplotlib.pyplot as plt
 from matplotlib.transforms import Bbox
 import numpy as np
+import matplotlib as mpl
+from typing import Union, Tuple
+from matplotlib.lines import Line2D
 
 
 class StandardPlotter:
-    def __init__(self, x=None, y=None, ax=None, fig=None, figwidth=8.57,
-                 figheight=11.43, ax_pref=None, plot_pref=None):
+    def __init__(self,
+                 x: Union[list, tuple, np.ndarray] = None,
+                 y: Union[list, tuple, np.ndarray] = None,
+                 ax: plt.Axes =None, fig: plt.Figure = None,
+                 figwidth: float = 8.57, figheight: float =11.43,
+                 ax_pref: dict = None, plot_pref: dict = None):
         """
         Parameters
         ==========
@@ -76,13 +83,37 @@ class StandardPlotter:
             self.plot_data(x, y=y, **plot_pref)
 
     def add_space(self, **kwargs):
+        """
+        Creates a subspace of reference to adjust the positions of the
+        graphics.
+
+        Parameters
+        ==========
+        **kwargs of myutils.plotters.Space
+
+        Return
+        ======
+        (myutils.plotters.Space) subspace of reference.
+        """
         self.layer.insert(0, self.layer[0] - 1)
         space = Space(sp=self, **kwargs)
         self.spaces += [space]
 
         return space
 
-    def add_axes(self, space=False):
+    def add_axes(self, space: bool = False) -> plt.Axes:
+        """
+        Creates a new axes in the figure.
+
+        Parameters
+        ==========
+        space: bool. Default=False
+            True if the axes is the frame of a space.
+
+        Return
+        ======
+        (plt.Axes) Created axes.
+        """
         newax = self.fig.add_subplot()
         if space:
             newax.set_zorder(self.layer[0])
@@ -93,42 +124,58 @@ class StandardPlotter:
 
         return newax
 
-    def axis_setter(self, ax=0, xlabel='', ylabel='',
-                    factor=10, xticks=None, yticks=None,
-                    color_labels=None, xminor=None, yminor=None, grid=False,
-                    mingrid=False, color_grid=None):
+    def axis_setter(self,
+                    ax: Union[plt.Axes, int] = 0,
+                    xlabel: str = '', ylabel: str = '',
+                    factor: int = 10,
+                    xticks: Union[list, np.ndarray, tuple] = None,
+                    yticks: Union[list, np.ndarray, tuple] = None,
+                    color_labels: Union[list, np.ndarray, tuple, str] = None,
+                    xminor: Union[list, np.ndarray, tuple] = None,
+                    yminor: Union[list, np.ndarray, tuple] = None,
+                    grid: bool = False, mingrid: bool = False,
+                    color_grid: Union[list, np.ndarray, tuple, str] = None) -> plt.Axes:
         """
+        Adjust the most common parameters of an axes.
+
         Parameters
         ==========
-        ax: int or axes. default=0
-            plt.axes object or index of the axis. In case it is not given, a
-            new one will be created.
-        xlabel: str. default=''
+        ax: int or axes. Default=0
+            plt.axes object or index of the axis in StandardPlotter. In case it
+            is not given, a new one will be created.
+        xlabel: str. Default=''
             label for the x axis.
-        ylabel: str. default=''
+        ylabel: str. Default=''
             label for the y axis.
-        xticks: array. default=automatic
+        factor: float. Default=10
+            fractor to scale the sizes in the plot. Basic size of reference.
+        xticks: array. Default=automatic
             numbers to appear in the x axis.
-        yticks: array. default=automatic
+        yticks: array. Default=automatic
             numbers to appear in the y axis.
-        xminor: array. default=None
-            minor ticks to add to the x axis.
-        yminor: array. default=None
-            minor ticks to add to the y axis.
-        color_labels: RGB array or matplotlib colors. default [0.4, 0.4, 0.4]
+        color_labels: RGB array or matplotlib colors. Default=[0.4, 0.4, 0.4]
             color of the x and y labels
-        pstyle: str. default='-'
-            matplotlib line style.
-        grid: bool. default False
+        xminor: array. Default=None
+            minor ticks to add to the x axis.
+        yminor: array. Default=None
+            minor ticks to add to the y axis.
+        grid: bool. Default=False
             grid regarding the main ticks (major)
-        mingrid: bool. default False
+        mingrid: bool. Default=False
             grid regarding the secundary ticks (minor)
-        color_grid: RGB array or matplotlib colors. default [0.4, 0.4, 0.4]
+        color_grid: RGB array or matplotlib colors. Default=[0.4, 0.4, 0.4]
             color for minor and major grid.
 
-        Output
+        Return
         ======
-        figure, axes.
+        (plt.Axes) Objects used in the plotting.
+
+        Note
+        ====
+        These are not all the possibilities to adjust in a plot using
+        matplotlib. You can use the figure and axis of the output to do further
+        changes. myutils does not pretend to replace matplotlib but making it
+        more accesible for scientific proposals.
         """
         if isinstance(ax, int):
             ax = self.ax[ax]
@@ -174,8 +221,45 @@ class StandardPlotter:
 
         return ax
 
-    def _plot_one_curve(self, x, y=None, ax=None, data_label=None, factor=10,
-                        pstyle='-', color_plot=None, fraclw=3, **kwargs):
+    def _plot_one_curve(self,
+                        x: Union[list, np.ndarray, tuple],
+                        y: Union[list, np.ndarray, tuple] = None,
+                        ax: plt.Axes = None,
+                        data_label: str = None,
+                        factor: float = 10,
+                        pstyle: str = '-',
+                        color_plot: Union[list, np.ndarray, tuple] = None,
+                        fraclw: float = 3, **kwargs) -> Line2D:
+        """
+        Add a curve to a plot.
+        
+        Parameters
+        ==========
+        x: list or array. Default=None
+            data to be plotted. It will correspond to the data in the y axis if
+            no y is given, or x data in case y is given.
+        y: list or array. Default=None
+            data to be plotted. It will correspond to the data in the y. It has
+            to have the same dimension than the x list.
+        ax: axes. Default=0
+            plt.axes object or index of the axis in StandardPlotter. In case it
+            is not given, a new one will be created.
+        data_label: str. Default=None
+            label of the curve
+        factor: float
+            fractor to scale the sizes in the plot. Basic size of reference.
+        pstyle: str. Default='-'
+            matplotlib line style.
+        color_plot: RGB array or matplotlib colors. Default=matplotlib palette
+            color of the curve
+        fraclw: float. Default=3
+            fraction of factor to define the thickness of the line.
+        
+        Return
+        ======
+        (mpl.lines.Line2d) output of plt.plot            
+        
+        """
         if ax is None:
             raise ValueError("the function _plot_one_curve requieres a "
                              "predefined axis")
@@ -184,11 +268,46 @@ class StandardPlotter:
 
         return p
 
-    def plot_data(self, x, y=None, ax=0, data_label=None, factor=10,
-                  pstyle='-o', color_plot=None, fraclw=3, **kwargs):
+    def plot_data(self, 
+                  x: Union[list, np.ndarray, tuple],
+                  y: Union[list, np.ndarray, tuple] = None,
+                  ax: Union[plt.Axes, int] = 0,
+                  data_label: str = None,
+                  factor: float = 10,
+                  pstyle: str = '-o',
+                  color_plot: Union[list, np.ndarray, tuple] = None,
+                  fraclw: float = 3,
+                  **kwargs) -> list:
         """
-        color_plot: color format. default None (namely matplotlib palette)
+        Add data to a curve.
+
+        Parameters
+        ==========
+        x: list or array. Default=None
+            data to be plotted. It will correspond to the data in the y axis if
+            no y is given, or x data in case y is given.
+        y: list or array. Default=None
+            data to be plotted. It will correspond to the data in the y. It has
+            to have the same dimension than the x list.
+        color_plot: color format. Default None (namely matplotlib palette)
             define the color of the data you want to plot
+        ax: axes. Default=0
+            plt.axes object or index of the axis in StandardPlotter. In case it
+            is not given, a new one will be created.
+        data_label: str. Default=None
+            label of the curve
+        factor: float
+            fractor to scale the sizes in the plot. Basic size of reference.
+        pstyle: str. Default='-'
+            matplotlib line style.
+        color_plot: RGB array or matplotlib colors. Default=matplotlib palette
+            color of the curve
+        fraclw: float. Default=3
+            fraction of factor to define the thickness of the line.
+        
+        Return
+        ======
+        (list) set of added matplotlib.lines.Line2d.
         """
         if isinstance(ax, int):
             ax = self.ax[ax]
@@ -240,12 +359,49 @@ class StandardPlotter:
 
         return self.plots
 
-    def raxis(self, ax, ylabel='', color_label=None, factor=10,
-              yticks=None, yminor=None, mingrid=False, grid=False):
-        # ==== right y-axis ====
-        #         |
-        #         |
-        #  --------
+    def raxis(self,
+              ax: plt.Axes,
+              ylabel: str = '',
+              color_label: Union[list, np.ndarray, tuple, str] = None,
+              factor: int = 10,
+              yticks: Union[list, np.ndarray, tuple] = None,
+              yminor: Union[list, np.ndarray, tuple] = None,
+              mingrid: bool = False,
+              grid: bool = False) -> plt.Axes:
+        """
+        Creates an axis on the right, such that your plot can have two set of
+        data for the same x values. You will be plotting in a figure as follows
+
+                |
+                | y-right
+                |
+        --------
+           x
+
+        Parameters
+        ==========
+        ax: int or axes. Default=0
+            plt.axes object or index of the axis in StandardPlotter. In case it
+            is not given, a new one will be created.
+        ylabel: str. Default=''
+            label for the y right axis.
+        factor: float. Default=10
+            fractor to scale the sizes in the plot. Basic size of reference.
+        yticks: array. Default=automatic
+            numbers to show up in the y right axis.
+        color_label: RGB array or matplotlib colors. Default=[0.4, 0.4, 0.4]
+            color of the y-right labels
+        yminor: array. Default=None
+            minor ticks to add to the y right axis.
+        grid: bool. Default=False
+            True to grid regarding the main ticks (major)
+        mingrid: bool. Default=False
+            True to grid regarding the secundary ticks (minor)
+
+        Return
+        ======
+        (Axes) overlaped axes with the y axis on the right
+        """
         if isinstance(ax, int):
             ax = self.ax[ax]
         ax2 = ax.twinx()
@@ -261,17 +417,39 @@ class StandardPlotter:
         return ax
 
     def show(self):
-        plt.show()
+        """
+        Shows the Figure.
+        """
+        return plt.show()
 
 
 class Space:
-    def __init__(self, sp=None, borders=None, axes=None, show_frame=False,
+    def __init__(self,
+                 sp: StandardPlotter = None,
+                 borders: Union[list, tuple, np.ndarray] = None,
+                 axes: plt.Axes = None,
+                 show_frame: bool =False,
                  **kwargs):
         """
         Section of a figure that will be used to separate the complete figure
         in squares. You will be able to define all the parameters respect to
         the space of reference. And, to have an idea of which values to use,
-        you can use the method show_frame and create a kind of meassure rule.
+        you can use the method show_frame and create a kind of meassure ruler.
+        
+        Parameters
+        ==========
+        sp: myutils.plotters.StandardPlotter. Default=None
+            object StandarPlotter. Set it before creating an space. In case of
+            being None, a new StandardPlotter is created.
+        borders: list. Default=[[0, 0], [1, 1]]
+            [[left, bottom], [right, top]] list defining the borders of the
+            space respect to the figure frame. Use sp.spaces[0].showframe() to
+            define the values easily.
+        axes: plt.Axes. Default=sp.ax
+            axes to be added to the Space.
+        show_frame: bool. Default=False
+            show the frame of the space 
+        **kwargs: Space.show_frame arguments.
         """
         if sp is None:
             sp = StandardPlotter()
@@ -301,11 +479,35 @@ class Space:
             for side in ['bottom', 'right', 'top', 'left']:
                 self.frame.spines[side].set_color('none')
 
-    def show_frame(self, majordelta=None, minordelta=None, color=None,
-                   layer='top'):
+    def show_frame(self,
+                   majordelta: float = None,
+                   minordelta: float = None,
+                   color: Union[list, np.ndarray, tuple, str] = None,
+                   layer: str = 'top') -> plt.Axes:
         """
         Shows the frame of the space with the metrics you choose for the
-        measurement rule
+        measurement ruler.
+
+        Parameters
+        ==========
+        majordelta: float. Default=None
+            value to space the mayor ticks and add the numbers to the ruler.
+        minordelta: float. Default=None
+            value to space the mayor ticks. these numbers are not added to the
+            ruler.
+        color: RGB array or matplotlib colors. Default=[1, 0, 0]
+            color of the grid and frame. 
+        layer: str
+            'top' or 'bottom', if you want to see the frame in the front or in
+            the back. 
+        
+        Return
+        ======
+        (plt.Axes) frame of the space.
+
+        Note
+        ====
+        Each side of the frame is always going from zero to one
         """
         # == Default
         if majordelta is None:
@@ -338,17 +540,39 @@ class Space:
             self.frame.set_zorder(0)
         return self.frame
 
-    def add_axes(self, ax):
+    def add_axes(self, ax: plt.Axes) -> np.ndarray:
+        """
+        Add an axes to the space.
+
+        Parameters
+        ==========
+        ax: plt.Axes
+            Axes to  be added to the frame.
+
+        Return
+        ======
+        (array) all the axes belonging to the space.
+        """
         self.axes = np.append(self.axes, ax)
         return self.axes
 
-    def locate_ax(self, borders=None, ax=None):
+    def locate_ax(self,
+                  borders: Union[list, tuple, np.ndarray] = None,
+                  ax: plt.Axes = None) -> plt.Axes:
         """
-        borders:
+        set the location of an axes respect to the ruler of the space.
+
+        Parameters
+        ==========
+        borders: list
             positions respect to the space coordinates specified as
             [[left, bottom], [top, right]]
-        ax:
-            axis to locate. Default: Space.axes[0]
+        ax: plt.Axes. Default=Space.axes[0]
+            axis to locate.
+
+        Return
+        ======
+        (plt.Axes) already relocated axes.
         """
         if ax is None and self.axes[0] is None:
             raise ValueError("To locate an axis, you have to provide an axis"
@@ -363,9 +587,18 @@ class Space:
 
         return ax
 
-    def _space2fig(self, borders):
+    def _space2fig(self,
+                   borders: Union[list, tuple, np.ndarray]) -> list:
         """
         change the borders reference from the space to the figure.
+
+        borders: list
+            positions respect to the space coordinates specified as
+            [[left, bottom], [top, right]]
+        
+        Return
+        ======
+        (list) borders respect to the figure.
         """
         [[left, bottom], [right, top]] = self.borders
 
@@ -376,11 +609,32 @@ class Space:
 
         return borders
 
-    def set_axis(self, axes=None, rows_cols=(1, 1), borders=None, spaces=None):
+    def set_axis(self,
+                 axes: Union[list, tuple, np.ndarray] = None,
+                 rows_cols: Union[list, tuple, np.ndarray] = (1, 1),
+                 borders: Union[list, tuple, np.ndarray] = None,
+                 spaces: Union[list, tuple, np.ndarray] = None) -> list:
         """
         Arrange the spaces in the axis of the space. It is assumed that the
         number of axis is equal to rows x columns and they are ordered in
         ascendent order from left to right and from top to bottom
+
+        Parameters
+        ==========
+        axes: list. Default=None
+            list of Axes to the adjusted according to the defined parameters.
+            In case of None, all the axes in the space are taken.
+        row_cols: tuple. Default=(1, 1)
+            number of rows and cols. the number of axes must be rows x cols.
+        borders: list
+            positions respect to the space coordinates specified as
+            [[left, bottom], [top, right]]
+        spaces: tuple. Default=(0.03, 0.03)
+            horizontal and vertical separation of the axes.
+
+        Return
+        ======
+        (list) list of relocated axes.
         """
         if borders is None:
             borders = [[0.03, 0.03], [0.99, 0.99]]
@@ -410,70 +664,33 @@ class Space:
             self.locate_ax(borders=borders, ax=ax)
         return axes
 
-    def _measure_size(self, n_elements=1, space_size=0.3, partial_size=1):
+    def _measure_size(self,
+                      n_elements: int = 1,
+                      space_size: float = 0.03,
+                      partial_size: float = 1):
         """
         This method computes the lenght of each axis side such that they end up
         separated by space_size.
+
+        Parameters
+        ==========
+        n_elements: int. Default=1
+            number of axes per side.
+        space_size: float. Default=0.03
+            space between the axes.
+        partial_size: float. Default=1
+            size of the side in the space in which you are going to fit your
+            plots.
+        
+        Return
+        ======
+        (float) lenght of the side of each plot.
         """
         l_side = (partial_size - (n_elements - 1) * space_size) / n_elements
+        assert l_side > 0, f"It is impossible to fit {n_elements} plots in " +\
+                           f"{partial_size} side with {space_size} separation"
         return l_side
 
-
-"""
-    Parameters
-    ==========
-    x: list or array
-        data to be plotted. It will correspond to the data in the y axis if no
-        y if given, or x data in case y is given.
-    y: list or array. default=None
-        data to be plotted. It will correspond to the data in the y. It has to
-        have the same dimension than the x list.
-    ax: axes. default=None
-        plt.axes object. In case it is not given, a new one will be created.
-    fig: figure. default=None
-        plt.figure object. In case it is not given, a new one will be created.
-    data_label: str. default=None
-        label to the curve to be plotted.
-    xlabel: str. default=''
-        label for the x axis.
-    ylabel: str. default=''
-        label for the y axis.
-    proportional: bool. default=False
-        True to scale the size of labels to the figsize.
-    figsize: float. default=10
-        size of the figure. it is usefull only if a new figure is created.
-    xticks: array. default=None
-        numbers to appear in the x axis.
-    yticks: array. default=None
-        numbers to appear in the y axis.
-    xminor: array. default=None
-        minor ticks to add to the x axis.
-    yminor: array. default=None
-        minor ticks to add to the y axis.
-    color_labels: RGB array or matplotlib colors. default [0.4, 0.4, 0.4]
-        color of the x and y labels
-    pstyle: str. default='-'
-        matplotlib line style.
-    grid: bool. default False
-        grid regarding the main ticks (major)
-    mingrid: bool. default False
-        grid regarding the secundary ticks (minor)
-    raxis: bool. default False
-        use the right axis.
-    color_plot: color format. default None (namely matplotlib palette)
-        define the color of the data you want to plot
-    borders: dictionary
-        set the space in each side, the keywords are 'left', 'right', 'top',
-        'bottom', 'wspace', 'hspace'. You can specify all of those keywords or
-        only some of them.
-    showframe: bool
-        True if you want to see the frame of the picture you would save with
-        plt.savefig.
-
-    Output
-    ======
-    figure, axes.
-    """
 
 '''
 import matplotlib as mpl
