@@ -369,6 +369,29 @@ class StandardPlotter:
 
         return self.plots
 
+    def _expand_argument(self, value, array: np.ndarray):
+        """
+        becomes value in with a given len
+
+        Paramenters
+        ===========
+        value: any
+            value to be extruded
+        array:
+            array of reference.
+
+        Return
+        ======
+        (np.array) Array with the value extruded.
+        """
+        if isinstance(value, (np.ndarray, list, tuple)) and \
+           len(value) == len(array):
+            values = value
+        else:
+            values = [value for _ in array]
+
+        return values
+
     def raxis(self,
               ax: plt.Axes,
               ylabel: str = '',
