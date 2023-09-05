@@ -246,3 +246,75 @@ class SithPlotter(PepSetter):
                     dof_per_amino[j] = np.append(dof_per_amino[j], i)
                     break
         return dof_per_amino
+
+    def plot_angles(self, cmap: mpl.colors.Colormap = None,
+                    step: int = 1, side: float = 10) -> Tuple(plt.Figure,
+                                                              plt.Axes):
+        """
+        Plot values of angles and changes during the deformations
+
+        Parameters
+        ==========
+        cmap: Colormap
+            colormap to the increasing changes.
+        step: int
+            steps between radius ticks.
+        side: float
+            size of the side of the figure.
+
+        Return
+        ======
+        (plt.Figure, plt.Axes) figure and axes of the StandardtPlotter.
+        """
+        sith = self.sith
+        distances = sith.dims[1]
+        n_angles = sith.dims[2] + sith.dims[3]
+        n_deformed = sith.n_deformed
+        rs = [np.arange(1, n_deformed + 1) for _ in range(n_angles)]
+        fig, axes = plt.subplots(2, 2, figsize=(side, side))
+        sp = StandardPlotter(fig=fig, ax=axes)
+        scale = 0.03
+        sp.set_polar(ax=1, r_ticks=rs[0][::step],
+                     r_lims=[-rs[0][-1] * scale, rs[0][-1] * (1 + scale)])
+        sp.set_polar(ax=3, r_ticks=rs[0][::step],
+                     r_lims=[-rs[0][-1] * scale, rs[0][-1] * (1 + scale)])
+        sp.spaces[0].set_axis(rows_cols=(2, 2),
+                              borders=[[0.1, 0.08], [0.97, 0.97]],
+                              spaces=(0.05, 0.1), axes=sp.ax)
+
+        if cmap is None:
+            try:
+                import cmocean as cmo
+                cmap = cmo.cm.algae
+            except ImportError:
+                cmap = mpl.colormaps['viridis']
+
+        # Plot values in cartesian
+        deformations = np.arange(1, n_deformed + 1, 1)
+        normalize = mpl.colors.BoundaryNorm(deformations + 0.5, cmap.N)
+        colors = [cmap(normalize(i + 0.5))[:3] for i in deformations]
+
+        # Set axes
+        sp.axis_setter(ax=0, xlabel='Deformation', ylabel='Angles[rad]')
+        sp.axis_setter(ax=2, xlabel='Deformation', ylabel='Changes[rad]')
+
+        # Add limits at pi and -pi
+        [sp.plot_data([0, n_angles + 1], [[np.pi, np.pi], [-np.pi, -np.pi]],
+                      pstyle='--', color_plot='gray', ax=i, fraclw=10)
+         for i in [0, 2]]
+
+        sp.plot_data(np.arange(1, n_angles + 1),
+                     sith.all_rics[:, distances:], pstyle='s',
+                     markersize=3, fraclw=10, color_plot=colors)
+        sp.plot_data(np.arange(1, n_angles + 1),
+                     sith.deltaQ[:, distances:], pstyle='s',
+                     markersize=3, fraclw=10, ax=2, color_plot=colors)
+
+        sp.plot_data(sith.all_rics[:, distances:].T,
+                     rs,
+                     pstyle='-', fraclw=10, ax=1)
+        sp.plot_data(sith.deltaQ[:, distances:].T,
+                     rs,
+                     pstyle='-', fraclw=10, ax=3)
+
+        return sp.fig, sp.ax
