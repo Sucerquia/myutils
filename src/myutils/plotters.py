@@ -449,6 +449,60 @@ class StandardPlotter:
                          mingrid=mingrid)
         return ax
 
+    def set_polar(self,
+                  ax: Union[plt.Axes, int],
+                  r_lims: Union[list, tuple, np.ndarray] = None,
+                  r_ticks: Union[list, tuple, np.ndarray] = None,
+                  add_center: float = 0,
+                  add_border: float = 0) -> plt.Axes:
+        """"
+        Changes and set the axes as a polar plot.
+
+        Parameters
+        ==========
+        ax: plt.Axes, int
+            Axes to transform and set as a polar plot. integer, the index to
+            one of the sp.ax
+        r_ticks: array. Default=None (<automatic>)
+            radius of the ticks you want to add. That also includes add the
+            numbers.
+        r_lims: list
+            minimum or maximum value of the data.
+        add_center: float
+            shift the minimum value of r limits to this radius.*
+        add_border: float
+            add this value to the maximum value of r limits.*
+
+        Note
+        ====
+        This value only makes sense when r_lim is defined.
+        """
+        index = None
+        if isinstance(ax, int):
+            index = ax
+            ax = self.ax[ax]
+        # Axes properties
+        borders = ax.get_position().get_points()
+        zorder = ax.get_zorder()
+        ax.remove()
+
+        # create and replace axes
+        ax = self.add_axes(projection='polar')
+        self.ax = np.delete(self.ax, -1)
+        self.spaces[0].locate_ax(borders=borders,
+                                 ax=ax)
+        ax.set_zorder(zorder)
+        if index is not None:
+            self.ax[index] = ax
+
+        # Set up axes
+        if r_ticks is not None:
+            ax.set_rticks(r_ticks)
+        if r_lims is not None:
+            ax.set_ylim([r_lims[0] - add_center, r_lims[1] + add_border])
+
+        return ax
+
     def show(self):
         """
         Shows the Figure.
