@@ -23,8 +23,9 @@ class SithPlotter(PepSetter):
         self.sith = sith
         PepSetter.__init__(self, pdb_template)
 
-    def plot_energies_in_DOFs(self, steps: list = None, **kwargs) -> \
-                              Tuple[plt.Figure, plt.Axes]:
+    def plot_energies_in_DOFs(self, steps: list = None,
+                              side: float = 10,
+                              **kwargs) -> Tuple[plt.Figure, plt.Axes]:
         """
         Plot of distribution of energies in all degrees of freedom and in each
         kind. Namely, distances, angles, dihedrals. Then, it creates a 2x2
@@ -32,6 +33,8 @@ class SithPlotter(PepSetter):
 
         Parameters
         ==========
+        side: float. Default=10
+            the output is an square figure with this side length.
         steps: list. Default=[1, 1, 1, 1]
             size of steps separating the labels of the degrees of freedom.
         **kwargs:
@@ -43,7 +46,7 @@ class SithPlotter(PepSetter):
         """
         if steps is None:
             steps = [1, 1, 1, 1]
-        fig, axes = plt.subplots(2, 2, figsize=(10, 10))
+        fig, axes = plt.subplots(2, 2, figsize=(side, side))
         sp = StandardPlotter(fig=fig, ax=axes)
         plots_space = sp.add_space(borders=[[0, 0], [0.9, 1]])
         plots_space.set_axis(rows_cols=(2, 2), borders=[[0.12, 0.1],
@@ -62,7 +65,7 @@ class SithPlotter(PepSetter):
                      [emin, emax], pstyle='--', color_plot='gray', ax=0)
 
         self.plot_sith(np.arange(1, dims[0] + 1), energies_per_DOF,
-                       'all DOF', ax=0, sp=sp, cbar=False, step=steps[0],
+                       'All DOF', ax=0, sp=sp, cbar=False, step=steps[0],
                        show_amino_legends=True, **kwargs)
         self.plot_sith(np.arange(1, dims[1] + 1),
                        energies_per_DOF[:, :dims[1]],
@@ -74,10 +77,10 @@ class SithPlotter(PepSetter):
                        **kwargs)
         self.plot_sith(np.arange(dims[1] + dims[2] + 1, dims[0] + 1),
                        energies_per_DOF[:, dims[1] + dims[2]:],
-                       'Dihedral DOF', ax=3, cbar=True, aspect=40,
+                       'Dihedral DOF', ax=3, cbar=True,
                        step=steps[3], sp=sp, **kwargs)
 
-        return fig, axes
+        return sp.fig, sp.ax
 
     def plot_sith(self, dofs: Union[list, tuple, np.ndarray] = None,
                   e_dofs: Union[list, tuple, np.ndarray] = None,
@@ -86,8 +89,8 @@ class SithPlotter(PepSetter):
                   cmap: mpl.colors.Colormap = None,
                   cbar: bool = True, step: int = 1, pstyle: str = '-o',
                   ylabel: str = r'$\Delta$E$_{\rm{\bf i}}$[' + f'Ha]',
-                  show_amino_legends: bool = False, **kwargs) -> \
-                  Tuple[plt.Figure, plt.Axes]:
+                  show_amino_legends: bool = False,
+                  **kwargs) -> Tuple[plt.Figure, plt.Axes]:
         """
         This function plots the energies per degrees of freedom from
         SithPlotter.sith.energies
@@ -116,7 +119,7 @@ class SithPlotter(PepSetter):
         cmap: plt.color.Colormap. Default: cmocean.cm.algae or 'vidris'.
             Color map for the deformations.
         cbar: bool. Default=False
-            True to show the color bar.            
+            True to show the color bar.
         step: int. Default 1
             size of steps separating the labels of the degrees of freedom.
         pstryle: str. Default='-o'
@@ -134,7 +137,6 @@ class SithPlotter(PepSetter):
             dofs = np.arange(1, self.sith.dims[0] + 1)
         if e_dofs is None:
             e_dofs = self.sith.energies
-        
 
         # Setup default
         if cmap is None:

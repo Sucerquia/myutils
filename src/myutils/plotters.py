@@ -11,8 +11,8 @@ class StandardPlotter:
     def __init__(self,
                  x: Union[list, tuple, np.ndarray] = None,
                  y: Union[list, tuple, np.ndarray] = None,
-                 ax: plt.Axes =None, fig: plt.Figure = None,
-                 figwidth: float = 8.57, figheight: float =11.43,
+                 ax: plt.Axes = None, fig: plt.Figure = None,
+                 figwidth: float = 8.57, figheight: float = 11.43,
                  ax_pref: dict = None, plot_pref: dict = None):
         """
         Parameters
@@ -101,7 +101,7 @@ class StandardPlotter:
 
         return space
 
-    def add_axes(self, space: bool = False) -> plt.Axes:
+    def add_axes(self, space: bool = False, **kwargs) -> plt.Axes:
         """
         Creates a new axes in the figure.
 
@@ -109,12 +109,13 @@ class StandardPlotter:
         ==========
         space: bool. Default=False
             True if the axes is the frame of a space.
+        **kwargs for plt.Figure.add_subplots
 
         Return
         ======
         (plt.Axes) Created axes.
         """
-        newax = self.fig.add_subplot()
+        newax = self.fig.add_subplot(**kwargs)
         if space:
             newax.set_zorder(self.layer[0])
         else:
@@ -134,7 +135,8 @@ class StandardPlotter:
                     xminor: Union[list, np.ndarray, tuple] = None,
                     yminor: Union[list, np.ndarray, tuple] = None,
                     grid: bool = False, mingrid: bool = False,
-                    color_grid: Union[list, np.ndarray, tuple, str] = None) -> plt.Axes:
+                    color_grid: Union[list, np.ndarray, tuple, str] = None
+                    ) -> plt.Axes:
         """
         Adjust the most common parameters of an axes.
 
@@ -232,7 +234,7 @@ class StandardPlotter:
                         fraclw: float = 3, **kwargs) -> Line2D:
         """
         Add a curve to a plot.
-        
+
         Parameters
         ==========
         x: list or array. Default=None
@@ -254,11 +256,11 @@ class StandardPlotter:
             color of the curve
         fraclw: float. Default=3
             fraction of factor to define the thickness of the line.
-        
+        **kwargs of plt.plot
+
         Return
         ======
-        (mpl.lines.Line2d) output of plt.plot            
-        
+        (mpl.lines.Line2d) output of plt.plot
         """
         if ax is None:
             raise ValueError("the function _plot_one_curve requieres a "
@@ -268,7 +270,7 @@ class StandardPlotter:
 
         return p
 
-    def plot_data(self, 
+    def plot_data(self,
                   x: Union[list, np.ndarray, tuple],
                   y: Union[list, np.ndarray, tuple] = None,
                   ax: Union[plt.Axes, int] = 0,
@@ -304,7 +306,8 @@ class StandardPlotter:
             color of the curve
         fraclw: float. Default=3
             fraction of factor to define the thickness of the line.
-        
+        **kwards of plt.plot
+
         Return
         ======
         (list) set of added matplotlib.lines.Line2d.
@@ -338,7 +341,7 @@ class StandardPlotter:
                     assert np.array(y).shape[-1] == len(x), "if you give a " +\
                         "set of list in y and only one list in x, all the " +\
                         "sublist in y has to have the same lenght than x"
-                    x = [x for _ in len(y)]
+                    x = [x for _ in y]
             # In case of one list of data in x and one list of data in y
             else:
                 assert len(x) == len(y), "x and y have to have the same " +\
@@ -347,11 +350,18 @@ class StandardPlotter:
                 x = [x]
                 y = [y]
 
+        data_label = self._expand_argument(data_label, x)
+        pstyle = self._expand_argument(pstyle, x)
+        color_plot = self._expand_argument(color_plot, x)
+        fraclw = self._expand_argument(fraclw, x)
         plots = []
         for i in range(len(x)):
-            p = self._plot_one_curve(x[i], y[i], ax=ax, data_label=data_label,
-                                     factor=factor, pstyle=pstyle,
-                                     color_plot=color_plot, fraclw=fraclw,
+            p = self._plot_one_curve(x[i], y[i], ax=ax,
+                                     data_label=data_label[i],
+                                     factor=factor,
+                                     pstyle=pstyle[i],
+                                     color_plot=color_plot[i],
+                                     fraclw=fraclw[i],
                                      **kwargs)
             plots.append(p)
 
@@ -428,14 +438,14 @@ class Space:
                  sp: StandardPlotter = None,
                  borders: Union[list, tuple, np.ndarray] = None,
                  axes: plt.Axes = None,
-                 show_frame: bool =False,
+                 show_frame: bool = False,
                  **kwargs):
         """
         Section of a figure that will be used to separate the complete figure
         in squares. You will be able to define all the parameters respect to
         the space of reference. And, to have an idea of which values to use,
         you can use the method show_frame and create a kind of meassure ruler.
-        
+
         Parameters
         ==========
         sp: myutils.plotters.StandardPlotter. Default=None
@@ -448,7 +458,7 @@ class Space:
         axes: plt.Axes. Default=sp.ax
             axes to be added to the Space.
         show_frame: bool. Default=False
-            show the frame of the space 
+            show the frame of the space.
         **kwargs: Space.show_frame arguments.
         """
         if sp is None:
@@ -496,11 +506,11 @@ class Space:
             value to space the mayor ticks. these numbers are not added to the
             ruler.
         color: RGB array or matplotlib colors. Default=[1, 0, 0]
-            color of the grid and frame. 
+            color of the grid and frame.
         layer: str
             'top' or 'bottom', if you want to see the frame in the front or in
-            the back. 
-        
+            the back.
+
         Return
         ======
         (plt.Axes) frame of the space.
@@ -595,7 +605,7 @@ class Space:
         borders: list
             positions respect to the space coordinates specified as
             [[left, bottom], [top, right]]
-        
+
         Return
         ======
         (list) borders respect to the figure.
@@ -660,7 +670,7 @@ class Space:
             borders = [[col * (l_horiz + hspace) + left,
                         row * (l_verti + vspace) + bottom],
                        [col * (l_horiz + hspace) + left + l_horiz,
-                        row * (l_verti + vspace) + bottom + l_horiz]]
+                        row * (l_verti + vspace) + bottom + l_verti]]
             self.locate_ax(borders=borders, ax=ax)
         return axes
 
@@ -681,7 +691,7 @@ class Space:
         partial_size: float. Default=1
             size of the side in the space in which you are going to fit your
             plots.
-        
+
         Return
         ======
         (float) lenght of the side of each plot.
