@@ -751,7 +751,7 @@ class Space:
         l_horiz = self._measure_size(n_cols, hspace, right - left)
         l_verti = self._measure_size(n_rows, vspace, top - bottom)
         for i, ax in enumerate(axes):
-            row = (n_rows - 1) - (i // n_rows)
+            row = (n_rows - 1) - (i // n_cols)
             col = (i % n_cols)
 
             borders = [[col * (l_horiz + hspace) + left,
