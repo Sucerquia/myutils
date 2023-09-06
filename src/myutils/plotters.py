@@ -131,6 +131,8 @@ class StandardPlotter:
                     factor: int = 10,
                     xticks: Union[list, np.ndarray, tuple] = None,
                     yticks: Union[list, np.ndarray, tuple] = None,
+                    xlim: Union[list, np.ndarray, tuple] = None,
+                    ylim: Union[list, np.ndarray, tuple] = None,
                     color_labels: Union[list, np.ndarray, tuple, str] = None,
                     xminor: Union[list, np.ndarray, tuple] = None,
                     yminor: Union[list, np.ndarray, tuple] = None,
@@ -155,6 +157,10 @@ class StandardPlotter:
             numbers to appear in the x axis.
         yticks: array. Default=automatic
             numbers to appear in the y axis.
+        xlim: array. Default=None
+            x limits, [min, max].
+        ylim: array. Default=None
+            y limits, [min, max].
         color_labels: RGB array or matplotlib colors. Default=[0.4, 0.4, 0.4]
             color of the x and y labels
         xminor: array. Default=None
@@ -220,6 +226,10 @@ class StandardPlotter:
         formatter = mticker.ScalarFormatter(useMathText=True)
         formatter.set_powerlimits((-2, 2))
         ax.yaxis.set_major_formatter(formatter)
+        if xlim is not None:
+            ax.set_xlim(xlim)
+        if ylim is not None:
+            ax.set_ylim(ylim)
 
         return ax
 
