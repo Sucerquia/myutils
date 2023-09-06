@@ -1274,48 +1274,6 @@ def min_profile(file, indexes=[3, 2, 0], num_ranges=20):
     return time, var, ener
 
 
-def plot_error(sith, amino_info, classical):
-    first_cap = amino_info.amino_name[1]
-    if first_cap == 'ACE':
-        first_atom = 'N'
-        last_atom = 'C'
-    else:
-        first_atom = 'C'
-        last_atom = 'N'
-    last_amino = list(amino_info.amino_info.keys())[-2]
-    index1 = amino_info.amino_info[2][first_atom] - 1
-    index2 = amino_info.amino_info[last_amino][last_atom] - 1
-
-    distances = []
-    for defo in sith._deformed:
-        distances.append(defo.atoms.get_distance(index1, index2))
-    distances = (np.array(distances) - distances[0])/(last_amino - 1)
-
-    e = sith.compareEnergies()
-
-    _, axis = plt.subplots(3, 1, figsize=(5, 8))
-
-    axis[0].plot(distances, e[1][:len(distances)], '*-', label='BMK')
-    axis[0].plot(distances, e[0][:len(distances)], '*-', label='SITH')
-    axis[0].plot(distances, classical[:len(distances)], '*-', label='amber99')
-    axis[0].set_ylabel('$\Delta$E [Ha]', fontsize=15)
-    axis[0].xaxis.grid(True, linestyle='--')
-    axis[0].legend()
-
-    axis[1].plot(distances, e[2][:len(distances)], '*-', color='C3')
-    axis[1].set_ylabel('$\Delta$E$_{SITH}$ - $\Delta$E$_{BMK}$ [Ha]',
-                       fontsize=15)
-    axis[1].xaxis.grid(True, linestyle='--')
-
-    axis[2].plot(distances, e[3][:len(distances)], '*-', color='C4')
-    axis[2].set_xlabel('$\Delta$d / N$_a$ [Å]', fontsize=15)
-    axis[2].set_ylabel('Error [%]', fontsize=15)
-    axis[2].set_ylim([-5, 105])
-    axis[2].xaxis.grid(True, linestyle='--')
-
-    plt.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0.2, hspace=0)
-
-    return e, distances, axis
 
 
 def plot_energy_in_lenght(all_le, title, axis=None, fig=None):

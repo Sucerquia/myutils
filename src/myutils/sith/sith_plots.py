@@ -248,8 +248,8 @@ class SithPlotter(PepSetter):
         return dof_per_amino
 
     def plot_angles(self, cmap: mpl.colors.Colormap = None,
-                    step: int = 1, side: float = 10) -> Tuple(plt.Figure,
-                                                              plt.Axes):
+                    step: int = 1, side: float = 10) -> Tuple[plt.Figure,
+                                                              plt.Axes]:
         """
         Plot values of angles and changes during the deformations
 
@@ -295,8 +295,8 @@ class SithPlotter(PepSetter):
         colors = [cmap(normalize(i + 0.5))[:3] for i in deformations]
 
         # Set axes
-        sp.axis_setter(ax=0, xlabel='Deformation', ylabel='Angles[rad]')
-        sp.axis_setter(ax=2, xlabel='Deformation', ylabel='Changes[rad]')
+        sp.axis_setter(ax=0, xlabel='Angle index', ylabel='Value[rad]')
+        sp.axis_setter(ax=2, xlabel='Angle index', ylabel='Changes[rad]')
 
         # Add limits at pi and -pi
         [sp.plot_data([0, n_angles + 1], [[np.pi, np.pi], [-np.pi, -np.pi]],
@@ -318,3 +318,78 @@ class SithPlotter(PepSetter):
                      pstyle='-', fraclw=10, ax=3)
 
         return sp.fig, sp.ax
+
+    def plot_error(self,
+                   classical: Union[list, tuple, np.ndarray] = None,
+                   ) -> Tuple[np.ndarray, np.ndarray, list]:
+        """
+        Plot the error between the expected value (DFT) and the computed using
+        SITH.
+
+        Parameters
+        ==========
+        classical:
+           set of classical energies of each deformation computed with amber99.
+
+        Return
+        ======
+        (np.ndarray, np.ndarray, list) energies, distances and sp.axes
+        """
+        # Check if ACE is the last or the first residue
+        first_cap = self.amino_name[1]
+        if first_cap == 'ACE':
+            first_atom = 'N'
+            last_atom = 'C'
+        else:
+            first_atom = 'C'
+            last_atom = 'N'
+
+        # Find the index of the closest atoms to the cap residues.
+        last_amino = list(self.amino_info.keys())[-2]
+        index1 = self.amino_info[2][first_atom] - 1
+        index2 = self.amino_info[last_amino][last_atom] - 1
+
+        # Find distances
+        distances = []
+        for defo in self.sith._deformed:
+            distances.append(defo.atoms.get_distance(index1, index2))
+        distances = (np.array(distances) - distances[0])
+
+        # get energies dE-sith, dE-DFT, dE-error, dE-errorpercent
+        e = self.sith.compareEnergies()
+
+        # ==== Plot ====
+        # set up
+        fig, axes = plt.subplots(3, 1, figsize=(5, 13))
+        sp = StandardPlotter(fig=fig, ax=axes)
+        ticks = np.round(np.linspace(0, distances[-1], 6), decimals=2)
+        ws = (ticks[1] - ticks[0]) / 5
+        sp.spaces[0].set_axis(rows_cols=(3, 1), spaces=(1, 0.03),
+                              borders=[[0.2, 0.1], [0.98, 0.99]])
+        sp.axis_setter(ax=0, ylabel='$\Delta$E [Ha]',
+                       xticks=[], xminor=ticks,
+                       mingrid=True, xlim=[-ws, ticks[-1] + ws])
+        sp.axis_setter(ax=1,
+                       ylabel='$\Delta$E$_{SITH}$ - $\Delta$E$_{BMK}$ [Ha]',
+                       xticks=[], xminor=ticks,
+                       mingrid=True, xlim=[-ws, ticks[-1] + ws])
+        sp.axis_setter(ax=2, ylabel='Error [%]', xlabel='$\Delta$d[Å]',
+                       xticks=ticks, xminor=ticks - 0.0001,
+                       mingrid=True, xlim=[-ws, ticks[-1] + ws])
+        # plot axis 1
+        sp.plot_data(distances, e[1], ax=0, data_label='BMK', pstyle='*-',
+                     fraclw=10)
+        sp.plot_data(distances, e[0], ax=0, data_label='SITH', pstyle='*-',
+                     fraclw=10)
+        if classical is not None:
+            sp.plot_data(distances, classical, ax=0, data_label='amber99',
+                         pstyle='*-', fraclw=10)
+        sp.ax[0].legend()
+
+        # plot axis 2
+        sp.plot_data(distances, e[2], ax=1, pstyle='*-', fraclw=10)
+
+        # plot axis 3
+        sp.plot_data(distances, e[3], ax=2, pstyle='*-', fraclw=10)
+
+        return e, distances, sp.ax
