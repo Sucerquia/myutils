@@ -77,7 +77,7 @@ class Sith:
     def __init__(self, forces_xyz_files=None, master_directory='./',
                  killAtoms=None, killDOFs=None, killElements=None,
                  rem_first_def=0, rem_last_def=0, integration_method=1,
-                 name=None):
+                 name=None, from_last_minima=True):
         """
         A class to calculate & house SITH analysis data.
 
@@ -111,6 +111,9 @@ class Sith:
         name: str
             name of the molecule to be analyze. This is completely arbitrary
             and up to the user. Default=master_directory
+        from_last_minima: bool
+            True to remove the first deformations until get the first
+            deformation as the last minima.
 
         Note: this code is done such that the deformation is sorted in
         alphabetic order.
@@ -162,8 +165,14 @@ class Sith:
                                self.simpson_integration]
         self.integration_method = implemented_methods[integration_method]
         self.energies, self.deformationEnergy = self.integration_method()
-
         self.killer(killAtoms, killDOFs, killElements)
+
+        if from_last_minima:
+            try:
+                dif_ener = self.scf_energy[1:] - self.scf_energy[:-1] < 0
+                rem_first_def = (np.where(dif_ener)[0] + 1)[-1]
+            except IndexError:
+                pass
         self.rem_first_last(rem_first_def, rem_last_def)
 
     def setting_force_xyz_files(self, forces_xyz_files=None,
@@ -474,8 +483,11 @@ class Sith:
         self.deltaQ = self.deltaQ[ini_index: last_index]
         self.all_forces = self.all_forces[ini_index: last_index]
         self.energies = self.energies[ini_index: last_index]
-        self.deformationEnergy = self.deformationEnergy[ini_index: last_index]
-        self.scf_energy = self.scf_energy[ini_index: last_index]
+        self.deformationEnergy = \
+            self.deformationEnergy[ini_index: last_index] - \
+            self.deformationEnergy[ini_index]
+        self.scf_energy = self.scf_energy[ini_index: last_index] - \
+            self.scf_energy[ini_index]
         self.all_rics = self.all_rics[ini_index: last_index]
         self.n_deformed -= rem_first_def + rem_last_def
 
