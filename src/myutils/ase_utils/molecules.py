@@ -109,7 +109,7 @@ class MoleculeSetter:
             angle *= -1
         return self.rot_x(-angle)
 
-    def apply_trans(self, trans, indexes=None):
+    def apply_trans(self, trans, indexes=None, shift=[0, 0, 0]):
         """
         Apply a transformation to all vector positions of some atoms.
 
@@ -133,7 +133,7 @@ class MoleculeSetter:
         new_positions = []
         for i, atom in enumerate(self.atoms):
             if i in indexes:
-                new_positions.append(np.dot(trans, atom.position))
+                new_positions.append(np.dot(trans, atom.position) + shift)
             else:
                 new_positions.append(atom.position)
         self.atoms.set_positions(new_positions)
@@ -169,8 +169,9 @@ class MoleculeSetter:
             center = self.atoms[center].position
         elif center == index2:
             center = self.atoms[center].position
+            tmp = index2
             index2 = index1
-            index1 = center
+            index1 = tmp
         else:
             pos1 = self.atoms[index1].position
             pos2 = self.atoms[index2].position
