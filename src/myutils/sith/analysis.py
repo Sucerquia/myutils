@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib.pyplot as plt
+from myutils.plotters import StandardPlotter
 
 
 def dof_classificator_all(dofs_indexes, atoms_per_aminoacids):
@@ -153,3 +155,64 @@ def le_same_aminoacids(sith, peptides_info, atom_types, kind_amino):
                                atom_types)
         all_le.append(values)
     return all_le
+
+class SithAnalysis:
+    def __init__(self, sith, pepinfo):
+        self.sith = sith
+        self.pep_info = pepinfo
+
+    def le_dof_amino(self, a_names, aminos):
+        if isinstance(aminos, int):
+            # if all atoms belog to the same aminoacid
+            aminos = [aminos for _ in a_names]
+        else:
+            assert len(aminos) == len(a_names)
+
+        indexes = []
+        for amino, atom in zip(aminos, a_names):
+            indexes.append(self.pep_info.amino_info[amino][atom])
+
+        dof = tuple(indexes)
+        dof_i = self.index_dof(dof)
+
+        dof_value = self.sith.all_rics[:, dof_i]
+        dof_e = self.sith.energies[:, dof_i]
+        dof_e -= dof_e[0]
+
+        return dof_value - dof_value[0], dof_e
+
+    def index_dof(self, target: tuple):
+        """
+        Search the index of a specific dof.
+
+        Parameter
+        =========
+        target: tuple
+            degree of freedom.
+
+        Return
+        ======
+        (int) index
+        """
+        for i, dof in enumerate(self.sith._deformed[0].dimIndices):
+            if dof == target or dof == target[::-1]:
+                return i
+        raise ValueError("Non-found dof.")
+
+
+class DataSetAnalysis:
+    def __init__(self, siths, pep_info):
+        self.pep_info = pep_info
+        self.siths = siths
+        self.analysis = [SithAnalysis(sith, self.pep_info) for sith in self.siths]
+
+    def plot_le(self, a_names, aminos=3, ax: plt.Axes = None, sp=None):
+        if sp is None:
+            sp = StandardPlotter()
+        if ax is None:
+            ax = sp.ax[0]
+        sp.axis_setter
+        for an in self.analysis:
+            l, e = an.le_dof_amino(a_names, aminos)
+            sp.plot_data(l, e, ax=ax)
+        return ax
