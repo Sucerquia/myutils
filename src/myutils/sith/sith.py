@@ -125,6 +125,15 @@ class Sith:
         # create Geometries shape=(n_def, 1)
         self._deformed = [Geometry(i, j)
                           for i, j in zip(self.xyz_files, self.forces_files)]
+
+        # remove atoms, dofs and last or first configurations
+        if killAtoms is None:
+            killAtoms = []
+        if killDOFs is None:
+            killDOFs = []
+        if killElements is None:
+            killElements = []
+
         # number of deformed configs
         self.n_deformed = len(self._deformed)
         self.dims = self._deformed[0].dims
@@ -153,14 +162,6 @@ class Sith:
                                self.simpson_integration]
         self.integration_method = implemented_methods[integration_method]
         self.energies, self.deformationEnergy = self.integration_method()
-
-        # remove atoms, dofs and last or first configurations
-        if killAtoms is None:
-            killAtoms = []
-        if killDOFs is None:
-            killDOFs = []
-        if killElements is None:
-            killElements = []
 
         self.killer(killAtoms, killDOFs, killElements)
         self.rem_first_last(rem_first_def, rem_last_def)
@@ -443,6 +444,7 @@ class Sith:
         self.all_rics = np.delete(self.all_rics, rIndices, axis=1)
         self.deltaQ = np.delete(self.deltaQ, rIndices, axis=1)
         self.all_forces = np.delete(self.all_forces, rIndices, axis=1)
+        self.energies = np.delete(self.energies, rIndices, axis=1)
 
         return rIndices
 

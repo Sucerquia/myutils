@@ -5,38 +5,38 @@ import sys
 
 
 pymodules = {
+    'optimized_e': 'myutils.miscellaneous',
+    'time_g09': 'myutils.miscellaneous',
+    'log2xyz': 'myutils.sith.g09_xyz',
+    'proline_state': 'myutils.sith.sith_tools',
+    'gen_randpep': 'myutils.sith.sith_tools',
     'distance': 'myutils.ase_utils.tools',
     'all_xyz2pdb': 'myutils.ase_utils.tools',
     'conf2pdb': 'myutils.ase_utils.tools',
     'diff_bonds': 'myutils.ase_utils.tools',
     'extract_bonds': 'myutils.ase_utils.tools',
     'change_distance': 'myutils.ase_utils.tools',
-    'proline_state': 'myutils.sith.sith_tools',
-    'gen_randpep': 'myutils.sith.sith_tools',
-    'log2xyz': 'myutils.sith.g09_xyz',
-    'optimized_e': 'myutils.miscellaneous',
-    'time_g09': 'myutils.miscellaneous',
 }
 
 sh_executers = {
-    'classical_minimization': './gromacs/classical_minimization.sh',
-    'classical_energies': './gromacs/classical_energies.sh',
-    'analysis': './gromacs/analysis.sh',
-    'pulling': './gromacs/pulling.sh',
-    'peptide_pulling': './gromacs/peptide_pulling.sh',
-    'generate_main': './cli/generate_main.sh',
-    'doc_pythonfile': './cli/pkg_structure/doc_pythonfile.sh',
-    'doc_modules': './cli/pkg_structure/doc_modules.sh',
-    'check_tests': './cli/pkg_structure/check_tests.sh',
-    'bash_style': './cli/pkg_structure/bash_style.sh',
-    'check_structure': './cli/pkg_structure/check_structure.sh',
     'single_optimization': './sith/single_optimization.sh',
-    'extract_forces': './sith/extract_forces.sh',
-    'proline_mod': './sith/proline_mod.sh',
     'workflow': './sith/workflow.sh',
     'find_forces': './sith/find_forces.sh',
     'clean_ds': './sith/clean_ds.sh',
+    'proline_mod': './sith/proline_mod.sh',
+    'extract_forces': './sith/extract_forces.sh',
     'stretching': './sith/stretching.sh',
+    'peptide_pulling': './gromacs/peptide_pulling.sh',
+    'pulling': './gromacs/pulling.sh',
+    'classical_minimization': './gromacs/classical_minimization.sh',
+    'analysis': './gromacs/analysis.sh',
+    'classical_energies': './gromacs/classical_energies.sh',
+    'generate_main': './cli/generate_main.sh',
+    'doc_pythonfile': './cli/pkg_structure/doc_pythonfile.sh',
+    'check_tests': './cli/pkg_structure/check_tests.sh',
+    'check_structure': './cli/pkg_structure/check_structure.sh',
+    'doc_modules': './cli/pkg_structure/doc_modules.sh',
+    'bash_style': './cli/pkg_structure/bash_style.sh',
     'basics': './basics.sh',
 }
 
@@ -69,8 +69,9 @@ def main():
 
     elif sys.argv[1] == 'tests':
         testdir = Path(__file__).parent
-        output_terminal(f"cd {str(testdir)}/../tests ; pytest -v --color=yes" +
-                        ' '.join(sys.argv[2:]))
+        cmd = f"cd {str(testdir)}/../tests ; pytest -v --color=yes" + \
+            ' '.join(sys.argv[2:])
+        output_terminal(cmd)
 
     # python module from terminal
     elif sys.argv[1] in pymodules.keys():
