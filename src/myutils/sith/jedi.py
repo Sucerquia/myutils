@@ -17,12 +17,12 @@ class Jedi(SITH):
             self.setKillAtoms(atoms2kill)
         self.extractData()
         self.dims = self._deformed[0].dims
-
-        self.all_rics = self.rics()
+        
+        self.all_rics = self.rics() 
         self.all_rics[:, :self.dims[1]] *= units.Bohr
         self.all_hessians = np.array([defo.hessian for defo in self._deformed])
+        self.all_hessians[:, :, :self.dims[1]] /= units.Bohr
         self.all_hessians[:, :self.dims[1]] /= units.Bohr
-        self.all_hessians[:self.dims[1]] /= units.Bohr
         self.n_deformed = len(self._deformed)
         self.scf_energy = np.array([defo.energy - self._deformed[0].energy
                                     for defo in self._deformed])
@@ -34,9 +34,9 @@ class Jedi(SITH):
                 pass
 
         # the next step creates
-        # self.deltaQ
-        # self.energies
-        # self.deformationEnergy
+        # - self.deltaQ
+        # - self.energies
+        # - self.deformationEnergy
         self.rem_first_last(rem_first_def, rem_last_def)
 
     def rics(self):
@@ -74,26 +74,6 @@ class Jedi(SITH):
         delta_rics[:, self.dims[1]:][condition] += 2 * np.pi
 
         return delta_rics
-
-    def compareEnergies(self):
-        """
-        computes the difference between the expected and the obtained change on
-        energy.
-
-        Return
-        ======
-        (np.array)[energy, expected energy, error, percentage of error]
-        """
-        obtainedDE = self.deformationEnergy
-        expectedDE = self.scf_energy
-
-        errorDE = obtainedDE - expectedDE
-        expectedDE[abs(expectedDE) < 1e-15] = 1e-15
-        pErrorDE = (errorDE / expectedDE) * 100
-        pErrorDE[0] = 0
-        pErrorDE[np.logical_not(np.isfinite(pErrorDE))] = 200
-
-        return np.array([obtainedDE, expectedDE, errorDE, pErrorDE])
 
     def rem_first_last(self, rem_first_def=0, rem_last_def=0):
         """
@@ -152,3 +132,23 @@ class Jedi(SITH):
 
         print("Execute Order 67. Successful energy analysis completed.")
         return self.energies
+
+    def compareEnergies(self):
+        """
+        computes the difference between the expected and the obtained change on
+        energy.
+
+        Return
+        ======
+        (np.array)[energy, expected energy, error, percentage of error]
+        """
+        obtainedDE = self.deformationEnergy
+        expectedDE = self.scf_energy
+
+        errorDE = obtainedDE - expectedDE
+        expectedDE[abs(expectedDE) < 1e-15] = 1e-15
+        pErrorDE = (errorDE / expectedDE) * 100
+        pErrorDE[0] = 0
+        pErrorDE[np.logical_not(np.isfinite(pErrorDE))] = 200
+
+        return np.array([obtainedDE, expectedDE, errorDE, pErrorDE])
