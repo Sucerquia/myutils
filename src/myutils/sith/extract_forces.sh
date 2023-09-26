@@ -45,7 +45,6 @@ mapfile -t log_files < <(ls ./*force*.log)
 
 for file in "${log_files[@]}"
 do
-    echo "$file"
     number=$( grep -n "Internal Coordinate Forces" "$file" | cut -d ":" -f 1 )
     awk -v num=$(( number + 3 )) 'NR >= num { print $0 }' "$file" > tmp1.txt
 
@@ -69,14 +68,15 @@ do
     tail -n +$(( head + 1 )) "$file" | head -n $(( end - 2 )) | awk '{print $2}' > tmp2.txt
     awk 'NR==FNR{file1[++u]=$0} NR!=FNR{file2[++n]=$0}END{for (i=1;i<=n;i++) printf "%s %s\n", file1[i], file2[i]}' tmp1.txt tmp2.txt >> "$output"
     output=${file%.*}
-    myutils log2xyz "$file" > /dev/null
+    myutils log2xyz "$file" "$output" > /dev/null || fail "exctracting coordinates"
     # Compare the order of the atoms
     if [ "$file" == "${log_files[0]}" ]
     then
         #creating reference
         awk '{if ( $1 != "#" ){print $2}}' indexes.dat  > reference.dat || fail "creating reference"
     fi
-    awk '{if ( $2 ){print $1}}' "${file%.*}.xyz" > tmp1.dat
+    awk '{if ( $2 ){print $1}}' "$output.xyz" > tmp1.dat
+    echo "$output.xyz"
     cmp -s  tmp1.dat reference.dat || fail "log and xyz files have different
         order of atoms for ${file%.*}"
     awk '{if ( $1 != "#" ){print $2}}' indexes.dat  > tmp1.dat
