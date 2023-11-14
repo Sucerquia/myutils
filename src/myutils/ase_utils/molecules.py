@@ -109,7 +109,7 @@ class MoleculeSetter:
             angle *= -1
         return self.rot_x(-angle)
 
-    def apply_trans(self, trans, indexes=None):
+    def apply_trans(self, trans, indexes=None, shift=None):
         """
         Apply a transformation to all vector positions of some atoms.
 
@@ -127,13 +127,15 @@ class MoleculeSetter:
         (numpy.array)[#natoms x 3float] new xyz positions of the N atoms. It
             changes the positions of the internal atoms object.
         """
+        if shift is None:
+            shift = [0, 0, 0]
         if indexes is None:
             indexes = list(range(len(self.atoms)))
 
         new_positions = []
         for i, atom in enumerate(self.atoms):
             if i in indexes:
-                new_positions.append(np.dot(trans, atom.position))
+                new_positions.append(np.dot(trans, atom.position) + shift)
             else:
                 new_positions.append(atom.position)
         self.atoms.set_positions(new_positions)
@@ -165,12 +167,8 @@ class MoleculeSetter:
             changes the positions of the internal atoms object.
         """
         # Move the origin
-        if center == index1:
+        if center == index1 or center == index2:
             center = self.atoms[center].position
-        elif center == index2:
-            center = self.atoms[center].position
-            index2 = index1
-            index1 = center
         else:
             pos1 = self.atoms[index1].position
             pos2 = self.atoms[index2].position
@@ -178,7 +176,7 @@ class MoleculeSetter:
 
         self.atoms.set_positions(self.atoms.positions - center)
         # set index1 and index2 along x axis
-        axis = self.atoms[index2].position
+        axis = self.atoms[index2].position - self.atoms[index1].position
         self.apply_trans(self.align_axis(axis))
         if index3 is not None:
             third = self.atoms[index3].position
