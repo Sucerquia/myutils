@@ -137,7 +137,8 @@ class StandardPlotter:
                     xminor: Union[list, np.ndarray, tuple] = None,
                     yminor: Union[list, np.ndarray, tuple] = None,
                     grid: bool = False, mingrid: bool = False,
-                    color_grid: Union[list, np.ndarray, tuple, str] = None
+                    color_grid: Union[list, np.ndarray, tuple, str] = None,
+                    sci_not: bool=True,
                     ) -> plt.Axes:
         """
         Adjust the most common parameters of an axes.
@@ -222,10 +223,17 @@ class StandardPlotter:
         ax.set_ylabel(ylabel, fontsize=factor * 2.5, color=color_labels,
                       weight='bold', labelpad=factor)
         # == scientific notation for numbers with more than 2 decimals
-        ax.yaxis.offsetText.set_fontsize(factor * 1.5)
-        formatter = mticker.ScalarFormatter(useMathText=True)
-        formatter.set_powerlimits((-2, 2))
-        ax.yaxis.set_major_formatter(formatter)
+        if sci_not:
+            ax.yaxis.offsetText.set_fontsize(factor * 1.5)
+            formatter = mticker.ScalarFormatter(useMathText=True)
+            formatter.set_powerlimits((-2, 2))
+            ax.yaxis.set_major_formatter(formatter)
+        else:
+            formatter = mticker.ScalarFormatter(useMathText=False)
+            ax.yaxis.set_major_formatter(formatter)
+            ax.ticklabel_format(useOffset=False)
+
+            
         if xlim is not None:
             ax.set_xlim(xlim)
         if ylim is not None:
@@ -241,7 +249,7 @@ class StandardPlotter:
                         factor: float = 10,
                         pstyle: str = '-',
                         color_plot: Union[list, np.ndarray, tuple] = None,
-                        fraclw: float = 3, **kwargs) -> Line2D:
+                        lw: float = 3, **kwargs) -> Line2D:
         """
         Add a curve to a plot.
 
@@ -264,7 +272,7 @@ class StandardPlotter:
             matplotlib line style.
         color_plot: RGB array or matplotlib colors. Default=matplotlib palette
             color of the curve
-        fraclw: float. Default=3
+        lw: float. Default=3
             fraction of factor to define the thickness of the line.
         **kwargs of plt.plot
 
@@ -275,7 +283,7 @@ class StandardPlotter:
         if ax is None:
             raise ValueError("the function _plot_one_curve requieres a "
                              "predefined axis")
-        p = ax.plot(x, y, pstyle, linewidth=factor / fraclw, label=data_label,
+        p = ax.plot(x, y, pstyle, lw=lw, label=data_label,
                     color=color_plot, **kwargs)
 
         return p
@@ -288,7 +296,7 @@ class StandardPlotter:
                   factor: float = 10,
                   pstyle: str = '-o',
                   color_plot: Union[list, np.ndarray, tuple] = None,
-                  fraclw: float = 3,
+                  lw: float = 3,
                   **kwargs) -> list:
         """
         Add data to a curve.
@@ -314,7 +322,7 @@ class StandardPlotter:
             matplotlib line style.
         color_plot: RGB array or matplotlib colors. Default=matplotlib palette
             color of the curve
-        fraclw: float. Default=3
+        lw: float. Default=3
             fraction of factor to define the thickness of the line.
         **kwards of plt.plot
 
@@ -363,7 +371,14 @@ class StandardPlotter:
         data_label = self._expand_argument(data_label, x)
         pstyle = self._expand_argument(pstyle, x)
         color_plot = self._expand_argument(color_plot, x)
-        fraclw = self._expand_argument(fraclw, x)
+        lw = self._expand_argument(lw, x)
+        
+        new_kwargs = [{} for _ in x]
+        for arg in kwargs.keys():
+            all_args = self._expand_argument(kwargs[arg], x)
+            for i, new_arg in enumerate(all_args):
+                new_kwargs[i][arg] = new_arg
+
         plots = []
         for i in range(len(x)):
             p = self._plot_one_curve(x[i], y[i], ax=ax,
@@ -371,8 +386,8 @@ class StandardPlotter:
                                      factor=factor,
                                      pstyle=pstyle[i],
                                      color_plot=color_plot[i],
-                                     fraclw=fraclw[i],
-                                     **kwargs)
+                                     lw=lw[i],
+                                     **new_kwargs[i])
             plots.append(p)
 
         self.plots = plots  # 2COMPLETE change for extend
@@ -381,7 +396,7 @@ class StandardPlotter:
 
     def _expand_argument(self, value, array: np.ndarray):
         """
-        becomes value in with a given len
+        becomes value in list with a given len
 
         Paramenters
         ===========
