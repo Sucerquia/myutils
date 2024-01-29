@@ -10,7 +10,7 @@ def dof_classificator_all(dofs_indexes, atoms_per_aminoacids):
     Parameters
     ==========
     dof_indexes: list of duples
-        sith._deformed[n].dimIndices containing definition of the degrees of
+        sith.structures[n].dim_indices containing definition of the degrees of
         freedom in term of the atomic indexes.
     atoms_per_aminoacids: dict
         Atoms in each residue. The keys are the number of the residues, values
@@ -45,7 +45,7 @@ def dof_classificator_one(dofs_indexes, atoms_per_aminoacids):
     Parameters
     ==========
     dof_indexes: list of duples
-        sith._deformed[n].dimIndices containing definition of the degrees of
+        sith.structures[n].dim_indices containing definition of the degrees of
         freedom in term of the atomic indexes.
     atoms_per_aminoacids: dict
         Atoms in each residue. The keys are the number of the residues, values
@@ -101,16 +101,16 @@ def length_energy(sith, aminos_info, atom_types):
     myutils.peptides.PepSetter.amino_info[n] where n is the selected amino
     acid.
     """
-    defo = sith._deformed[0]
+    defo = sith.structures[0]
     try:
-        i_ric = defo.dimIndices.index((aminos_info[atom_types[0]],
+        i_ric = defo.dim_indices.index((aminos_info[atom_types[0]],
                                        aminos_info[atom_types[1]]))
     except ValueError:
-        i_ric = defo.dimIndices.index((aminos_info[atom_types[1]],
+        i_ric = defo.dim_indices.index((aminos_info[atom_types[1]],
                                        aminos_info[atom_types[0]]))
     energies = sith.energies.T[i_ric]
     values_dof = []
-    for defo in sith._deformed:
+    for defo in sith.structures:
         values_dof.append(defo.ric[i_ric])
     values_dof = np.array(values_dof)
     return [values_dof, energies]
@@ -172,11 +172,12 @@ class SithAnalysis:
         for amino, atom in zip(aminos, a_names):
             indexes.append(self.pep_info.amino_info[amino][atom])
 
-        dof = tuple(indexes)
+        dof = np.zeros(4, dtype=int)
+        dof[-len(indexes):] = indexes
         dof_i = self.index_dof(dof)
 
-        dof_value = self.sith.all_rics[:, dof_i]
-        dof_e = self.sith.energies[:, dof_i]
+        dof_value = self.sith.all_dofs[:, dof_i]
+        dof_e = self.sith.dofs_energies[:, dof_i]
         dof_e -= dof_e[0]
 
         return dof_value - dof_value[0], dof_e
@@ -187,15 +188,19 @@ class SithAnalysis:
 
         Parameter
         =========
-        target: tuple
+        target: np.ndarray
             degree of freedom.
 
         Return
         ======
         (int) index
         """
-        for i, dof in enumerate(self.sith._deformed[0].dimIndices):
-            if dof == target or dof == target[::-1]:
+        for i, dof in enumerate(self.sith.structures[0].dim_indices):
+            dof_wo_0 = dof[np.nonzero(dof)[0]]
+            target_wo_0 = target[np.nonzero(target)[0]]
+
+            if (dof_wo_0 == target_wo_0).all() or \
+               (dof_wo_0 == target_wo_0[::-1]).all():
                 return i
         raise ValueError("Non-found dof.")
 

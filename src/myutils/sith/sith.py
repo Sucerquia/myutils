@@ -146,10 +146,10 @@ class Sith:
 
         # Create matrices
         # # DFT energies for each configuration shape=(n_def, 1)
-        self.scf_energy = np.array([defo.energy - self.structures[0].scf_energy
+        self.scf_energy = np.array([defo.scf_energy - self.structures[0].scf_energy
                                     for defo in self.structures])
         # # ric values matrix shape=(n_def, n_dofs)
-        self.qF = np.array([defo.ric for defo in self.structures])
+        self.qF = np.array([defo.dof for defo in self.structures])
         self.all_rics = self.dofs()
         # # matrix changes shape=(n_def, n_dofs)
         self.deltaQ = self.extract_changes()
@@ -269,7 +269,7 @@ class Sith:
                     f" the DOF in {defo.name} is {to_compare[i]}"
         return True
 
-    def rics(self):
+    def dofs(self):
         """
         Extract and concatenate the DOFs values in a matrix. Angles are given
         in radians.
@@ -281,7 +281,7 @@ class Sith:
         """
         rics = list()
         for defo in self.structures:
-            ric = defo.ric.copy()
+            ric = defo.dof.copy()
             ric[defo.dims[1]:] = ric[defo.dims[1]:] * np.pi / 180
             rics.append(ric)
         return np.array(rics)
