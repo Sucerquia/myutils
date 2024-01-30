@@ -5,6 +5,7 @@ from ase.visualize import view
 from ase import Atom
 from ase.io import write
 
+
 class Protonize:
     def __init__(self, pdb):
         self.pepset = PepSetter(pdb)
@@ -19,7 +20,6 @@ class Protonize:
         for aa in charged_aa:
             aa_indexes = np.where(all_aa == aa)[0] + 1
             self.matched_aa[aa] = aa_indexes
-        
         self.todel = []
         self.atoms2add = []
         self.residuenames2add = []
@@ -32,7 +32,7 @@ class Protonize:
             od1 = self.pepset.amino_info[aa_index]['OD1'] - 1
             cg = self.pepset.amino_info[aa_index]['CG'] - 1
             new_o = 1.8 * self.pepset.atoms[od1].position - \
-                    0.8 * self.pepset.atoms[cg].position
+                0.8 * self.pepset.atoms[cg].position
             atom = Atom('H', new_o)
             self.atoms2add.append(atom)
             self.residuenames2add.append('ASP')
@@ -45,7 +45,7 @@ class Protonize:
             od1 = self.pepset.amino_info[aa_index]['OE1'] - 1
             cg = self.pepset.amino_info[aa_index]['CD'] - 1
             new_o = 1.8 * self.pepset.atoms[od1].position - \
-                    0.8 * self.pepset.atoms[cg].position
+                0.8 * self.pepset.atoms[cg].position
             atom = Atom('H', new_o)
             self.atoms2add.append(atom)
             self.residuenames2add.append('GLU')
@@ -68,7 +68,7 @@ class Protonize:
                 h = self.pepset.amino_info[aa_index]['3HZ'] - 1
             self.todel.append(h)
         return self.todel
-    
+
     def create_atoms(self):
         # Populate Atoms to add
         self.asp()
@@ -84,7 +84,8 @@ class Protonize:
             self.atoms += Hat
             self.atoms.arrays['residuenames'][-1] = self.residuenames2add[i]
             self.atoms.arrays['atomtypes'][-1] = self.atomtypes2add[i]
-            self.atoms.arrays['residuenumbers'][-1] = self.residuenumbers2add[i]
+            self.atoms.arrays['residuenumbers'][-1] = \
+                self.residuenumbers2add[i]
 
 
 # add2executable
