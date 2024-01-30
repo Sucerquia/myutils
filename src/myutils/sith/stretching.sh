@@ -25,21 +25,6 @@ caps carbon, constraining and optimizing using BMK exchange-correlation.
 exit 0
 }
 
-# functions used to define the charge
-separate_letters () {
-    i=0
-    word="$1"
-    while [ "$i" -lt "${#word}" ]
-    do 
-        echo "${word:$i:1}"
-        i=$(( i + 1 ))
-    done
-}
-
-count_letter () {
-    n=$( separate_letters "$1" | grep -c "$2" )
-    echo "$n"
-}
 # ----- definition of functions finishes --------------------------------------
 
 # ----- set up starts ---------------------------------------------------------
@@ -93,13 +78,6 @@ fi
 verbose "This code will stretch the atoms with the indexes $index1 $index2
     (g09 convention)"
 
-# compute charges
-Kn=$( count_letter "$pep" "K" ) # Lysine
-Rn=$( count_letter "$pep" "R" ) # Argine
-Dn=$( count_letter "$pep" "D" ) # Asparate
-En=$( count_letter "$pep" "E" ) # Glutamine acid
-charge=$(( Kn + Rn - Dn - En ))
-verbose "The charge is $charge"
 # ----- set up finishes -------------------------------------------------------
 
 # ----- checking restart starts -----------------------------------------------
@@ -125,7 +103,7 @@ then
         create_bck "$pep-stretched${nameiplusone}"* && \
         create_bck "$pep-stretched${nameiplusone}-a"* && \
         myutils change_distance "$pep-stretched${nameiplusone}-a-bck_1.xyz" \
-            "$pep-stretched${nameiplusone}" frozen_dofs.dat 0 "$charge" \
+            "$pep-stretched${nameiplusone}" frozen_dofs.dat 0 0 \
             "$method" && \
         retake='false' && \
         warning "The stretching of peptide $pep will be restarted from
@@ -136,7 +114,7 @@ then
         myutils log2xyz "$pep-stretched${nameiplusone}.log" 2> /dev/null && \
         create_bck "$pep-stretched${nameiplusone}"* &&
         myutils change_distance "$pep-stretched${nameiplusone}-bck_1.xyz" \
-            "$pep-stretched${nameiplusone}" frozen_dofs.dat 0 "$charge" \
+            "$pep-stretched${nameiplusone}" frozen_dofs.dat 0 0 \
             "$method" && \
         retake='false' && \
         warning "The stretching of peptide $pep will be restarted
@@ -167,7 +145,7 @@ do
         # initial g09 optimization
         verbose "The first g09 process is an optimization"
         myutils change_distance "$pep-stretched00.pdb" \
-            "$pep-stretched00" frozen_dofs.dat 0 "$charge" "$method" || \
+            "$pep-stretched00" frozen_dofs.dat 0 0 "$method" || \
             fail "Preparating the input of gaussian"
         sed -i  '/^TV  /d' "$pep-stretched00.com"
         sed -i "/opt/d" "$pep-stretched00.com"
@@ -176,7 +154,7 @@ do
         then
             myutils change_distance \
                 "$pep-stretched$namei.xyz" "$pep-stretched${nameiplusone}" \
-                frozen_dofs.dat "$size" "$charge" "$method" \
+                frozen_dofs.dat "$size" 0 "$method" \
                 || fail "Preparating g09 input"
         fi
         retake='true'
@@ -210,7 +188,7 @@ do
                 Transforming log file to xyz in second trial of optimization"
             myutils change_distance \
                     "$pep-stretched${nameiplusone}.xyz" \
-                    "$pep-stretched${nameiplustwo}" frozen_dofs.dat 0 "$charge" \
+                    "$pep-stretched${nameiplustwo}" frozen_dofs.dat 0 0 \
                     "$method" || fail "changing distance"
             # save the failed files in ...-stretched<number>a.*
             create_bck "$pep-stretched${nameiplusone}"*

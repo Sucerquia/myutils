@@ -144,6 +144,7 @@ then
     # shellcheck disable=SC2086
     pepgen "$pep" tmp -s flat $pep_options || fail "Creating peptide $pep"
     mv tmp/pep.pdb "./$pep-stretched00.pdb"
+    myutils protonize "./$pep-stretched00.pdb" "./$pep-stretched00.pdb"
     myutils proline_mod -f "$pep-stretched00.pdb" -s "$endoexo" || \
         fail "Proline estates configuration"
 
