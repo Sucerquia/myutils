@@ -6,8 +6,8 @@ source "$(myutils basics -path)" EXTR_FORCES
 print_help() {
 echo "
 Extract the forces and indexes of the DOFs from the log files (g09). The output
-is a set of files called <pep>-forces<n_stretching>.dat and
-<pep>-forces<n_stretching>.xyz
+is a set of files called <pep>-forces<n_stretching>.fchk containing the
+information in fchk g09 format.
 
     -d   <path>. directory where forces_files.log are located. Default ./forces
 
@@ -134,9 +134,9 @@ do
 
     # region dofs_indexes
     # find the begining of the block of the internal forces
-    awk '{if( $3 ){ printf "0\n0\n%d\n%d\n", $1, $3 }}' tmp2.txt > tmp1.txt
-    awk '{if( $6 ){ printf "0\n%d\n%d\n%d\n", $1, $3, $6 }}' tmp2.txt >> tmp1.txt
-    awk '{if( $9 ){ printf "%d\n%d\n%d\n%d\n", $1, $3, $6, $9 }}' tmp2.txt >> tmp1.txt
+    awk '{if( $3 ){ printf "%d\n%d\n0\n0\n", $3, $1 }}' tmp2.txt > tmp1.txt
+    awk '{if( $6 ){ printf "%d\n%d\n%d\n0\n", $6, $3, $1 }}' tmp2.txt >> tmp1.txt
+    awk '{if( $9 ){ printf "%d\n%d\n%d\n%d\n", $9, $6, $3, $1 }}' tmp2.txt >> tmp1.txt
 
     mapfile -t indexes < tmp1.txt
 
@@ -151,7 +151,7 @@ do
     # region forces
     awk '{if( $3 ){ printf "%f\n", $4 }}' tmp2.txt > tmp1.txt
     awk '{if( $6 ){ printf "%f\n", $7 }}' tmp2.txt >> tmp1.txt
-    awk '{if( $9 ){ printf "%f\n", $9 }}' tmp2.txt >> tmp1.txt
+    awk '{if( $9 ){ printf "%f\n", $10 }}' tmp2.txt >> tmp1.txt
 
     mapfile -t forces < tmp1.txt
 
