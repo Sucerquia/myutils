@@ -7,8 +7,7 @@ class MoleculeSetter:
         self.atoms = atoms
 
     def rot_x(self, angle):
-        """
-        Rotation matrix around x axis.
+        """Rotation matrix around x axis.
 
         Parameters
         ==========
@@ -137,7 +136,7 @@ class MoleculeSetter:
             if i in indexes:
                 new_positions.append(np.dot(trans, atom.position) + shift)
             else:
-                new_positions.append(atom.position)
+                new_positions.append(atom.position + shift)
         self.atoms.set_positions(new_positions)
 
         return new_positions
