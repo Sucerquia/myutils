@@ -175,7 +175,9 @@ do
     # region dofs_values
     head=$( grep -n "Variables:" "$file" | cut -d ":" -f 1 )
     end=$( tail -n +$(( head + 1 )) "$file" | grep -n "^ $" | head -n 1 | cut -d ":" -f 1 )
-    mapfile -t dof_val < <(tail -n +$(( head + 1 )) "$file" | head -n $(( end - 1 )) | awk '{print $2}')
+    # Transform angles in radians
+    mapfile -t dof_val < <(tail -n +$(( head + 1 )) "$file" | head -n $(( end - 1 )) | \
+        awk '{if ($1 ~ "R"){print $2*1.8897261258369282}else{print $2*0.017453292519943295}}')
     line=$(printf "%-43s" "Redundant internal coordinates")
     line+="R   N="
     line+=$(printf "%12s" "${#dof_val[@]}")
