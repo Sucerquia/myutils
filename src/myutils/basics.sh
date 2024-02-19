@@ -58,14 +58,14 @@ create_bck () {
     for to_bck in "$@"
     do
         # in case creating backup directory
-        bck=$to_bck-bck_1
+        bck=$to_bck-bck_001
         if [ -d "$to_bck" ]
         then
-            bck_i=2
+            bck_i=$(printf "%03d" 2)
             while [ -d "$bck" ]
             do
                 bck=$to_bck-bck_$bck_i
-                bck_i=$(( bck_i + 1 ))
+                bck_i=$(printf "%03d" $(( bck_i + 1 )) )
             done
             warning "$to_bck directory already exist. This directory will be
                 backed up in $bck"
@@ -75,20 +75,28 @@ create_bck () {
         # in case creating backup file
         new_fil=${to_bck%.*} # file name
         ext=${to_bck##*.}    # file extension
-        bck=$new_fil-bck_1.$ext
+        bck=$new_fil-bck_001.$ext
         if [ -f "$to_bck" ]
         then
-            bck_i=2
+            bck_i=$(printf "%03d" 2)
             while [ -f "$bck" ]
             do
                 bck=$new_fil-bck_$bck_i.$ext
-                bck_i=$(( bck_i + 1 ))
+                bck_i=$(printf "%03d" $(( bck_i + 1 )) )
             done
             warning "$to_bck file already exist. This directory will be
                 backed up in $bck"
             mv "$to_bck" "$bck"
         fi
     done
+}
+
+search_last_bck() {
+    name_file=$1
+    mapfile -t all_bcks < <( ls -1 "$1"-bck_???.* | sort )
+    last_woext=${all_bcks[-1]%.*}
+    # prints the number of the last config
+    echo ${last_woext:0-3}
 }
 
 adjust "STARTS"
