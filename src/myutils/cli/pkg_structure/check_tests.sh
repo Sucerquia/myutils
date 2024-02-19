@@ -6,14 +6,18 @@ source "$(myutils basics -path)" TestChecker
 adjust "Starts"
 print_help() {
 echo "
-Check that all scripts are already tested. So far, only python and bash scripts
-are included. The output reports which functions/methods and are not tested or
-if the test file doesn't even exist. This is done assuming that the test of an
-<x_script.ext> is called <test_x_script.py>; same for methods and classes.
+Check that all scripts in a package are already tested. So far, only python and
+bash scripts are included. The output reports which functions/methods and are
+not tested or if the test file doesn't even exist. This is done assuming that
+the test of an <x_script.ext> is called <test_x_script.py>; same for methods
+and classes.
 
-    -n    <name> Package you want to check. there must be a '<name> path'
-          command that returns the location of the pkg files.
-    -t    <test_directory> Default: test
+    -d    <ignore_dirs> directories to be ignored.
+    -f    <ignore_files> files to be ignored.
+    -p    <dir_path> Path to the package source to be analyzed.
+          Default: myutils -path
+    -t    <test_directory> subdirectory of the package where tests are located.
+          Default: test.
 
     -h    prints this message.
 "
@@ -55,14 +59,15 @@ ignore_elements () {
 # ----- set up starts ---------------------------------------------------------
 # General variables
 test_directory='tests'
+original_cs=$(pwd)
+mod_path=$( myutils path )
 
-
-while getopts 'd:f:n:t:h' flag;
+while getopts 'd:f:p:t:h' flag;
 do
     case "${flag}" in
       d) raw_ign_dirs=${OPTARG} ;;
       f) raw_ign_fils=${OPTARG} ;;
-      n) pkg_name=${OPTARG} ;;
+      p) mod_path=${OPTARG} ;;
       t) test_directory=${OPTARG} ;;
 
       h) print_help ;;
@@ -70,18 +75,12 @@ do
     esac
 done
 
-mod_path=$( $pkg_name path )   # path to the files to be documented
-
-if [ ${#pkg_name} -eq 0 ];
-then
-  fail "You have to provide the name of the package you want to check"
-fi
+VERBOSE "Tests of $mod_path will be checked"
 
 if [ ! -d "$mod_path/$test_directory" ];
 then
   fail "$mod_path/$test_directory does not exist"
 fi
-
 
 # directories to be ignore during the check.
 mapfile -t ignore_dirs < <(echo "$raw_ign_dirs" | tr ',' '\n')
@@ -109,24 +108,25 @@ mapfile -t pkg_files < <( ignore_elements \
 
 with_test=( )
 without_test=( )
-cd tests || fail "test directory does not exist"
+cd $test_directory
 
 # the structure of package and tests must be the same
-adjust "tests directories structure"
+adjust "Tests directories structure"
 for dir in "${pkg_dirs[@]}"
 do
     [ -d "$dir" ] || warning "$dir does not exist in tests"
 done
 
-
 for file in "${pkg_files[@]}"
 do
+    # Find the existing test files of python scripts
     ext=$(echo "$file" | cut -d '.' -f3 )
     if [ "$ext" == 'py' ]
     then
         [ -f "${file%/*}/test_${file##*/}" ] && \
             with_test+=( "$file" ) || \
             without_test+=( "$file" )
+    # Check if which sh files are tested already
     elif [ "$ext" == 'sh' ]
     then
         namefile="${file##*/}"
@@ -202,3 +202,5 @@ do
     name=$( echo "$fil" | sed "s/^.\//$pkg_name\//g" )
     echo "$name   "
 done
+
+cd $original_cs

@@ -2,8 +2,9 @@
 
 print_help() {
 echo "
-Check the structure of myutils. All checkers run by default.
+Check the structure of a package. All checkers run by default.
 
+    -d    src directory of the package. Defatul: \"\$myutils -path\"
     -p    pep8 convention in all python scripts.
     -s    ShellCheck in all bash scripts.
     -t    check tests.
@@ -20,8 +21,10 @@ pep8="false"
 shellcheck="false"
 tests="false"
 
-while getopts 'psth' flag; do
+check_dir="$(myutils path)"
+while getopts 'd:psth' flag; do
     case "${flag}" in
+      d) check_dir=${OPTARG};;
       p) pep8='true' ; all="false" ;;
       s) shellcheck='true' ; all="false" ;;
       t) tests='true' ; all="false" ;;
@@ -51,7 +54,7 @@ if $pep8
 then
     source "$(myutils basics -path)" PEP8
     original_cs=$(pwd)
-    cd "$(myutils path)" || fail "myutils path does not exist"
+    cd $check_dir || fail "package path does not exist"
     echo ; echo
     pycodestyle -h > /dev/null || fail "You need to install pycodestyle"
     pycodestyle . --exclude=pre-deprected --ignore W605
@@ -62,5 +65,5 @@ fi
 if $shellcheck
 then
     echo ; echo
-    myutils bash_style
+    myutils bash_style -d $check_dir
 fi

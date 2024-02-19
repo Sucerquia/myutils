@@ -2,9 +2,31 @@
 
 source "$(myutils basics -path)" BashChecker
 
+
+print_help() {
+echo "
+Check bash style of all bash files in a directory, and its subdirectories.
+   -d   directory. Default: \"\$myutils -path\"
+
+   -h   prints this message.
+"
+exit 0
+}
+# ----- definition of functions finishes --------------------------------------
+
+directory="$(myutils path)"
+while getopts 'd:h' flag; do
+    case "${flag}" in
+      d) directory=${OPTARG};;
+
+      h) print_help ;;
+      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+    esac
+done
+
 bsoriginal_dir=$(pwd)
 
-cd "$(myutils path)" || fail "moving to package directory"
+cd $directory || fail "moving to package directory"
 
 mapfile -t bash_files < <(find . -name "*.sh")
 
