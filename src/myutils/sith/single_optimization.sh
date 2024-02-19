@@ -15,7 +15,8 @@ This code runs one optimization using gaussian in one of the clusters. You
 have to create the input file and give it (without .com extension) as first
 argument when run this code.
 
-    -c    run in cascade.
+    -f    name if the gaussian input file without extension (.com).
+    -c    run in server.
 
     -h    prints this message.
 "
@@ -23,8 +24,9 @@ exit 0
 }
 
 cascade='false'
-while getopts 'd:cp:h' flag; do
+while getopts 'f:ch' flag; do
     case "${flag}" in
+      f) file=${OPTARG} ;;
       c) cascade='true' ;;
 
       h) print_help ;;
@@ -48,4 +50,4 @@ then
     source /hits/basement/mbm/sucerquia/exec/load_g09.sh
 fi
 
-g09 "$1.com" "$1.log"
+g09 "$file.com" "$file.log"
