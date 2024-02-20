@@ -138,7 +138,7 @@ class StandardPlotter:
                     yminor: Union[list, np.ndarray, tuple] = None,
                     grid: bool = False, mingrid: bool = False,
                     color_grid: Union[list, np.ndarray, tuple, str] = None,
-                    sci_not: bool=True,
+                    sci_not: bool = True,
                     ) -> plt.Axes:
         """
         Adjust the most common parameters of an axes.
@@ -233,7 +233,6 @@ class StandardPlotter:
             ax.yaxis.set_major_formatter(formatter)
             ax.ticklabel_format(useOffset=False)
 
-            
         if xlim is not None:
             ax.set_xlim(xlim)
         if ylim is not None:
@@ -372,7 +371,7 @@ class StandardPlotter:
         pstyle = self._expand_argument(pstyle, x)
         color_plot = self._expand_argument(color_plot, x)
         lw = self._expand_argument(lw, x)
-        
+
         new_kwargs = [{} for _ in x]
         for arg in kwargs.keys():
             all_args = self._expand_argument(kwargs[arg], x)

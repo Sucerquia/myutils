@@ -156,6 +156,8 @@ def le_same_aminoacids(sith, peptides_info, atom_types, kind_amino):
         all_le.append(values)
     return all_le
 
+
+# TODO: deprecated, up to date with last version of sith.
 class SithAnalysis:
     def __init__(self, sith, pepinfo):
         self.sith = sith
@@ -209,7 +211,8 @@ class DataSetAnalysis:
     def __init__(self, siths, pep_info):
         self.pep_info = pep_info
         self.siths = siths
-        self.analysis = [SithAnalysis(sith, self.pep_info) for sith in self.siths]
+        self.analysis = [SithAnalysis(sith, self.pep_info)
+                         for sith in self.siths]
 
     def plot_le(self, a_names, aminos=3, ax: plt.Axes = None, sp=None):
         if sp is None:

@@ -98,7 +98,7 @@ then
              stretching detected"
 
     # searching incomplete optimization trials
-	nameiplusone=$(printf "%02d" "$(( i + 1))")
+	nameiplusone=$(printf "%02d" "$(( i + 1 ))")
 
     # searching advances in i+1
     $retake && \
