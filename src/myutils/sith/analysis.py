@@ -221,3 +221,47 @@ class DataSetAnalysis:
             l, e = an.le_dof_amino(a_names, aminos)
             sp.plot_data(l, e, ax=ax)
         return ax
+
+
+def set_hes_from_ref(geo_ref, sith_tar, structure):
+    """
+    Set the hessian in in a target sith taken from a geometry of reference.
+    
+    Parameters
+    ==========
+    geo_ref: SITH.Utilities.Geometry
+        sith object that contains the atribute you want to redefine.
+    sith_tar: SITH.SITH
+        sith object that will change its property.
+    structure: int
+        index of the deformed structure to set the hessian.
+
+    Returns
+    =======
+    (SITH.SITH) returns the sith_tar with the hessian in the defined structure.
+    
+    Note: All the SITH.SITH.structures are Geometry objects with all the information of the structure.
+    """
+    for dof in sith_tar.dim_indices:
+        test = dof[dof != 0]
+        check2 = np.concatenate((test[::-1], np.zeros(4-len(test), dtype=int)))
+        if not (np.all(geo_ref.dim_indices == dof, axis=1).any() \
+            or np.all(geo_ref.dim_indices == check2, axis=1).any()):
+            raise('this dof does not exist: ', dof)
+        
+    order = []
+    for dof in sith_tar.dim_indices:
+        test = dof[dof != 0]
+        check2 = np.concatenate((test[::-1], np.zeros(4-len(test), dtype=int)))
+        try:
+            index = np.where(np.all(geo_ref.dim_indices == dof, axis=1))[0][0]
+        except IndexError:
+            index = np.where(np.all(geo_ref.dim_indices == check2, axis=1))[0][0]
+        order.append(index)
+        
+    geo_ref.hessian = geo_ref.hessian[order]
+    geo_ref.hessian = geo_ref.hessian[:, order]
+    
+    sith_tar.structures[structure].hessian = geo_ref.hessian
+    
+    return sith_tar
