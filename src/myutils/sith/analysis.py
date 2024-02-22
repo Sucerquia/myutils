@@ -1,6 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from myutils.plotters import StandardPlotter
+from SITH.SITH import SITH
+from myutils.miscellaneous import output_terminal
+from myutils.peptides import PepSetter
+from os.path import isdir
 
 
 def dof_classificator_all(dofs_indexes, atoms_per_aminoacids):
@@ -206,20 +210,64 @@ class SithAnalysis:
 
 
 class DataSetAnalysis:
-    def __init__(self, siths, pep_info):
-        self.pep_info = pep_info
-        self.siths = siths
-        self.analysis = [SithAnalysis(sith, self.pep_info) for sith in self.siths]
+    def __init__(self, data_dir='./', exclude_prolines=True, kind_analysis='sith'):
+        jedi = False
+        sith = False
+        if kind_analysis == 'sith':
+            sith = True
+        elif kind_analysis == 'jedi':
+            jedi= True
+        elif kind_analysis == 'both':
+            jedi = True
+            sith = True
+        else:
+            raise ValueError("Non-recognized kind of analysis.")
 
-    def plot_le(self, a_names, aminos=3, ax: plt.Axes = None, sp=None):
+        peptides = output_terminal('ls ' + data_dir, print_output=False).split('\n')
+        self.pep_infos = []
+        self.outcomes = {'jedi': [], 'sith': []}
+        self.analysis = {'jedi': [], 'sith': []}
+
+        for pep in peptides:
+            print(pep + ' ', end='')
+            if ((exclude_prolines) and ('P' in pep)) or (not isdir(f'{data_dir}/{pep}/forces')):
+                continue
+
+            self.pep_infos.append(PepSetter(f'{data_dir}/{pep}/{pep}-stretched00.pdb'))
+            
+            if jedi:
+                path = f'{data_dir}/{pep}/'
+                sith = SITH(path)
+                sith.killer(killElements='H')
+                sith.rem_first_last(from_last_minimum=True)
+                self.outcomes['jedi'].append(sith)
+                self.analysis['jedi'].append(SithAnalysis(self.outcomes['jedi'][-1],
+                                                          self.pep_infos[-1]))
+            if sith:
+                try:
+                    path = f'{data_dir}/{pep}/forces'
+                    sith = SITH(inputfiles=path)
+                    sith.rem_first_last(from_last_minimum=True)
+                    sith.sith_analysis()
+                    self.outcomes['sith'].append(sith)
+                    self.analysis['sith'].append(SithAnalysis(self.outcomes['sith'][-1],
+                                                              self.pep_infos[-1]))
+                except:
+                    print(pep)
+                    continue
+
+    def plot_le(self, a_names, aminos=3, ax: plt.Axes = None, sp=None,
+                kind_analysis='sith', lw=1, ms=1):
         if sp is None:
             sp = StandardPlotter()
         if ax is None:
             ax = sp.ax[0]
-        sp.axis_setter
-        for an in self.analysis:
+        sp.axis_setter(ax=ax,
+                        xlabel=f'Distance({", ".join(a_names)})[A]',
+                        ylabel='Energy[Ha]')
+        for an in self.analysis[kind_analysis]:
             l, e = an.le_dof_amino(a_names, aminos)
-            sp.plot_data(l, e, ax=ax)
+            sp.plot_data(l, e, ax=ax, lw=lw, markersize=ms)
         return ax
 
 
