@@ -160,6 +160,8 @@ def le_same_aminoacids(sith, peptides_info, atom_types, kind_amino):
         all_le.append(values)
     return all_le
 
+
+# TODO: deprecated, up to date with last version of sith.
 class SithAnalysis:
     def __init__(self, sith, pepinfo):
         self.sith = sith

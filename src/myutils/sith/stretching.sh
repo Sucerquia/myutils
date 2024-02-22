@@ -80,6 +80,7 @@ verbose "This code will stretch the atoms with the indexes $index1 $index2
 
 # ----- set up finishes -------------------------------------------------------
 
+
 # ----- checking restart starts -----------------------------------------------
 if $restart
 then
@@ -97,28 +98,22 @@ then
              stretching detected"
 
     # searching incomplete optimization trials
-	nameiplusone=$(printf "%02d" "$(( i + 1))")
-    # searching advances in i+1a
-    myutils log2xyz "$pep-stretched${nameiplusone}-a.log" 2> /dev/null && \
-        create_bck "$pep-stretched${nameiplusone}"* && \
-        create_bck "$pep-stretched${nameiplusone}-a"* && \
-        myutils change_distance "$pep-stretched${nameiplusone}-a-bck_1.xyz" \
-            "$pep-stretched${nameiplusone}" frozen_dofs.dat 0 0 \
-            "$method" && \
-        retake='false' && \
-        warning "The stretching of peptide $pep will be restarted from
-                 $(( i + 1 ))a"
+	nameiplusone=$(printf "%02d" "$(( i + 1 ))")
 
     # searching advances in i+1
     $retake && \
         myutils log2xyz "$pep-stretched${nameiplusone}.log" 2> /dev/null && \
-        create_bck "$pep-stretched${nameiplusone}"* &&
-        myutils change_distance "$pep-stretched${nameiplusone}-bck_1.xyz" \
+        create_bck "$pep-stretched${nameiplusone}."* &&
+        lastone=$( search_last_bck $pep-stretched${nameiplusone} ) &&
+        if [ $(( lastone )) -gt 2 ]; then fail "this optimization was" \
+            "restarted more than 3 times and didn't converged."; fi &&
+        echo "coping $pep-stretched${nameiplusone}-bck_$lastone.xyz" &&
+        myutils change_distance "$pep-stretched${nameiplusone}-bck_$lastone.xyz" \
             "$pep-stretched${nameiplusone}" frozen_dofs.dat 0 0 \
             "$method" && \
         retake='false' && \
         warning "The stretching of peptide $pep will be restarted
-            from $(( i + 1))"
+            from $(( i + 1 ))"
     # if i+1 trial doesn't exist
     $retake && \
         warning "The stretching of peptide $pep will be restarted from $i"
@@ -180,9 +175,9 @@ do
     if [ "$output" -ne 0 ]
     then
             # If the code enters here is because, in a first optimization, it
-            # didn't converges so it has to run again to get the optimized 
-            # structure
-            verbose "Optimization did not converge with distance $(( i + 1)) *
+            # didn't converge so it has to run again to get the optimized 
+            # structure. As a second chance to converge.
+            verbose "Optimization did not converge with distance $(( i + 1 )) *
                      $size . Then, a new trial will start now"
             myutils log2xyz "$pep-stretched${nameiplusone}.log" || fail "
                 Transforming log file to xyz in second trial of optimization"
@@ -235,7 +230,7 @@ do
         then
             mkdir rupture
         fi
-        mapfile -t bck_files < <(ls "./rupture/$pep-stretched${nameiplusone}."*)
+        mapfile -t bck_files < <(ls -1 "./rupture/$pep-stretched${nameiplusone}."* | grep -v pdb)
         cd rupture || fail "rupture directory not found"
         create_bck "${bck_files[@]}"
         cd .. || fail "moving to back directory"
