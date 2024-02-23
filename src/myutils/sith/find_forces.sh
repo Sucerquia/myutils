@@ -2,7 +2,7 @@
 
 #SBATCH -N 1                   # number of nodes
 #SBATCH -n 8
-#SBATCH --job-name="workflow"       #job name
+#SBATCH --job-name="forces"       #job name
 #SBATCH -t 24:00:00
 #SBATCH --output=compute_forces-%j.o
 #SBATCH --error=compute_forces-%j.e
@@ -74,7 +74,6 @@ create_bck forces
 mkdir forces
 mkdir bck
 mv ./*-bck*.* bck
-mv ./*-a.* bck
 
 mapfile -t chks < <(ls "$pattern"*.chk)
 
@@ -90,6 +89,8 @@ done
 
 mv forces.com forces/input_template.com || fail "moving template to forces
     directory"
+
+myutils extract_forces
 
 finish "finished"
 exit 0

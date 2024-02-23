@@ -45,6 +45,7 @@ resubmit () {
     sbatch "$( myutils workflow -path)" -p "$1" -c -r -s "$2" -b "$3" -s "$4" ; \
     echo "new JOB submitted"
 }
+
 # ----- definition of functions finishes --------------------------------------
 
 # ----- set up starts ---------------------------------------------------------
@@ -111,7 +112,6 @@ then
     echo " * This JOB will be run in the Node:"
     echo "$SLURM_JOB_NODELIST"
     cd "$SLURM_SUBMIT_DIR" || fail "moving to execution directory: $SLURM_SUBMIT_DIR"
-    # check dependencies
     source "$HOME/.bashrc"
     # shellcheck disable=SC1091
     source /hits/basement/mbm/sucerquia/exec/load_g09.sh
@@ -120,6 +120,7 @@ then
     module use /hits/sw/its/doserbd/haswell/modules/all/GROMACS
     module load 2020.3-fosscuda-2019b
 fi
+
 ase -h &> /dev/null || fail "This code needs ASE"
 command -V g09 &> /dev/null || fail "This code needs gaussian"
 gmx -h &> /dev/null || fail "This code needs gmx"
@@ -140,14 +141,18 @@ then
     # Creation of the peptide directory and moving inside.
     mkdir "$pep"
     cd "$pep" || fail "directory $pep does not exist"
+    verbose "generating peptide"
     # Creation of peptide
     # shellcheck disable=SC2086
     pepgen "$pep" tmp -s flat $pep_options || fail "Creating peptide $pep"
     mv tmp/pep.pdb "./$pep-stretched00.pdb"
-    myutils protonize "./$pep-stretched00.pdb" "./$pep-stretched00.pdb"
+    verbose "protonize"
+    myutils protonize "./$pep-stretched00.pdb" "./$pep-stretched00.pdb" | \
+        fail "protonizing"
+    verbose "define proline state"
     myutils proline_mod -f "$pep-stretched00.pdb" -s "$endoexo" || \
         fail "Proline estates configuration"
-
+    mv "$pep-stretched00modpro.pdb" "$pep-stretched00.pdb" 
     rm -r tmp
 else
     # moving to the peptide directory
@@ -163,9 +168,13 @@ verbose "computing classical energies."
 
 myutils classical_energies
 # compute forces
-verbose "submitting comptutation of forces."
+verbose "submitting comptutation of forces.";
 
-sbatch "$(myutils find_forces -path)" -c
+# command -V nohub || fail "nohub does not exist"
 
-finish "finished"
+module load slurm/20.11.7-1.hits
+sbatch "$( myutils find_forces -path )" "tmp.out" &&
+echo "computation of forces submitted"
+
+finish "$pep finished"
 exit 0

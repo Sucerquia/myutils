@@ -90,6 +90,17 @@ class Protonize:
 
 # add2executable
 def protonize(pdb, output):
+    """
+    Add or remove the H atoms neccessary to neutralize charges in the atoms
+    charged amino acids.
+
+    Parameters
+    ==========
+    pdb: str
+        name of the pdb file with the amino acids.
+    output:
+        name of the output file.
+    """
     prot = Protonize(pdb)
     prot.create_atoms()
     write(output, prot.atoms)

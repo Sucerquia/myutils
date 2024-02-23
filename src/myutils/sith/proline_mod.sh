@@ -6,8 +6,9 @@ print_help() {
 echo "
 Changes the state of the proline to endo, exo or random.
     -f    <path> pdb file.
+    -o    <path> output pdb file.
+    -l    <path> log file of the gromacs outputs. Default /dev/null
     -s    <state> proline state. So far, random, endo and exo are accepted.
-    -l   log file of the gromacs outputs. Default /dev/null
 
     -h   prints this message.
 "

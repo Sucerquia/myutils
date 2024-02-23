@@ -73,6 +73,7 @@ verbose "Extracting forces starts"
 extract_forces_fl=$(pwd)
 
 # moves to the forces directory
+verbose "Moving to $forces_directory"
 cd "$forces_directory" || fail "$forces_directory doesn't exist"
 
 # extract forces of the all log files in "forces_directory"
@@ -81,6 +82,7 @@ for file in "${log_files[@]}"
 do
     # same name than the log file but with fchk extension
     output=${file%.*}.fchk
+    verbose "Creating $output"
     echo "Forces extracted from log files" > $output
     
     # region AtomicNumbers_n_coords
@@ -102,6 +104,7 @@ do
     line+=$(printf "%12s" "${#atomic_nums[@]}")
     echo "$line" >> $output
     write_int_vector "${atomic_nums[@]}" >> $output
+    echo "atomic numbers"
 
     # write coordinates in the file
     line=$(printf "%-43s" "Current cartesian coordinates")
@@ -109,6 +112,7 @@ do
     line+=$(printf "%12s" "${#coords[@]}")
     echo "$line" >> $output
     write_float_vector "${coords[@]}" >> $output
+    echo "coordinates"
     # endregion
 
     # region dofs_indexes
@@ -130,6 +134,7 @@ do
     line+=$(printf "%12s" "${#dim[@]}")
     echo "$line" >> $output
     write_int_vector "${dim[@]}" >> $output
+    echo "dimensions"
     # endregion
 
     # region dofs_indexes
@@ -146,6 +151,7 @@ do
     line+=$(printf "%12s" "${#indexes[@]}")
     echo "$line" >> $output
     write_int_vector "${indexes[@]}" >> $output
+    echo "indices of dofs"
     # endregion
 
     # region forces
@@ -161,6 +167,7 @@ do
     line+=$(printf "%12s" "${#forces[@]}")
     echo "$line" >> $output
     write_float_vector "${forces[@]}" >> $output
+    echo "forces"
     # endregion
 
     # region energy
@@ -170,6 +177,7 @@ do
     line+="R"
     line+=$(printf "%27s" "$ener")
     echo "$line" >> $output
+    echo "energy"
     # endregion
 
     # region dofs_values
@@ -183,5 +191,10 @@ do
     line+=$(printf "%12s" "${#dof_val[@]}")
     echo "$line" >> $output
     write_float_vector "${dof_val[@]}" >> $output
+    echo "dofs values"
     # endregion
 done
+
+cd $extract_forces_fl
+
+finish "going back to $extract_forces_fl"

@@ -38,6 +38,7 @@ finish () {
         # shellcheck disable=SC2068
         adjust $@
     fi
+    echo
     array_bfnames=( "${array_bfnames[@]:1}" )
     basic_functions_name=${array_bfnames[0]}
 }

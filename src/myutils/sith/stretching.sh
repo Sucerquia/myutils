@@ -230,9 +230,8 @@ do
         then
             mkdir rupture
         fi
-        mapfile -t bck_files < <(ls -1 "./rupture/$pep-stretched${nameiplusone}."* | grep -v pdb)
         cd rupture || fail "rupture directory not found"
-        create_bck "${bck_files[@]}"
+        create_bck "$pep-stretched${nameiplusone}"
         cd .. || fail "moving to back directory"
         mv "$pep-stretched${nameiplusone}"* rupture/
         continue
