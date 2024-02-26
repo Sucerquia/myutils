@@ -11,10 +11,10 @@ pymodules = {
     'diff_bonds': 'myutils.ase_utils.tools',
     'extract_bonds': 'myutils.ase_utils.tools',
     'change_distance': 'myutils.ase_utils.tools',
+    'protonate': 'myutils.sith.protonate',
     'proline_state': 'myutils.sith.sith_tools',
     'gen_randpep': 'myutils.sith.sith_tools',
     'log2xyz': 'myutils.sith.g09_xyz',
-    'protonize': 'myutils.sith.protonize',
     'optimized_e': 'myutils.miscellaneous',
     'time_g09': 'myutils.miscellaneous',
 }

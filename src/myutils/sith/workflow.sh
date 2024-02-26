@@ -152,8 +152,8 @@ then
     myutils proline_mod -f "$pep-stretched00.pdb" -s "$endoexo" || \
         fail "Proline estates configuration"
     mv "$pep-stretched00modpro.pdb" "$pep-stretched00.pdb" 
-    verbose "protonize"
-    myutils protonize "./$pep-stretched00.pdb" "./$pep-stretched00.pdb" | \
+    verbose "protonate/deprotonate"
+    myutils protonate "./$pep-stretched00.pdb" "./$pep-stretched00.pdb" | \
         fail "protonizing"
     rm -r tmp
 else

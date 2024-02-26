@@ -1,4 +1,4 @@
-# Note: This code protonizes the protein to make it neutral in charge.
+# Note: This code protonates the protein to make it neutral in charge.
 import numpy as np
 from myutils.peptides import PepSetter
 from ase.visualize import view
@@ -89,7 +89,7 @@ class Protonize:
 
 
 # add2executable
-def protonize(pdb, output):
+def protonate(pdb, output):
     """
     Add or remove the H atoms neccessary to neutralize charges in the atoms
     charged amino acids.
