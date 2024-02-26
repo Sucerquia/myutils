@@ -146,13 +146,15 @@ then
     # shellcheck disable=SC2086
     pepgen "$pep" tmp -s flat $pep_options || fail "Creating peptide $pep"
     mv tmp/pep.pdb "./$pep-stretched00.pdb"
-    verbose "protonize"
-    myutils protonize "./$pep-stretched00.pdb" "./$pep-stretched00.pdb" | \
-        fail "protonizing"
+    myutils classical_minimization -f "./$pep-stretched00.pdb" \
+        -o "./$pep-stretched00.pdb"
     verbose "define proline state"
     myutils proline_mod -f "$pep-stretched00.pdb" -s "$endoexo" || \
         fail "Proline estates configuration"
     mv "$pep-stretched00modpro.pdb" "$pep-stretched00.pdb" 
+    verbose "protonize"
+    myutils protonize "./$pep-stretched00.pdb" "./$pep-stretched00.pdb" | \
+        fail "protonizing"
     rm -r tmp
 else
     # moving to the peptide directory
