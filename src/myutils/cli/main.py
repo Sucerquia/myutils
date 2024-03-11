@@ -35,10 +35,12 @@ sh_executers = {
     'extract_forces': './sith/extract_forces.sh',
     'proline_mod': './sith/proline_mod.sh',
     'workflow': './sith/workflow.sh',
+    'workflow_from_extreme': './sith/workflow_from_extreme.sh',
     'find_forces': './sith/find_forces.sh',
     'clean_ds': './sith/clean_ds.sh',
     'stretching': './sith/stretching.sh',
     'basics': './basics.sh',
+    'pkges_installer': './pkges_installer.sh',
 }
 
 other_files = {

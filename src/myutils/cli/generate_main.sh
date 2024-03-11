@@ -52,6 +52,7 @@ do
     done
 done
 
+# bash scripts
 line2add=$(grep -n "sh_executers = {" "cli/$output" | cut -d ":" -f 1)
 mapfile -t sh_files < <(find . -name "*.sh")
 for file in "${sh_files[@]}"
@@ -64,6 +65,7 @@ do
     fi
 done
 
+# Other files
 line2add=$(grep -n "other_files = {" "cli/$output" | cut -d ":" -f 1)
 mapfile -t mdp_files < <(find . -name "*.mdp")
 for file in "${mdp_files[@]}"
