@@ -40,17 +40,19 @@ def change_distance(inp, out, file_cons, deltad, charge, method):
     if method not in methods:
         raise ValueError("Non-recognized stretching method. To see the "
                          "options, check 'myutils change_distance -h'")
-    # -1 to transform into python convention
-    cons = np.loadtxt(file_cons, usecols=[0, 1], dtype=int) - 1
-    if type(cons[0]) is np.int64:
-        cons = np.array([list(cons)])
+    
     deltad = float(deltad)
-
     # Read previus file
     atoms = read(inp)
     manipulator = MoleculeSetter(atoms)
-    manipulator.xy_alignment(cons[0][0], cons[0][1], center=cons[0][0])
-    eval(f'manipulator.{method}(cons, deltad)')
+    if deltad != 0:
+        # -1 to transform into python convention
+        cons = np.loadtxt(file_cons, usecols=[0, 1], dtype=int) - 1
+        if type(cons[0]) is np.int64:
+            cons = np.array([list(cons)])
+        manipulator.xy_alignment(cons[0][0], cons[0][1], center=cons[0][0])
+        eval(f'manipulator.{method}(cons, deltad)')
+
     manipulator.create_gaussian_input(out=out, charge=charge)
 
     return f"{out}.com"
