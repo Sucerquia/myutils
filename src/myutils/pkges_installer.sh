@@ -7,7 +7,7 @@ print_help() {
 echo "
 This tool installs all the next packages:
 
-    -A    ase*. Default=git repository when <path>='_'
+    -A    <path> ase*. Default=git repository when <path>='_'
     -p    pymol
     -v    vpython
     -V    <path> vmol*. Default=git repository when <path>='_'
@@ -16,7 +16,12 @@ This tool installs all the next packages:
     -P    <path> pepgen*. Default=git repository when <path>='_'
     -x    sphinx
     -t    sphinx_rtd_theme
+
+Consider the next options:
+
     -a    all packages
+    -d    <path>. directory where you want to store the packages installed
+          from the source.
 
 Note: if you use the flag -a, all the packages are installed, even those with
 asterisk. The packages with asterisk are installed from the repository if you
@@ -28,20 +33,20 @@ exit 0
 install_from_repository() {
     # first arg: name of the package; second arg: path to the repository;
     # second arg: git remote repository. The first second has preference over
-    # the third, but if it is ' ', the pkg will be installed from the git
-    # repository after clonning it in a directory called installed_pkg
+    # the third, but if it is '_', the pkg will be installed from the git
+    # repository after clonning it in a directory called $pkgs_dir
     if [ "$2" != "false" ]
     then
         verbose "$1"
         if [ "$2" == "_" ]
         then
             adjust "This pkg will clone from git remote repository to the " \
-                "directory installed_pkgs using ssh protocol. Be sure that " \
+                "directory $pkgs_dir using ssh protocol. Be sure that " \
                 "you have configured the keys."
-            [ -d "installed_pkgs" ] || mkdir "installed_pkgs"
-            cd installed_pkgs
+            [ -d "pkgs_dir" ] || mkdir "$pkgs_dir"
+            cd $pkgs_dir
             git clone "$3" || fail "clonning $3"
-            cd ase
+            cd $1
         else
             [ -d "$2" ] || fail "$2 is not a directory"
             cd "$2"
@@ -63,13 +68,16 @@ pepgen='false'
 sphinx='false'
 sphinx_rtd_theme='false'
 cmocean='false'
-all='false'
 
-while getopts 'A:cpvV:nS:P:xtah' flag;
+all='false'
+pkgs_dir='installed_pkgs'
+
+while getopts 'A:cd:pvV:nS:P:xtah' flag;
 do
     case "${flag}" in
-      A) ase='true' ;;
+      A) ase=${OPTARG} ;;
       c) cmocean='true' ;;
+      d) pkgs_dir=${OPTARG} ;;
       p) pymol='true' ;;
       v) vpython='true' ;;
       V) vmol=${OPTARG} ;;
