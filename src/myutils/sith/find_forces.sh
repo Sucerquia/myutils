@@ -53,18 +53,7 @@ done
 
 if $cascade
 then
-    echo " * This JOB will be run in the Node:"
-    echo "$SLURM_JOB_NODELIST"
-    cd "$SLURM_SUBMIT_DIR" || fail "Moving to the directory from where the job
-        was submitted $SLURM_SUBMIT_DIR"
-    # check dependencies
-    module purge
-    source "$HOME/.bashrc"
-    # shellcheck disable=SC1091
-    source /etc/profile.d/modules.sh
-    # shellcheck disable=SC1091
-    source /hits/basement/mbm/sucerquia/exec/load_g09.sh
-    conda activate myutils
+    load_modules
 fi
 
 cd "$directory" || fail "moving to $directory"

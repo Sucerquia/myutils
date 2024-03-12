@@ -100,4 +100,32 @@ search_last_bck() {
     echo ${last_woext:0-3}
 }
 
+load_modules() {
+    args=$@
+    if [ ${#args} -ne 0 ]
+    then
+        resubmit $args &
+        echo " * This JOB will be run in the Node:"
+        echo "$SLURM_JOB_NODELIST"
+        cd "$SLURM_SUBMIT_DIR" || fail "moving to execution directory: $SLURM_SUBMIT_DIR"
+        source "$HOME/.bashrc"
+    fi
+    if [[ "$(whoami)" == "hits_"* ]]
+    then
+        # shellcheck disable=SC1091
+        source /home/hits/hits_hits/hits_sucerqdl/sw/gaussian/load_g09.sh
+        conda activate myutils
+        module purge
+        module load chem/gromacs/2022.2-cuda-11.6
+    else
+        # shellcheck disable=SC1091
+        source /hits/basement/mbm/sucerquia/exec/load_g09.sh
+        conda activate myutils
+        module purge
+        module use /hits/sw/its/doserbd/haswell/modules/all/GROMACS
+        module load 2020.3-fosscuda-2019b
+        module load slurm/20.11.7-1.hits
+    fi
+}
+
 adjust "STARTS"

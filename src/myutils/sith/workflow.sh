@@ -108,17 +108,7 @@ fi
 
 if $cascade
 then
-    resubmit "$pep" "$method" "$breakages" "$size" &
-    echo " * This JOB will be run in the Node:"
-    echo "$SLURM_JOB_NODELIST"
-    cd "$SLURM_SUBMIT_DIR" || fail "moving to execution directory: $SLURM_SUBMIT_DIR"
-    source "$HOME/.bashrc"
-    # shellcheck disable=SC1091
-    source /hits/basement/mbm/sucerquia/exec/load_g09.sh
-    conda activate myutils
-    module purge
-    module use /hits/sw/its/doserbd/haswell/modules/all/GROMACS
-    module load 2020.3-fosscuda-2019b
+    load_modules "$pep" "$method" "$breakages" "$size"
 fi
 
 ase -h &> /dev/null || fail "This code needs ASE"
@@ -173,8 +163,6 @@ myutils classical_energies
 verbose "submitting comptutation of forces.";
 
 # command -V nohub || fail "nohub does not exist"
-
-module load slurm/20.11.7-1.hits
 sbatch "$( myutils find_forces -path )" "tmp.out" &&
 echo "computation of forces submitted"
 

@@ -83,18 +83,7 @@ fi
 
 if $cascade
 then
-    # TODO: automatic resubmit
-    # resubmit "$ref" "$method" "$breakages" "$size" &
-    echo " * This JOB will be run in the Node:"
-    echo "$SLURM_JOB_NODELIST"
-    cd "$SLURM_SUBMIT_DIR" || fail "moving to execution directory: $SLURM_SUBMIT_DIR"
-    source "$HOME/.bashrc"
-    # shellcheck disable=SC1091
-    source /hits/basement/mbm/sucerquia/exec/load_g09.sh
-    conda activate myutils
-    module purge
-    module use /hits/sw/its/doserbd/haswell/modules/all/GROMACS
-    module load 2020.3-fosscuda-2019b
+    load_modules
 fi
 
 if [ -d $ref ]
