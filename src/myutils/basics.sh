@@ -105,11 +105,12 @@ load_modules() {
     if [ ${#args} -ne 0 ]
     then
         resubmit $args &
-        echo " * This JOB will be run in the Node:"
-        echo "$SLURM_JOB_NODELIST"
-        cd "$SLURM_SUBMIT_DIR" || fail "moving to execution directory: $SLURM_SUBMIT_DIR"
-        source "$HOME/.bashrc"
     fi
+    echo " * This JOB will be run in the Node:"
+    echo "$SLURM_JOB_NODELIST"
+    cd "$SLURM_SUBMIT_DIR" || fail "moving to execution directory: $SLURM_SUBMIT_DIR"
+    source "$HOME/.bashrc"
+
     if [[ "$(whoami)" == "hits_"* ]]
     then
         # shellcheck disable=SC1091
