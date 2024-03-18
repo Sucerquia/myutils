@@ -34,6 +34,8 @@ while getopts 'f:ch' flag; do
     esac
 done
 
+source "$(myutils basics -path)" SingleJob
+
 if $cascade
 then
     load_modules
