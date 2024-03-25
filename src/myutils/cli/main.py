@@ -20,6 +20,7 @@ pymodules = {
 }
 
 sh_executers = {
+    'find_blocks': './bash_scripts/find_blocks.sh',
     'classical_minimization': './gromacs/classical_minimization.sh',
     'classical_energies': './gromacs/classical_energies.sh',
     'analysis': './gromacs/analysis.sh',
@@ -31,7 +32,11 @@ sh_executers = {
     'check_tests': './cli/pkg_structure/check_tests.sh',
     'bash_style': './cli/pkg_structure/bash_style.sh',
     'check_structure': './cli/pkg_structure/check_structure.sh',
+    'compute_forces': './from_extreme/compute_forces.sh',
+    'opt_and_forces': './from_extreme/opt_and_forces.sh',
+    'prepare_and_submit': './from_extreme/prepare_and_submit.sh',
     'single_optimization': './sith/single_optimization.sh',
+    'forces': './sith/forces.sh',
     'extract_forces': './sith/extract_forces.sh',
     'proline_mod': './sith/proline_mod.sh',
     'workflow': './sith/workflow.sh',
