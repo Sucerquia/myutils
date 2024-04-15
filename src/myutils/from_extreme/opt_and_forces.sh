@@ -41,12 +41,25 @@ fi
 
 g09 "$file.com" "$file.log"
 
+if $(grep -q "NtrErr Called from FileIO." "$file.log")
+then
+  myutils resubmit_failed "$file.log"
+  fail "$file failed, it will be submitted again"
+fi
+
 grep -q "Normal termination of Gaussian" "$file.log" || \
     fail "optimization did not work for $file"
 
-sbatch --job-name="${file:0:6}_forces" \
+if [[ "$(whoami)" == "hits_"* ]]
+then
+    single_part="--partition=single"
+else
+    single_part=""
+fi
+
+sbatch --job-name="${file:0:6}_forces" $single_part \
        --output="${file:0:6}_forces.o" \
        --error="${file:0:6}_forces.e" \
-       $(myutils compute_forces -path) -f $file.chk -c
+       $(myutils compute_forces -path) -f $file.chk -c || fail "submitting forces"
 
 finish "optmimization"

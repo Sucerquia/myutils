@@ -2,7 +2,7 @@
 
 source "$(myutils basics -path)" PrepareAndSubmit
 
-for pep in */
+for pep in $@
 do
     verbose ${pep%*/}
     cd $pep
@@ -25,10 +25,19 @@ do
         echo "$index1 $index2 F" >> ${file%.xyz}-opt.com
         sed -i "1a %NProcShared=8" "${file%.xyz}-opt.com"
         sed -i "3a opt(modredun,calcfc)" "${file%.xyz}-opt.com"
-        sbatch --job-name="${file:0:6}_opt" \
+
+        if [[ "$(whoami)" == "hits_"* ]]
+        then
+            single_part="--partition=single"
+        else
+            single_part=""
+        fi
+
+        sbatch --job-name="${file:0:6}_opt" $single_part \
                --output="${file:0:6}_opt.o" \
                --error="${file:0:6}_opt.e" \
-               $(myutils opt_and_forces -path) -f ${file%.xyz}-opt -c
+               $(myutils opt_and_forces -path) -f ${file%.xyz}-opt -c || \
++           fail "submitting opt_and_forces"
     done
     cd ../..
 done
