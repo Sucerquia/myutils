@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
+
 print_help() {
 echo "
 This tool finds the dofs and removes all of them that are repeated. such that
@@ -27,8 +28,6 @@ while getopts 'd:f:p:s:h' flag;
 do
   case "${flag}" in
     d) ds_dir=${OPTARG} ;;
-    f) xyz_pattern=${OPTARG} ;;
-    p) pep=${OPTARG} ;;
     s) subdir=${OPTARG} ;;
 
     h) print_help ;;
@@ -36,13 +35,7 @@ do
   esac
 done
 
-if [ ${#xyz_pattern} -eq 0 ]
-then
-    # find the xyz roughly continuous
-    myutils info_from_opt $pep # it looks for <pep>-opt.log and <pep>-stretched00.pdb
-    xyz_pattern='-forces'
-fi
-
+original_path=$(pwd)
 cd $ds_dir
 ds_path=$(pwd)
 mapfile -t peptides < <(find . -maxdepth 1 -mindepth 1 -type d | sort)
@@ -54,12 +47,14 @@ do
   then
     cd $subdir
   fi
-  # creates dofs. the outputs are *"xyz_pattern"*-dof.dat
+  # creates dofs. the outputs are ${<*pep*.xyz>%.xyz}-dof.dat
   myutils extr_dofs -f "${pep#*/}"
 
-  # send all selected files called <xyz_pattern>* to subset directory
+  # send all selected files called ${<*pep*.xyz>%.xyz}* to subset directory
   myutils reduce_structs "."
   cd subset
   myutils rearange_files
   cd $ds_path
 done
+
+cd $original_path
