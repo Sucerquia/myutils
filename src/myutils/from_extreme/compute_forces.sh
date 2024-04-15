@@ -34,7 +34,7 @@ compute_forces () {
 
 # ----- general setup ---------------------------------------------------------
 cascade='false'
-while getopts 'f:c:h' flag; do
+while getopts 'f:ch' flag; do
     case "${flag}" in
       c) cascade='true' ;;
       f) chkfile=${OPTARG} ;;
@@ -44,6 +44,7 @@ while getopts 'f:c:h' flag; do
     esac
 done
 
+source "$(myutils basics -path)" ${chkfile%.chk}
 if $cascade
 then
     load_modules

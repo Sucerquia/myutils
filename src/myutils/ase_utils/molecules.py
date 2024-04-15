@@ -1,5 +1,6 @@
 from ase.calculators.gaussian import Gaussian
 import numpy as np
+from ase import Atom
 
 
 class MoleculeSetter:
@@ -326,3 +327,119 @@ class MoleculeSetter:
         calculator.write_input(self.atoms)
 
         return calculator
+
+
+class Alignment:
+    def __init__(self, atoms):
+        self.atoms = atoms
+        self.ms = MoleculeSetter(self.atoms)
+
+    @staticmethod
+    def pca_vectors(atoms, indexes='all'):
+        """
+        Find the eigen vectors in the Principal Component Analysis.
+
+        Parameters
+        ==========
+        atoms: ase.Atoms
+
+        """
+        try:
+            from sklearn.decomposition import PCA
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError("This code requires sklearn")
+
+        if indexes == 'all':
+            indexes = list(range(len(atoms)))
+        positions = atoms.positions[indexes]
+        pca = PCA(n_components=3)
+        pca.fit(positions)
+        components = pca.components_
+        return components
+
+    @staticmethod
+    def center_geo(atoms):
+        """
+        Moves the coordinates origin to the geometrical center atoms.
+
+        Parameters
+        ==========
+        atoms: ase.Atoms
+            Molecule to be moved.
+
+        Returns
+        =======
+        (ase.Atoms) Transformed atoms
+        """
+        ms = MoleculeSetter(atoms)
+        geo_center = np.sum(atoms.positions, axis=0) / len(atoms)
+        ms.apply_trans(np.identity(3), shift=-geo_center)
+
+        return ms.atoms
+
+    @staticmethod
+    def align_with_components(atoms):
+        """
+        Aligns the coordinates x, y, z axis with the main vectors (in that order).
+
+        Parameters
+        ==========
+        atoms: ase.Atoms
+            Molecule to be aligned.
+
+        Returns
+        =======
+        (ase.Atoms) rotated and shifted molecule.
+        """
+        ms = MoleculeSetter(atoms)
+        components = Alignment.pca_vectors(atoms)
+
+        # add dummy atoms
+        ms.atoms += Atom('H', position=[0, 0, 0])
+        for vec_comp in components:
+            ms.atoms += Atom('H', position=vec_comp)
+
+        # transform based on dummy atoms
+        ms.xy_alignment(-4, -3, -2)
+
+        #remove dummy atoms
+        ms.atoms = ms.atoms[:-4]
+
+        return ms.atoms
+
+
+class PCAMatcher:
+    def __init__(self, reference, to_compare):
+        assert len(reference) == len(to_compare), "The reference and the " + \
+            "structure to compare have to have the same number of atoms"
+        self.reference = reference.copy()
+        self.to_compare = to_compare.copy()
+
+    def align_molecules(self):
+        self.reference = Alignment.center_geo(self.reference)
+        self.reference = Alignment.align_with_components(self.reference)
+        self.to_compare = Alignment.center_geo(self.to_compare)
+        self.to_compare = Alignment.align_with_components(self.to_compare)
+        return self.reference, self.to_compare
+
+    def matching(self):
+        """align before using this function"""
+        self.align_molecules()
+        n_atoms = len(self.reference)
+        correspondence = -np.ones(n_atoms, dtype=int)
+
+        for i in range(n_atoms):
+            distances = np.linalg.norm(self.reference.positions[i] -
+                                       self.to_compare.positions,
+                                       axis=1)
+            i_min = np.where(distances == min(distances))[0][0]
+
+            if correspondence[i] == -1:
+                correspondence[i] = int(i_min)
+
+        if -1 in correspondence:
+            print('Warning: check repetitions because the next atoms of the reference did'
+                ' not get a correspondent in the test:',
+                np.where(correspondence == -1)[0])
+
+        return correspondence

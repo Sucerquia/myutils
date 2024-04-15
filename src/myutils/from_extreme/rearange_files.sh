@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# ----- definition of functions starts ----------------------------------------
+print_help() {
+echo "
+This tool rearange the files called <pep>-forces<n>* changing the number <n>
+for the correspondent in increasing order. it must be executed in the directory
+where the files to organize are.
+
+    -h    prints this message.
+"
+exit 0
+}
+
+# ----- definition of functions finishes --------------------------------------
+
+# ----- general setup ---------------------------------------------------------
+while getopts 'h' flag; do
+    case "${flag}" in
+      h) print_help ;;
+      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+    esac
+done
+
+n=0
+for xyz_file in $(ls *.xyz | sort)
+do
+  num=$(echo "$xyz_file" | grep -oE '[0-9]+')
+  nn=$(printf "%03d" $n )
+  n=$(( n + 1 ))
+  for j in ${i%.xyz}*
+  do
+    rename=${j//$num/$nn}
+    if [[ "$j" != "$rename" ]]
+    then
+      echo $j " ---> " $rename
+      mv $j $rename
+    else
+      echo $j " ---> " $rename
+    fi
+  done
+done

@@ -106,9 +106,8 @@ def log2xyz(finput, foutput=None):
     if foutput:
         prefix = foutput
     else:
-        prefix = finput.strip(".log")
+        prefix = finput[:-4]
     foutput = prefix + ".xyz"
-
     with open(foutput, "w") as fout:
         dataList = optimized_structure.split("\n")
         atoms = _getCoordinates(dataList)
