@@ -24,7 +24,7 @@ pep=''
 xyz_pattern=''
 
 ds_dir="./"
-while getopts 'd:f:p:s:h' flag;
+while getopts 'd:s:h' flag;
 do
   case "${flag}" in
     d) ds_dir=${OPTARG} ;;
@@ -42,16 +42,18 @@ mapfile -t peptides < <(find . -maxdepth 1 -mindepth 1 -type d | sort)
 
 for pep in ${peptides[@]}
 do
+  echo $pep
   cd $pep
   if [ -d $subdir ]
   then
     cd $subdir
   fi
   # creates dofs. the outputs are ${<*pep*.xyz>%.xyz}-dof.dat
-  myutils extr_dofs -f "${pep#*/}"
+  myutils extr_dofs -f "${pep#*/}" > /dev/null
 
   # send all selected files called ${<*pep*.xyz>%.xyz}* to subset directory
   myutils reduce_structs "."
+  echo -n "rename: "
   cd subset
   myutils rearange_files
   cd $ds_path
