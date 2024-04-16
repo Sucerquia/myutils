@@ -28,15 +28,15 @@ do
   num=$(echo "$xyz_file" | grep -oE '[0-9]+')
   nn=$(printf "%03d" $n )
   n=$(( n + 1 ))
-  for j in ${i%.xyz}*
-  do
-    rename=${j//$num/$nn}
-    if [[ "$j" != "$rename" ]]
-    then
-      echo $j " ---> " $rename
-      mv $j $rename
-    else
-      echo $j " ---> " $rename
-    fi
-  done
+  echo -n "($num/$nn)"
+  if [ "$nn" -ne "$num" ]
+  then
+    for j in ${xyz_file%.xyz}*
+    do
+      rename=${j//$num/$nn}
+      mv $j $rename || fail "moving file $j to $rename"
+    done
+  fi
 done
+echo
+
