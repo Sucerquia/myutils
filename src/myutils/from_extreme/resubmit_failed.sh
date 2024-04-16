@@ -44,7 +44,13 @@ do
       echo $frozen >> $comfile
       sed -i "1a %NProcShared=8" "$comfile"
       sed -i "3a opt(modredun,calcfc)" "$comfile"
-      sbatch --job-name="${file:0:6}_opt" \
+      if [[ "$(whoami)" == "hits_"* ]]
+      then
+          single_part="--partition=single"
+      else
+          single_part=""
+      fi
+      sbatch --job-name="${file:0:6}_opt" $single_part \
              --output="${file:0:6}_opt.o" \
              --error="${file:0:6}_opt.e" \
              $(myutils opt_and_forces -path) -f ${comfile%.com} -c
