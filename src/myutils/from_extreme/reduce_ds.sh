@@ -4,15 +4,14 @@
 
 print_help() {
 echo "
-This tool finds the dofs and removes all of them that are repeated. such that
-the trajectory is reduced without loosing information.
+This tool finds the dofs of all xyz files in each directory of the dataset.
+Such that the trajectory is reduced without loosing information.
 
-    -d    <directory path = ./>. path to the data set of the peptides.
-    -f    <xyz files pattern>. The code will look for *pattern*.xyz
-    -p    <peptide>. Alternative to xyz files, this code can extract the peptides
-          from <peptide>-optext.log
+  -d  <directory path = ./>. path to the data set of the peptides.
+  -s  <subdir>. subdir of each one of the directories where the xyz files
+      are.
 
-    -h    prints this message.
+  -h  prints this message.
 "
 exit 0
 }
@@ -24,7 +23,7 @@ pep=''
 xyz_pattern=''
 
 ds_dir="./"
-while getopts 'd:f:p:s:h' flag;
+while getopts 'd:s:h' flag;
 do
   case "${flag}" in
     d) ds_dir=${OPTARG} ;;
