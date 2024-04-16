@@ -113,7 +113,7 @@ load_modules() {
     if [[ "$(whoami)" == "hits_"* ]]
     then
         # shellcheck disable=SC1091
-        source /home/hits/hits_hits/hits_sucerqdl/sw/gaussian/load_g09.sh
+        source $(ws_find sw_hits_mbm)/gaussian/load_g09.sh
         module purge
         module load chem/gromacs/2022.2-cuda-11.6
     else

@@ -30,7 +30,7 @@ do
       create_bck ${just_name%-opt.log}.xyz
       mv tmp $just_name
 
-      myutils log2xyz "$just_name" || fail "paila"
+      myutils log2xyz "$just_name" || fail "Extracting xyz from logfile"
       file=${just_name//-opt.log/.xyz}
       echo $file
       mv ${just_name%.log}.xyz $file
@@ -44,10 +44,16 @@ do
       echo $frozen >> $comfile
       sed -i "1a %NProcShared=8" "$comfile"
       sed -i "3a opt(modredun,calcfc)" "$comfile"
-      sbatch --job-name="${file:0:6}_opt" \
+      if [[ "$(whoami)" == "hits_"* ]]
+      then
+          single_part="--partition=single"
+      else
+          single_part=""
+      fi
+      sbatch --job-name="${file:0:6}_opt" $single_part \
              --output="${file:0:6}_opt.o" \
              --error="${file:0:6}_opt.e" \
-             $(myutils opt_and_forces -path) -f ${comfile%.com} -c
+             $(myutils opt_and_forces -path) -f ${comfile%.com} -c || fail "submitting Job {file:0:6}"
       cd $original_path
     fi
   fi
