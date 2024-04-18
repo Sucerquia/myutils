@@ -83,7 +83,7 @@ create_bck () {
             while [ -f "$bck" ]
             do
                 bck=$new_fil-bck_$bck_i.$ext
-                bck_i=$(printf "%03d" $(( bck_i + 1 )) )
+                bck_i=$(printf "%03d" $(( 10#$bck_i + 1 )) )
             done
             warning "$to_bck file already exist. This directory will be
                 backed up in $bck"
