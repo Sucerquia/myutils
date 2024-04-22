@@ -44,14 +44,15 @@ while getopts 'f:ch' flag; do
     esac
 done
 
-source "$(myutils basics -path)" ${chkfile%.chk}
+source "$(myutils basics -path)" Forces ${chkfile%.chk} || fail "sourcing basics"
+
 if $cascade
 then
-    load_modules
+    load_modules || fail "loading modules"
 fi
 
 # ----- Core ------------------------------------------------------------------
-source "$(myutils basics -path)" Forces
+
 [[ -f $chkfile ]] || fail "$chkfile does not exist"
 
 compute_forces "$chkfile"
