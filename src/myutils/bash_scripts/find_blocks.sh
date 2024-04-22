@@ -25,7 +25,7 @@ exit 0
 # ----- set up starts ---------------------------------------------------------
 # General variables
 
-
+output='output'
 while getopts 'f:s:e:o:h' flag;
 do
     case "${flag}" in
@@ -43,7 +43,7 @@ if [ ${#file} -eq 0 ] || [ ${#starts} -eq 0 ] || [ ${#ends} -eq 0 ]
 then
     echo "ERROR: you have to set the input flags"
 fi
-  
+
 # ----- set up finishes -------------------------------------------------------
 
 # ---- Body -------------------------------------------------------------------
@@ -51,17 +51,19 @@ fi
 source "$(myutils basics -path)" Find Blocks
 
 mapfile -t nsta < <( grep -n "$starts" "$file" | \
-    awk '{print substr($1, 1, length($1)-1)}' )
+    awk -F ":" '{print $1}' )
+#awk '{print substr($1, 1, length($1)-1)}' )
 
 # Converged?
 mapfile -t nend < <( grep -n "$ends" "$file" | \
-    awk '{print substr($1, 1, length($1)-1)}' )
+    awk -F ":" '{print $1}' )
+#awk '{print substr($1, 1, length($1)-1)}' )
 
 w="001"
 for (( i=0; i<${#nsta[@]}; i++ ))
 do
-    head -n "$(( ${nend[$i]} - 1 ))" HLW-optext.log | \
-        tail -n +"$(( ${nsta[$i]} + 1 ))" > "$pattern"_"$w".out
+    head -n "$(( ${nend[$i]} - 1 ))" $file | \
+        tail -n +"$(( ${nsta[$i]} + 1 ))" > "$output"_"$w".out
     w=$(printf "%03d" "$(( 10#$w + 1 ))")
 done
 
