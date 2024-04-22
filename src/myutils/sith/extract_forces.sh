@@ -80,10 +80,24 @@ cd "$forces_directory" || fail "$forces_directory doesn't exist"
 mapfile -t log_files < <(ls ./*force*.log)
 for file in "${log_files[@]}"
 do
+    # backing up real fchk file
+    fchk_file=false
+    if [ -f "${file%.*}.fchk" ]
+    then
+      grep -q "Forces extracted from log file" "${file%.*}.fchk" || \
+        { mv "${file%.*}.fchk" tmp.fchk ; fchk_file=true ; }
+    fi
+    if [ $fchk_file = false ] && [ -f "${file%.*}.chk" ]
+    then
+      formchk -3 "${file%.*}.chk"
+      mv "${file%.*}.fchk" tmp.fchk
+      fchk_file='true'
+    fi
+
     # same name than the log file but with fchk extension
     output=${file%.*}.fchk
     verbose "Creating $output"
-    echo "Forces extracted from log files" > $output
+    echo "Forces extracted from log file ($file)" > $output
     
     # region AtomicNumbers_n_coords
     number=$( grep -n "Center     Atomic      Atomic" "$file" \
@@ -155,11 +169,20 @@ do
     # endregion
 
     # region forces
-    awk '{if( $3 ){ printf "%f\n", $4 }}' tmp2.txt > tmp1.txt
-    awk '{if( $6 ){ printf "%f\n", $7 }}' tmp2.txt >> tmp1.txt
-    awk '{if( $9 ){ printf "%f\n", $10 }}' tmp2.txt >> tmp1.txt
+    if [ -f $chk_file ]
+    then
+      myutils find_blocks -f tmp.fchk -s \"Internal Forces\" \
+        -e \"Internal Force Constants\" -o tmp
+      for i in $(cat tmp_001.out ); do echo $i; done > tmp1.txt
+    else
+      echo "and here"
+      awk '{if( $3 ){ printf "%f\n", $4 }}' tmp2.txt > tmp1.txt
+      awk '{if( $6 ){ printf "%f\n", $7 }}' tmp2.txt >> tmp1.txt
+      awk '{if( $9 ){ printf "%f\n", $10 }}' tmp2.txt >> tmp1.txt
+    fi
 
-    mapfile -t forces < tmp1.txt
+    unset forces
+    mapfile -t forces < <( cat tmp1.txt )
 
     # write indices of internal coordinates in the file
     line=$(printf "%-43s" "Internal Forces")
@@ -192,9 +215,11 @@ do
     echo "$line" >> $output
     write_float_vector "${dof_val[@]}" >> $output
     echo "dofs values"
+    rm tmp*
     # endregion
 done
 
+echo $extract_forces_fl
 cd $extract_forces_fl
 
 finish "going back to $extract_forces_fl"
