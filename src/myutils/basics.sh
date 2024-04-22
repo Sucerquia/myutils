@@ -66,7 +66,7 @@ create_bck () {
             while [ -d "$bck" ]
             do
                 bck=$to_bck-bck_$bck_i
-                bck_i=$(printf "%03d" $(( bck_i + 1 )) )
+                bck_i=$(printf "%03d" $(( 10#$bck_i + 1 )) )
             done
             warning "$to_bck directory already exist. This directory will be
                 backed up in $bck"
