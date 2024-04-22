@@ -12,7 +12,7 @@ class StandardPlotter:
                  x: Union[list, tuple, np.ndarray] = None,
                  y: Union[list, tuple, np.ndarray] = None,
                  ax: plt.Axes = None, fig: plt.Figure = None,
-                 figwidth: float = 8.57, figheight: float = 11.43,
+                 figwidth: float = 8.9, figheight: float = 8,
                  ax_pref: dict = None, plot_pref: dict = None):
         """
         Parameters
