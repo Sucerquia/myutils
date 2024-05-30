@@ -317,13 +317,21 @@ class DataSetAnalysis:
         
         prolines = []
         errors = []
+        eff_exclu = []
         if exclude is None:
             exclude = []
 
+        n_pep = 0
         for pep in peptides:
-            if (((exclude_prolines) and ('P' in pep.stem)) or (pep.stem in exclude)):
+            if ((exclude_prolines) and ('P' in pep.stem)):
                 prolines.append(pep.stem)
                 continue
+            if (pep.stem in exclude):
+                eff_exclu.append(pep.stem)
+                continue
+            if pep.is_file():
+                continue
+
             assert pep.is_dir(), f"{pep} does not exist."
             
             pdb = list(pep.glob(f'*{pdb_pattern}*.pdb'))
@@ -346,10 +354,15 @@ class DataSetAnalysis:
                 sith.name = pep.stem
                 self.outcomes.append(sith)
                 self.analysis.append(SithAnalysis(self.outcomes[-1],
-                                                self.pep_infos[-1]))
+                                                  self.pep_infos[-1]))
             except:
+                self.pep_infos.pop(-1)
                 errors.append(pep.stem)
-
+            
+            if n_pep % 20 == 0:
+                print()
+            n_pep += 1
+        
             print(pep.stem + ' ', end='')
         
         print(f"\n--- A total of {len(self.outcomes)} peptides where added to the "
@@ -363,10 +376,14 @@ class DataSetAnalysis:
         if len(errors) > 0:
             print("\n--- The next peptides did not woked for some reason. "
                   "Check them individually:")
-            [print(pep+ ' ', end='') for pep in prolines]
+            [print(pep+ ' ', end='') for pep in errors]
+        if len(eff_exclu) > 0:
+            print("--- The next peptides were neglected because they have a "
+                  "proline at least:")
+            [print(pep + ' ', end='') for pep in eff_exclu]
     
         self.test()
-    
+
     def test(self):
         """check that the first sith has the basic variables. It assumes that
         the rest also has it"""
