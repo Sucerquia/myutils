@@ -206,9 +206,15 @@ class StandardPlotter:
             ax.set_xticks(xminor, minor=True)
         if yminor is not None:
             ax.set_yticks(yminor, minor=True)
-        # == grids
 
-        # = major ticks
+        for side in ['bottom', 'right', 'top', 'left']:
+            ax.spines[side].set_linewidth(0.5)
+            ax.spines[side].set_color([0.1, 0.1, 0.1])
+
+        ax.tick_params(axis='both', which='major', length=2, width=0.5)
+        
+        # === Grids
+        # == major ticks
         if grid:
             ax.grid(True, color=color_grid)
         # = minor ticks
