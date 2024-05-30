@@ -84,7 +84,7 @@ do
     fchk_file=false
     if [ -f "${file%.*}.fchk" ]
     then
-      grep -q "Forces extracted from log file" "${file%.*}.fchk" || \
+      grep -q "Gaussian input prepared by ASE" "${file%.*}.fchk" && \
         { mv "${file%.*}.fchk" tmp.fchk ; fchk_file=true ; }
     fi
     if [ $fchk_file = false ] && [ -f "${file%.*}.chk" ]
@@ -169,7 +169,7 @@ do
     # endregion
 
     # region forces
-    if [ -f $chk_file ]
+    if $fchk_file
     then
       myutils find_blocks -f tmp.fchk -s \"Internal Forces\" \
         -e \"Internal Force Constants\" -o tmp
