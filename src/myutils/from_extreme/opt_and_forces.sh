@@ -3,6 +3,8 @@
 #SBATCH -N 1                   # number of nodes
 #SBATCH -n 8
 #SBATCH -t 24:00:00
+#SBATCH --output=%x-%j.o
+#SBATCH --error=%x-%j.e
 #SBATCH --exclusive
 
 

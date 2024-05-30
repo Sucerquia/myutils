@@ -2,10 +2,9 @@
 
 #SBATCH -N 1                   # number of nodes
 #SBATCH -n 8
-#SBATCH --job-name="optimization"       #job name
 #SBATCH -t 24:00:00
-#SBATCH --output=optimization-%j.o
-#SBATCH --error=optimization-%j.e
+#SBATCH --output=%x-%j.o
+#SBATCH --error=%x-%j.e
 #SBATCH --exclusive
 
 
@@ -36,9 +35,22 @@ done
 
 source "$(myutils basics -path)" SingleJob
 
+verbose "JOB information"
+echo " * Date:"
+date
+echo " * Command:"
+echo "$0" "$@"
+
 if $cascade
 then
     load_modules
 fi
 
 g09 "$file.com" "$file.log"
+
+
+verbose "JOB-end information"
+echo " * Date:"
+date
+echo " * Command:"
+echo "$0" "$@"

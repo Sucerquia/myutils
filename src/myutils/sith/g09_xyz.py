@@ -91,12 +91,12 @@ def log2xyz(finput, foutput=None):
             elif isStructure:
                 currentStructure += line
             else:
-                if line.find("Optimized") != -1:
+                if line.find("Optimized") != -1 and not optimized:
                     optimized = True
+                    optimized_structure = structures[-1][1]
+                    break
 
-        if optimized:
-            optimized_structure = currentStructure
-        else:
+        if not optimized:
             if currentStructure != "":
                 structures.append((_getEnergy(currentStructure),
                                    currentStructure))

@@ -4,6 +4,8 @@
 #SBATCH -n 8
 #SBATCH -t 24:00:00
 #SBATCH --exclusive
+#SBATCH --output=%x-%j.o
+#SBATCH --error=%x-%j.e
 
 # ----- definition of functions starts ----------------------------------------
 print_help() {
@@ -23,7 +25,9 @@ compute_forces () {
     echo "construct Z-matrix for ${1%.chk}"
     newzmat -ichk -ozmat -rebuildzmat -bmodel "$1" ${1%.chk}-forces.com || \
        { lnbck=$(search_last_bck ${1%.chk}) ; \
-         newzmat -ichk -ozmat -rebuildzmat -bmodel "${1%.chk}-bck_$lnbck.chk" ${1%.chk}-forces.com || fail "creating matrix"
+         newzmat -ichk -ozmat -rebuildzmat -bmodel "${1%.chk}-bck_$lnbck.chk" ${1%.chk}-forces.com || \
+         fail "creating matrix" ;
+       }
     sed -i "s/#P bmk\/6-31+g opt(modredun,calcfc)/%chk=${1%.chk}-forces\n%NProcShared=8\n#P bmk\/6-31+g force/g" ${1%.chk}-forces.com
     echo "executes g09 computation of forces for $1"
     g09 ${1%.chk}-forces.com || fail "computing forces"
@@ -48,6 +52,11 @@ source "$(myutils basics -path)" Forces ${chkfile%.chk} || fail "sourcing basics
 
 if $cascade
 then
+    verbose "JOB information"
+    echo " * Date:"
+    date
+    echo " * Command:"
+    echo "$0" "$@"
     load_modules || fail "loading modules"
 fi
 
