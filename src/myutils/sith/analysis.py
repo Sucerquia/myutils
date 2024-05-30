@@ -167,6 +167,7 @@ class SithAnalysis:
         self.pep_info = pepinfo
 
     def le_dof_amino(self, a_names, aminos):
+        # Note: aminos is actually residues
         if isinstance(aminos, int):
             # if all atoms belog to the same aminoacid
             aminos = [aminos for _ in a_names]
@@ -466,8 +467,6 @@ class DataSetAnalysis:
             l, e = an.le_dof_amino(a_names, aminos)
             self.ls.append(l)
             self.es.append(e)
-        
-
 
     def plot_DFT_ener(self, ax: plt.Axes = None, sp=None,
                       lw=1, ms=1, **kwargs):
@@ -485,7 +484,7 @@ class DataSetAnalysis:
                        xlabel=f'Stretched Structure',
                        ylabel='DFT Energy[Ha]',
                        **setter)
-        
+
         xs = []
         ys = []
         for i, sith in enumerate(self.outcomes):

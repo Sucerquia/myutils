@@ -59,7 +59,7 @@ class StandardPlotter:
             self.ax = self.ax.flatten()
         else:
             self.ax = np.array([self.ax])
-
+        # TODO: add change of layer per axis.
         self.layer = [0]
         self.spaces = []
         self.add_space(borders=[[0, 0], [1, 1]])
@@ -122,9 +122,12 @@ class StandardPlotter:
             self.layer += [len(self.ax) + 1]
             newax.set_zorder(self.layer[-1])
             self.ax = np.append(self.ax, newax)
+        # TODO: update space[0] such that takes into account new axes.
 
         return newax
-
+    
+    # TODO: avoid to change this that where modified before. this can be done
+    # creating a directory containing the values here used.
     def axis_setter(self,
                     ax: Union[plt.Axes, int] = 0,
                     xlabel: str = '', ylabel: str = '',
@@ -725,7 +728,9 @@ class Space:
                     bottom + (top - bottom) * borders[1][1]]]
 
         return borders
-
+    
+    # TODO: change rows_cols default such that it fits the number of axes
+    # when rows_cols is not given
     def set_axis(self,
                  axes: Union[list, tuple, np.ndarray] = None,
                  rows_cols: Union[list, tuple, np.ndarray] = (1, 1),

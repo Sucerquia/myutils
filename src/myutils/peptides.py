@@ -15,9 +15,9 @@ class PepSetter(MoleculeSetter):
             path to the pdb file containing the information of the protein.
         """
         self.atoms = read(pdb_file)
+        self.name = pdb_file
 
         MoleculeSetter(self.atoms)
-
         indexes_aminos = self.atoms.arrays['residuenumbers']
         names_aminos = self.atoms.arrays['residuenames']
         indexes_atoms = np.arange(len(self.atoms)) + 1

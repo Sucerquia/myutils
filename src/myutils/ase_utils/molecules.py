@@ -5,10 +5,15 @@ from ase import Atom
 
 class MoleculeSetter:
     def __init__(self, atoms):
+        """
+        Parameters
+        ==========
+        """
         self.atoms = atoms
 
     def rot_x(self, angle):
-        """Rotation matrix around x axis.
+        """
+        Rotation matrix around x axis.
 
         Parameters
         ==========
