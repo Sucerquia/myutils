@@ -410,6 +410,27 @@ class DataSetAnalysis:
 
         return self
 
+    def dof_vs_energy(self, aa_names, naas=3):
+        xs = []
+        es = []
+        for an in self.analysis:
+            x, e = an.le_dof_amino(aa_names, naas)
+            xs.append(x)
+            es.append(e)
+
+        return xs, es
+    
+    def dof_vs_energy2(self, aa_names, naas=3):
+        xs = []
+        es = []
+        for an in self.analysis:
+            x, e = an.le_dof_amino(aa_names, naas)
+            xs.append(x - x[0])
+            es.append(e)
+
+        return xs, es
+
+    # Deprected: Remove
     def plot_le(self, a_names, aminos=3, ax: plt.Axes = None, sp=None,
                 lw=1, ms=1, **kwargs):
         """
