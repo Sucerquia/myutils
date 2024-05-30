@@ -204,6 +204,9 @@ class SithAnalysis:
             dof_wo_0 = dof[np.nonzero(dof)[0]]
             target_wo_0 = target[np.nonzero(target)[0]]
 
+            if len(dof_wo_0) != len(target_wo_0):
+                continue
+
             if (dof_wo_0 == target_wo_0).all() or \
                (dof_wo_0 == target_wo_0[::-1]).all():
                 return i
