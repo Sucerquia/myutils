@@ -1,7 +1,7 @@
 import subprocess
 
 
-def output_terminal(cmd, print_output=True, skip_error=False, **kwargs):
+def output_terminal(cmd, print_output=True, skip_error=False, print_cmd=False,**kwargs):
     """
     Runs a command in a terminal and save the output in a list
     of strings
@@ -21,6 +21,8 @@ def output_terminal(cmd, print_output=True, skip_error=False, **kwargs):
     ======
     (list) [#linesStr] output of the executed command, line by line.
     """
+    if print_cmd:
+        print(cmd)
     p = subprocess.Popen(cmd,
                          shell=True,
                          stdout=subprocess.PIPE,
