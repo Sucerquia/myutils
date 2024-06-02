@@ -22,17 +22,21 @@ exit 0
 
 # ----- definition of functions finishes --------------------------------------
 
+source "$(myutils basics -path)" Find Blocks
+
 # ----- set up starts ---------------------------------------------------------
 # General variables
 
+index='false'
 output='output'
-while getopts 'f:s:e:o:h' flag;
+while getopts 'e:f:io:s:h' flag;
 do
     case "${flag}" in
-      f) file=${OPTARG} ;;
-      s) starts=${OPTARG} ;;
-      e) ends=${OPTARG} ;;
-      o) output=${OPTARG} ;;
+      e) ends="${OPTARG}" ;;
+      f) file="${OPTARG}" ;;
+      i) index='true' ;;
+      o) output="${OPTARG}" ;;
+      s) starts="${OPTARG}" ;;
 
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
@@ -41,32 +45,37 @@ done
 
 if [ ${#file} -eq 0 ] || [ ${#starts} -eq 0 ] || [ ${#ends} -eq 0 ]
 then
-    echo "ERROR: you have to set the input flags"
+    warning "This tool does not recognize arguments with simple spaces.
+    Remember to add \\ before each special character." 
+    fail "ERROR: you have to set the input flags"
 fi
 
 # ----- set up finishes -------------------------------------------------------
 
 # ---- Body -------------------------------------------------------------------
 
-source "$(myutils basics -path)" Find Blocks
-
-mapfile -t nsta < <( grep -n "$starts" "$file" | \
+if $index
+then
+  nsta=( $starts )
+  nend=( $ends )
+else
+  mapfile -t nsta < <( grep -n "$starts" "$file" | \
     awk -F ":" '{print $1}' )
-#awk '{print substr($1, 1, length($1)-1)}' )
-
-# Converged?
-mapfile -t nend < <( grep -n "$ends" "$file" | \
+  mapfile -t nend < <( grep -n "$ends" "$file" | \
     awk -F ":" '{print $1}' )
-#awk '{print substr($1, 1, length($1)-1)}' )
+fi
 
 w="001"
 for (( i=0; i<${#nsta[@]}; i++ ))
 do
     head -n "$(( ${nend[$i]} - 1 ))" $file | \
-        tail -n +"$(( ${nsta[$i]} + 1 ))" > "$output"_"$w".out
-    w=$(printf "%03d" "$(( 10#$w + 1 ))")
+          tail -n +"$(( ${nsta[$i]} + 1 ))" > "$output"_"$w".out
+    if [[ "$output" == "terminal" ]]
+    then
+        cat "$output"_"$w".out
+        rm "$output"_"$w".out
+    fi
 done
 
 finish
-
 # -----------------------------------------------------------------------------
