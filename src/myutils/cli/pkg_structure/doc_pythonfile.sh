@@ -2,51 +2,56 @@
 
 print_help() {
 echo "
-Code that automatically creates the documentation of all python classes and
-functions that finds in a file.
+Code that automatically creates or update the '.rst' file for the documentation
+of all python classes and functions that finds in a python file. Also add the
+file to <path_to_doc>/modules.rst if it does not exist.
 
-   -f   <file> file name with the stem from the directory (starting with
-        \"./\") that contains all the python codes to be documented. Usually
-        src directory.  
-   -p   <pkg_path> path to directory that contains all the python codes to be
-        documented. Usually src directory. 
-   -m   <mod_doc> path to the directory that stores the documentation of the
-        modules.
-   -n   <pkg_name> name of the package to be documented.
+  -f  <file> file name with the stem relative to the directory that contains
+      all the python codes to be documented (pkg_path, see -p below).
+  -m  <mod_doc_path> path to the directory that stores the modules
+      documentation.
+  -n  <pkg_name> name of the package to be documented.
+  -p  <pkg_path> path to directory that contains all the python codes to be
+      documented. Usually src directory.
+  -h  prints this message.
 
-   -h   prints this message.
-
-Note: This documentation is usually used in myutils.doc_modules.sh
+Note: This documentation is used in doc_modules.sh
 "
 exit 0
 }
 # ----- definition of functions finishes --------------------------------------
 
 # ==== Costumer set up ========================================================
-pkg_path="$(myutils path)"
-while getopts 'd:f:p:n:h' flag;
+while getopts 'f:m:n:p:h' flag;
 do
-    case "${flag}" in
-      d) pkg_path=${OPTARG} ;;
-      f) all_file=${OPTARG} ;;
-      p) mod_doc=${OPTARG};;
-      n) pkg_name=${OPTARG};;
+  case "${flag}" in
+    f) all_file=${OPTARG} ;;
+    m) mod_doc=${OPTARG} ;;
+    n) pkg_name=${OPTARG};;
+    p) pkg_path=${OPTARG} ;;
 
-      h) print_help ;;
-      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
-    esac
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
 done
 
+# just convention of this code
+[[ "${all_file:0:2}" == "./" ]] || all_file="./"$all_file
+
+# name of the file with the stem without extension
+# it will be the same name in the documentation directory but with rst
+# extension.
 file="${all_file%.*}"
 
 # create rst if the documentation file does not exist.
 if [ ! -f "$mod_doc/$file.rst" ]
 then
-    name_mod=$( echo "$file" | rev | cut -d "/" -f 1 | rev )
-    echo "$name_mod"
-    equals=$( perl -E "say '=' x ${#name_mod}" )
-    echo -e ".. _$name_mod:\n\n$name_mod\n$equals\n\n" >> "$mod_doc/$file.rst"
-    echo -e ".. _$name_mod: was added to $mod_doc/$file.rst"
+  name_mod=$( echo "$file" | rev | cut -d "/" -f 1 | rev )
+  echo "${name_mod^}"
+  equals=$( perl -E "say '=' x ${#name_mod}" )
+  # Creates heading
+  echo -e ".. _$name_mod:\n\n${name_mod^}\n$equals\n\n" >> "$mod_doc/$file.rst"
+  echo -e ".. _$name_mod: was added to $mod_doc/$file.rst"
 fi
 
 # check if the rst file already exist in modules.rst file. Add it other wise.

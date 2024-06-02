@@ -1,4 +1,6 @@
 import subprocess
+import inspect
+from importlib import import_module
 
 
 def output_terminal(cmd, print_output=True, skip_error=False, print_cmd=False,**kwargs):
@@ -122,3 +124,29 @@ def optimized_e(file):
     out = output_terminal('grep "E(RBMK) =" ' + file)
     energy = float(out.split()[-5])
     return energy * 27.21  # energy in eV
+
+
+# add2executable
+def args_and_defaults(module, *args):
+    """
+    Takes a function and prints its parameters with their default values.
+
+    Parameters
+    ==========
+    func:
+        function that you want to extract the parameters and default values.    
+    """
+    module = import_module(module)
+    for func in args:
+        method = getattr(module, func)
+
+        signature = inspect.signature(method)
+        
+        print("@@@_Separation_of_function_starts@@@")
+        print(func)
+        for param_name, param in signature.parameters.items():
+            if param.default != inspect.Parameter.empty:
+                print(f"{param_name}: {param.default}")
+            else:
+                print(f"{param_name}")
+        print("@@@_Separation_of_function_ends@@@")
