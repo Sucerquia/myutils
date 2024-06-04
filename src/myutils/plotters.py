@@ -504,13 +504,9 @@ class StandardPlotter:
 
     def raxis(self,
               ax: plt.Axes,
-              ylabel: str = '',
-              color_label: Union[list, np.ndarray, tuple, str] = None,
-              factor: int = 10,
-              yticks: Union[list, np.ndarray, tuple] = None,
-              yminor: Union[list, np.ndarray, tuple] = None,
-              mingrid: bool = False,
-              grid: bool = False) -> plt.Axes:
+              rax_color: Union[list, np.ndarray, tuple, str] = None,
+              lax_color: Union[list, np.ndarray, tuple, str] = None,
+              **kwargs) -> plt.Axes:
         """
         Creates an axis on the right, such that your plot can have two set of
         data for the same x values. You will be plotting in a figure as follows
@@ -532,31 +528,49 @@ class StandardPlotter:
             fractor to scale the sizes in the plot. Basic size of reference.
         yticks: array. Default=automatic
             numbers to show up in the y right axis.
-        color_label: RGB array or matplotlib colors. Default=[0.4, 0.4, 0.4]
+        rax_color: RGB array or matplotlib colors. Default=[0.4, 0.4, 0.4]
             color of the y-right labels
+        rax_color: RGB array or matplotlib colors. Default=[0.4, 0.4, 0.4]
+            color of the y-left labels
         yminor: array. Default=None
             minor ticks to add to the y right axis.
         grid: bool. Default=False
             True to grid regarding the main ticks (major)
         mingrid: bool. Default=False
             True to grid regarding the secundary ticks (minor)
+        **kwargs for axis_setter for the new axis.
 
         Return
         ======
         (Axes) overlaped axes with the y axis on the right
         """
+
+        if rax_color is None:
+            rax_color = [0.4, 0.4, 0.4]
+        if lax_color is None:
+            lax_color = [0.4, 0.4, 0.4]
         if isinstance(ax, int):
             ax = self.ax[ax]
+        if not hasattr(ax, 'preferences'):
+            ax.preferences = self.ax_pref.copy()
+        self._change_dict(ax.preferences)
+        pref = ax.preferences
+        
+        ax.spines['right'].set_visible(False)
+        ax.patch.set_alpha(0)
+        ax.tick_params(axis='y', colors=lax_color)
+        ax.spines['left'].set_color(lax_color)
+        ax.set_ylabel(pref['ylabel'], fontsize=pref['factor'] * 2.5,
+                      color=lax_color, weight='bold',
+                      labelpad=pref['factor'])
+
         ax2 = ax.twinx()
         ax = ax2
-        ax.tick_params(axis='y', colors=color_label)
-
-        if color_labels is None:
-            color_labels = [0.4, 0.4, 0.4]
-
-        self.axis_setter(ax, ylabel=ylabel, factor=factor, yticks=yticks,
-                         color_label=color_label, yminor=yminor, grid=grid,
-                         mingrid=mingrid)
+        ax.tick_params(axis='y', colors=rax_color)
+        kwargs['color_labels'] = rax_color
+        kwargs['color_spines'] = rax_color
+        self.axis_setter(ax, **kwargs)
+        self.ax = np.append(self.ax, ax)
         return ax
 
     def set_polar(self,
