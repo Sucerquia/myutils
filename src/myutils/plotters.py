@@ -35,11 +35,33 @@ class StandardPlotter:
             height of the figure in centimeters.
         ax_pref: dict. Default=None
             argument preferences for 'axis_setter'. For more details about
-            options, check StandardPlotter.axis_setter
+            options, check StandardPlotter.change_ax_defaults
         plot_pref: dict. Default=None
             argument preferences for 'plot_data'. For more details about
             options, check StandardPlotter.plot_data
         """
+        # ==== Default ====
+        self.ax_pref = {'xlabel': '',
+                        'ylabel': '',
+                        'factor': 10,
+                        'xticks': None,
+                        'yticks': None,
+                        'xticklabels': None,
+                        'yticklabels': None,
+                        'xlim': None,
+                        'ylim': None,
+                        'color_labels': [0.4, 0.4, 0.4],
+                        'xminor': None,
+                        'yminor': None,
+                        'grid': False,
+                        'mingrid': False,
+                        'color_grid': [0.8, 0.8, 0.8],
+                        'sci_not': True,
+                        'lw_spines': 0.5,
+                        'color_spines': [0.1, 0.1, 0.1],
+                        'l_ticks': 2}
+        self.ax_pref_bck = self.ax_pref.copy()
+
         # ==== Axis and Figure setup ====
         if ax is None and fig is None:
             self.fig, self.ax = plt.subplots(1, 1, figsize=(figwidth / 2.54,
@@ -69,18 +91,108 @@ class StandardPlotter:
             ax.set_zorder(i + 1)
 
         self.plots = []
-
-        # ==== Default ====
-        if ax_pref is None:
-            ax_pref = {}
-        if plot_pref is None:
-            plot_pref = {}
+        if ax_pref is not None:
+            self.change_ax_defaults(**ax_pref)
 
         for ax in self.ax:
             self.axis_setter(ax, **ax_pref)
 
         if x is not None:
             self.plot_data(x, y=y, **plot_pref)
+
+    def change_ax_defaults(self, reset: bool = False, **kwargs):
+        """
+        Changes the values of StandardPlot.ax_pref dictionary.
+
+        Prameters
+        =========
+        reset: bool
+            besides of the changes given in the kwargs, reset the other values
+            to the default.
+        **kwargs of the defaults you want to change. Among the posibilities,
+        you have:
+
+        xlabel: str. Default=''
+            label for the x axis.
+        ylabel: str. Default=''
+            label for the y axis.
+        factor: float. Default=10
+            fractor to scale the sizes in the plot. Basic size of reference.
+        xticks: array. Default=automatic
+            numbers to appear in the x axis.
+        yticks: array. Default=automatic
+            numbers to appear in the y axis.
+        xticklabels: List of strings. Default=None (same as xticks)
+            characters to replace the numbers in the xticks.
+        yticklabels: List of strings. Default=None (same as yticks)
+            characters to replace the numbers in the yticks.
+        xlim: array. Default=None
+            x limits, [min, max].
+        ylim: array. Default=None
+            y limits, [min, max].
+        color_labels: RGB array or matplotlib colors. Default=[0.4, 0.4, 0.4]
+            color of the x and y labels
+        xminor: array. Default=None
+            minor ticks to add to the x axis.
+        yminor: array. Default=None
+            minor ticks to add to the y axis.
+        grid: bool. Default=False
+            grid regarding the main ticks (major)
+        mingrid: bool. Default=False
+            grid regarding the secundary ticks (minor)
+        color_grid: RGB array or matplotlib colors. Default=[0.8, 0.8, 0.8]
+            color for minor and major grid.
+        sci_not: bool. Default=True
+            True for usage of scientific notation.
+        lw_spines: float. Default=0.5
+            line width of spines.
+        color_spines: RGB array or matplotlib colors. Default=[0.1, 0.1, 0.1]
+            Color of spines.
+        l_ticks: float. Default=2
+            Lenght of ticks.
+
+        Returns
+        =======
+        (dict) modified StandardPlot.ax_pref.
+
+        Note
+        ====
+        The defaults showed before only represent the initial state. If you
+        change one of the parameters in some point, it will keep that value
+        even after calling this function if you do not specify that parameter.
+        For restoring those values, use reset=True.
+        """
+        if reset:
+            self.ax_pref = self.ax_pref_bck.copy()
+        self._change_dict(self.ax_pref, **kwargs)
+
+        return self.ax_pref
+
+    def _change_dict(self, dictio, **kwargs):
+        """
+        Changes the values of the keys given in the arguments. The other values
+        of the dictionary remain the same.
+
+        Prameters
+        =========
+        dict: dictionary
+            dictionary that you want to change the values.
+        **kwargs of the parameters you want to change.
+
+        Returns
+        =======
+        (dict) modified default_dict.
+
+        Note:
+        =====
+        This function does not allow to set new keys.
+        """
+        for parameter, value in kwargs.items():
+            if parameter not in dictio:
+                raise ValueError(f'{parameter} is not part of the dictionary')
+            dictio[parameter] = value
+
+        return dictio
 
     def add_space(self, **kwargs):
         """
@@ -97,6 +209,7 @@ class StandardPlotter:
         """
         self.layer.insert(0, self.layer[0] - 1)
         space = Space(sp=self, **kwargs)
+        space.frame.preferences = self.ax_pref_bck.copy()
         self.spaces += [space]
 
         return space
@@ -125,58 +238,17 @@ class StandardPlotter:
         # TODO: update space[0] such that takes into account new axes.
 
         return newax
-    
-    # TODO: avoid to change this that where modified before. this can be done
-    # creating a directory containing the values here used.
-    def axis_setter(self,
-                    ax: Union[plt.Axes, int] = 0,
-                    xlabel: str = '', ylabel: str = '',
-                    factor: int = 10,
-                    xticks: Union[list, np.ndarray, tuple] = None,
-                    yticks: Union[list, np.ndarray, tuple] = None,
-                    xlim: Union[list, np.ndarray, tuple] = None,
-                    ylim: Union[list, np.ndarray, tuple] = None,
-                    color_labels: Union[list, np.ndarray, tuple, str] = None,
-                    xminor: Union[list, np.ndarray, tuple] = None,
-                    yminor: Union[list, np.ndarray, tuple] = None,
-                    grid: bool = False, mingrid: bool = False,
-                    color_grid: Union[list, np.ndarray, tuple, str] = None,
-                    sci_not: bool = True,
-                    ) -> plt.Axes:
+                    
+    def axis_setter(self, ax: Union[plt.Axes, int] = 0, reset: bool = False, **kwargs) -> plt.Axes:
         """
         Adjust the most common parameters of an axes.
 
         Parameters
         ==========
         ax: int or axes. Default=0
-            plt.axes object or index of the axis in StandardPlotter. In case it
-            is not given, a new one will be created.
-        xlabel: str. Default=''
-            label for the x axis.
-        ylabel: str. Default=''
-            label for the y axis.
-        factor: float. Default=10
-            fractor to scale the sizes in the plot. Basic size of reference.
-        xticks: array. Default=automatic
-            numbers to appear in the x axis.
-        yticks: array. Default=automatic
-            numbers to appear in the y axis.
-        xlim: array. Default=None
-            x limits, [min, max].
-        ylim: array. Default=None
-            y limits, [min, max].
-        color_labels: RGB array or matplotlib colors. Default=[0.4, 0.4, 0.4]
-            color of the x and y labels
-        xminor: array. Default=None
-            minor ticks to add to the x axis.
-        yminor: array. Default=None
-            minor ticks to add to the y axis.
-        grid: bool. Default=False
-            grid regarding the main ticks (major)
-        mingrid: bool. Default=False
-            grid regarding the secundary ticks (minor)
-        color_grid: RGB array or matplotlib colors. Default=[0.4, 0.4, 0.4]
-            color for minor and major grid.
+            plt.axes object or index of the axis in StandardPlotter.
+        **kwargs of the preferences you want to change. For further details,
+        take a look in ax.preferences, where ax is the previous argument.
 
         Return
         ======
@@ -184,56 +256,62 @@ class StandardPlotter:
 
         Note
         ====
-        These are not all the possibilities to adjust in a plot using
-        matplotlib. You can use the figure and axis of the output to do further
-        changes. myutils does not pretend to replace matplotlib but making it
-        more accesible for scientific proposals.
+        StandardPlotter.ax_pref do not contain all the possibilities to adjust
+        in a plot using matplotlib. You can use the axis of the output to do
+        further changes. myutils does not pretend to replace matplotlib but
+        making it more accesible for scientific proposals.
         """
         if isinstance(ax, int):
             ax = self.ax[ax]
 
-        if color_labels is None:
-            color_labels = [0.4, 0.4, 0.4]
-        if color_grid is None:
-            color_grid = [0.8, 0.8, 0.8]
+        if reset:
+            ax.preferences = self.ax_pref_bck
+        elif not hasattr(ax, 'preferences'):
+            ax.preferences = self.ax_pref.copy()
+
+        self._change_dict(ax.preferences, **kwargs)
+        pref = ax.preferences
 
         # ==== axis setup ====
-        ax.tick_params(labelsize=factor * 1.5)
+        ax.tick_params(labelsize=pref['factor'] * 1.5)
         # == major ticks
-        if xticks is not None:
-            ax.set_xticks(xticks)
-        if yticks is not None:
-            ax.set_yticks(yticks)
+        if pref['xticks'] is not None:
+            ax.set_xticks(pref['xticks'], labels=pref['xticklabels'])
+        if pref['yticks'] is not None:
+            ax.set_yticks(pref['yticks'], labels=pref['yticklabels'])
+
         # == minor ticks
-        if xminor is not None:
-            ax.set_xticks(xminor, minor=True)
-        if yminor is not None:
-            ax.set_yticks(yminor, minor=True)
+        if pref['xminor'] is not None:
+            ax.set_xticks(pref['xminor'], minor=True)
+        if pref['yminor'] is not None:
+            ax.set_yticks(pref['yminor'], minor=True)
 
+        ax.tick_params(axis='both', which='major', length=pref['l_ticks'],
+                       width=pref['lw_spines'])
         for side in ['bottom', 'right', 'top', 'left']:
-            ax.spines[side].set_linewidth(0.5)
-            ax.spines[side].set_color([0.1, 0.1, 0.1])
+            ax.spines[side].set_linewidth(pref['lw_spines'])
+            ax.spines[side].set_color(pref['color_spines'])
 
-        ax.tick_params(axis='both', which='major', length=2, width=0.5)
-        
         # === Grids
-        # == major ticks
-        if grid:
-            ax.grid(True, color=color_grid)
-        # = minor ticks
-        if mingrid:
-            if (xminor is None) and (yminor is None):
+        # == major grids
+        if pref['grid']:
+            ax.grid(True, color=pref['color_grid'])
+        # == minor grids
+        if pref['mingrid']:
+            if (pref['xminor'] is None) and (pref['yminor'] is None):
                 raise ValueError("To add min grid you have to define "
                                  "xminticks or yminticks")
-            ax.grid(True, which='minor', color=color_grid)
+            ax.grid(True, which='minor', color=pref['color_grid'])
         # == axis labels
-        ax.set_xlabel(xlabel, fontsize=factor * 2.5, color=color_labels,
-                      weight='bold', labelpad=factor)
-        ax.set_ylabel(ylabel, fontsize=factor * 2.5, color=color_labels,
-                      weight='bold', labelpad=factor)
+        ax.set_xlabel(pref['xlabel'], fontsize=pref['factor'] * 2.5,
+                      color=pref['color_labels'], weight='bold',
+                      labelpad=pref['factor'])
+        ax.set_ylabel(pref['ylabel'], fontsize=pref['factor'] * 2.5,
+                      color=pref['color_labels'], weight='bold',
+                      labelpad=pref['factor'])
         # == scientific notation for numbers with more than 2 decimals
-        if sci_not:
-            ax.yaxis.offsetText.set_fontsize(factor * 1.5)
+        if pref['sci_not']:
+            ax.yaxis.offsetText.set_fontsize(pref['factor'] * 1.5)
             formatter = mticker.ScalarFormatter(useMathText=True)
             formatter.set_powerlimits((-2, 2))
             ax.yaxis.set_major_formatter(formatter)
@@ -241,11 +319,10 @@ class StandardPlotter:
             formatter = mticker.ScalarFormatter(useMathText=False)
             ax.yaxis.set_major_formatter(formatter)
             ax.ticklabel_format(useOffset=False)
-
-        if xlim is not None:
-            ax.set_xlim(xlim)
-        if ylim is not None:
-            ax.set_ylim(ylim)
+        if pref['xlim'] is not None:
+            ax.set_xlim(pref['xlim'])
+        if pref['ylim'] is not None:
+            ax.set_ylim(pref['ylim'])
 
         return ax
 
@@ -620,6 +697,7 @@ class Space:
         layer: str
             'top' or 'bottom', if you want to see the frame in the front or in
             the back.
+        **kwargs #TODO add doc
 
         Return
         ======
@@ -647,17 +725,16 @@ class Space:
                             yminor=minorticks,
                             grid=True,
                             mingrid=True,
-                            color_grid=color)
+                            color_grid=color,
+                            color_spines=color)
 
         self.frame.tick_params(colors=color)
-
-        for side in ['bottom', 'right', 'top', 'left']:
-            self.frame.spines[side].set_color(color)
 
         if layer == 'front':
             self.frame.set_zorder(len(self.sp.ax) + 1)
         elif layer == 'back':
             self.frame.set_zorder(0)
+
         return self.frame
 
     def add_axes(self, ax: plt.Axes) -> np.ndarray:
@@ -673,6 +750,9 @@ class Space:
         ======
         (array) all the axes belonging to the space.
         """
+        if not hasattr(ax, 'preferences'):
+            ax.preferences = self.sp.ax_pref.copy()
+
         self.axes = np.append(self.axes, ax)
         return self.axes
 
@@ -694,6 +774,7 @@ class Space:
         ======
         (plt.Axes) already relocated axes.
         """
+        #TODO: change ax None for 0. default
         if ax is None and self.axes[0] is None:
             raise ValueError("To locate an axis, you have to provide an axis"
                              " or add at least one axis to the space")
