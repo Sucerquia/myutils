@@ -219,7 +219,6 @@ do
     # endregion
 done
 
-echo $extract_forces_fl
 cd $extract_forces_fl
 
 finish "going back to $extract_forces_fl"
