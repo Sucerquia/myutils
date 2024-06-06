@@ -55,7 +55,7 @@ then
   source "$(myutils basics -path)" PEP8
   original_cs=$(pwd)
   cd $check_dir || fail "package path does not exist"
-  for file in *.py
+  for file in $(find . -name "*.py")
   do
     sed -i 's/[[:space:]]*$//g' $file
     sed -i 's/^[[:space:]]*$//g' $file

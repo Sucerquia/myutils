@@ -135,7 +135,7 @@ def args_and_defaults(module, *args):
     Parameters
     ==========
     func:
-        function that you want to extract the parameters and default values.   
+        function that you want to extract the parameters and default values.
     """
     module = import_module(module)
     for func in args:

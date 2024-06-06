@@ -14,7 +14,7 @@ import glob
 # add2executable
 def info_from_opt(pep):
     """
-    Extract configurations 
+    Extract configurations
     Parameters
     ==========
     """
@@ -63,7 +63,7 @@ def info_from_opt(pep):
     for conf in atoms:
         ms = MoleculeSetter(conf)
         ms.xy_alignment(ind1, ind2, ind3)
-    
+
     # TODO: change from here to consider continuos DOFs instead of continuos
     # distance. This function can be unified in this and the next one.
 
@@ -89,11 +89,11 @@ def info_from_opt(pep):
             new_set.extend(inbetween)
         new_set.append(conf)
         i += 1
-    
+
     # in case of last configurations does not belong to new_set, it is added
     if np.any(atoms[-1].positions != new_set[-1].positions):
         new_set.append(atoms[-1])
-    
+
     # write all the trajectory
     for i, atoms in enumerate(new_set[::-1]):
         write('{}-forces{:03d}.xyz'.format(pep, i), atoms)
@@ -104,7 +104,7 @@ def reduce_structs_pre(dir):
     unnrelevant changes"""
     all_files = glob.glob(f"{dir}/*-dofs.dat")
     all_files.sort()
-    
+
     dofs_ref = np.loadtxt(all_files[0], delimiter='=', comments='      Variables:', usecols=0, dtype=str)
     nrs = len([r for r in dofs_ref if r[1] == 'R'])
     all_dofs = []
@@ -122,7 +122,7 @@ def reduce_structs_pre(dir):
 
     d_ij = (all_dofs[j] - all_dofs[j + 1:])
     d_ij[:, :nrs] *= 10
-    
+
     condition = d_ij[:, nrs:] < -180
     while condition.any():
         d_ij[:, nrs:][condition] += 360
@@ -131,9 +131,9 @@ def reduce_structs_pre(dir):
     while condition.any():
         d_ij[:, nrs:][condition] -= 360
         condition = d_ij[:, nrs:] > 180
-    
+
     d_ij[:, nrs:] *= 1e-2
-    
+
     maxis_d = np.amax(d_ij[:, :nrs], axis=1)
     maxis_a = np.amax(d_ij[:, nrs:], axis=1)
     with open("file.dat", "w") as f:
@@ -158,7 +158,7 @@ def reduce_structs_pre(dir):
         d_ij = (all_dofs[j] - all_dofs[j + 1:])
         # rescale distances and angles to have them in the same order of
         # magnitude. I could also evaluate the approximation for distances and then
-        # for angles and use logicaland. 
+        # for angles and use logicaland.
         condition = d_ij[:, nrs:] < -180
         while condition.any():
             d_ij[:, nrs:][condition] += 360
@@ -228,7 +228,7 @@ def reduce_structs(dir):
         d_ij = (all_dofs[j] - all_dofs[j + 1:])
         # rescale distances and angles to have them in the same order of
         # magnitude. I could also evaluate the approximation for distances and
-        # then for angles and use logicaland. 
+        # then for angles and use logicaland.
         condition = d_ij[:, nrs:] < -180
         while condition.any():
             d_ij[:, nrs:][condition] += 360
@@ -237,7 +237,7 @@ def reduce_structs(dir):
         while condition.any():
             d_ij[:, nrs:][condition] -= 360
             condition = d_ij[:, nrs:] > 180
-        d_ij[:, nrs:] *= 1e-3 # trans 1 degree 
+        d_ij[:, nrs:] *= 1e-3 # trans 1 degree
         d_ij = abs(d_ij)
         close = np.isclose(d_ij, 0, atol=1e-3)
         by_struc = np.all(close, axis=1)
@@ -249,7 +249,7 @@ def reduce_structs(dir):
 
     # copy relevant files to a directory called subset
     all_files = np.array(all_files)[new_set]
-    
+
     output_terminal("if [ ! -d subset ]; then mkdir subset; fi")
     for file in all_files:
         output_terminal("name=" + file + "; cp ${name%-dofs.dat}* subset")

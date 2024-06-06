@@ -40,7 +40,7 @@ def change_distance(inp, out, file_cons, deltad, charge, method):
     if method not in methods:
         raise ValueError("Non-recognized stretching method. To see the "
                          "options, check 'myutils change_distance -h'")
-    
+
     deltad = float(deltad)
     # Read previus file
     atoms = read(inp)
