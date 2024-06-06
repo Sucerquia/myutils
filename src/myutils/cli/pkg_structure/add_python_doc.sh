@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 source "$(myutils basics -path)" AddPythonDoc
 
 print_help() {
@@ -76,16 +75,16 @@ do
     mapfile -t functions < <(grep "^def " "$fil" | awk '{print $2}' | \
                              cut -d "(" -f 1)
     module=$(echo "myutils"${fil//\.\//\.} | sed "s/\//\./g" | sed "s/\.py//g")
-    echo $module
-    myutils args_and_defaults $module ${functions[@]}
-    # TODO: So far, this code prints the functions and parameters in each python file
-    # separated by @@@... (check args_and_defaults).
-    # The next step will be to check this functions/classes and its parameters and
-    # add the documentation automatically
 
-    # Another important topic is to define automatic documentation of bash scripts.
+    for func in ${functions[@]}
+    do
+      myutils find_documentation -f "$func" -m "$module"
+    done
+    # TODO: SO far, this script finds the functions and the module and send it to fin_documentation
+    # The idea is to take that output (the corrected documentation) and and replace it into the python file
+
+    # Classes
+    # TODO: extend this proporsal for classes
   fi
 done
-
-
 

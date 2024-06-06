@@ -32,6 +32,7 @@ sh_executers = {
     'pulling': './gromacs/pulling.sh',
     'peptide_pulling': './gromacs/peptide_pulling.sh',
     'generate_main': './cli/generate_main.sh',
+    'find_documentation': './cli/pkg_structure/find_documentation.sh',
     'doc_pythonfile': './cli/pkg_structure/doc_pythonfile.sh',
     'doc_modules': './cli/pkg_structure/doc_modules.sh',
     'check_tests': './cli/pkg_structure/check_tests.sh',
