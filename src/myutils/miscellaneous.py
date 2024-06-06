@@ -3,7 +3,8 @@ import inspect
 from importlib import import_module
 
 
-def output_terminal(cmd, print_output=True, skip_error=False, print_cmd=False,**kwargs):
+def output_terminal(cmd, print_output=True, skip_error=False, print_cmd=False,
+                    **kwargs):
     """
     Runs a command in a terminal and save the output in a list
     of strings
@@ -150,3 +151,18 @@ def args_and_defaults(module, *args):
             else:
                 print(f"{param_name}")
         print("@@@_Separation_of_function_ends@@@")
+
+# add2executable
+def function_doc(module, func):
+    """
+    Takes a function and prints its parameters with their default values.
+
+    Parameters
+    ==========
+    func:
+        function that you want to extract the parameters and default values.    
+    """
+    module = import_module(module)
+    method = getattr(module, func)
+    return method.__doc__
+
