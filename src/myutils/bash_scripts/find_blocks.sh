@@ -4,7 +4,8 @@
 print_help() {
 echo "
 This code extracts the sections in a file starting and finishing with specific
-patterns. Check the next options:
+patterns without including the lines containing those patterns. Check the next
+options:
 
     -f  <file> file that shows 
     -s  <pattern> pattern that defines the beginning of the block. This line
@@ -43,6 +44,8 @@ do
     esac
 done
 
+verbose "starts: $starts ; ends: $ends ; file: $file ; output: $output"
+
 if [ ${#file} -eq 0 ] || [ ${#starts} -eq 0 ] || [ ${#ends} -eq 0 ]
 then
     warning "This tool does not recognize arguments with simple spaces.
@@ -56,25 +59,37 @@ fi
 
 if $index
 then
-  nsta=( $starts )
-  nend=( $ends )
+  awk -v ini=$starts -v end=$ends 'NR > ini && NR < end' add_python_doc.sh \
+    > "$output".out
+  if [[ "$output" == "terminal" ]]
+  then
+    cat "$output".out
+    rm "$output".out
+  fi
+  finish
+  exit 0
 else
   mapfile -t nsta < <( grep -n "$starts" "$file" | \
-    awk -F ":" '{print $1}' )
-  mapfile -t nend < <( grep -n "$ends" "$file" | \
     awk -F ":" '{print $1}' )
 fi
 
 w="001"
 for (( i=0; i<${#nsta[@]}; i++ ))
 do
-    head -n "$(( ${nend[$i]} - 1 ))" $file | \
-          tail -n +"$(( ${nsta[$i]} + 1 ))" > "$output"_"$w".out
-    if [[ "$output" == "terminal" ]]
-    then
-        cat "$output"_"$w".out
-        rm "$output"_"$w".out
-    fi
+  nend=$(tail -n +"$(( ${nsta[$i]} + 1 ))" $file | grep -n "$ends" | \
+         head -n 1 | cut -d ":" -f 1)
+  if [ ${#nend} -eq 0 ]
+  then
+    finish
+    exit 0
+  fi
+  tail -n +"$(( ${nsta[$i]} + 1 ))" $file | head -n $(( nend - 1 )) \
+        > "$output"_"$w".out
+  if [[ "$output" == "terminal" ]]
+  then
+    cat "$output"_"$w".out
+    rm "$output"_"$w".out
+  fi
 done
 
 finish
