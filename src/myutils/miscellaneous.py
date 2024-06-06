@@ -135,34 +135,37 @@ def args_and_defaults(module, *args):
     Parameters
     ==========
     func:
-        function that you want to extract the parameters and default values.    
+        function that you want to extract the parameters and default values.   
     """
     module = import_module(module)
     for func in args:
         method = getattr(module, func)
 
         signature = inspect.signature(method)
-        
-        print("@@@_Separation_of_function_starts@@@")
-        print(func)
+
+        #print("@@@_Separation_of_function_starts@@@")
+        #print(func)
+        output = f"\n ### {func}\n"
         for param_name, param in signature.parameters.items():
             if param.default != inspect.Parameter.empty:
-                print(f"{param_name}: {param.default}")
+                output += f"{param_name}: Default={param.default}\n"
             else:
-                print(f"{param_name}")
-        print("@@@_Separation_of_function_ends@@@")
+                output += f"{param_name}:\n"
+        output += "\n"
+        #print("@@@_Separation_of_function_ends@@@")
+    return output
+
 
 # add2executable
 def function_doc(module, func):
     """
-    Takes a function and prints its parameters with their default values.
+    Takes a function and prints its documentation.
 
     Parameters
     ==========
     func:
-        function that you want to extract the parameters and default values.    
+        function that you want to extract the documentation.
     """
     module = import_module(module)
     method = getattr(module, func)
     return method.__doc__
-
