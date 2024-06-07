@@ -12,6 +12,7 @@ options:
         is not included in the block.
     -e  <pattern> pattern that defines the end of the block. This line is not
         included in the block.
+    -i  use this flag if the start and the end are indexes
     -o  <output='output'> name of the output without extension. The output will be
         stored in files called <output>_<n>.dat, where n is the number of
         appearence of the block in the file.
@@ -59,7 +60,7 @@ fi
 
 if $index
 then
-  awk -v ini=$starts -v end=$ends 'NR > ini && NR < end' add_python_doc.sh \
+  awk -v ini=$starts -v end=$ends 'NR > ini && NR < end' $file \
     > "$output".out
   if [[ "$output" == "terminal" ]]
   then
