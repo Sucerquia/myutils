@@ -78,7 +78,8 @@ do
 
     for func in ${functions[@]}
     do
-      myutils find_documentation -f "$func" -m "$module"
+      # The output of the next function is stored in final_<func>-doc.txt
+      myutils python_doc_fixer -f "$func" -m "$module"
     done
     # TODO: SO far, this script finds the functions and the module and send it to fin_documentation
     # The idea is to take that output (the corrected documentation) and and replace it into the python file
