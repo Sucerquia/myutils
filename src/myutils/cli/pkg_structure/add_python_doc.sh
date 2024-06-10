@@ -78,14 +78,36 @@ do
 
     for func in ${functions[@]}
     do
+      verbose $func
       # The output of the next function is stored in final_<func>-doc.txt
-      myutils python_doc_fixer -f "$func" -m "$module"
-    done
-    # TODO: SO far, this script finds the functions and the module and send it to fin_documentation
-    # The idea is to take that output (the corrected documentation) and and replace it into the python file
+      myutils python_doc_fixer -f "$func" -m "$module" || \
+        fail "creating new documentation"
 
+      # search n lines of the beginning of the function, the end of the
+      # heading of the function and the beginning of the documentation
+      n_func=$( grep -n "def $func" $fil | cut -d ":" -f 1 )
+      rel_n_func_end=$( tail -n +$n_func $fil | grep -n ")" | head +n 1 | \
+                        cut -d ':' -f 1)
+      doc_num_start=$(( n_func + rel_n_func_end + 1))
+
+      # ==== insert checked documentation
+      if awk -v numline=$doc_num_start 'NR==numline' \
+             $fil | grep -q "\"\"\""
+      then
+        # Remove prev documentation first
+        doc_num_end=$(tail -n +$(( doc_num_start + 1 )) $fil | \
+                      grep -n "\"\"\"" | head -n 1 | cut -d ":" -f 1)
+        sed -i "{$doc_num_start},${doc_num_end}d" $fil
+      fi 
+      # insert new documentation
+      sed -i "$(( doc_num_starts - 1 ))r final_$func-doc.txt" $fil
+
+      # delete documentation file
+      rm final_$func-doc.txt
+    done
     # Classes
-    # TODO: extend this proporsal for classes
+    # TODO: extend this proporsal for classes. python_doc_fixer works also for
+    # this case, just give the number of leading spaces
   fi
 done
 
