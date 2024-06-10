@@ -37,10 +37,13 @@ finish () {
     then
         # shellcheck disable=SC2068
         adjust $@
+    else
+        adjust finish
     fi
     echo
     array_bfnames=( "${array_bfnames[@]:1}" )
     basic_functions_name=${array_bfnames[0]}
+    exit 0
 }
 
 # Function that returns the error message and stops the run if something fails.

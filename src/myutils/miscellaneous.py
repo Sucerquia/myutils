@@ -23,6 +23,12 @@ def output_terminal(cmd, print_output=True, skip_error=False, print_cmd=False,
     Return
     ======
     (list) [#linesStr] output of the executed command, line by line.
+
+
+
+
+
+    
     """
     if print_cmd:
         print(cmd)

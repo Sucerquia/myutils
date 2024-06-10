@@ -67,6 +67,7 @@ mapfile -t pck_fils < <(eval "find . -type f -not \(" "${bool_ign::-2}" \
 
 for fil in "${pck_fils[@]}"
 do
+  verbose $fil
   ext=$(echo "$fil" | cut -d '.' -f3 )
   if [ "$ext" == 'py' ]
   then
@@ -86,9 +87,9 @@ do
       # search n lines of the beginning of the function, the end of the
       # heading of the function and the beginning of the documentation
       n_func=$( grep -n "def $func" $fil | cut -d ":" -f 1 )
-      rel_n_func_end=$( tail -n +$n_func $fil | grep -n ")" | head +n 1 | \
+      rel_n_func_end=$( tail -n +$n_func $fil | grep -n ")" | head -n 1 | \
                         cut -d ':' -f 1)
-      doc_num_start=$(( n_func + rel_n_func_end + 1))
+      doc_num_start=$(( n_func + rel_n_func_end ))
 
       # ==== insert checked documentation
       if awk -v numline=$doc_num_start 'NR==numline' \
@@ -97,13 +98,15 @@ do
         # Remove prev documentation first
         doc_num_end=$(tail -n +$(( doc_num_start + 1 )) $fil | \
                       grep -n "\"\"\"" | head -n 1 | cut -d ":" -f 1)
-        sed -i "{$doc_num_start},${doc_num_end}d" $fil
+        doc_num_end=$(( doc_num_end + doc_num_start ))
+        sed -i "${doc_num_start},${doc_num_end}d" $fil
+
       fi 
       # insert new documentation
-      sed -i "$(( doc_num_starts - 1 ))r final_$func-doc.txt" $fil
+      sed -i "$(( doc_num_start - 1 ))r final_$func-doc.txt" $fil
 
       # delete documentation file
-      rm final_$func-doc.txt
+      rm final_$func-doc.txt || fail "not final documentation found"
     done
     # Classes
     # TODO: extend this proporsal for classes. python_doc_fixer works also for
@@ -111,3 +114,4 @@ do
   fi
 done
 
+finish

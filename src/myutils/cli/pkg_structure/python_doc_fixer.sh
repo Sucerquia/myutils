@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source "$(myutils basics -path)" AddPythonDoc
+source "$(myutils basics -path)" PythonDocFixer
 
 print_help() {
 echo "
@@ -40,6 +40,13 @@ myutils function_doc $module $function | sed 's/^/#new_line/' > \
   $function-doc.txt
 sed -i 's/[[:space:]]*$//g' $function-doc.txt
 
+# In case the documentation was written without leaving the first line empty
+first_line=$(head -n 1 $function-doc.txt)
+if [ "$first_line" != "#new_line" ]
+then
+  sed -i "1s/^/#new_line\n/" $function-doc.txt
+fi
+
 mapfile -t ns_empty < <(cat $function-doc.txt | grep -n "#new_line$" | \
                         cut -d ":" -f1)
 
@@ -49,7 +56,16 @@ do
   myutils find_blocks -f $function-doc.txt \
                       -s ${ns_empty[$i]} \
                       -e ${ns_empty[$(( i + 1 ))]} \
-                      -i -o documentation-blocks_$i
+                      -i -o documentation-blocks_$i || \
+                      fail "finding blocks"
+
+  # Note for developers: I had to add the next while because the creation of
+  # the files was a bit delayed and that created errors trying to find those
+  # files later.
+  while ! ls | grep -q documentation-blocks_$i.out
+  do
+    continue
+  done
 done
 
 # ==== Block of Parameters in old documentation
@@ -57,7 +73,6 @@ done
 par_block=$(grep -xl "#new_line    Parameters" documentation-blocks_*)
 if [ ${#par_block} -eq 0 ]
 then
-  echo "didn't find the parameters"
   cat << EOF > documentation-blocks_parameters.out
 #new_line    Parameters
 #new_line    ==========
@@ -73,6 +88,7 @@ then
   cat << EOF > documentation-blocks_return.out
 #new_line    Return
 #new_line    ======
+#new_line    # TODO: add return information
 EOF
   return_block="documentation-blocks_return.out"
 fi
@@ -95,43 +111,53 @@ mapfile -t parameters < <(myutils args_and_defaults $module $function | \
     grep -v "###" | grep -vx '' )
 
 # insert missed parameters
-for par in "${parameters[@]}"
-do
-  par_name=$(echo $par | cut -d ":" -f 1) # name of the parameter
-  par_defa=$(echo $par | cut -d ":" -f 2) # default of the parameter
-  n_par=$(grep -n $par_name $par_block | \
-          cut -d ":" -f 1) # line number of the parameter
-
-  if [ ${#n_par} -eq 0 ]
-  then
-    # if the variable is not defined
-    echo "#new_line    $par # TODO: check default value" >> $par_block
-    echo "#new_line        # TODO: add documentation of this parameter" >> \
-      $par_block
-  else
-    # check if the default exists
-    if [ ! ${#par_defa} -eq 0 ]
+if [ ${#parameters} -eq 0 ]
+then
+  # if the function does not have parameters, it creates an empty file
+  rm $par_block
+  touch $par_block
+else
+  for par in "${parameters[@]}"
+  do
+    par_name=$(echo $par | cut -d ":" -f 1) # name of the parameter
+    par_defa=$(echo $par | cut -d ":" -f 2) # default of the parameter
+    n_par=$(grep -n $par_name $par_block | \
+            cut -d ":" -f 1) # line number of the parameter
+    if [ ${#n_par} -eq 0 ]
     then
-      awk -v line=$n_par 'NR==line' $par_block | grep -q Default || \
-        sed -i "${n_par}s/$/\.$par_defa # TODO: check default value/" $par_block
-    fi
+      # if the variable is not defined
+      echo "#new_line    $par # TODO: check default value" >> $par_block
+      echo "#new_line        # TODO: add documentation of this parameter" >> \
+        $par_block
+    else
+      # if the variable is defined. check if the default exists
+      if [ ${#par_defa} -ne 0 ]
+      then
+        awk -v line=$n_par 'NR==line' $par_block | grep -q Default || \
+          sed -i "${n_par}s/$/\.$par_defa # TODO: check default value/" $par_block
+      fi
 
-    # check if the definition of the parameter exist
-    if awk -v line=$(( n_par + 1 )) 'NR==line' $par_block | grep -q ":"
-    then
-      sed -i "${n_par}a\#new_line        # TODO: add documentation of this parameter" $par_block
+      # check if the definition of the parameter exist
+      if awk -v line=$(( n_par + 1 )) 'NR==line' $par_block | grep -q ":"
+      then
+        sed -i "${n_par}a\#new_line        # TODO: add documentation of this parameter" $par_block
+      fi
     fi
-  fi
-done
+  done
+fi
 
 # === Create the final doc block ==============================================
 echo "#new_line    \"\"\"" > final_$function-doc.txt
 cat $definition_block >> final_$function-doc.txt
 rm $definition_block
 
-echo "#new_line" >> final_$function-doc.txt
-cat $par_block >> final_$function-doc.txt
-rm $par_block
+n_lines_in_par_block=$(wc -l < $par_block)
+if  [ $n_lines_in_par_block -ne 0 ]
+then
+  echo "#new_line" >> final_$function-doc.txt
+  cat $par_block >> final_$function-doc.txt
+  rm $par_block
+fi
 
 echo "#new_line" >> final_$function-doc.txt
 cat $return_block >> final_$function-doc.txt
@@ -146,11 +172,19 @@ do
 done
 echo "#new_line    \"\"\"" >> final_$function-doc.txt
 
-# cleaning
+# ==== cleaning
 sed -i 's/#new_line//g' final_$function-doc.txt
-spaces=$(printf "%${num_spaces}s")
 # Add spaces to the beginning of each line and save to a new file
+spaces=$(printf "%${num_spaces}s")
+sed -i 's/[[:space:]]*$//g' $function-doc.txt
+# Remove empty lines
 sed -i "s/^/${spaces}/" final_$function-doc.txt
+
+while [[ "$(tail -n 2 final_$function-doc.txt | head -n 1)" == "" ]]
+do
+  total_lines=$(wc -l < final_$function-doc.txt)
+  sed -i "$(( total_lines - 1 ))d" final_$function-doc.txt
+done
 rm $function-doc.txt
 
 finish

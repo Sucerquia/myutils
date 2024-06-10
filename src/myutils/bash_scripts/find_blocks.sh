@@ -68,7 +68,6 @@ then
     rm "$output".out
   fi
   finish
-  exit 0
 else
   mapfile -t nsta < <( grep -n "$starts" "$file" | \
     awk -F ":" '{print $1}' )
