@@ -19,6 +19,8 @@ def dof_classificator_all(dofs_indexes, atoms_per_aminoacids):
     atoms_per_aminoacids: dict
         Atoms in each residue. The keys are the number of the residues, values
         should be the indexes of the atoms belonging to the residue of the key.
+    dofs_indexes: # TODO: check default value
+        # TODO: add documentation of this parameter
 
     Return
     ======
@@ -54,6 +56,8 @@ def dof_classificator_one(dofs_indexes, atoms_per_aminoacids):
     atoms_per_aminoacids: dict
         Atoms in each residue. The keys are the number of the residues, values
         should be the indexes of the atoms belonging to the residue of the key.
+    dofs_indexes: # TODO: check default value
+        # TODO: add documentation of this parameter
 
     Return
     ======
@@ -227,6 +231,10 @@ def set_hes_from_ref(geo_ref, sith_tar, structure):
         sith object that will change its property.
     structure: int
         index of the deformed structure to set the hessian.
+
+    Return
+    ======
+    # TODO: add return information
 
     Returns
     =======

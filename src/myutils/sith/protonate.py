@@ -100,6 +100,10 @@ def protonate(pdb, output):
         name of the pdb file with the amino acids.
     output:
         name of the output file.
+
+    Return
+    ======
+    # TODO: add return information
     """
     prot = Protonize(pdb)
     prot.create_atoms()

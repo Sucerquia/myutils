@@ -13,22 +13,18 @@ def output_terminal(cmd, print_output=True, skip_error=False, print_cmd=False,
     ==========
     cmd: str
         bash command to be executed in the terminal.
-    print_output: bool (optional)
+    print_output: bool (optional). Default=True # TODO: check default value
         True for printing the output besides of returning it. Default False.
-    skip_error: bool (optional)
+    skip_error: bool (optional). Default=False # TODO: check default value
         True for continuing running although the command fails. Default False.
     **kwargs:
         additional options for subprocess.Popen
+    print_cmd: Default=False # TODO: check default value
+        # TODO: add documentation of this parameter
 
     Return
     ======
     (list) [#linesStr] output of the executed command, line by line.
-
-
-
-
-
-    
     """
     if print_cmd:
         print(cmd)
@@ -61,6 +57,17 @@ def _time(keyword, logfile):
     """
     Used in myutils.miscellaneous.time_09. It extracts the time from a
     line of gaussian.
+
+    Parameters
+    ==========
+    keyword: # TODO: check default value
+        # TODO: add documentation of this parameter
+    logfile: # TODO: check default value
+        # TODO: add documentation of this parameter
+
+    Return
+    ======
+    # TODO: add return information
     """
     out = output_terminal("grep '" + keyword + "' " + logfile)
     out = out.split()
@@ -142,6 +149,14 @@ def args_and_defaults(module, *args):
     ==========
     func:
         function that you want to extract the parameters and default values.
+    module: # TODO: check default value
+        # TODO: add documentation of this parameter
+    args: # TODO: check default value
+        # TODO: add documentation of this parameter
+
+    Return
+    ======
+    # TODO: add return information
     """
     module = import_module(module)
     for func in args:
@@ -171,6 +186,12 @@ def function_doc(module, func):
     ==========
     func:
         function that you want to extract the documentation.
+    module: # TODO: check default value
+        # TODO: add documentation of this parameter
+
+    Return
+    ======
+    # TODO: add return information
     """
     module = import_module(module)
     method = getattr(module, func)

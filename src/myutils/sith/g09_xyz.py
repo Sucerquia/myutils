@@ -31,6 +31,18 @@ code = {"1": "H", "2": "He", "3": "Li", "4": "Be", "5": "B",
 
 
 def _getEnergy(structure):
+    """
+    # TODO: Add definition
+
+    Parameters
+    ==========
+    structure: # TODO: check default value
+        # TODO: add documentation of this parameter
+
+    Return
+    ======
+    # TODO: add return information
+    """
     for line in structure.split("\n"):
         if line.startswith(" SCF Done:"):
             arr = line.split("=")
@@ -39,6 +51,20 @@ def _getEnergy(structure):
 
 
 def _findInList(dataList, target):
+    """
+    # TODO: Add definition
+
+    Parameters
+    ==========
+    dataList: # TODO: check default value
+        # TODO: add documentation of this parameter
+    target: # TODO: check default value
+        # TODO: add documentation of this parameter
+
+    Return
+    ======
+    # TODO: add return information
+    """
     for i in range(0, len(dataList)):
         if dataList[i].find(target) != -1:
             return i
@@ -46,6 +72,18 @@ def _findInList(dataList, target):
 
 
 def _getCoordinates(dataList):
+    """
+    # TODO: Add definition
+
+    Parameters
+    ==========
+    dataList: # TODO: check default value
+        # TODO: add documentation of this parameter
+
+    Return
+    ======
+    # TODO: add return information
+    """
     start = _findInList(dataList, "Standard orientation")
     dataList = dataList[start + 5:]
     dataList = dataList[: _findInList(dataList, "-----")]
@@ -62,8 +100,12 @@ def log2xyz(finput, foutput=None):
     ==========
     finput: str
         path to the log file.
-    foutput: str (optional)
+    foutput: str (optional). Default=None # TODO: check default value
         name of the output file without extension.
+
+    Return
+    ======
+    # TODO: add return information
 
     Note: if foutput is not given, the name output will be the same than the
     input but with xyz extension.

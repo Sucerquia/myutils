@@ -14,9 +14,17 @@ import glob
 # add2executable
 def info_from_opt(pep):
     """
+    # TODO: Add definition
+
     Extract configurations
     Parameters
     ==========
+    pep: # TODO: check default value
+        # TODO: add documentation of this parameter
+
+    Return
+    ======
+    # TODO: add return information
     """
     # read configurations
     atoms = read(pep + "-optext.log", index=':')
@@ -100,8 +108,18 @@ def info_from_opt(pep):
 
 # add2executable
 def reduce_structs_pre(dir):
-    """Check all the *-dofs.dat files and remove those files that represent
-    unnrelevant changes"""
+    """
+    # TODO: Add definition
+
+    Parameters
+    ==========
+    dir: # TODO: check default value
+        # TODO: add documentation of this parameter
+
+    Return
+    ======
+    # TODO: add return information
+    """
     all_files = glob.glob(f"{dir}/*-dofs.dat")
     all_files.sort()
 
