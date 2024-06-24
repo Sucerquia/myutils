@@ -100,7 +100,7 @@ original_path=$(pwd)
 # ---- Body -------------------------------------------------------------------
 echo -e "\n are you sure you are in a conda environment?[y/N]"
 read environment
-if [ $environment == "n" ]
+if [ $environment == "n" ] || [ $environment == "N" ] || [ $environment == "" ]
 then
     echo "you need a conda environement to run this code"
     exit 0

@@ -14,34 +14,34 @@ source "$(myutils basics -path)" WORKFLOW
 
 print_help() {
 echo "
-This tool executes the sith analysis in a set of peptides defined as arguments.
-You can use this code to submit a Job in cascade or to execute it locally. 
-Consider the next options:
-    
-    -b    <number of breakages> The simulation will run until get this number of
-              ruptures.
-    -c    run in cascade. (modules are loaded)
-    -d    <reference document> file containing the existing peptides to avoid
-              repetition.
-    -e    <endo> or <exo> states for initial state of proline. Default <random>.
-    -m    <method>. stretching method. To see the options, use
-              'myutils change_distance -h'
-    -n    <options>. pepgen options.
-    -p    <peptide>. Chains of aminoacids to be evaluated. For example, \"AAA\"
-              would analyse a trialanine peptide.
-    -R   random pepeptide. Give the number of amino acids with this argument.
-    -r   restart. In this case, run from the directory of the precreated
-         peptide.
-    -s   <size[A]> of the step that increases the distances. Default 0.2A
+This tool creates all the stretched structures for a peptide and computes the
+needed quantities for sith. You can use this code to submit a Job in cascade or
+to execute it locally. Consider the next options:
 
-    -h   prints this message.
+  -b  <number of breakages=1> The simulation will run until getting this number
+      of ruptures in the bonds.
+  -c  run in cascade. (modules are loaded)
+  -d  <reference document=00-aminos.txt> file containing the existing peptides
+      to avoid repetition. Mainly used for generation of random peptides.
+  -e  <endo> or <exo> states for initial state of proline. Default 'random'.
+  -m  <method=0> Index ofstretching method. To see the options, use
+      'myutils change_distance -h' to see the order.
+  -n  <options> Pepgen options (use \\\" for this)
+  -p  <peptide> Chains of aminoacids to be evaluated. For example, \"AAA\"
+      would analyse a trialanine peptide.
+  -R  random pepeptide. Give the number of amino acids with this argument.
+  -r  restart. In this case, run from the directory of the pre-created
+      peptide.
+  -s  <size[A]=0.2> of the step that increases the distances.
+
+  -h  prints this message.
 "
 exit 0
 }
 
 resubmit () {
     sleep 23h 58m ; \
-    sbatch "$( myutils workflow -path)" -p "$1" -c -r -s "$2" -b "$3" -s "$4" ; \
+    sbatch "$( myutils workflow -path)" -p "$1" -c -r -m "$2" -b "$3" -s "$4" ; \
     echo "new JOB submitted"
 }
 
@@ -99,12 +99,14 @@ then
         with this peptide even if you also passed -p argument."
 fi
 
+# debug peptides
 if [ "${#pep}" -eq 0 ]
-then 
+then
     fail "This code needs one peptide. Please, define it using the flag -p or
-        -R. For more info, use \"myutils workflow -h\""
+          -R. For more info, use \"myutils workflow -h\""
 fi
 
+# load modules
 if $cascade
 then
     load_modules "$pep" "$method" "$breakages" "$size"
@@ -118,6 +120,7 @@ perl -E "say '+' x 80"
 
 # ----- set up finishes -------------------------------------------------------
 
+# ---- BODY -------------------------------------------------------------------
 # ---- firstly, backup previous directories with the same name
 if [[ "$restart" != "-r" ]]
 then
@@ -151,19 +154,17 @@ else
     warning "$pep restarted"
 fi
 
+# construct the stretched configurations
 myutils stretching -b "$breakages" -p "$pep" "$restart" -m "$method" \
                    -s "$size" || fail "Stretching of $pep failed"
 
 # Compute classical energies
 verbose "computing classical energies."
-
 myutils classical_energies
+
 # compute forces
 verbose "submitting comptutation of forces.";
-
-# command -V nohub || fail "nohub does not exist"
-sbatch "$( myutils find_forces -path )" "tmp.out" &&
+sbatch -J ${pep}_forces "$( myutils find_forces -path )" "tmp.out" &&
 echo "computation of forces submitted"
 
 finish "$pep finished"
-exit 0
