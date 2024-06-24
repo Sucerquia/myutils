@@ -3,10 +3,9 @@
 #SBATCH -N 1                   # number of nodes
 #SBATCH -n 9
 #SBATCH --cpus-per-task=1
-#SBATCH --job-name="workflow"       #job name
 #SBATCH -t 24:00:00
-#SBATCH --output=peptides_analysis-%j.o
-#SBATCH --error=peptides_analysis-%j.e
+#SBATCH --output=%x-%j.o
+#SBATCH --error=%x-%j.e
 #SBATCH --exclusive
 
 
@@ -134,7 +133,7 @@ then
     verbose "generating peptide"
     # Creation of peptide
     # shellcheck disable=SC2086
-    pepgen "$pep" tmp -s flat $pep_options || fail "Creating peptide $pep"
+    pepgen "$pep" tmp -r -s flat $pep_options || fail "Creating peptide $pep"
     mv tmp/pep.pdb "./$pep-stretched00.pdb"
     myutils classical_minimization -f "./$pep-stretched00.pdb" \
         -o "./$pep-stretched00.pdb"
@@ -143,7 +142,7 @@ then
         fail "Proline estates configuration"
     mv "$pep-stretched00modpro.pdb" "$pep-stretched00.pdb" 
     verbose "protonate/deprotonate"
-    myutils protonate "./$pep-stretched00.pdb" "./$pep-stretched00.pdb" | \
+    myutils protonate "./$pep-stretched00.pdb" "./$pep-stretched00.pdb" || \
         fail "protonizing"
     rm -r tmp
 else
