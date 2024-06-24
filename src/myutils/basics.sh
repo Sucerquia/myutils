@@ -122,7 +122,7 @@ load_modules() {
     else
         source "$HOME/.bashrc"
         # shellcheck disable=SC1091
-        source /hits/basement/mbm/sucerquia/exec/load_g09.sh
+        source /hits/basement/mbm/sucerquia/sw/g09/load_g09.sh
         conda activate myutils
         module purge
         module use /hits/sw/its/doserbd/haswell/modules/all/GROMACS
