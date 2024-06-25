@@ -25,6 +25,8 @@ pymodules = {
 }
 
 sh_executers = {
+    'single_optimization': './bash_scripts/single_optimization.sh',
+    'bash-template': './bash_scripts/bash-template.sh',
     'find_blocks': './bash_scripts/find_blocks.sh',
     'classical_minimization': './gromacs/classical_minimization.sh',
     'classical_energies': './gromacs/classical_energies.sh',
@@ -45,13 +47,12 @@ sh_executers = {
     'resubmit_failed': './from_extreme/resubmit_failed.sh',
     'compute_forces': './from_extreme/compute_forces.sh',
     'extr_dofs': './from_extreme/extr_dofs.sh',
+    'workflow_from_extreme': './from_extreme/workflow_from_extreme.sh',
     'opt_and_forces': './from_extreme/opt_and_forces.sh',
     'prepare_and_submit': './from_extreme/prepare_and_submit.sh',
-    'single_optimization': './sith/single_optimization.sh',
     'extract_forces': './sith/extract_forces.sh',
     'proline_mod': './sith/proline_mod.sh',
     'workflow': './sith/workflow.sh',
-    'workflow_from_extreme': './sith/workflow_from_extreme.sh',
     'find_forces': './sith/find_forces.sh',
     'forces_from_xyzs': './sith/forces_from_xyzs.sh',
     'clean_ds': './sith/clean_ds.sh',

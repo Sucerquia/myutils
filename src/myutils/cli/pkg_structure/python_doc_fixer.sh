@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source "$(myutils basics -path)" PythonDocFixer
-
 print_help() {
 echo "
 Code takes the documentation of a function and checks the documentation adding
@@ -33,6 +31,7 @@ do
   esac
 done
 
+source "$(myutils basics -path)" PythonDocFixer
 # ==== Body ===================================================================
 
 # ==== Initial Blocks =========================================================

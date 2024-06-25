@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" STRETCHING
-
 print_help() {
 echo "
 This tool obtains the stretched configurations of a peptide by increasing the
@@ -42,11 +40,24 @@ while getopts 'b:p:m:rs:h' flag; do
     m) method=${OPTARG} ;;
     r) restart='true' ;;
     s) size=${OPTARG} ;;
+
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
 done
 
+source "$(myutils basics -path)" STRETCHING
+
+# starting information
+verbose "JOB information"
+echo " * Date:"
+date
+echo " * Command:"
+echo "$0" "$@"
+
+# ---- set up ends ------------------------------------------------------------
+
+# ---- BODY -------------------------------------------------------------------
 # stretching method
 if [[ "$method" -eq 0 ]]
 then
@@ -247,5 +258,5 @@ do
 done
 
 # ----- stretching finishes ---------------------------------------------------
+
 finish "$pep finished"
-exit 0

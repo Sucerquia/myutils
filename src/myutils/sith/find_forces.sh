@@ -9,8 +9,6 @@
 
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" FIND_FORCES
-
 print_help() {
 echo "
 This tool computes the forces in all chk files and store them in a directory
@@ -54,16 +52,19 @@ while getopts 'd:cp:h' flag; do
   esac
 done
 
-if $cascade
-then
-    load_modules
-fi
+source "$(myutils basics -path)" FIND_FORCES
 
 verbose "JOB information"
 echo " * Date:"
 date
 echo " * Command:"
 echo "$0" "$@"
+
+if $cascade
+then
+    load_modules
+fi
+
 # ---- set-up ends ------------------------------------------------------------
 
 # ---- BODY -------------------------------------------------------------------
@@ -93,4 +94,3 @@ mv forces.com forces/input_template.com || fail "moving template to forces
 myutils extract_forces
 
 finish "finished"
-exit 0

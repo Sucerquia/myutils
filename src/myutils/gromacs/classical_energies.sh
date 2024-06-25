@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" CLASSICAL_E
-
 print_help() {
 echo "
 Tool that computes the classical energy from a set of pdb files in the
@@ -32,9 +30,11 @@ while getopts 'l:nh' flag; do
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
 done
+
+source "$(myutils basics -path)" CLASSICAL_E
 # ----- set up finishes -------------------------------------------------------
 
-# computation starts
+# ---- BODY -------------------------------------------------------------------
 verbose "The classical energies of configurations in the next pdb files are
          going to be computed:"
 if $all_xyz2pdb
@@ -78,4 +78,4 @@ rm mini*
 rm posre.itp
 rm topol.top
 
-finish "finished"
+finish

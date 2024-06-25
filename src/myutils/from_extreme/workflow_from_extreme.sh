@@ -3,16 +3,13 @@
 #SBATCH -N 1                   # number of nodes
 #SBATCH -n 9
 #SBATCH --cpus-per-task=1
-#SBATCH --job-name="workflow_from_rup"       #job name
 #SBATCH -t 24:00:00
-#SBATCH --output=peptides_analysis-%j.o
-#SBATCH --error=peptides_analysis-%j.e
+#SBATCH --output=%x-%j.o
+#SBATCH --error=%x-%j.e
 #SBATCH --exclusive
 
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" WF_FROM_EXTREME
-
 print_help() {
 echo "
 This tool creates the files to do the sith analysis by optimizing a molecule
@@ -34,9 +31,15 @@ exit 0
 
 
 resubmit () {
-    sleep 23h 58m ; \
-    sbatch "$( myutils workflow_from_extreme -path)" -p "$1" -c -r -s "$2"; \
-    echo "new JOB submitted"
+  sleep 23h 58m ; \
+  if [[ "$(whoami)" == "hits_"* ]]
+  then
+    single_part="--partition=single"
+  else
+    single_part=""
+  fi
+  sbatch $single_part -J $SLURM_JOB_NAME "$( myutils workflow_from_extreme -path)" -p "$1" -c -r -s "$2"; \
+  echo "new JOB submitted"
 }
 # ----- definition of functions finishes --------------------------------------
 
@@ -61,6 +64,15 @@ do
   esac
 done
 
+source "$(myutils basics -path)" WF_FROM_EXTREME
+
+if $cascade
+then
+    load_modules # ADD the parameters to resubmit
+fi
+# ---- BODY -------------------------------------------------------------------
+
+
 if [ "${#lenght}" -eq 0 ]
 then 
     fail "You have to specify the lenght of the peptide usign the flag -l. For
@@ -71,12 +83,6 @@ if [ "${#ref}" -eq 0 ]
 then 
     fail "This code needs one reference. Please, define it using the flag -p.
           For more info, use \"myutils workflow_from_extreme -h\""
-fi
-
-
-if $cascade
-then
-    load_modules
 fi
 
 if [ -d $ref ]
@@ -118,4 +124,3 @@ output=$(grep -i optimized "$name-optext.log" | \
 [ "$output" -ne 0 ] && fail "optimization didn't converged"
 
 finish "$name finish"
-exit 0

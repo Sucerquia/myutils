@@ -26,12 +26,13 @@ while getopts 'f:p:h' flag; do
 done
 
 source "$(myutils basics -path)" dofs
+# ---- BODY -------------------------------------------------------------------
 # Next is to reduce, optimize and then try to find intermedias.
 for xyzfile in *"${xyzs}"*.xyz
 do
   tail -n +3 $xyzfile > tmp.xyz
-  newzmat -ixyz -ozmat -rebuildzmat -bmodel tmp.xyz ${xyzfile%.xyz}-forces.com || \
-    fail "z-matrix"
+  newzmat -ixyz -ozmat -rebuildzmat -bmodel \
+    tmp.xyz ${xyzfile%.xyz}-forces.com || fail "z-matrix"
   n=$(grep -n "Variables:" ${xyzfile%.xyz}-forces.com | awk '{print $1}')
   n=${n%:}
   if [ ! -f mat_inf.dat ]

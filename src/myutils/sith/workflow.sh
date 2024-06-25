@@ -9,9 +9,7 @@
 #SBATCH --exclusive
 
 
-# ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" WORKFLOW
-
+# ----- definition of functions -----------------------------------------------
 print_help() {
 echo "
 This tool creates all the stretched structures for a peptide and computes the
@@ -40,9 +38,15 @@ exit 0
 }
 
 resubmit () {
-    sleep 23h 58m ; \
-    sbatch -J $SLURM_JOB_NAME "$( myutils workflow -path)" -p "$1" -c -r -m "$2" -b "$3" -s "$4" ; \
-    echo "new JOB submitted"
+  sleep 23h 58m ; \
+  if [[ "$(whoami)" == "hits_"* ]]
+  then
+    single_part="--partition=single"
+  else
+    single_part=""
+  fi
+  sbatch $single_part -J $SLURM_JOB_NAME "$( myutils workflow -path)" -p "$1" -c -r -m "$2" -b "$3" -s "$4" ; \
+  echo "new JOB submitted"
 }
 
 # ----- definition of functions finishes --------------------------------------
@@ -60,22 +64,24 @@ ref_doc='00-aminos.txt'
 
 while getopts 'd:b:ce:m:n:p:rR:s:h' flag;
 do
-    case "${flag}" in
-      b) breakages=${OPTARG} ;;
-      c) cascade='true' ;;
-      d) ref_doc=${OPTARG} ;;
-      e) endoexo=${OPTARG} ;;
-      m) method=${OPTARG} ;;
-      n) pep_options=${OPTARG} ;;
-      p) pep=${OPTARG} ;;
-      r) restart='-r' ;;
-      R) random=${OPTARG} ;;
-      s) size=${OPTARG} ;;
+  case "${flag}" in
+    b) breakages=${OPTARG} ;;
+    c) cascade='true' ;;
+    d) ref_doc=${OPTARG} ;;
+    e) endoexo=${OPTARG} ;;
+    m) method=${OPTARG} ;;
+    n) pep_options=${OPTARG} ;;
+    p) pep=${OPTARG} ;;
+    r) restart='-r' ;;
+    R) random=${OPTARG} ;;
+    s) size=${OPTARG} ;;
 
-      h) print_help ;;
-      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
-    esac
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
 done
+
+source "$(myutils basics -path)" WORKFLOW
 
 # starting information
 verbose "JOB information"
@@ -84,32 +90,32 @@ date
 echo " * Command:"
 echo "$0" "$@"
 
+# load modules
+if $cascade
+then
+  load_modules "$pep" "$method" "$breakages" "$size"
+fi
+
+# ---- BODY -------------------------------------------------------------------
 # random peptide
 if [ ! "${#random}" -eq 0 ]
 then
-    [ -f "$ref_doc" ] || fail "Non-recognized $ref_doc, check flag -d"
+  [ -f "$ref_doc" ] || fail "Non-recognized $ref_doc, check flag -d"
+  pep=$( myutils gen_randpep "$random" ) || fail "Creating random peptide"
+  while awk '!/^#/ {print $1}' "$ref_doc" | grep -q "$pep"
+  do
     pep=$( myutils gen_randpep "$random" ) || fail "Creating random peptide"
-    while awk '!/^#/ {print $1}' "$ref_doc" | grep -q "$pep"
-    do
-        pep=$( myutils gen_randpep "$random" ) || fail "Creating
-            random peptide"
-    done
-    echo "$pep" "   R" >> "$ref_doc"
-    warning "The code created the random peptide $pep, the workflow will run
-        with this peptide even if you also passed -p argument."
+  done
+  echo "$pep" "   R" >> "$ref_doc"
+  warning "The code created the random peptide $pep, the workflow will run
+    with this peptide even if you also passed -p argument."
 fi
 
 # debug peptides
 if [ "${#pep}" -eq 0 ]
 then
-    fail "This code needs one peptide. Please, define it using the flag -p or
-          -R. For more info, use \"myutils workflow -h\""
-fi
-
-# load modules
-if $cascade
-then
-    load_modules "$pep" "$method" "$breakages" "$size"
+  fail "This code needs one peptide. Please, define it using the flag -p or
+        -R. For more info, use \"myutils workflow -h\""
 fi
 
 ase -h &> /dev/null || fail "This code needs ASE"
@@ -118,40 +124,38 @@ gmx -h &> /dev/null || fail "This code needs gmx"
 myutils -h &> /dev/null || fail "This code needs myutils"
 perl -E "say '+' x 80"
 
-# ----- set up finishes -------------------------------------------------------
-
 # ---- BODY -------------------------------------------------------------------
 # ---- firstly, backup previous directories with the same name
 if [[ "$restart" != "-r" ]]
 then
-    # check pepgen
-    pepgen -h &> /dev/null || fail "This code needs pepgen"
+  # check pepgen
+  pepgen -h &> /dev/null || fail "This code needs pepgen"
 
-    # create back up
-    create_bck "$pep"
+  # create back up
+  create_bck "$pep"
 
-    # Creation of the peptide directory and moving inside.
-    mkdir "$pep"
-    cd "$pep" || fail "directory $pep does not exist"
-    verbose "generating peptide"
-    # Creation of peptide
-    # shellcheck disable=SC2086
-    pepgen "$pep" tmp -r -s flat $pep_options || fail "Creating peptide $pep"
-    mv tmp/pep.pdb "./$pep-stretched00.pdb"
-    myutils classical_minimization -f "./$pep-stretched00.pdb" \
-        -o "./$pep-stretched00.pdb"
-    verbose "define proline state"
-    myutils proline_mod -f "$pep-stretched00.pdb" -s "$endoexo" || \
-        fail "Proline estates configuration"
-    mv "$pep-stretched00modpro.pdb" "$pep-stretched00.pdb" 
-    verbose "protonate/deprotonate"
-    myutils protonate "./$pep-stretched00.pdb" "./$pep-stretched00.pdb" || \
-        fail "protonizing"
-    rm -r tmp
+  # Creation of the peptide directory and moving inside.
+  mkdir "$pep"
+  cd "$pep" || fail "directory $pep does not exist"
+  verbose "generating peptide"
+  # Creation of peptide
+  # shellcheck disable=SC2086
+  pepgen "$pep" tmp -r -s flat $pep_options || fail "Creating peptide $pep"
+  mv tmp/pep.pdb "./$pep-stretched00.pdb"
+  myutils classical_minimization -f "./$pep-stretched00.pdb" \
+                                 -o "./$pep-stretched00.pdb"
+  verbose "define proline state"
+  myutils proline_mod -f "$pep-stretched00.pdb" -s "$endoexo" || \
+    fail "Proline estates configuration"
+  mv "$pep-stretched00modpro.pdb" "$pep-stretched00.pdb" 
+  verbose "protonate/deprotonate"
+  myutils protonate "./$pep-stretched00.pdb" "./$pep-stretched00.pdb" || \
+    fail "protonizing"
+  rm -r tmp
 else
-    # moving to the peptide directory
-    cd "$pep" || fail "directory $pep does not exist"
-    warning "$pep restarted"
+  # moving to the peptide directory
+  cd "$pep" || fail "directory $pep does not exist"
+  warning "$pep restarted"
 fi
 
 # construct the stretched configurations

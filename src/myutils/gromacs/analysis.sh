@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" ANALYSIS
-
 print_help() {
 echo "
 This tool helps you to extract information from a gromacs trajectory. You have
@@ -79,12 +77,13 @@ then
     largest='true'
 fi
 
+source "$(myutils basics -path)" ANALYSIS
+
 # check dependencies
 $gmx -h &> /dev/null || fail "This code needs gromacs ($gmx failed)"
 # ----- set up finishes -------------------------------------------------------
 
-# ----- Analysis starts -------------------------------------------------------
-
+# ----- BODY ------------------------------------------------------------------
 # potential energy all the box
 if $pot_energy
 then
@@ -294,5 +293,4 @@ then
     fi
 fi
 
-finish "finished"
-exit 0
+finish

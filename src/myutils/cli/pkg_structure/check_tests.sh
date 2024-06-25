@@ -1,8 +1,6 @@
 #!/usr/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" TestChecker
-
 adjust "Starts"
 print_help() {
 echo "
@@ -75,7 +73,10 @@ do
     esac
 done
 
-VERBOSE "Tests of $mod_path will be checked"
+source "$(myutils basics -path)" TestChecker
+
+# ---- BODY -------------------------------------------------------------------
+verbose "Tests of $mod_path will be checked"
 
 if [ ! -d "$mod_path/$test_directory" ];
 then
@@ -204,3 +205,5 @@ do
 done
 
 cd $original_cs
+
+finish

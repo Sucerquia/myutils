@@ -1,7 +1,7 @@
 #!/bin/bash
 
-source "$(myutils basics -path)" BasicModDoc
 
+# ----- definition of functions -----------------------------------------------
 print_help() {
 echo "
 Code that explores the files in the package and automatically create the
@@ -19,8 +19,9 @@ documentation of all classes and functions that finds in it.
 "
 exit 0
 }
-# ----- definition of functions finishes --------------------------------------
 
+source "$(myutils basics -path)" BasicModDoc
+# ---- BODY -------------------------------------------------------------------
 # ==== General variables ======================================================
 mod_path=$(myutils path)   # path to the dir with the files to be documented
 # directories to be ignored during documentation.
