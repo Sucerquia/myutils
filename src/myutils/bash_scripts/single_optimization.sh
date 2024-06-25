@@ -7,7 +7,7 @@
 #SBATCH --error=%x-%j.e
 #SBATCH --exclusive
 
-
+# ----- definition of functions -----------------------------------------------
 print_help() {
 echo "
 This code runs one optimization using gaussian in one of the clusters. You
@@ -22,6 +22,7 @@ argument when run this code.
 exit 0
 }
 
+# ---- set up -----------------------------------------------------------------
 cascade='false'
 while getopts 'f:ch' flag; do
   case "${flag}" in
@@ -46,4 +47,7 @@ then
   load_modules
 fi
 
+# ---- BODY -------------------------------------------------------------------
 g09 "$file.com" "$file.log"
+
+finish
