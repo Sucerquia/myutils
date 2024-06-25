@@ -41,7 +41,7 @@ exit 0
 
 resubmit () {
     sleep 23h 58m ; \
-    sbatch "$( myutils workflow -path)" -p "$1" -c -r -m "$2" -b "$3" -s "$4" ; \
+    sbatch -J $SLURM_JOB_NAME "$( myutils workflow -path)" -p "$1" -c -r -m "$2" -b "$3" -s "$4" ; \
     echo "new JOB submitted"
 }
 
@@ -164,7 +164,7 @@ myutils classical_energies
 
 # compute forces
 verbose "submitting comptutation of forces.";
-sbatch -J ${pep}_forces "$( myutils find_forces -path )" "tmp.out" &&
-echo "computation of forces submitted"
+sbatch -J ${pep}_forces "$( myutils find_forces -path )" -c  -p $pep &&
+  echo "computation of forces submitted"
 
 finish "$pep finished"
