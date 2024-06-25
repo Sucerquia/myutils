@@ -19,20 +19,15 @@ This tool creates the files to do the sith analysis by optimizing a molecule
 that was just about to get a first rupture, then takes the intermedia steps and
 find the internal forces. Consider the next options:
 
-    -c    run in cascade. (modules are loaded)
-    -p    <peptide>. directory or xyzfile of last conf.Chains of aminoacids to
-          be evaluated. For example, \"./AAA/\" would optimize the last
-          stretched a trialanine peptide (where last means after organizing
-          alphabetically).
-    -l    <number of amino acids in the peptide> It will be assumed that the
-          xyz file starts with the letter code of the amino acids.
-    -r    restart. In this case, run from the directory of the pre-created
-          peptide.
-    -s    <N> Sets the maximum size for an optimization step (the initial
-          trust radius) to 0.01N Bohr or radians. The default value for N is
-          30. Not working
+  -c  run in cascade. (modules are loaded)
+  -p  <peptide>. directory or xyzfile of last conf.Chains of aminoacids to
+      be evaluated. For example, \"./AAA/\" would optimize the last
+      stretched a trialanine peptide (where last means after organizing
+      alphabetically).
+  -l  <number of amino acids in the peptide> It will be assumed that the
+      xyz file starts with the letter code of the amino acids.
 
-    -h   prints this message.
+  -h  prints this message.
 "
 exit 0
 }
@@ -55,18 +50,16 @@ lenght=''
 
 while getopts 'cl:p:rs:h' flag;
 do
-    case "${flag}" in
-      c) cascade='true' ;;
-      l) lenght=${OPTARG} ;;
-      p) ref=${OPTARG} ;;
-      r) restart='-r' ;;
-      s) size=${OPTARG} ;;
+  case "${flag}" in
+    c) cascade='true' ;;
+    l) lenght=${OPTARG} ;;
+    p) ref=${OPTARG} ;;
+    r) restart='-r' ;;
 
-      h) print_help ;;
-      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
-    esac
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
 done
-
 
 if [ "${#lenght}" -eq 0 ]
 then 
@@ -77,7 +70,7 @@ fi
 if [ "${#ref}" -eq 0 ]
 then 
     fail "This code needs one reference. Please, define it using the flag -p.
-         For more info, use \"myutils workflow_from_extreme -h\""
+          For more info, use \"myutils workflow_from_extreme -h\""
 fi
 
 
@@ -103,7 +96,7 @@ fi
 xyz=${ref##*/}
 name=${xyz:0:$lenght}
 
-verbose "The first g09 process is an optimization starging from $ref"
+verbose "The first g09 process is an optimization starting from $ref"
 
 # creates gaussian input
 myutils change_distance "$xyz" "$name-optext" frozen_dofs.dat 0 0 \
@@ -119,7 +112,7 @@ g09 "$name-optext.com" "$name-optext.log" || \
             -eq 1 ]; then fail "Atoms too close for ${nameiplusone}" ; \
       fi ; }
 # check convergence from output
-output=$(grep -i optimized "$name-optext.com" | \
+output=$(grep -i optimized "$name-optext.log" | \
             grep -c -i Non )
 
 [ "$output" -ne 0 ] && fail "optimization didn't converged"
