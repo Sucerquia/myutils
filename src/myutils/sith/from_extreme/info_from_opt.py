@@ -31,6 +31,8 @@ def info_from_opt(pep):
     ps = PepSetter(f'{pep}-stretched00.pdb')
     ind1 = ps.amino_info[1]['CH3'] - 1
     ind2 = ps.amino_info[5]['CH3'] - 1
+
+    # choose third atom for orientation.
     if ps.amino_name[3] != 'GLY':  # Glycine does not have CB
         ind3 = ps.amino_info[3]['CB'] - 1
     elif ps.amino_name[2] != 'GLY':
