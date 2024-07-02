@@ -16,7 +16,6 @@ pymodules = {
     'gen_randpep': 'myutils.sith.sith_tools',
     'log2xyz': 'myutils.sith.g09_xyz',
     'reduce_structs': 'myutils.sith.from_extreme.info_from_opt',
-    'reduce_structs_pre': 'myutils.sith.from_extreme.info_from_opt',
     'info_from_opt': 'myutils.sith.from_extreme.info_from_opt',
     'function_doc': 'myutils.miscellaneous',
     'args_and_defaults': 'myutils.miscellaneous',
@@ -25,8 +24,8 @@ pymodules = {
 }
 
 sh_executers = {
-    'single_optimization': './bash_scripts/single_optimization.sh',
     'bash-template': './bash_scripts/bash-template.sh',
+    'single_g09': './bash_scripts/single_g09.sh',
     'find_blocks': './bash_scripts/find_blocks.sh',
     'classical_minimization': './gromacs/classical_minimization.sh',
     'classical_energies': './gromacs/classical_energies.sh',
@@ -54,6 +53,7 @@ sh_executers = {
     'submit_forces_after_opt': './sith/from_extreme/submit_forces_after_opt.sh',
     'resubmit_failed': './sith/from_extreme/resubmit_failed.sh',
     'extr_dofs': './sith/from_extreme/extr_dofs.sh',
+    'after_optimization': './sith/from_extreme/after_optimization.sh',
     'workflow_from_extreme': './sith/from_extreme/workflow_from_extreme.sh',
     'opt_and_forces': './sith/from_extreme/opt_and_forces.sh',
     'prepare_and_submit': './sith/from_extreme/prepare_and_submit.sh',

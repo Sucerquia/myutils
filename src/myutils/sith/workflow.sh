@@ -171,4 +171,6 @@ verbose "submitting comptutation of forces.";
 sbatch -J ${pep}_forces "$( myutils find_forces -path )" -c  -p $pep &&
   echo "computation of forces submitted"
 
+sbatch -J ${pep}_WAR $(myutils workflow_from_extreme -path) -c -l 3 -p "."
+
 finish "$pep finished"
