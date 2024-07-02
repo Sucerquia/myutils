@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source "$(myutils basics -path)" PythonDocFixer
-
 print_help() {
 echo "
 Code takes the documentation of a function and checks the documentation adding
@@ -21,9 +19,11 @@ exit 0
 # ==== Costumer set up ========================================================
 directory="$(myutils path)"
 spaces=0
-while getopts 'f:m:s:h' flag;
+class=""
+while getopts 'c:f:m:s:h' flag;
 do
   case "${flag}" in
+    c) class=${OPTARG} ;;
     f) function=${OPTARG} ;;
     m) module=${OPTARG} ;;
     s) num_spaces=${OPTARG} ;;
@@ -33,11 +33,20 @@ do
   esac
 done
 
+source "$(myutils basics -path)" PythonDocFixer
 # ==== Body ===================================================================
 
 # ==== Initial Blocks =========================================================
-myutils function_doc $module $function | sed 's/^/#new_line/' > \
-  $function-doc.txt
+if [[ "$class" != "" ]]
+then
+  leading_spaces=$(printf "%8s")
+else
+  leading_spaces=$(printf "%4s")
+fi
+
+myutils function_doc $module $class $function | sed 's/^/#new_line/' > \
+  $function-doc.txt || fail "extracting old documentation"
+
 sed -i 's/[[:space:]]*$//g' $function-doc.txt
 
 # In case the documentation was written without leaving the first line empty
@@ -70,26 +79,30 @@ done
 
 # ==== Block of Parameters in old documentation
 # In case it does not exist, a new block is created
-par_block=$(grep -xl "#new_line    Parameters" documentation-blocks_*)
+par_block=$(grep -Exl "#new_line+[[:space:]]+Parameters" documentation-blocks_*)
 if [ ${#par_block} -eq 0 ]
 then
   cat << EOF > documentation-blocks_parameters.out
-#new_line    Parameters
-#new_line    ==========
+#new_lineParameters
+#new_line==========
 EOF
+  sed -i "s/#new_line/#new_line$leading_spaces/g" \
+    documentation-blocks_parameters.out
   par_block="documentation-blocks_parameters.out"
 fi
 
 # ==== Block of Return in old documentation
 # In case it does not exist, a new block is created
-return_block=$(grep -xl "#new_line    Return" documentation-blocks_*)
+return_block=$(grep -Exl "#new_line+[[:space:]]+Return" documentation-blocks_*)
 if [ ${#return_block} -eq 0 ]
 then
   cat << EOF > documentation-blocks_return.out
-#new_line    Return
-#new_line    ======
-#new_line    # TODO: add return information
+#new_lineReturn
+#new_line======
+#new_line# TODO: add return information
 EOF
+  sed -i "s/#new_line/#new_line$leading_spaces/g" \
+    documentation-blocks_return.out
   return_block="documentation-blocks_return.out"
 fi
 
@@ -99,7 +112,8 @@ if [[ "$par_block" == "documentation-blocks_0.out" ]] || \
    [[ "$return_block" == "documentation-blocks_0.out" ]] || \
    [ ! -f "documentation-blocks_0.out" ]
 then
-  echo "#new_line    # TODO: Add definition" > documentation-blocks_def.out
+  echo "#new_line$leading_spaces# TODO: Add definition" > \
+    documentation-blocks_def.out
   definition_block="documentation-blocks_def.out"
 else
   definition_block="documentation-blocks_0.out"
@@ -107,7 +121,7 @@ fi
 
 # === Check parameters ========================================================
 # parameters
-mapfile -t parameters < <(myutils args_and_defaults $module $function | \
+mapfile -t parameters < <(myutils args_and_defaults $module $class $function | \
     grep -v "###" | grep -vx '' )
 
 # insert missed parameters
@@ -119,6 +133,10 @@ then
 else
   for par in "${parameters[@]}"
   do
+    if [[ "$par" == "self:" ]]
+    then
+      continue
+    fi
     par_name=$(echo $par | cut -d ":" -f 1) # name of the parameter
     par_defa=$(echo $par | cut -d ":" -f 2) # default of the parameter
     n_par=$(grep -n $par_name $par_block | \
@@ -126,8 +144,15 @@ else
     if [ ${#n_par} -eq 0 ]
     then
       # if the variable is not defined
-      echo "#new_line    $par # TODO: check default value" >> $par_block
-      echo "#new_line        # TODO: add documentation of this parameter" >> \
+      if [ ${#par_defa} -ne 0 ]
+      then
+        automatic_def_val="# TODO: check default value"
+      else
+        automatic_def_val=""
+      fi
+      echo "#new_line$leading_spaces$par $automatic_def_val" >> \
+        $par_block
+      echo "#new_line$leading_spaces    # TODO: add documentation of this parameter" >> \
         $par_block
     else
       # if the variable is defined. check if the default exists
@@ -140,14 +165,14 @@ else
       # check if the definition of the parameter exist
       if awk -v line=$(( n_par + 1 )) 'NR==line' $par_block | grep -q ":"
       then
-        sed -i "${n_par}a\#new_line        # TODO: add documentation of this parameter" $par_block
+        sed -i "${n_par}a\#new_line$leading_spaces    # TODO: add documentation of this parameter" $par_block
       fi
     fi
   done
 fi
 
 # === Create the final doc block ==============================================
-echo "#new_line    \"\"\"" > final_$function-doc.txt
+echo "#new_line$leading_spaces\"\"\"" > final_$function-doc.txt
 cat $definition_block >> final_$function-doc.txt
 rm $definition_block
 
@@ -170,16 +195,15 @@ do
   cat $other_doc_block >> final_$function-doc.txt
   rm $other_doc_block
 done
-echo "#new_line    \"\"\"" >> final_$function-doc.txt
+echo "#new_line$leading_spaces\"\"\"" >> final_$function-doc.txt
 
 # ==== cleaning
+# Remove newline comments
 sed -i 's/#new_line//g' final_$function-doc.txt
-# Add spaces to the beginning of each line and save to a new file
-spaces=$(printf "%${num_spaces}s")
+# Remove tailing spaces
 sed -i 's/[[:space:]]*$//g' $function-doc.txt
-# Remove empty lines
-sed -i "s/^/${spaces}/" final_$function-doc.txt
 
+# Remove unnecessary empty space
 while [[ "$(tail -n 2 final_$function-doc.txt | head -n 1)" == "" ]]
 do
   total_lines=$(wc -l < final_$function-doc.txt)

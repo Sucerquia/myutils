@@ -5,6 +5,10 @@ import sys
 
 
 pymodules = {
+    'function_doc': 'myutils.miscellaneous',
+    'args_and_defaults': 'myutils.miscellaneous',
+    'optimized_e': 'myutils.miscellaneous',
+    'time_g09': 'myutils.miscellaneous',
     'distance': 'myutils.ase_utils.tools',
     'all_xyz2pdb': 'myutils.ase_utils.tools',
     'conf2pdb': 'myutils.ase_utils.tools',
@@ -18,35 +22,32 @@ pymodules = {
     'proline_state': 'myutils.sith.sith_tools',
     'gen_randpep': 'myutils.sith.sith_tools',
     'log2xyz': 'myutils.sith.g09_xyz',
-    'function_doc': 'myutils.miscellaneous',
-    'args_and_defaults': 'myutils.miscellaneous',
-    'optimized_e': 'myutils.miscellaneous',
-    'time_g09': 'myutils.miscellaneous',
 }
 
 sh_executers = {
-    'find_blocks': './bash_scripts/find_blocks.sh',
-    'classical_minimization': './gromacs/classical_minimization.sh',
     'classical_energies': './gromacs/classical_energies.sh',
     'analysis': './gromacs/analysis.sh',
     'pulling': './gromacs/pulling.sh',
     'peptide_pulling': './gromacs/peptide_pulling.sh',
+    'classical_minimization': './gromacs/classical_minimization.sh',
     'generate_main': './cli/generate_main.sh',
+    'check_structure': './cli/pkg_structure/check_structure.sh',
     'doc_pythonfile': './cli/pkg_structure/doc_pythonfile.sh',
     'doc_modules': './cli/pkg_structure/doc_modules.sh',
-    'check_tests': './cli/pkg_structure/check_tests.sh',
     'add_python_doc': './cli/pkg_structure/add_python_doc.sh',
-    'python_doc_fixer': './cli/pkg_structure/python_doc_fixer.sh',
     'bash_style': './cli/pkg_structure/bash_style.sh',
-    'check_structure': './cli/pkg_structure/check_structure.sh',
+    'python_doc_fixer': './cli/pkg_structure/python_doc_fixer.sh',
+    'check_tests': './cli/pkg_structure/check_tests.sh',
+    'basics': './basics.sh',
+    'find_blocks': './bash_scripts/find_blocks.sh',
+    'compute_forces': './from_extreme/compute_forces.sh',
+    'resubmit_failed': './from_extreme/resubmit_failed.sh',
     'reduce_ds': './from_extreme/reduce_ds.sh',
     'rearange_files': './from_extreme/rearange_files.sh',
-    'submit_forces_after_opt': './from_extreme/submit_forces_after_opt.sh',
-    'resubmit_failed': './from_extreme/resubmit_failed.sh',
-    'compute_forces': './from_extreme/compute_forces.sh',
-    'extr_dofs': './from_extreme/extr_dofs.sh',
-    'opt_and_forces': './from_extreme/opt_and_forces.sh',
     'prepare_and_submit': './from_extreme/prepare_and_submit.sh',
+    'opt_and_forces': './from_extreme/opt_and_forces.sh',
+    'submit_forces_after_opt': './from_extreme/submit_forces_after_opt.sh',
+    'extr_dofs': './from_extreme/extr_dofs.sh',
     'single_optimization': './sith/single_optimization.sh',
     'extract_forces': './sith/extract_forces.sh',
     'proline_mod': './sith/proline_mod.sh',
@@ -56,13 +57,12 @@ sh_executers = {
     'forces_from_xyzs': './sith/forces_from_xyzs.sh',
     'clean_ds': './sith/clean_ds.sh',
     'stretching': './sith/stretching.sh',
-    'basics': './basics.sh',
     'pkges_installer': './pkges_installer.sh',
 }
 
 other_files = {
-    'pulling_temp': './gromacs/pulling_temp.mdp',
     'minim': './gromacs/minim.mdp',
+    'pulling_temp': './gromacs/pulling_temp.mdp',
 }
 
 

@@ -159,26 +159,25 @@ def args_and_defaults(module, *args):
     # TODO: add return information
     """
     module = import_module(module)
-    for func in args:
-        method = getattr(module, func)
 
-        signature = inspect.signature(method)
+    method = getattr(module, args[0])
+    for func in args[1:]:
+        method = getattr(method, func)
 
-        #print("@@@_Separation_of_function_starts@@@")
-        #print(func)
-        output = f"\n ### {func}\n"
-        for param_name, param in signature.parameters.items():
-            if param.default != inspect.Parameter.empty:
-                output += f"{param_name}: Default={param.default}\n"
-            else:
-                output += f"{param_name}:\n"
-        output += "\n"
-        #print("@@@_Separation_of_function_ends@@@")
+    signature = inspect.signature(method)
+
+    output = f"\n ### {args[-1]}\n"
+    for param_name, param in signature.parameters.items():
+        if param.default != inspect.Parameter.empty:
+            output += f"{param_name}: Default={param.default}\n"
+        else:
+            output += f"{param_name}:\n"
+    output += "\n"
     return output
 
 
 # add2executable
-def function_doc(module, func):
+def function_doc(module, *args):
     """
     Takes a function and prints its documentation.
 
@@ -186,7 +185,7 @@ def function_doc(module, func):
     ==========
     func:
         function that you want to extract the documentation.
-    module: # TODO: check default value
+    module:
         # TODO: add documentation of this parameter
 
     Return
@@ -194,5 +193,10 @@ def function_doc(module, func):
     # TODO: add return information
     """
     module = import_module(module)
-    method = getattr(module, func)
+
+    method = getattr(module, args[0])
+    for func in args[1:]:
+        method = getattr(method, func)
+
     return method.__doc__
+
