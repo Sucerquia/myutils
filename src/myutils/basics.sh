@@ -5,9 +5,14 @@
 # ------ variables ------------------------------------------------------------
 array_bfnames=( "$1" "${array_bfnames[@]}" )
 basic_functions_name=${array_bfnames[0]}
+if [ ${#2} == 0 ]
+then
+  eval "BASICVERBOSE_${basic_functions_name[0]}=false"
+else
+  eval "BASICVERBOSE_${basic_functions_name[0]}=$2"
+fi
 
 # ------ functions ------------------------------------------------------------
-
 # Function that adjustes the text to 80 characters
 adjust () {
     text="++++++++ ${basic_functions_name[0]}: $*"
@@ -23,22 +28,25 @@ adjust () {
 # prints some text adjusted to 80 characters per line, filling empty spaces
 # with +
 verbose () {
+  if [[ "$(eval "echo \$BASICVERBOSE_${basic_functions_name[0]}")" == "true" ]]
+  then
     # shellcheck disable=SC2068
     adjust "VERBOSE" $@ "$( date )"
+  fi
 }
 
 warning () {
     # shellcheck disable=SC2068
-    adjust "WARNING" $@ "$( date )"
+    adjust "WARNING" $@ "$( date )" >&2
 }
 
 finish () {
     if [ "$#" -ne 0 ]
     then
         # shellcheck disable=SC2068
-        adjust $@
+        verbose $@
     else
-        adjust finish
+        verbose finish
     fi
     echo
     array_bfnames=( "${array_bfnames[@]:1}" )
@@ -134,4 +142,5 @@ load_modules() {
     fi
 }
 
-adjust "STARTS"
+verbose "STARTS"
+
