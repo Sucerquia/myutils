@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" CLASSICAL_E
-
 print_help() {
 echo "
 Tool that computes the classical energy from a set of pdb files in the
@@ -22,15 +20,18 @@ exit 0
 counter=0
 all_xyz2pdb='true'
 output='/dev/null'
+verbose='false'
 while getopts 'l:nh' flag; do
     case "${flag}" in
       l) output=${OPTARG} ;;
       n) all_xyz2pdb='false' ;;
 
+      v) verbose='true' ;;
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
+source "$(myutils basics -path)" CLASSICAL_E $verbose
 # ----- set up finishes -------------------------------------------------------
 
 # computation starts

@@ -1,8 +1,6 @@
 #!/usr/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-
-source "$(myutils basics -path)" CHECK_DS || exit 1
 print_help() {
 echo "
 This code checks the aminoacids in the 'data runnig' directory and evaluates
@@ -25,18 +23,21 @@ exit 0
 running_directory="./"
 dataset="../random3"
 user="sucerqdl"
-
-while getopts 'r:s:u:h' flag;
+verbose='false'
+while getopts 'r:s:u:vh' flag;
 do
     case "${flag}" in
       r) running_directory=${OPTARG} ;;
       s) dataset=${OPTARG} ;;
       u) user=${OPTARG} ;;
 
+      v) verbose='true' ;;
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
+
+source "$(myutils basics -path)" CHECK_DS $verbose || exit 1
 
 # requierements
 if [ ! -d "$dataset" ]

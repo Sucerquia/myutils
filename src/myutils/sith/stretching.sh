@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" STRETCHING
-
 print_help() {
 echo "
 This tool obtains the stretched configuration by increasing the distance between
@@ -20,6 +18,7 @@ caps carbon, constraining and optimizing using BMK exchange-correlation.
               the peptide's directory.
     -s    <size[A]> of the step that increases the distances. Default 0.2A
 
+    -v    verbose
     -h    prints this message.
 "
 exit 0
@@ -35,19 +34,22 @@ n_processors=8
 restart='false'
 size=0.2
 retake='true'
-
-while getopts 'b:p:m:rs:h' flag; do
+verbose='false'
+while getopts 'b:p:m:rs:vh' flag; do
     case "${flag}" in
       b) breakages=${OPTARG} ;;
       p) pep=${OPTARG} ;;
       m) method=${OPTARG} ;;
       r) restart='true' ;;
       s) size=${OPTARG} ;;
+      v) verbose='true' ;;
 
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
+
+source "$(myutils basics -path)" STRETCHING $verbose
 
 # stretching method
 if [[ "$method" -eq 0 ]]

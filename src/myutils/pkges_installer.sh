@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # ---- functions --------------------------------------------------------------
-source "$(myutils basics -path)" Installer
+# true in the next line means verbose activated
+source "$(myutils basics -path)" Installer 'true'
 
 print_help() {
 echo "

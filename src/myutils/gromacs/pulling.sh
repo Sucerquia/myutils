@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" PULLING
-
 print_help() {
 echo "
 This code executes the pulling adding an external force along the x axis to the
@@ -24,18 +22,22 @@ exit 0
 output='/dev/null'
 gmx="gmx"
 steps="10000"
+verbose='false'
 
-while getopts 'f:g:l:s:h' flag; do
+while getopts 'f:g:l:s:vh' flag; do
     case "${flag}" in
       f) force=${OPTARG} ;;
       g) gmx=${OPTARG} ;;
       l) output=${OPTARG} ;;
       s) steps=${OPTARG} ;;
+      v) verbose='true' ;;
 
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
+
+source "$(myutils basics -path)" PULLING $verbose
 
 # check dependencies
 if [ ! -d equilibrate ]

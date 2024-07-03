@@ -13,6 +13,7 @@ documentation of all classes and functions that finds in it.
         Default: \"\$myutils path\"
    -n   <name> pkg name. Default: myutils 
 
+   -v   verbose
    -h   prints this message.
 "
 exit 0
@@ -41,9 +42,7 @@ insert_doc() {
 # ----- definition of functions finishes --------------------------------------
 
 # ==== General variables ======================================================
-source "$(myutils basics -path)" AddPythonDoc
-
-mod_path=$(myutils path)   # path to the dir with the files to be documented
+mod_path=""   # path to the dir with the files to be documented
 # directories to be ignored during documentation.
 raw_ign_dirs='pycache,tests,ipynb_checkpoints,tutorials,pre-deprected'
 # files to be ignored during the documentation.
@@ -52,7 +51,7 @@ pkg_name="myutils"
 
 # ==== Costumer set up ========================================================
 directory="$(myutils path)"
-while getopts 'd:f:m:n:p:h' flag;
+while getopts 'd:f:m:n:p:vh' flag;
 do
     case "${flag}" in
       d) raw_ign_dirs=${OPTARG} ;;
@@ -60,10 +59,17 @@ do
       n) pkg_name=${OPTARG};;
       p) mod_path=${OPTARG};;
 
+      v) verbose='true' ;;
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
+source "$(myutils basics -path)" AddPythonDoc $verbose
+
+if [ "$mod_path" == "" ]
+then
+  mod_path=$(myutils path)
+fi
 
 mapfile -t ignore_dirs < <(echo "$raw_ign_dirs" | tr ',' '\n')
 # files to be ignore during the check.

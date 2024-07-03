@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source "$(myutils basics -path)" PrepareAndSubmit
+source "$(myutils basics -path)" PrepareAndSubmit 'true'
 
 for pep in $@
 do

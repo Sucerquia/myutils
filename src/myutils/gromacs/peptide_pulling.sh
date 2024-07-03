@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" PEP_PULL
-
 print_help() {
 echo "
 This tool creates the trajectory of a given peptide pulled by an external force.
@@ -29,8 +27,9 @@ read_forces="200"
 analysis="-d -L"
 steps="10000"
 pep_options="-silent"
+verbose='false'
 
-while getopts 'a:f:g:op:s:h' flag; do
+while getopts 'a:f:g:op:s:vh' flag; do
     case "${flag}" in
       a) analysis=${OPTARG} ;;
       f) read_forces=${OPTARG} ;;
@@ -39,10 +38,13 @@ while getopts 'a:f:g:op:s:h' flag; do
       p) pep=${OPTARG} ;;
       s) steps=${OPTARG} ;;
 
+      v) verbose='true' ;;
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
+
+source "$(myutils basics -path)" PEP_PULL $verbose
 
 IFS=',' read -ra forces <<< "$read_forces"
 # check dependencies

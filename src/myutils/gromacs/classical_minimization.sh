@@ -1,8 +1,6 @@
 #!/usr/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" CLASSICAL_MIN
-
 print_help () {
 echo "
 This tool optimizes a configuration from an initial pdb file, which must be the
@@ -19,16 +17,20 @@ exit 0
 }
 
 output='/dev/null'
-while getopts 'f:o:l:h' flag; do
+verbose='false'
+while getopts 'f:o:l:vh' flag; do
     case "${flag}" in
         f) pdbfile_min=${OPTARG} ;;
         o) output_file=${OPTARG} ;;
         l) output=${OPTARG} ;;
 
+        v) verbose='true' ;;
         h) print_help ;;
         *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
+
+source "$(myutils basics -path)" CLASSICAL_MIN $verbose
 
 if [ ${#output_file} -eq 0 ]
 then

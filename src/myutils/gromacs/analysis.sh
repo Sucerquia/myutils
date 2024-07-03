@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" ANALYSIS
-
 print_help() {
 echo "
 This tool helps you to extract information from a gromacs trajectory. You have
@@ -48,7 +46,7 @@ output='/dev/null'
 header=()
 new_files=()
 
-while getopts 'acdef:g:kLl:mrsh' flag; do
+while getopts 'acdef:g:kLl:mrsvh' flag; do
     case "${flag}" in
       a) all='true' ;;
       c) config='true' ;;
@@ -63,10 +61,12 @@ while getopts 'acdef:g:kLl:mrsh' flag; do
       r) rama='true' ;;
       s) sub='true' ;;
 
+      v) verbose='true' ;;
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
+source "$(myutils basics -path)" ANALYSIS $verbose
 
 if $all
 then

@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source "$(myutils basics -path)" BasicModDoc
-
 print_help() {
 echo "
 Code that explores the files in the package and automatically create the
@@ -13,8 +11,9 @@ documentation of all classes and functions that finds in it.
         Default: \"\$myutils path\"
    -m   <mod_doc_path> path to the directory that stores the modules
         documentation. Default: <mod_path>/../../doc/modules
-   -n   <name> pakage name. Default: myutils 
+   -n   <name> pakage name. Default: myutils
 
+   -v   verbose
    -h   prints this message.
 "
 exit 0
@@ -22,7 +21,7 @@ exit 0
 # ----- definition of functions finishes --------------------------------------
 
 # ==== General variables ======================================================
-mod_path=$(myutils path)   # path to the dir with the files to be documented
+mod_path=""   # path to the dir with the files to be documented
 # directories to be ignored during documentation.
 raw_ign_dirs='pycache,tests,cli,ipynb_checkpoints'
 # files to be ignored during the documentation.
@@ -31,7 +30,7 @@ pkg_name="myutils"
 
 # ==== Costumer set up ========================================================
 directory="$(myutils path)"
-while getopts 'd:f:m:n:p:h' flag;
+while getopts 'd:f:m:n:p:vh' flag;
 do
     case "${flag}" in
       d) raw_ign_dirs=${OPTARG} ;;
@@ -39,11 +38,19 @@ do
       m) mod_doc=${OPTARG};;
       n) pkg_name=${OPTARG};;
       p) mod_path=${OPTARG};;
+      v) verbose='true' ;;
 
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
+
+source "$(myutils basics -path)" BasicModDoc $verbose
+
+if [ "$mod_path" == "" ]
+then
+  mod_path=$(myutils path)
+fi
 
 if [ ${#mod_doc} -eq 0 ];
 then
