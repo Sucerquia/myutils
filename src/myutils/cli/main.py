@@ -15,6 +15,7 @@ pymodules = {
     'diff_bonds': 'myutils.ase_utils.tools',
     'extract_bonds': 'myutils.ase_utils.tools',
     'change_distance': 'myutils.ase_utils.tools',
+    'methods_in_class': 'myutils.cli.pkg_structure.documentation_tools',
     'reduce_structs': 'myutils.from_extreme.info_from_opt',
     'reduce_structs_pre': 'myutils.from_extreme.info_from_opt',
     'info_from_opt': 'myutils.from_extreme.info_from_opt',

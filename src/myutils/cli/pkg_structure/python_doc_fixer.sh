@@ -20,6 +20,7 @@ exit 0
 directory="$(myutils path)"
 spaces=0
 class=""
+function=""
 while getopts 'c:f:m:s:h' flag;
 do
   case "${flag}" in
@@ -37,11 +38,11 @@ source "$(myutils basics -path)" PythonDocFixer
 # ==== Body ===================================================================
 
 # ==== Initial Blocks =========================================================
-if [[ "$class" != "" ]]
+if [[ "$class" == "" ]] || [[ "$func" == "" ]]
 then
-  leading_spaces=$(printf "%8s")
-else
   leading_spaces=$(printf "%4s")
+else
+  leading_spaces=$(printf "%8s")
 fi
 
 myutils function_doc $module $class $function | sed 's/^/#new_line/' > \
@@ -104,6 +105,12 @@ EOF
   sed -i "s/#new_line/#new_line$leading_spaces/g" \
     documentation-blocks_return.out
   return_block="documentation-blocks_return.out"
+fi
+
+# In case of documentation of a class
+if [ "$function" == "" ]
+then
+  echo "" > $return_block
 fi
 
 # ==== Block of Definition in old documentation

@@ -1,14 +1,13 @@
 #!/bin/bash
 
-source "$(myutils basics -path)" AddPythonDoc
 
 print_help() {
 echo "
-Code that explores the files in the package and automatically create the
+Code that explores the files in the package and automatically creates the
 documentation of all classes and functions that finds in it.
 
    -d   <dir1,dir2...> directories to be ignored.
-        Default: 'pycache,tests,cli,tutorials,pre-deprected'
+        Default: 'pycache,tests,tutorials,pre-deprected'
    -f   <fil1,fil2...> files to be ignored. Default: '__init__'
    -p   <absolute_path> path directory to be checked (no relative path).
         Default: \"\$myutils path\"
@@ -18,12 +17,35 @@ documentation of all classes and functions that finds in it.
 "
 exit 0
 }
+
+insert_doc() {
+  doc_num_start=$1
+  fil=$2
+  func=$3
+  # Remove prev documentation first
+  if awk -v numline=$doc_num_start 'NR==numline' \
+          $fil | grep -q "\"\"\""
+  then
+    doc_num_end=$(tail -n +$(( doc_num_start + 1 )) $fil | \
+                  grep -n "\"\"\"" | head -n 1 | cut -d ":" -f 1)
+    doc_num_end=$(( doc_num_end + doc_num_start ))
+    sed -i "${doc_num_start},${doc_num_end}d" $fil
+  fi
+
+  # insert new documentation
+  sed -i "$(( doc_num_start - 1 ))r final_$func-doc.txt" $fil
+
+  # delete documentation file
+  rm final_$func-doc.txt || fail "not final documentation found"
+}
 # ----- definition of functions finishes --------------------------------------
 
 # ==== General variables ======================================================
+source "$(myutils basics -path)" AddPythonDoc
+
 mod_path=$(myutils path)   # path to the dir with the files to be documented
 # directories to be ignored during documentation.
-raw_ign_dirs='pycache,tests,cli,ipynb_checkpoints,tutorials,pre-deprected'
+raw_ign_dirs='pycache,tests,ipynb_checkpoints,tutorials,pre-deprected'
 # files to be ignored during the documentation.
 raw_ign_fils='__init__.'
 pkg_name="myutils"
@@ -69,17 +91,18 @@ for fil in "${pck_fils[@]}"
 do
   verbose $fil
   ext=$(echo "$fil" | cut -d '.' -f3 )
+  # Python files
   if [ "$ext" == 'py' ]
   then
-    # Python files
+    module=$(echo "myutils"${fil//\.\//\.} | sed "s/\//\./g" | sed "s/\.py//g")
     # Functions
     mapfile -t functions < <(grep "^def " "$fil" | awk '{print $2}' | \
                              cut -d "(" -f 1)
-    module=$(echo "myutils"${fil//\.\//\.} | sed "s/\//\./g" | sed "s/\.py//g")
+    if [ ${#functions} -eq 0 ]; then verbose "functions"; fi
 
     for func in ${functions[@]}
     do
-      verbose $func
+      echo $func
       # The output of the next function is stored in final_<func>-doc.txt
       myutils python_doc_fixer -f "$func" -m "$module" || \
         fail "creating new documentation"
@@ -91,26 +114,56 @@ do
                         cut -d ':' -f 1)
       doc_num_start=$(( n_func + rel_n_func_end ))
 
-      # ==== insert checked documentation
-      if awk -v numline=$doc_num_start 'NR==numline' \
-             $fil | grep -q "\"\"\""
-      then
-        # Remove prev documentation first
-        doc_num_end=$(tail -n +$(( doc_num_start + 1 )) $fil | \
-                      grep -n "\"\"\"" | head -n 1 | cut -d ":" -f 1)
-        doc_num_end=$(( doc_num_end + doc_num_start ))
-        sed -i "${doc_num_start},${doc_num_end}d" $fil
-
-      fi 
-      # insert new documentation
-      sed -i "$(( doc_num_start - 1 ))r final_$func-doc.txt" $fil
-
-      # delete documentation file
-      rm final_$func-doc.txt || fail "not final documentation found"
+      insert_doc $doc_num_start $fil $func
     done
+
     # Classes
-    # TODO: extend this proporsal for classes. python_doc_fixer works also for
-    # this case, just give the number of leading spaces
+    mapfile -t classes < <(grep "^class " "$fil" | awk '{print $2}' | \
+                             cut -d "(" -f 1)
+    if [ ${#classes} -eq 0 ]; then verbose "Classes"; fi
+    for class in ${classes[@]}
+    do
+      # Documentation of the class definition
+      class=${class%:}
+      echo $class
+      myutils python_doc_fixer -m $module -c $class || \
+        fail "creating new documentation"
+
+      # search n lines of the beginning of the function, the end of the
+      # heading of the function and the beginning of the documentation
+      n_class=$( grep -n "^class $class" $fil | cut -d ":" -f 1 )
+      rel_n_class_end=$( tail -n +$n_class $fil | grep -n ":" | head -n 1 | \
+                        cut -d ':' -f 1)
+      doc_num_start=$(( n_class + rel_n_class_end ))
+
+      insert_doc $doc_num_start $fil
+
+      # TODO: add description of the attributes.
+      
+      # ==== description of modules
+      # subfile with the class only
+      n_end_class=$(tail -n +$n_class $fil | grep -nEv "^ |^$"  | \
+                    grep -v "^$" | tail -n +2 | head -n 1 | cut -d ":" -f 1 )
+
+      if [ ${#n_end_class} -eq 0 ]
+      then
+        tail -n +$n_class $fil > ${class}_complete.dat
+      else
+        myutils find_blocks -f $fil -s $n_class -e $n_end_class \
+                            -i -o ${class}_complete
+      fi
+      mapfile -t methods < <(myutils methods_in_class $module $class | \
+                             head -n -1)
+      for method in ${methods[@]}
+      do
+        rel_n_meth=$(grep -n "def $method" ${class}_complete.dat)
+        rel_n_meth_end=$( tail -n +$rel_n_meth  | grep -n ")" | head -n 1 | \
+                          cut -d ':' -f 1)
+        doc_num_start=$(( n_class + rel_n_meth + rel_n_meth_end ))
+        insert_doc $doc_num_start $fil $method
+      done
+      rm ${class}_complete.dat
+    done
   fi
 done
 
