@@ -13,14 +13,12 @@ def dof_classificator_all(dofs_indexes, atoms_per_aminoacids):
 
     Parameters
     ==========
-    dof_indexes: list of duples
+    dofs_indexes: list of duples
         sith.structures[n].dim_indices containing definition of the degrees of
         freedom in term of the atomic indexes.
     atoms_per_aminoacids: dict
         Atoms in each residue. The keys are the number of the residues, values
         should be the indexes of the atoms belonging to the residue of the key.
-    dofs_indexes: # TODO: check default value
-        # TODO: add documentation of this parameter
 
     Return
     ======
@@ -50,14 +48,12 @@ def dof_classificator_one(dofs_indexes, atoms_per_aminoacids):
 
     Parameters
     ==========
-    dof_indexes: list of duples
+    dofs_indexes: list of duples
         sith.structures[n].dim_indices containing definition of the degrees of
         freedom in term of the atomic indexes.
     atoms_per_aminoacids: dict
         Atoms in each residue. The keys are the number of the residues, values
         should be the indexes of the atoms belonging to the residue of the key.
-    dofs_indexes: # TODO: check default value
-        # TODO: add documentation of this parameter
 
     Return
     ======
@@ -166,6 +162,16 @@ def le_same_aminoacids(sith, peptides_info, atom_types, kind_amino):
 
 
 class SithAnalysis:
+    """
+    # TODO: Add definition
+
+    Parameters
+    ==========
+    sith: 
+        # TODO: add documentation of this parameter
+    pepinfo: 
+        # TODO: add documentation of this parameter
+    """
     def __init__(self, sith, pepinfo):
         self.sith = sith
         self.pep_info = pepinfo

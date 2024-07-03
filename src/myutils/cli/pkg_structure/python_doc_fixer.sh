@@ -4,7 +4,7 @@ print_help() {
 echo "
 Code takes the documentation of a function and checks the documentation adding
 TODOs in the missing parts. The output is stored in a file called
-final_<method>-doc.txt
+final_<method>_doc.txt
 
    -f   <method> Function to be checked
    -m   <module> Module that contains the Function
@@ -46,24 +46,24 @@ else
 fi
 
 myutils function_doc $module $class $function | sed 's/^/#new_line/' > \
-  $function-doc.txt || fail "extracting old documentation"
+  $function_doc.txt || fail "extracting old documentation"
 
-sed -i 's/[[:space:]]*$//g' $function-doc.txt
+sed -i 's/[[:space:]]*$//g' $function_doc.txt
 
 # In case the documentation was written without leaving the first line empty
-first_line=$(head -n 1 $function-doc.txt)
+first_line=$(head -n 1 $function_doc.txt)
 if [ "$first_line" != "#new_line" ]
 then
-  sed -i "1s/^/#new_line\n/" $function-doc.txt
+  sed -i "1s/^/#new_line\n/" $function_doc.txt
 fi
 
-mapfile -t ns_empty < <(cat $function-doc.txt | grep -n "#new_line$" | \
+mapfile -t ns_empty < <(cat $function_doc.txt | grep -n "#new_line$" | \
                         cut -d ":" -f1)
 
 # ==== Existing blocks in old documentation
 for (( i=0 ; i < $(( ${#ns_empty[@]} - 1 )) ; i++ ))
 do
-  myutils find_blocks -f $function-doc.txt \
+  myutils find_blocks -f $function_doc.txt \
                       -s ${ns_empty[$i]} \
                       -e ${ns_empty[$(( i + 1 ))]} \
                       -i -o documentation-blocks_$i || \
@@ -179,43 +179,43 @@ else
 fi
 
 # === Create the final doc block ==============================================
-echo "#new_line$leading_spaces\"\"\"" > final_$function-doc.txt
-cat $definition_block >> final_$function-doc.txt
+echo "#new_line$leading_spaces\"\"\"" > final_$function_doc.txt
+cat $definition_block >> final_$function_doc.txt
 rm $definition_block
 
 n_lines_in_par_block=$(wc -l < $par_block)
 if  [ $n_lines_in_par_block -ne 0 ]
 then
-  echo "#new_line" >> final_$function-doc.txt
-  cat $par_block >> final_$function-doc.txt
+  echo "#new_line" >> final_$function_doc.txt
+  cat $par_block >> final_$function_doc.txt
   rm $par_block
 fi
 
-echo "#new_line" >> final_$function-doc.txt
-cat $return_block >> final_$function-doc.txt
+echo "#new_line" >> final_$function_doc.txt
+cat $return_block >> final_$function_doc.txt
 rm $return_block
 
 # rest of blocks
 for other_doc_block in documentation-blocks*.out
 do
-  echo "#new_line" >> final_$function-doc.txt
-  cat $other_doc_block >> final_$function-doc.txt
+  echo "#new_line" >> final_$function_doc.txt
+  cat $other_doc_block >> final_$function_doc.txt
   rm $other_doc_block
 done
-echo "#new_line$leading_spaces\"\"\"" >> final_$function-doc.txt
+echo "#new_line$leading_spaces\"\"\"" >> final_$function_doc.txt
 
 # ==== cleaning
 # Remove newline comments
-sed -i 's/#new_line//g' final_$function-doc.txt
+sed -i 's/#new_line//g' final_$function_doc.txt
 # Remove tailing spaces
-sed -i 's/[[:space:]]*$//g' $function-doc.txt
+sed -i 's/[[:space:]]*$//g' $function_doc.txt
 
 # Remove unnecessary empty space
-while [[ "$(tail -n 2 final_$function-doc.txt | head -n 1)" == "" ]]
+while [[ "$(tail -n 2 final_$function_doc.txt | head -n 1)" == "" ]]
 do
-  total_lines=$(wc -l < final_$function-doc.txt)
-  sed -i "$(( total_lines - 1 ))d" final_$function-doc.txt
+  total_lines=$(wc -l < final_$function_doc.txt)
+  sed -i "$(( total_lines - 1 ))d" final_$function_doc.txt
 done
-rm $function-doc.txt
+rm $function_doc.txt
 
 finish

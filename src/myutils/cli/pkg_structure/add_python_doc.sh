@@ -33,10 +33,10 @@ insert_doc() {
   fi
 
   # insert new documentation
-  sed -i "$(( doc_num_start - 1 ))r final_$func-doc.txt" $fil
+  sed -i "$(( doc_num_start - 1 ))r final_$func_doc.txt" $fil
 
   # delete documentation file
-  rm final_$func-doc.txt || fail "not final documentation found"
+  rm final_$func_doc.txt || fail "not final documentation found final_$func_doc.txt"
 }
 # ----- definition of functions finishes --------------------------------------
 
@@ -103,7 +103,7 @@ do
     for func in ${functions[@]}
     do
       echo $func
-      # The output of the next function is stored in final_<func>-doc.txt
+      # The output of the next function is stored in final_<func>_doc.txt
       myutils python_doc_fixer -f "$func" -m "$module" || \
         fail "creating new documentation"
 
@@ -127,7 +127,7 @@ do
       class=${class%:}
       echo $class
       myutils python_doc_fixer -m $module -c $class || \
-        fail "creating new documentation"
+        fail "creating new documentation of $class"
 
       # search n lines of the beginning of the function, the end of the
       # heading of the function and the beginning of the documentation
@@ -139,7 +139,7 @@ do
       insert_doc $doc_num_start $fil
 
       # TODO: add description of the attributes.
-      
+
       # ==== description of modules
       # subfile with the class only
       n_end_class=$(tail -n +$n_class $fil | grep -nEv "^ |^$"  | \
@@ -154,8 +154,12 @@ do
       fi
       mapfile -t methods < <(myutils methods_in_class $module $class | \
                              head -n -1)
+      echo "$class methods"
       for method in ${methods[@]}
       do
+        echo $method
+        myutils python_doc_fixer -m $module -c $class -f $method || \
+          fail "creating new documentation of $class"
         rel_n_meth=$(grep -n "def $method" ${class}_complete.dat)
         rel_n_meth_end=$( tail -n +$rel_n_meth  | grep -n ")" | head -n 1 | \
                           cut -d ':' -f 1)
