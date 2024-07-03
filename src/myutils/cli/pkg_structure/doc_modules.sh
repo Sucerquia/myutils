@@ -13,7 +13,7 @@ documentation of all classes and functions that finds in it.
         documentation. Default: <mod_path>/../../doc/modules
    -n   <name> pakage name. Default: myutils
 
-   -v   verbose
+   -v   verbose.
    -h   prints this message.
 "
 exit 0
@@ -29,7 +29,8 @@ raw_ign_fils='__init__.'
 pkg_name="myutils"
 
 # ==== Costumer set up ========================================================
-directory="$(myutils path)"
+directory=""
+verbose='false'
 while getopts 'd:f:m:n:p:vh' flag;
 do
     case "${flag}" in

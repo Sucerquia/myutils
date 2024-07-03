@@ -46,6 +46,7 @@ output='/dev/null'
 header=()
 new_files=()
 
+verbose='false'
 while getopts 'acdef:g:kLl:mrsvh' flag; do
     case "${flag}" in
       a) all='true' ;;

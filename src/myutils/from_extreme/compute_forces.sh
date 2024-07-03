@@ -38,17 +38,19 @@ compute_forces () {
 
 # ----- general setup ---------------------------------------------------------
 cascade='false'
-while getopts 'f:ch' flag; do
+verbose='false'
+while getopts 'f:cvh' flag; do
     case "${flag}" in
       c) cascade='true' ;;
       f) chkfile=${OPTARG} ;;
 
+  v)  verbose='true' ;;
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
 
-source "$(myutils basics -path)" Forces ${chkfile%.chk} || fail "sourcing basics"
+source "$(myutils basics -path)" Forces-${chkfile%.chk} $verbose
 
 if $cascade
 then

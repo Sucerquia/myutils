@@ -1,8 +1,6 @@
 #!/usr/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" EXTR_FORCES
-
 print_help() {
 echo "
 Extract the forces and indexes of the DOFs from the log files (g09). The output
@@ -57,16 +55,19 @@ write_int_vector(){
 # General variables
 forces_directory="./forces"
 
-while getopts 'd:h' flag;
+verbose='false'
+while getopts 'd:vh' flag;
 do
     case "${flag}" in
       d) forces_directory=${OPTARG} ;;
 
+  v)  verbose='true' ;;
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
 
+source "$(myutils basics -path)" EXTR_FORCES $verbose
 verbose "Extracting forces starts"
 
 # store original location

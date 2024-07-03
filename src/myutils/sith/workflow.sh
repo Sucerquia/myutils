@@ -11,8 +11,6 @@
 
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" WORKFLOW
-
 print_help() {
 echo "
 This tool executes the sith analysis in a set of peptides defined as arguments.
@@ -59,7 +57,8 @@ restart=''
 size=0.2
 ref_doc='00-aminos.txt'
 
-while getopts 'd:b:ce:m:n:p:rR:s:h' flag;
+verbose='false'
+while getopts 'd:b:ce:m:n:p:rR:s:vh' flag;
 do
     case "${flag}" in
       b) breakages=${OPTARG} ;;
@@ -73,10 +72,13 @@ do
       R) random=${OPTARG} ;;
       s) size=${OPTARG} ;;
 
+  v)  verbose='true' ;;
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
+
+source "$(myutils basics -path)" WORKFLOW $verbose
 
 # starting information
 verbose "JOB information"

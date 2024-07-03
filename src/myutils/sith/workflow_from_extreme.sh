@@ -11,7 +11,7 @@
 
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" WF_FROM_EXTREME
+source "$(myutils basics -path)" WF_FROM_EXTREME $verbose
 
 print_help() {
 echo "
@@ -53,7 +53,8 @@ restart=''
 size=30
 lenght=''
 
-while getopts 'cl:p:rs:h' flag;
+verbose='false'
+while getopts 'cl:p:rs:vh' flag;
 do
     case "${flag}" in
       c) cascade='true' ;;
@@ -62,6 +63,7 @@ do
       r) restart='-r' ;;
       s) size=${OPTARG} ;;
 
+  v)  verbose='true' ;;
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac

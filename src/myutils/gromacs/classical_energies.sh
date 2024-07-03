@@ -21,7 +21,7 @@ counter=0
 all_xyz2pdb='true'
 output='/dev/null'
 verbose='false'
-while getopts 'l:nh' flag; do
+while getopts 'l:nvh' flag; do
     case "${flag}" in
       l) output=${OPTARG} ;;
       n) all_xyz2pdb='false' ;;

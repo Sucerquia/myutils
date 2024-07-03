@@ -10,6 +10,7 @@ it is moved to the dataset directory.
     -r   running directory. default ./
     -s   data set directory. default ../random3
     -u   user. defatult sucerqdl
+  -v  verbose.
 
     -h   prints this message.
 "

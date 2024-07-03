@@ -16,16 +16,18 @@ exit 0
 # ----- definition of functions finishes --------------------------------------
 
 # ----- general setup ---------------------------------------------------------
-while getopts 'f:p:h' flag; do
+verbose='false'
+while getopts 'f:p:vh' flag; do
     case "${flag}" in
       f) xyzs=${OPTARG} ;;
 
+  v)  verbose='true' ;;
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
 
-source "$(myutils basics -path)" dofs
+source "$(myutils basics -path)" dofs $verbose
 # Next is to reduce, optimize and then try to find intermedias.
 for xyzfile in *"${xyzs}"*.xyz
 do

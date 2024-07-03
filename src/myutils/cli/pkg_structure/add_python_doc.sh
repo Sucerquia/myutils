@@ -13,7 +13,7 @@ documentation of all classes and functions that finds in it.
         Default: \"\$myutils path\"
    -n   <name> pkg name. Default: myutils 
 
-   -v   verbose
+   -v   verbose.
    -h   prints this message.
 "
 exit 0
@@ -51,6 +51,7 @@ pkg_name="myutils"
 
 # ==== Costumer set up ========================================================
 directory="$(myutils path)"
+verbose='false'
 while getopts 'd:f:m:n:p:vh' flag;
 do
     case "${flag}" in

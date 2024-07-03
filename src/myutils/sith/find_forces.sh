@@ -10,8 +10,6 @@
 
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" FIND_FORCES
-
 print_help() {
 echo "
 This tool computes the forces in all chk files and store them in a directory
@@ -40,16 +38,20 @@ compute_forces () {
 cascade='false'
 directory='./'
 pattern=''
-while getopts 'd:cp:h' flag; do
+verbose='false'
+while getopts 'd:cp:vh' flag; do
     case "${flag}" in
       c) cascade='true' ;;
       d) directory=${OPTARG} ;;
       p) pattern=${OPTARG} ;;
 
+  v)  verbose='true' ;;
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
+
+source "$(myutils basics -path)" FIND_FORCES $verbose
 
 if $cascade
 then

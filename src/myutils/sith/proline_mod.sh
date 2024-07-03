@@ -1,7 +1,6 @@
 #!/usr/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" PROLINE_MODE
 print_help() {
 echo "
 Changes the state of the proline to endo, exo or random.
@@ -22,7 +21,8 @@ proline_state='random'
 outfile=''
 pdbfile=''
 outgromacs='/dev/null'
-while getopts 'f:o:l:s:h' flag;
+verbose='false'
+while getopts 'f:o:l:s:vh' flag;
 do
     case "${flag}" in
       f) pdbfile=${OPTARG} ;;
@@ -30,10 +30,13 @@ do
       o) outfile=${OPTARG} ;;
       l) outgromacs=${OPTARG} ;;
 
+  v)  verbose='true' ;;
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
+
+source "$(myutils basics -path)" PROLINE_MODE
 
 if [ "${#outfile}" -eq 0 ]
 then

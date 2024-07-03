@@ -1,8 +1,6 @@
 #!/usr/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-source "$(myutils basics -path)" TestChecker
-
 adjust "Starts"
 print_help() {
 echo "
@@ -60,9 +58,10 @@ ignore_elements () {
 # General variables
 test_directory='tests'
 original_cs=$(pwd)
-mod_path=$( myutils path )
+mod_path=""
 
-while getopts 'd:f:p:t:h' flag;
+verbose='false'
+while getopts 'd:f:p:t:vh' flag;
 do
     case "${flag}" in
       d) raw_ign_dirs=${OPTARG} ;;
@@ -70,12 +69,20 @@ do
       p) mod_path=${OPTARG} ;;
       t) test_directory=${OPTARG} ;;
 
+  v)  verbose='true' ;;
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
 
-VERBOSE "Tests of $mod_path will be checked"
+source "$(myutils basics -path)" TestChecker $verbose
+
+if [[ "$mod_path" == "" ]]
+then
+  mod_path=$( myutils path )
+fi
+
+verbose "Tests of $mod_path will be checked"
 
 if [ ! -d "$mod_path/$test_directory" ];
 then

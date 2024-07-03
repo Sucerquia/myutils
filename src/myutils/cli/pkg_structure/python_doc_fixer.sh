@@ -21,7 +21,8 @@ directory="$(myutils path)"
 spaces=0
 class=""
 function=""
-while getopts 'c:f:m:s:h' flag;
+verbose='false'
+while getopts 'c:f:m:s:vh' flag;
 do
   case "${flag}" in
     c) class=${OPTARG} ;;
@@ -29,12 +30,13 @@ do
     m) module=${OPTARG} ;;
     s) num_spaces=${OPTARG} ;;
 
+  v)  verbose='true' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
 done
 
-source "$(myutils basics -path)" PythonDocFixer
+source "$(myutils basics -path)" PythonDocFixer $verbose
 # ==== Body ===================================================================
 
 # ==== Initial Blocks =========================================================
