@@ -16,6 +16,7 @@ called forces.
     -c    run in cascade.
     -f    <chk file> of the configuration that you want to compute the forces.
 
+  -v  verbose.
     -h    prints this message.
 "
 exit 0

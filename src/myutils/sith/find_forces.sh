@@ -19,6 +19,7 @@ called forces.
     -d    directory containging the chk files of the stretching-optimization
           process. Default ./
 
+  -v  verbose.
     -h    prints this message.
 "
 exit 0

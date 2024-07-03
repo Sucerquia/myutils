@@ -10,6 +10,7 @@ final_<method>_doc.txt
    -m   <module> Module that contains the Function
    -s   <n_spaces> number of leading spaces.
 
+  -v  verbose.
    -h   prints this message.
 "
 exit 0

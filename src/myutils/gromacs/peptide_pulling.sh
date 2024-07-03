@@ -14,6 +14,7 @@ Consider the next options:
     -o    pepgen flags
     -p    peptide.
 
+  -v  verbose.
     -h    prints this message.
 "
 exit 0

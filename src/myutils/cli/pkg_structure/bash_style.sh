@@ -5,6 +5,7 @@ echo "
 Check bash style of all bash files in a directory, and its subdirectories.
    -d   directory. Default: \"\$myutils -path\"
 
+  -v  verbose.
    -h   prints this message.
 "
 exit 0

@@ -32,6 +32,7 @@ find the internal forces. Consider the next options:
           trust radius) to 0.01N Bohr or radians. The default value for N is
           30. Not working
 
+  -v  verbose.
     -h   prints this message.
 "
 exit 0

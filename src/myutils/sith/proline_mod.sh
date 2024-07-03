@@ -9,6 +9,7 @@ Changes the state of the proline to endo, exo or random.
     -l    <path> log file of the gromacs outputs. Default /dev/null
     -s    <state> proline state. So far, random, endo and exo are accepted.
 
+  -v  verbose.
     -h   prints this message.
 "
 exit 0
@@ -36,7 +37,7 @@ do
     esac
 done
 
-source "$(myutils basics -path)" PROLINE_MODE
+source "$(myutils basics -path)" PROLINE_MODE $verbose
 
 if [ "${#outfile}" -eq 0 ]
 then

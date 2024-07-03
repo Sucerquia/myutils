@@ -17,6 +17,7 @@ and classes.
     -t    <test_directory> subdirectory of the package where tests are located.
           Default: test.
 
+  -v  verbose.
     -h    prints this message.
 "
 exit 0

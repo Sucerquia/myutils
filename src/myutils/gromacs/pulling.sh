@@ -11,6 +11,7 @@ carbon atoms of the NME and ACE caps. Consider the next options:
     -l    log file of the gromacs outputs. Default /dev/null
     -s    steps in the MD pulling.
 
+  -v  verbose.
     -h    prints this message.
 "
 exit 0

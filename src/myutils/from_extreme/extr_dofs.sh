@@ -8,6 +8,7 @@ This tool extract the dofs of a set of xyz files. The ouput are files called
 
     -f    xyz files pattern. The code will look for *pattern*.xyz
 
+  -v  verbose.
     -h    prints this message.
 "
 exit 0

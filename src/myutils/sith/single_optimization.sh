@@ -17,6 +17,7 @@ argument when run this code.
     -f    name if the gaussian input file without extension (.com).
     -c    run in server.
 
+  -v  verbose.
     -h    prints this message.
 "
 exit 0

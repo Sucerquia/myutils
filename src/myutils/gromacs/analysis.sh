@@ -23,6 +23,7 @@ you want to compute considering the next options:
    -s   computes the energy of the subsystem in the trajectory, in this case,
         the protein.
 
+  -v  verbose.
    -h   prints this message.
 "
 exit 0

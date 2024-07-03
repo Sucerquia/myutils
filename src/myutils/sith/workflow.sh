@@ -33,6 +33,7 @@ Consider the next options:
          peptide.
     -s   <size[A]> of the step that increases the distances. Default 0.2A
 
+  -v  verbose.
     -h   prints this message.
 "
 exit 0

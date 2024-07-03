@@ -9,6 +9,7 @@ information in fchk g09 format.
 
     -d   <path>. directory where forces_files.log are located. Default ./forces
 
+  -v  verbose.
     -h   prints this message.
 "
 exit 0

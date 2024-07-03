@@ -11,6 +11,7 @@ first argument.
         input (replaces the pdb of the input).
    -l   log file of the gromacs outputs. Default /dev/null
 
+  -v  verbose.
    -h   prints this message.
 "
 exit 0

@@ -9,6 +9,7 @@ executing directory.
    -n   use this flag to NOT transform all xyz files into pdbs. In this case is
         assumed that the pdbs already exist.
 
+  -v  verbose.
    -h   prints this message.
 "
 exit 0
