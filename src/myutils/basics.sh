@@ -44,9 +44,9 @@ finish () {
   if [ "$#" -ne 0 ]
   then
     # shellcheck disable=SC2068
-    verbose $@
+    verbose $@ "$( date )"
   else
-    verbose finish
+    verbose finish "$( date )"
   fi
   echo
   array_bfnames=( "${array_bfnames[@]:1}" )
