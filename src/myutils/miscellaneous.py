@@ -41,7 +41,7 @@ def output_terminal(cmd, print_output=True, skip_error=False, print_cmd=False,
         output = p.stdout.readline()
         if output:
             out += output
-            if print_output:
+            if print_output and len(output.strip()) != 0:
                 print(output.strip())
     return_code = p.wait()
 
