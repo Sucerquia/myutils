@@ -1,3 +1,6 @@
+#!/bin/bash
+
+# checks that it has the basic structure
 source $(myutils basics -path) just_check 'true'
 
 for file in $@
@@ -78,15 +81,9 @@ do
   fi
 done
 
-for file in $@
-do
-  if grep -q "while getopts" $file
-  then
-    echo $file
-    grep -q "vh' flag" $file || fail "v is missing as a flag"
-    grep -q "verbose='true" $file || fail "v is missing as a flag action"
-    grep -q "^verbose=" $file || fail "default verbose is missing"
-    grep "source" $file | grep "myutils basics" | grep -q "\$verbose" || fail "verbose is not given in the source"
-  fi
-done
+# TODO: Add checking Job information in files like command and so: checl
+# TODO: compute_forces for an example
 
+# TODO: change headings in bash scripts (functions, settings, body)
+
+# TODO: add finish all codes that sources myutils basics
