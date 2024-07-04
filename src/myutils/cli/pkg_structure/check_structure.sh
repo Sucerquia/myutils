@@ -4,12 +4,12 @@ print_help() {
 echo "
 Check the structure of a package. All checkers run by default.
 
-    -d    src directory of the package. Defatul: \"\$myutils -path\"
-    -p    pep8 convention in all python scripts.
-    -s    ShellCheck in all bash scripts.
-    -t    check tests.
+  -d  src directory of the package. Defatul: \"\$myutils -path\"
+  -p  pep8 convention in all python scripts.
+  -s  ShellCheck in all bash scripts.
+  -t  check tests.
 
-    -h    prints this message.
+  -h  prints this message.
 "
 exit 0
 }

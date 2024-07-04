@@ -6,16 +6,16 @@ echo "
 This tool creates the trajectory of a given peptide pulled by an external force.
 Consider the next options:
 
-    -a    properties you want to analyse. For example \"-d -r\". Default \"-d -L\".
-          For more information, check: myutils analysis -h
-    -f    forces to stretch the peptide in [kJ mol^-1 nm^-1]. eg 100,200.
-          Default 200
-    -g    gromacs binary. For example gmx or gmx_mpi. Default gmx.
-    -o    pepgen flags
-    -p    peptide.
+  -a  properties you want to analyse. For example \"-d -r\". Default \"-d -L\".
+      For more information, check: myutils analysis -h
+  -f  forces to stretch the peptide in [kJ mol^-1 nm^-1]. eg 100,200.
+      Default 200
+  -g  gromacs binary. For example gmx or gmx_mpi. Default gmx.
+  -o  pepgen flags
+  -p  peptide.
 
   -v  verbose.
-    -h    prints this message.
+  -h  prints this message.
 "
 exit 0
 }
@@ -31,18 +31,18 @@ pep_options="-silent"
 verbose='false'
 
 while getopts 'a:f:g:op:s:vh' flag; do
-    case "${flag}" in
-      a) analysis=${OPTARG} ;;
-      f) read_forces=${OPTARG} ;;
-      g) gmx=${OPTARG} ;;
-      o) pep_options=${OPTARG} ;;
-      p) pep=${OPTARG} ;;
-      s) steps=${OPTARG} ;;
+  case "${flag}" in
+    a) analysis=${OPTARG} ;;
+    f) read_forces=${OPTARG} ;;
+    g) gmx=${OPTARG} ;;
+    o) pep_options=${OPTARG} ;;
+    p) pep=${OPTARG} ;;
+    s) steps=${OPTARG} ;;
 
-      v) verbose='true' ;;
-      h) print_help ;;
-      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
-    esac
+    v) verbose='true' ;;
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
 done
 
 source "$(myutils basics -path)" PEP_PULL $verbose
@@ -62,34 +62,33 @@ pepgen "$pep" equilibrate -gmx "$gmx" "$pep_options" -e || fail "Creating peptid
 verbose "Pulling of $pep starts"
 if [ "${#forces[@]}" -eq 0 ]
 then
-    warning "You didn't specify which forces you want to use. Then the pulling
-        will be done using the value by default: 200 [kJ mol^-1 nm^-1]"
-    forces=( "200" )
+  warning "You didn't specify which forces you want to use. Then the pulling
+      will be done using the value by default: 200 [kJ mol^-1 nm^-1]"
+  forces=( "200" )
 fi
 
 for force in "${forces[@]}"
 do
-    forcename="$(printf "%04d" "$force")"
-    verbose "Force $force acting $pep starts"
-    myutils pulling -g "$gmx" -f "$force" -s "$steps" || fail "Pulling $pep
-        with $force failed"
+  forcename="$(printf "%04d" "$force")"
+  verbose "Force $force acting $pep starts"
+  myutils pulling -g "$gmx" -f "$force" -s "$steps" || fail "Pulling $pep
+    with $force failed"
 
-    create_bck "force$forcename" || fail "creating bck"
+  create_bck "force$forcename" || fail "creating bck"
 
-    mkdir "force$forcename" && \
-        mv md_0_* "force$forcename" && \
-        mv ./*.ndx "force$forcename" && \
-        mv ./*.mdp "force$forcename" || fail "Moving gromacs files to the
-           ditectory force$forcename"
+  mkdir "force$forcename" && \
+    mv md_0_* "force$forcename" && \
+    mv ./*.ndx "force$forcename" && \
+    mv ./*.mdp "force$forcename" || \
+    fail "Moving gromacs files to the ditectory force$forcename"
 
-    verbose "Analysis of $pep and $force starts"
-    ( cd "force$forcename" && \
-    file=$( ls md_*.gro) && \
-    name=${file%%.*} && \
-    myutils analysis -f "$name" -g "$gmx" "$analysis" || \
-        fail "Equilibration Analysis." && \
-    cd .. )
+  verbose "Analysis of $pep and $force starts"
+  ( cd "force$forcename" && \
+  file=$( ls md_*.gro) && \
+  name=${file%%.*} && \
+  myutils analysis -f "$name" -g "$gmx" "$analysis" || \
+    fail "Equilibration Analysis." && \
+  cd .. )
 done
 
 finish "$pep finished"
-exit 0

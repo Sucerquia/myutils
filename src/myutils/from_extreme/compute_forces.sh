@@ -41,26 +41,26 @@ compute_forces () {
 cascade='false'
 verbose='false'
 while getopts 'f:cvh' flag; do
-    case "${flag}" in
-      c) cascade='true' ;;
-      f) chkfile=${OPTARG} ;;
+  case "${flag}" in
+    c) cascade='true' ;;
+    f) chkfile=${OPTARG} ;;
 
-  v)  verbose='true' ;;
-      h) print_help ;;
-      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
-    esac
+    v)  verbose='true' ;;
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
 done
 
 source "$(myutils basics -path)" Forces-${chkfile%.chk} $verbose
+verbose "JOB information"
+echo " * Date:"
+date
+echo " * Command:"
+echo "$0" "$@"
 
 if $cascade
 then
-    verbose "JOB information"
-    echo " * Date:"
-    date
-    echo " * Command:"
-    echo "$0" "$@"
-    load_modules || fail "loading modules"
+  load_modules || fail "loading modules"
 fi
 
 # ----- Core ------------------------------------------------------------------
@@ -70,4 +70,3 @@ fi
 compute_forces "$chkfile"
 
 finish "finished"
-exit 0

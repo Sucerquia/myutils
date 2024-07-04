@@ -6,15 +6,15 @@ echo "
 Code that explores the files in the package and automatically creates the
 documentation of all classes and functions that finds in it.
 
-   -d   <dir1,dir2...> directories to be ignored.
-        Default: 'pycache,tests,tutorials,pre-deprected'
-   -f   <fil1,fil2...> files to be ignored. Default: '__init__'
-   -p   <absolute_path> path directory to be checked (no relative path).
-        Default: \"\$myutils path\"
-   -n   <name> pkg name. Default: myutils 
+  -d  <dir1,dir2...> directories to be ignored.
+      Default: 'pycache,tests,tutorials,pre-deprected'
+  -f  <fil1,fil2...> files to be ignored. Default: '__init__'
+  -n  <name> pkg name. Default: myutils
+  -p  <absolute_path> path directory to be checked (no relative path).
+      Default: \"\$myutils path\"
 
-   -v   verbose.
-   -h   prints this message.
+  -v  verbose.
+  -h  prints this message.
 "
 exit 0
 }
@@ -25,7 +25,7 @@ insert_doc() {
   func=$3
   # Remove prev documentation first
   if awk -v numline=$doc_num_start 'NR==numline' \
-          $fil | grep -q "\"\"\""
+       $fil | grep -q "\"\"\""
   then
     doc_num_end=$(tail -n +$(( doc_num_start + 1 )) $fil | \
                   grep -n "\"\"\"" | head -n 1 | cut -d ":" -f 1)
@@ -50,21 +50,21 @@ raw_ign_fils='__init__.'
 pkg_name="myutils"
 
 # ==== Costumer set up ========================================================
-directory="$(myutils path)"
 verbose='false'
 while getopts 'd:f:m:n:p:vh' flag;
 do
-    case "${flag}" in
-      d) raw_ign_dirs=${OPTARG} ;;
-      f) raw_ign_fils=${OPTARG} ;;
-      n) pkg_name=${OPTARG};;
-      p) mod_path=${OPTARG};;
+  case "${flag}" in
+    d) raw_ign_dirs=${OPTARG} ;;
+    f) raw_ign_fils=${OPTARG} ;;
+    n) pkg_name=${OPTARG};;
+    p) mod_path=${OPTARG};;
 
-      v) verbose='true' ;;
-      h) print_help ;;
-      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
-    esac
+    v) verbose='true' ;;
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
 done
+
 source "$(myutils basics -path)" AddPythonDoc $verbose
 
 if [ "$mod_path" == "" ]
@@ -87,7 +87,7 @@ done
 # files to ignore
 for ign_fil in "${ignore_files[@]}"
 do
-    bool_ign="$bool_ign -name '*$ign_fil*' -o"
+  bool_ign="$bool_ign -name '*$ign_fil*' -o"
 done
 
 # files

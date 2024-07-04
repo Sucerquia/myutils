@@ -3,10 +3,11 @@
 print_help() {
 echo "
 Check bash style of all bash files in a directory, and its subdirectories.
-   -d   directory. Default: \"\$myutils -path\"
+
+  -d  directory. Default: \"\$myutils -path\"
 
   -v  verbose.
-   -h   prints this message.
+  -h  prints this message.
 "
 exit 0
 }
@@ -15,13 +16,13 @@ exit 0
 directory=""
 verbose='false'
 while getopts 'd:vh' flag; do
-    case "${flag}" in
-      d) directory=${OPTARG};;
+  case "${flag}" in
+    d) directory=${OPTARG};;
 
-  v)  verbose='true' ;;
-      h) print_help ;;
-      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
-    esac
+    v)  verbose='true' ;;
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
 done
 source "$(myutils basics -path)" BashChecker $verbose
 
@@ -38,7 +39,7 @@ mapfile -t bash_files < <(find . -name "*.sh")
 
 for fil in "${bash_files[@]}"
 do
-    shellcheck -e SC1090,SC2015 "$fil"
+  shellcheck -e SC1090,SC2015 "$fil"
 done
 
 cd "$bsoriginal_dir" || fail "original directory lost"

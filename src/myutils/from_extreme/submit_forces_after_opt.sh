@@ -15,6 +15,6 @@ do
     sbatch --job-name="${file:0:6}_forces" $single_part \
            --output="${file:0:6}_forces.o" \
            --error="${file:0:6}_forces.e" \
-           $(myutils compute_forces -path) -f $file -c || fail "submitting forces"
+      $(myutils compute_forces -path) -f $file -c || fail "submitting forces"
   done; cd ../../
 done

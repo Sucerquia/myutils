@@ -7,7 +7,7 @@ This tool rearange the files called <pep>-forces<n>* changing the number <n>
 for the correspondent in increasing order. it must be executed in the directory
 where the files to organize are.
 
-    -h    prints this message.
+  -h  prints this message.
 "
 exit 0
 }
@@ -16,10 +16,10 @@ exit 0
 
 # ----- general setup ---------------------------------------------------------
 while getopts 'h' flag; do
-    case "${flag}" in
-      h) print_help ;;
-      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
-    esac
+  case "${flag}" in
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
 done
 
 n=0
@@ -39,4 +39,3 @@ do
   fi
 done
 echo
-

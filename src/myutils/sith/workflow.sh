@@ -17,32 +17,32 @@ This tool executes the sith analysis in a set of peptides defined as arguments.
 You can use this code to submit a Job in cascade or to execute it locally. 
 Consider the next options:
     
-    -b    <number of breakages> The simulation will run until get this number of
-              ruptures.
-    -c    run in cascade. (modules are loaded)
-    -d    <reference document> file containing the existing peptides to avoid
-              repetition.
-    -e    <endo> or <exo> states for initial state of proline. Default <random>.
-    -m    <method>. stretching method. To see the options, use
-              'myutils change_distance -h'
-    -n    <options>. pepgen options.
-    -p    <peptide>. Chains of aminoacids to be evaluated. For example, \"AAA\"
-              would analyse a trialanine peptide.
-    -R   random pepeptide. Give the number of amino acids with this argument.
-    -r   restart. In this case, run from the directory of the precreated
-         peptide.
-    -s   <size[A]> of the step that increases the distances. Default 0.2A
+  -b  <number of breakages> The simulation will run until get this number of
+      ruptures.
+  -c  run in cascade. (modules are loaded)
+  -d  <reference document> file containing the existing peptides to avoid
+      repetition.
+  -e  <endo> or <exo> states for initial state of proline. Default <random>.
+  -m  <method>. stretching method. To see the options, use
+      'myutils change_distance -h'
+  -n  <options>. pepgen options.
+  -p  <peptide>. Chains of aminoacids to be evaluated. For example, \"AAA\"
+      would analyse a trialanine peptide.
+  -R  random pepeptide. Give the number of amino acids with this argument.
+  -r  restart. In this case, run from the directory of the precreated
+      peptide.
+  -s  <size[A]> of the step that increases the distances. Default 0.2A
 
   -v  verbose.
-    -h   prints this message.
+  -h  prints this message.
 "
 exit 0
 }
 
 resubmit () {
-    sleep 23h 58m ; \
-    sbatch "$( myutils workflow -path)" -p "$1" -c -r -s "$2" -b "$3" -s "$4" ; \
-    echo "new JOB submitted"
+  sleep 23h 58m ; \
+  sbatch "$( myutils workflow -path)" -p "$1" -c -r -s "$2" -b "$3" -s "$4" ; \
+  echo "new JOB submitted"
 }
 
 # ----- definition of functions finishes --------------------------------------
@@ -61,22 +61,22 @@ ref_doc='00-aminos.txt'
 verbose='false'
 while getopts 'd:b:ce:m:n:p:rR:s:vh' flag;
 do
-    case "${flag}" in
-      b) breakages=${OPTARG} ;;
-      c) cascade='true' ;;
-      d) ref_doc=${OPTARG} ;;
-      e) endoexo=${OPTARG} ;;
-      m) method=${OPTARG} ;;
-      n) pep_options=${OPTARG} ;;
-      p) pep=${OPTARG} ;;
-      r) restart='-r' ;;
-      R) random=${OPTARG} ;;
-      s) size=${OPTARG} ;;
+  case "${flag}" in
+    b) breakages=${OPTARG} ;;
+    c) cascade='true' ;;
+    d) ref_doc=${OPTARG} ;;
+    e) endoexo=${OPTARG} ;;
+    m) method=${OPTARG} ;;
+    n) pep_options=${OPTARG} ;;
+    p) pep=${OPTARG} ;;
+    r) restart='-r' ;;
+    R) random=${OPTARG} ;;
+    s) size=${OPTARG} ;;
 
-  v)  verbose='true' ;;
-      h) print_help ;;
-      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
-    esac
+    v)  verbose='true' ;;
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
 done
 
 source "$(myutils basics -path)" WORKFLOW $verbose
@@ -91,21 +91,21 @@ echo "$0" "$@"
 # random peptide
 if [ ! "${#random}" -eq 0 ]
 then
-    [ -f "$ref_doc" ] || fail "Non-recognized $ref_doc, check flag -d"
-    pep=$( myutils gen_randpep "$random" ) || fail "Creating random peptide"
-    while awk '!/^#/ {print $1}' "$ref_doc" | grep -q "$pep"
-    do
-        pep=$( myutils gen_randpep "$random" ) || fail "Creating
-            random peptide"
-    done
-    echo "$pep" "   R" >> "$ref_doc"
-    warning "The code created the random peptide $pep, the workflow will run
-        with this peptide even if you also passed -p argument."
+  [ -f "$ref_doc" ] || fail "Non-recognized $ref_doc, check flag -d"
+  pep=$( myutils gen_randpep "$random" ) || fail "Creating random peptide"
+  while awk '!/^#/ {print $1}' "$ref_doc" | grep -q "$pep"
+  do
+    pep=$( myutils gen_randpep "$random" ) || fail "Creating
+      random peptide"
+  done
+  echo "$pep" "   R" >> "$ref_doc"
+  warning "The code created the random peptide $pep, the workflow will run
+    with this peptide even if you also passed -p argument."
 fi
 
 if [ "${#pep}" -eq 0 ]
 then 
-    fail "This code needs one peptide. Please, define it using the flag -p or
+  fail "This code needs one peptide. Please, define it using the flag -p or
         -R. For more info, use \"myutils workflow -h\""
 fi
 
@@ -125,34 +125,34 @@ perl -E "say '+' x 80"
 # ---- firstly, backup previous directories with the same name
 if [[ "$restart" != "-r" ]]
 then
-    # check pepgen
-    pepgen -h &> /dev/null || fail "This code needs pepgen"
+  # check pepgen
+  pepgen -h &> /dev/null || fail "This code needs pepgen"
 
-    # create back up
-    create_bck "$pep"
+  # create back up
+  create_bck "$pep"
 
-    # Creation of the peptide directory and moving inside.
-    mkdir "$pep"
-    cd "$pep" || fail "directory $pep does not exist"
-    verbose "generating peptide"
-    # Creation of peptide
-    # shellcheck disable=SC2086
-    pepgen "$pep" tmp -s flat $pep_options || fail "Creating peptide $pep"
-    mv tmp/pep.pdb "./$pep-stretched00.pdb"
-    myutils classical_minimization -f "./$pep-stretched00.pdb" \
-        -o "./$pep-stretched00.pdb"
-    verbose "define proline state"
-    myutils proline_mod -f "$pep-stretched00.pdb" -s "$endoexo" || \
-        fail "Proline estates configuration"
-    mv "$pep-stretched00modpro.pdb" "$pep-stretched00.pdb" 
-    verbose "protonate/deprotonate"
-    myutils protonate "./$pep-stretched00.pdb" "./$pep-stretched00.pdb" | \
-        fail "protonizing"
-    rm -r tmp
+  # Creation of the peptide directory and moving inside.
+  mkdir "$pep"
+  cd "$pep" || fail "directory $pep does not exist"
+  verbose "generating peptide"
+  # Creation of peptide
+  # shellcheck disable=SC2086
+  pepgen "$pep" tmp -s flat $pep_options || fail "Creating peptide $pep"
+  mv tmp/pep.pdb "./$pep-stretched00.pdb"
+  myutils classical_minimization -f "./$pep-stretched00.pdb" \
+    -o "./$pep-stretched00.pdb"
+  verbose "define proline state"
+  myutils proline_mod -f "$pep-stretched00.pdb" -s "$endoexo" || \
+    fail "Proline estates configuration"
+  mv "$pep-stretched00modpro.pdb" "$pep-stretched00.pdb" 
+  verbose "protonate/deprotonate"
+  myutils protonate "./$pep-stretched00.pdb" "./$pep-stretched00.pdb" | \
+    fail "protonizing"
+  rm -r tmp
 else
-    # moving to the peptide directory
-    cd "$pep" || fail "directory $pep does not exist"
-    warning "$pep restarted"
+  # moving to the peptide directory
+  cd "$pep" || fail "directory $pep does not exist"
+  warning "$pep restarted"
 fi
 
 myutils stretching -b "$breakages" -p "$pep" "$restart" -m "$method" \
@@ -167,7 +167,6 @@ verbose "submitting comptutation of forces.";
 
 # command -V nohub || fail "nohub does not exist"
 sbatch "$( myutils find_forces -path )" "tmp.out" &&
-echo "computation of forces submitted"
+  echo "computation of forces submitted"
 
 finish "$pep finished"
-exit 0

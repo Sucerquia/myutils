@@ -7,20 +7,20 @@ This code extracts the sections in a file starting and finishing with specific
 patterns without including the lines containing those patterns. Check the next
 options:
 
-    -f  <file> file that shows 
-    -s  <pattern> pattern that defines the beginning of the block. This line
-        is not included in the block.
-    -e  <pattern> pattern that defines the end of the block. This line is not
-        included in the block.
-    -i  use this flag if the start and the end are indexes
-    -o  <output='output'> 'terminal' or the name of the output without
-        extension. In the later case, the output will be stored in a file
-        called <output>.dat if the flag -i is given or in files called
-        <output>_<n>.dat, where n is the number of appearence of the block in
-        the file.
+  -f  <file> file that shows 
+  -s  <pattern> pattern that defines the beginning of the block. This line
+      is not included in the block.
+  -e  <pattern> pattern that defines the end of the block. This line is not
+      included in the block.
+  -i  use this flag if the start and the end are indexes
+  -o  <output='output'> 'terminal' or the name of the output without
+      extension. In the later case, the output will be stored in a file
+      called <output>.dat if the flag -i is given or in files called
+      <output>_<n>.dat, where n is the number of appearence of the block in
+      the file.
 
-    -v  verbose of what's the code doing.
-    -h  prints this message.
+  -v  verbose of what's the code doing.
+  -h  prints this message.
 "
 exit 0
 }
@@ -35,17 +35,17 @@ output='output'
 verbose='false'
 while getopts 'e:f:io:s:vh' flag;
 do
-    case "${flag}" in
-      e) ends="${OPTARG}" ;;
-      f) file="${OPTARG}" ;;
-      i) index='true' ;;
-      o) output="${OPTARG}" ;;
-      s) starts="${OPTARG}" ;;
-      v) verbose='true' ;;
+  case "${flag}" in
+    e) ends="${OPTARG}" ;;
+    f) file="${OPTARG}" ;;
+    i) index='true' ;;
+    o) output="${OPTARG}" ;;
+    s) starts="${OPTARG}" ;;
+    v) verbose='true' ;;
 
-      h) print_help ;;
-      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
-    esac
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
 done
 
 source "$(myutils basics -path)" FindBlocks $verbose
@@ -54,9 +54,9 @@ verbose "starts: $starts ; ends: $ends ; file: $file ; output: $output"
 
 if [ ${#file} -eq 0 ] || [ ${#starts} -eq 0 ] || [ ${#ends} -eq 0 ]
 then
-    warning "This tool does not recognize arguments with simple spaces.
-    Remember to add \\ before each special character." 
-    fail "ERROR: you have to set the input flags"
+  warning "This tool does not recognize arguments with simple spaces.
+  Remember to add \\ before each special character." 
+  fail "ERROR: you have to set the input flags"
 fi
 
 # ----- set up finishes -------------------------------------------------------
@@ -98,4 +98,3 @@ do
 done
 
 finish
-# -----------------------------------------------------------------------------

@@ -15,23 +15,23 @@ echo "
 This tool computes the forces in all chk files and store them in a directory
 called forces.
 
-    -c    run in cascade.
-    -d    directory containging the chk files of the stretching-optimization
-          process. Default ./
+  -c  run in cascade.
+  -d  directory containging the chk files of the stretching-optimization
+      process. Default ./
 
   -v  verbose.
-    -h    prints this message.
+  -h  prints this message.
 "
 exit 0
 }
 
 compute_forces () {
-    verbose "construct Z-matrix for $1"
-    newzmat -ichk -ozmat -rebuildzmat -bmodel "$1" forces.com || fail "
-    Error creating the matrix"
-    sed -i "s/#P bmk\/6-31+g opt(modredun,calcfc)/%NProcShared=8\n#P bmk\/6-31+g force/g" forces.com
-    verbose "executes g09 computation of forces for $1"
-    g09 forces.com || fail "computing forces"
+  verbose "construct Z-matrix for $1"
+  newzmat -ichk -ozmat -rebuildzmat -bmodel "$1" forces.com || fail "
+  Error creating the matrix"
+  sed -i "s/#P bmk\/6-31+g opt(modredun,calcfc)/%NProcShared=8\n#P bmk\/6-31+g force/g" forces.com
+  verbose "executes g09 computation of forces for $1"
+  g09 forces.com || fail "computing forces"
 }
 
 # ----- definition of functions finishes --------------------------------------
@@ -41,22 +41,22 @@ directory='./'
 pattern=''
 verbose='false'
 while getopts 'd:cp:vh' flag; do
-    case "${flag}" in
-      c) cascade='true' ;;
-      d) directory=${OPTARG} ;;
-      p) pattern=${OPTARG} ;;
+  case "${flag}" in
+    c) cascade='true' ;;
+    d) directory=${OPTARG} ;;
+    p) pattern=${OPTARG} ;;
 
-  v)  verbose='true' ;;
-      h) print_help ;;
-      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
-    esac
+    v) verbose='true' ;;
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
 done
 
 source "$(myutils basics -path)" FIND_FORCES $verbose
 
 if $cascade
 then
-    load_modules
+  load_modules
 fi
 
 cd "$directory" || fail "moving to $directory"
@@ -71,18 +71,17 @@ mapfile -t chks < <(ls "$pattern"*.chk)
 
 for chkfile in "${chks[@]}"
 do
-    echo "$chkfile"
-    compute_forces "$chkfile"
-    name=${chkfile//stretched/force}
-    verbose "Moving result to forces/${name%.*}.log"
-    mv forces.log "forces/${name%.*}.log" || fail "moving results to forces
-        directory."
+  echo "$chkfile"
+  compute_forces "$chkfile"
+  name=${chkfile//stretched/force}
+  verbose "Moving result to forces/${name%.*}.log"
+  mv forces.log "forces/${name%.*}.log" || fail "moving results to forces
+    directory."
 done
 
 mv forces.com forces/input_template.com || fail "moving template to forces
-    directory"
+  directory"
 
 myutils extract_forces
 
 finish "finished"
-exit 0
