@@ -143,4 +143,11 @@ load_modules() {
   fi
 }
 
+wait_until_next_file_exist() {
+  while ! ls | grep -q $1
+  do
+    continue
+  done
+}  
+
 verbose "STARTS"
