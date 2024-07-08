@@ -101,31 +101,31 @@ do
   if [ "$ext" == 'py' ]
   then
     module=$(echo "myutils"${fil//\.\//\.} | sed "s/\//\./g" | sed "s/\.py//g")
-#     # Functions
-#     mapfile -t functions < <(grep "^def " "$fil" | awk '{print $2}' | \
-#                              cut -d "(" -f 1)
-#     if [ ${#functions} -ne 0 ]; then verbose "functions"; fi
-# 
-#     for func in ${functions[@]}
-#     do
-#       echo $func
-#       # The output of the next function is stored in final_<func>_doc.txt
-#       myutils python_doc_fixer -f "$func" -m "$module" || \
-#         fail "creating new documentation"
-#       wait_until_next_file_exist final_$class-$func.txt
-#       # search n lines of the beginning of the function, the end of the
-#       # heading of the function and the beginning of the documentation
-#       n_func=$( grep -n "def $func" $fil | cut -d ":" -f 1 )
-#       rel_n_func_end=$( tail -n +$n_func $fil | grep -n ")" | head -n 1 | \
-#                         cut -d ':' -f 1)
-#       doc_num_start=$(( n_func + rel_n_func_end ))
-# 
-#       insert_doc $doc_num_start $fil $func
-#       # delete documentation file
-#       rm final_-$func.txt || \
-#         fail "not final documentation found final_-$func.txt"
-#     done
-# 
+     # Functions
+     mapfile -t functions < <(grep "^def " "$fil" | awk '{print $2}' | \
+                              cut -d "(" -f 1)
+     if [ ${#functions} -ne 0 ]; then verbose "functions"; fi
+ 
+     for func in ${functions[@]}
+     do
+       echo $func
+       # The output of the next function is stored in final_<func>_doc.txt
+       myutils python_doc_fixer -f "$func" -m "$module" || \
+         fail "creating new documentation"
+       wait_until_next_file_exist final_$class-$func.txt
+       # search n lines of the beginning of the function, the end of the
+       # heading of the function and the beginning of the documentation
+       n_func=$( grep -n "def $func" $fil | cut -d ":" -f 1 )
+       rel_n_func_end=$( tail -n +$n_func $fil | grep -n ")" | head -n 1 | \
+                         cut -d ':' -f 1)
+       doc_num_start=$(( n_func + rel_n_func_end ))
+ 
+       insert_doc $doc_num_start $fil $func
+       # delete documentation file
+       rm final_-$func.txt || \
+         fail "not final documentation found final_-$func.txt"
+     done
+ 
     # Classes
     mapfile -t classes < <(grep "^class " "$fil" | awk '{print $2}' | \
                              cut -d "(" -f 1)
@@ -142,7 +142,7 @@ do
       # search n lines of the beginning of the function, the end of the
       # heading of the function and the beginning of the documentation
       n_class=$( grep -n "^class $class" $fil | cut -d ":" -f 1 )
-      echo $class $n_class "." $fil
+
       rel_n_class_end=$( tail -n +$n_class $fil | grep -n ":" | head -n 1 | \
                          cut -d ':' -f 1)
       doc_num_start=$(( n_class + rel_n_class_end ))
@@ -193,8 +193,7 @@ do
         rm final_$class-$method.txt || \
           fail "not final documentation found final_$class-$method.txt"
       done
-      if [[ "$class" == "DataSetAnalysis" ]]; then exit 0; fi
-      #rm ${class}_complete.out || fail could not remove complete file
+      rm ${class}_complete.out || fail could not remove complete file
     done
   fi
 done
