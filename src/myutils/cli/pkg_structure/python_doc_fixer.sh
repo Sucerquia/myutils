@@ -18,7 +18,6 @@ exit 0
 # ----- definition of functions finishes --------------------------------------
 
 # ==== Costumer set up ========================================================
-directory="$(myutils path)"
 spaces=0
 class=""
 function=""
@@ -31,7 +30,7 @@ do
     m) module=${OPTARG} ;;
     s) num_spaces=${OPTARG} ;;
 
-    v)  verbose='true' ;;
+    v) verbose='true' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
@@ -41,7 +40,7 @@ source "$(myutils basics -path)" PythonDocFixer $verbose
 # ==== Body ===================================================================
 
 # ==== Initial Blocks =========================================================
-if [[ "$class" == "" ]] || [[ "$func" == "" ]]
+if [[ "$class" == "" ]] || [[ "$function" == "" ]]
 then
   leading_spaces=$(printf "%4s")
 else
@@ -49,24 +48,24 @@ else
 fi
 
 myutils function_doc $module $class $function | sed 's/^/#new_line/' > \
-  $function_doc.txt || fail "extracting old documentation"
+  $function.txt || fail "extracting old documentation"
 
-sed -i 's/[[:space:]]*$//g' $function_doc.txt
+sed -i 's/[[:space:]]*$//g' $function.txt
 
 # In case the documentation was written without leaving the first line empty
-first_line=$(head -n 1 $function_doc.txt)
+first_line=$(head -n 1 $function.txt)
 if [ "$first_line" != "#new_line" ]
 then
-  sed -i "1s/^/#new_line\n/" $function_doc.txt
+  sed -i "1s/^/#new_line\n/" $function.txt
 fi
 
-mapfile -t ns_empty < <(cat $function_doc.txt | grep -n "#new_line$" | \
+mapfile -t ns_empty < <(cat $function.txt | grep -n "#new_line$" | \
                         cut -d ":" -f1)
 
 # ==== Existing blocks in old documentation
 for (( i=0 ; i < $(( ${#ns_empty[@]} - 1 )) ; i++ ))
 do
-  myutils find_blocks -f $function_doc.txt \
+  myutils find_blocks -f $function.txt \
                       -s ${ns_empty[$i]} \
                       -e ${ns_empty[$(( i + 1 ))]} \
                       -i -o documentation-blocks_$i || \
@@ -75,10 +74,7 @@ do
   # Note for developers: I had to add the next while because the creation of
   # the files was a bit delayed and that created errors trying to find those
   # files later.
-  while ! ls | grep -q documentation-blocks_$i.out
-  do
-    continue
-  done
+  wait_until_next_file_exist documentation-blocks_$i.out
 done
 
 # ==== Block of Parameters in old documentation
@@ -182,43 +178,43 @@ else
 fi
 
 # === Create the final doc block ==============================================
-echo "#new_line$leading_spaces\"\"\"" > final_$function_doc.txt
-cat $definition_block >> final_$function_doc.txt
+echo "#new_line$leading_spaces\"\"\"" > final_$class-$function.txt
+cat $definition_block >> final_$class-$function.txt
 rm $definition_block
 
 n_lines_in_par_block=$(wc -l < $par_block)
 if  [ $n_lines_in_par_block -ne 0 ]
 then
-  echo "#new_line" >> final_$function_doc.txt
-  cat $par_block >> final_$function_doc.txt
+  echo "#new_line" >> final_$class-$function.txt
+  cat $par_block >> final_$class-$function.txt
   rm $par_block
 fi
 
-echo "#new_line" >> final_$function_doc.txt
-cat $return_block >> final_$function_doc.txt
+echo "#new_line" >> final_$class-$function.txt
+cat $return_block >> final_$class-$function.txt
 rm $return_block
 
 # rest of blocks
 for other_doc_block in documentation-blocks*.out
 do
-  echo "#new_line" >> final_$function_doc.txt
-  cat $other_doc_block >> final_$function_doc.txt
+  echo "#new_line" >> final_$class-$function.txt
+  cat $other_doc_block >> final_$class-$function.txt
   rm $other_doc_block
 done
-echo "#new_line$leading_spaces\"\"\"" >> final_$function_doc.txt
+echo "#new_line$leading_spaces\"\"\"" >> final_$class-$function.txt
 
 # ==== cleaning
 # Remove newline comments
-sed -i 's/#new_line//g' final_$function_doc.txt
+sed -i 's/#new_line//g' final_$class-$function.txt
 # Remove tailing spaces
-sed -i 's/[[:space:]]*$//g' $function_doc.txt
+sed -i 's/[[:space:]]*$//g' $function.txt
 
 # Remove unnecessary empty space
-while [[ "$(tail -n 2 final_$function_doc.txt | head -n 1)" == "" ]]
+while [[ "$(tail -n 2 final_$class-$function.txt | head -n 1)" == "" ]]
 do
-  total_lines=$(wc -l < final_$function_doc.txt)
-  sed -i "$(( total_lines - 1 ))d" final_$function_doc.txt
+  total_lines=$(wc -l < final_$class-$function.txt)
+  sed -i "$(( total_lines - 1 ))d" final_$class-$function.txt
 done
-rm $function_doc.txt
+rm $function.txt
 
 finish
