@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+# ----- definition of functions -----------------------------------------------
 print_help() {
 echo "
 Check the structure of a package. All checkers run by default.
@@ -14,8 +16,7 @@ Check the structure of a package. All checkers run by default.
 exit 0
 }
 
-# ----- definition of functions finishes --------------------------------------
-
+# ---- set up -----------------------------------------------------------------
 all="true"
 pep8="false"
 shellcheck="false"
@@ -54,6 +55,10 @@ then
   source "$(myutils basics -path)" PEP8 'true'
   original_cs=$(pwd)
   cd $check_dir || fail "package path does not exist"
+  # take a look in finish to understand next two lines
+  array_bfnames=( "${array_bfnames[@]:1}" )
+  basic_functions_name=${array_bfnames[0]}
+
   for file in $(find . -name "*.py")
   do
     sed -i 's/[[:space:]]*$//g' $file
@@ -63,7 +68,6 @@ then
   pycodestyle -h > /dev/null || fail "You need to install pycodestyle"
   pycodestyle . --exclude=pre-deprected --ignore W605
   cd "$original_cs" || fail "returning to former directory"
-  finish "finish"
 fi
 
 if $shellcheck

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# ----- definition of functions starts ----------------------------------------
+# ----- definition of functions -----------------------------------------------
 print_help() {
 echo "
 This code executes the pulling adding an external force along the x axis to the
@@ -47,7 +47,8 @@ then
 fi
 
 $gmx -h &> /dev/null || fail "This code needs gromacs ($gmx failed)"
-# ----- set up finishes -------------------------------------------------------
+
+# ----- BODY ------------------------------------------------------------------
 verbose "Creates index file of force $force"
 
 echo -e "r ACE & a CH3 \n r NME & a CH3 \n \"ACE_&_CH3\" | \"NME_&_CH3\" \n q\n " \

@@ -3,20 +3,19 @@
 # ----- definition of functions starts ----------------------------------------
 print_help() {
 echo "
-This tool obtains the stretched configuration by increasing the distance between
-caps carbon, constraining and optimizing using BMK exchange-correlation.
+This tool obtains the stretched configurations of a peptide by increasing the
+distance between carbons of the capping groups, constraining and optimizing
+using BMK exchange-correlation.
 
-  -b  <number of breakages> The simulation will run until get this number of
-          ruptures.
-  -p  <peptide>. In this directory, a file called <peptide>-stretched00.pdb
-          has to exist.
-  -m  <method>. stretching method. To see the options, use
-          'myutils change_distance -h'
-  -n  <number of processors> for the gaussian optimization 
-          (function not implemented yet)
+  -b  <number of breakages=1> The simulation will run until get this number of
+      ruptures.
+  -p  <peptide> One letter code of the amino acids forming the peptides. In
+      this directory, a file called <peptide>-stretched00.pdb has to exist.
+  -m  <method=0> index of stretching method. To see the options, use
+      'myutils change_distance -h' to see the order.
   -r  restart stretching. In this case, this conde must be executed from
-          the peptide's directory.
-  -s  <size[A]> of the step that increases the distances. Default 0.2A
+      the peptide's directory.
+  -s  <size[A]=0.2> of the step that increases the distances.
 
   -v  verbose
   -h  prints this message.
@@ -42,8 +41,8 @@ while getopts 'b:p:m:rs:vh' flag; do
     m) method=${OPTARG} ;;
     r) restart='true' ;;
     s) size=${OPTARG} ;;
+    
     v) verbose='true' ;;
-
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
@@ -51,6 +50,16 @@ done
 
 source "$(myutils basics -path)" STRETCHING $verbose
 
+# starting information
+verbose "JOB information"
+echo " * Date:"
+date
+echo " * Command:"
+echo "$0" "$@"
+
+# ---- set up ends ------------------------------------------------------------
+
+# ---- BODY -------------------------------------------------------------------
 # stretching method
 if [[ "$method" -eq 0 ]]
 then
@@ -82,13 +91,13 @@ verbose "This code will stretch the atoms with the indexes $index1 $index2
 
 # ----- set up finishes -------------------------------------------------------
 
-
+# ---- BODY -------------------------------------------------------------------
 # ----- checking restart starts -----------------------------------------------
 if $restart
 then
   # extracting last i with xyz file already created
   mapfile -t previous < <( find . -maxdepth 1 -type f -name "*$pep*.xyz" \
-                                  -not -name "*bck*" | sort )
+                          -not -name "*bck*" | sort )
   wext=${previous[-1]}
   last=${wext%.*}
   if [ "${last: -1}" == 'a' ]
@@ -97,7 +106,7 @@ then
   fi
   i=$(( 10#${last:0-2} ))
   verbose "Restarting $pep, searching last optimization, $i is the last
-    stretching detected"
+           stretching detected"
 
   # searching incomplete optimization trials
   nameiplusone=$(printf "%02d" "$(( i + 1 ))")
@@ -138,6 +147,7 @@ do
   nameiplustwo=$(printf "%02d" $(( i + 2)))
 
   verbose "Stretched ${nameiplusone} starts"
+  # Creates g09 input file
   if [ $(( i + 1)) -eq 0 ]
   then
     # initial g09 optimization
@@ -159,7 +169,7 @@ do
     sed -i '$d' "$pep-stretched${nameiplusone}.com"
     # add constrains
     cat frozen_dofs.dat >> \
-      "$pep-stretched${nameiplusone}.com"
+    "$pep-stretched${nameiplusone}.com"  
   fi
   sed -i "1a %NProcShared=$n_processors" "$pep-stretched${nameiplusone}.com"
   sed -i "3a opt(modredun,calcfc)" "$pep-stretched${nameiplusone}.com"
@@ -251,4 +261,5 @@ do
 done
 
 # ----- stretching finishes ---------------------------------------------------
+
 finish "$pep finished"

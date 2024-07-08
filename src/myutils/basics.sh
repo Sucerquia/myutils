@@ -61,6 +61,11 @@ fail () {
   # shellcheck disable=SC2068
   finish "ERROR" $@ "$( date )" >&2
   exit 1
+  # shellcheck disable=SC2068
+  adjust "ERROR" $@ "$( date )"
+  # shellcheck disable=SC2068
+  finish "ERROR" $@ "$( date )" >&2
+  exit 1
 }
 
 # function that moves an existing file or directory to 
@@ -109,6 +114,11 @@ search_last_bck() {
   last_woext=${all_bcks[-1]%.*}
   # prints the number of the last config
   echo ${last_woext:0-3}
+  name_file=$1
+  mapfile -t all_bcks < <( ls -1 "$1"-bck_???.* | sort )
+  last_woext=${all_bcks[-1]%.*}
+  # prints the number of the last config
+  echo ${last_woext:0-3}
 }
 
 load_modules() {
@@ -131,7 +141,7 @@ load_modules() {
   else
     source "$HOME/.bashrc"
     # shellcheck disable=SC1091
-    source /hits/basement/mbm/sucerquia/exec/load_g09.sh
+    source /hits/basement/mbm/sucerquia/sw/g09/load_g09.sh
     conda activate myutils
     module purge
     module use /hits/sw/its/doserbd/haswell/modules/all/GROMACS

@@ -30,6 +30,8 @@ exit 0
 # ----- set up starts ---------------------------------------------------------
 # General variables
 
+starts="empty_starting_pattern"
+ends="empty_ending_pattern"
 index='false'
 output='output'
 verbose='false'
@@ -74,15 +76,32 @@ then
   fi
   finish
 else
-  mapfile -t nsta < <( grep -n "$starts" "$file" | \
-    awk -F ":" '{print $1}' )
+  if [[ $starts == "empty_starting_pattern" ]]
+  then
+    nsta=( 0 )
+  else
+    mapfile -t nsta < <( grep -n "$starts" "$file" | \
+      awk -F ":" '{print $1}' )
+  fi
 fi
 
 w="001"
 for (( i=0; i<${#nsta[@]}; i++ ))
 do
+  if [[ "$starts" == "$ends" ]]
+  then
+    end_line=2
+  else
+    end_line=1
+  fi
   nend=$(tail -n +"$(( ${nsta[$i]} + 1 ))" $file | grep -n "$ends" | \
-         head -n 1 | cut -d ":" -f 1)
+         head -n $end_line | cut -d ":" -f 1)
+  if [[ $empty_ending_pattern == "empty_ending_pattern" ]]
+  then
+    nend=$( tail -n +"$(( ${nsta[$i]} + 1 ))" $file | wc -l )
+    nend=$(( nend + 1 ))
+  fi
+
   if [ ${#nend} -eq 0 ]
   then
     finish

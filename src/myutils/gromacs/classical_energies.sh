@@ -36,7 +36,7 @@ done
 source "$(myutils basics -path)" CLASSICAL_E $verbose
 # ----- set up finishes -------------------------------------------------------
 
-# computation starts
+# ---- BODY -------------------------------------------------------------------
 verbose "The classical energies of configurations in the next pdb files are
   going to be computed:"
 if $all_xyz2pdb
@@ -81,4 +81,4 @@ rm mini*
 rm posre.itp
 rm topol.top
 
-finish "finished"
+finish

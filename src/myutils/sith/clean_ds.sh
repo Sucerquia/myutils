@@ -38,7 +38,15 @@ do
   esac
 done
 
-source "$(myutils basics -path)" CHECK_DS $verbose || exit 1
+source "$(myutils basics -path)" CHECK_DS $verbose 
+
+verbose "JOB information"
+echo " * Date:"
+date
+echo " * Command:"
+echo "$0" "$@"
+
+# ---- BODY -------------------------------------------------------------------
 
 # requierements
 if [ ! -d "$dataset" ]
@@ -143,7 +151,6 @@ done
 
 # Now separates the non-running by completed and error. Understanding error as
 # anything that aviods to complete
-
 
 verbose "summary"
 echo "completed Jobs: $(grep -c "  C" 00-aminos.txt )"

@@ -17,6 +17,7 @@ first argument.
 exit 0
 }
 
+# ---- set up -----------------------------------------------------------------
 output='/dev/null'
 verbose='false'
 while getopts 'f:o:l:vh' flag; do
@@ -42,6 +43,7 @@ fi
   the structure you want to optimize. Please check
   'myutils classical_minimization -h'"
 
+# ---- BODY -------------------------------------------------------------------
 verbose "creating .gro file from $pdbfile_min"
 echo -e "4\n 7\n" | gmx pdb2gmx -f "$pdbfile_min" -o minim.gro -ignh > \
   "$output" 2>&1 || fail "Creating gro file"
@@ -73,5 +75,4 @@ rm mini*
 rm posre.itp
 rm topol.top
 
-finish "finished"
-exit 0
+finish

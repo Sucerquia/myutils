@@ -103,8 +103,10 @@ def protonate(pdb, output):
 
     Return
     ======
-    # TODO: add return information
+    (ase.Atoms) new structures.
     """
     prot = Protonize(pdb)
     prot.create_atoms()
     write(output, prot.atoms)
+
+    return prot.atoms

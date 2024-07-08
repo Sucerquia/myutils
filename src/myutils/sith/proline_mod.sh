@@ -42,8 +42,11 @@ source "$(myutils basics -path)" PROLINE_MODE $verbose
 
 if [ "${#outfile}" -eq 0 ]
 then
-    outfile="${pdbfile%.*}modpro.pdb"
+  outfile="${pdbfile%.*}modpro.pdb"
 fi
+
+source "$(myutils basics -path)" PROLINE_MODE
+# ---- BODY -------------------------------------------------------------------
 
 # checking dependencies
 [ "${#pdbfile}" -eq 0  ] && fail "To use proline modification, you have to

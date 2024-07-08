@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # ---- functions --------------------------------------------------------------
-# true in the next line means verbose activated
-source "$(myutils basics -path)" Installer 'true'
 
 print_help() {
 echo "
@@ -58,7 +56,7 @@ install_from_repository() {
   pip install -e .
 }
 
-# ---- variables --------------------------------------------------------------
+# ---- set up -----------------------------------------------------------------
 ase='false'
 pymol='false'
 vpython='false'
@@ -94,12 +92,16 @@ do
   esac
 done
 
+# true in the next line means verbose activated
+source "$(myutils basics -path)" Installer 'true'
+
 original_path=$(pwd)
 
 # ---- BODY -------------------------------------------------------------------
+
 echo -e "\n are you sure you are in a conda environment?[y/N]"
 read environment
-if [ $environment == "n" ]
+if [ $environment == "n" ] || [ $environment == "N" ] || [ $environment == "" ]
 then
   echo "you need a conda environement to run this code"
   exit 0
@@ -176,5 +178,4 @@ then
   verbose "cmocean"
   pip install cmocean || fail "installing cmocean"
 fi
-
 finish

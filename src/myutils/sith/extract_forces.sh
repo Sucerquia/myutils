@@ -7,10 +7,10 @@ Extract the forces and indexes of the DOFs from the log files (g09). The output
 is a set of files called <pep>-forces<n_stretching>.fchk containing the
 information in fchk g09 format.
 
-    -d   <path>. directory where forces_files.log are located. Default ./forces
+  -d  <path>. directory where forces_files.log are located. Default ./forces
 
   -v  verbose.
-    -h   prints this message.
+  -h   prints this message.
 "
 exit 0
 }
@@ -69,6 +69,8 @@ do
 done
 
 source "$(myutils basics -path)" EXTR_FORCES $verbose
+
+# ---- BODY -------------------------------------------------------------------
 verbose "Extracting forces starts"
 
 # store original location
@@ -212,7 +214,7 @@ do
   end=$( tail -n +$(( head + 1 )) "$file" | grep -n "^ $" | head -n 1 | cut -d ":" -f 1 )
   # Transform angles in radians
   mapfile -t dof_val < <(tail -n +$(( head + 1 )) "$file" | head -n $(( end - 1 )) | \
-    awk '{if ($1 ~ "R"){print $2*1.8897261258369282}else{print $2*0.017453292519943295}}')
+    awk '{if ($1 ~ "R"){print $2*1.88972612583}else{print $2*0.0174532925199}}')
   line=$(printf "%-43s" "Redundant internal coordinates")
   line+="R   N="
   line+=$(printf "%12s" "${#dof_val[@]}")

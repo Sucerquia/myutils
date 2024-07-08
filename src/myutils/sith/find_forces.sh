@@ -2,10 +2,9 @@
 
 #SBATCH -N 1                   # number of nodes
 #SBATCH -n 8
-#SBATCH --job-name="forces"       #job name
 #SBATCH -t 24:00:00
-#SBATCH --output=compute_forces-%j.o
-#SBATCH --error=compute_forces-%j.e
+#SBATCH --output=%x-%j.o
+#SBATCH --error=%x-%j.e
 #SBATCH --exclusive
 
 
@@ -16,11 +15,14 @@ This tool computes the forces in all chk files and store them in a directory
 called forces.
 
   -c  run in cascade.
-  -d  directory containging the chk files of the stretching-optimization
-      process. Default ./
+  -d  <dir=./> directory containging the chk files of the
+      stretching-optimization process.
+  -p  <pattern> pattern present in the chk files that will be used.
 
   -v  verbose.
   -h  prints this message.
+
+Note: it replaces the substring 'stretched' by 'forces' in the name.
 "
 exit 0
 }
@@ -28,7 +30,7 @@ exit 0
 compute_forces () {
   verbose "construct Z-matrix for $1"
   newzmat -ichk -ozmat -rebuildzmat -bmodel "$1" forces.com || fail "
-  Error creating the matrix"
+    Error creating the matrix"
   sed -i "s/#P bmk\/6-31+g opt(modredun,calcfc)/%NProcShared=8\n#P bmk\/6-31+g force/g" forces.com
   verbose "executes g09 computation of forces for $1"
   g09 forces.com || fail "computing forces"
@@ -36,6 +38,7 @@ compute_forces () {
 
 # ----- definition of functions finishes --------------------------------------
 
+# ---- set-up starts ----------------------------------------------------------
 cascade='false'
 directory='./'
 pattern=''
@@ -54,14 +57,23 @@ done
 
 source "$(myutils basics -path)" FIND_FORCES $verbose
 
+verbose "JOB information"
+echo " * Date:"
+date
+echo " * Command:"
+echo "$0" "$@"
+
 if $cascade
 then
   load_modules
 fi
 
+# ---- set-up ends ------------------------------------------------------------
+
+# ---- BODY -------------------------------------------------------------------
 cd "$directory" || fail "moving to $directory"
 verbose "Finding forces in the directory $( pwd )" 
-verbose "Create forces directory and extracting forces"
+echo "Create forces directory and extracting forces"
 create_bck forces
 mkdir forces
 mkdir bck

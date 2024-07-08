@@ -7,36 +7,34 @@
 #SBATCH --error=%x-%j.e
 #SBATCH --exclusive
 
-
+# ----- definition of functions -----------------------------------------------
 print_help() {
 echo "
 This code runs one optimization using gaussian in one of the clusters. You
 have to create the input file and give it (without .com extension) as first
 argument when run this code.
 
-  -f  name if the gaussian input file without extension (.com).
+  -f  <com file> name if the gaussian input file without extension (.com).
   -c  run in server.
 
-  -v  verbose.
   -h  prints this message.
 "
 exit 0
 }
 
+# ---- set up -----------------------------------------------------------------
 cascade='false'
-verbose='false'
-while getopts 'f:cvh' flag; do
+while getopts 'f:ch' flag; do
   case "${flag}" in
     f) file=${OPTARG} ;;
     c) cascade='true' ;;
 
-    v)  verbose='true' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
 done
 
-source "$(myutils basics -path)" SingleJob $verbose
+source "$(myutils basics -path)" SingleJob
 
 verbose "JOB information"
 echo " * Date:"
@@ -49,6 +47,7 @@ then
   load_modules
 fi
 
+# ---- BODY -------------------------------------------------------------------
 g09 "$file.com" "$file.log"
 
 finish

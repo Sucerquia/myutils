@@ -53,17 +53,19 @@ pepgen -h &> /dev/null || fail "This code needs pepgen"
 $gmx -h &> /dev/null || fail "This code needs gromacs ($gmx failed)"
 # ----- set up finishes -------------------------------------------------------
 
+# ---- BODY -------------------------------------------------------------------
 # create peptide
 verbose "Creation and equilibration of $pep starts"
 echo -e "\n $pep $gmx"
-pepgen "$pep" equilibrate -gmx "$gmx" "$pep_options" -e || fail "Creating peptide $pep"
+pepgen "$pep" equilibrate -gmx "$gmx" "$pep_options" -e ||
+  fail "Creating peptide $pep"
 
 # pulling
 verbose "Pulling of $pep starts"
 if [ "${#forces[@]}" -eq 0 ]
 then
   warning "You didn't specify which forces you want to use. Then the pulling
-      will be done using the value by default: 200 [kJ mol^-1 nm^-1]"
+    will be done using the value by default: 200 [kJ mol^-1 nm^-1]"
   forces=( "200" )
 fi
 

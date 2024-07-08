@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+# ----- definition of functions -----------------------------------------------
 print_help() {
 echo "
 Check bash style of all bash files in a directory, and its subdirectories.
@@ -25,14 +27,12 @@ while getopts 'd:vh' flag; do
   esac
 done
 source "$(myutils basics -path)" BashChecker $verbose
-
 if [ "$directory" == "" ]
 then
   directory="$(myutils path)"
 fi
 
-bsoriginal_dir=$(pwd)
-
+# ---- BODY -------------------------------------------------------------------
 cd $directory || fail "moving to package directory"
 
 mapfile -t bash_files < <(find . -name "*.sh")
@@ -43,3 +43,5 @@ do
 done
 
 cd "$bsoriginal_dir" || fail "original directory lost"
+
+finish

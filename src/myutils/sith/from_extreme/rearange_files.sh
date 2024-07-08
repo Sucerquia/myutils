@@ -3,15 +3,14 @@
 # ----- definition of functions starts ----------------------------------------
 print_help() {
 echo "
-This tool rearange the files called <pep>-forces<n>* changing the number <n>
-for the correspondent in increasing order. it must be executed in the directory
+This tool rearange the files called *<n>*.xyz changing the number <n>
+for the correspondending in increasing order. it must be executed in the directory
 where the files to organize are.
 
   -h  prints this message.
 "
 exit 0
 }
-
 # ----- definition of functions finishes --------------------------------------
 
 # ----- general setup ---------------------------------------------------------
@@ -22,6 +21,7 @@ while getopts 'h' flag; do
   esac
 done
 
+# ---- BODY -------------------------------------------------------------------
 n=0
 for xyz_file in $(ls *.xyz | sort)
 do

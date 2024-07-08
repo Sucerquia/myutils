@@ -1,6 +1,7 @@
 #!/bin/bash
 
 
+# ----- definition of functions -----------------------------------------------
 print_help() {
 echo "
 Code that explores the files in the package and automatically creates the
@@ -40,6 +41,7 @@ insert_doc() {
 
 # ----- definition of functions finishes --------------------------------------
 
+# ---- BODY -------------------------------------------------------------------
 # ==== General variables ======================================================
 mod_path=""   # path to the dir with the files to be documented
 # directories to be ignored during documentation.
