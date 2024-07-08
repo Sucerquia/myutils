@@ -27,7 +27,7 @@ insert_doc() {
   class=$4
   # Remove prev documentation first
   if awk -v numline=$doc_num_start 'NR==numline' \
-       $fil | grep -q "\"\"\""
+       $file_doc | grep -q "\"\"\""
   then
     doc_num_end=$(tail -n +$(( doc_num_start + 1 )) $file_doc | \
                   grep -n "\"\"\"" | head -n 1 | cut -d ":" -f 1)

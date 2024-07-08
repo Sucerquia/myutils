@@ -127,11 +127,12 @@ fi
 
 # === Check parameters ========================================================
 # parameters
-mapfile -t parameters < <(myutils args_and_defaults $module $class $function | \
-    grep -v "###" | grep -vx '' )
+mapfile -t parameters < <(myutils args_and_defaults $module $class \
+                          $function | grep -v "###" | grep -vx '' )
 
 # insert missed parameters
-if [ ${#parameters} -eq 0 ]
+if [ ${#parameters[@]} -eq 1 ] && [[ "${parameters[0]}" == "self:" ]] || \
+   [ ${#parameters} -eq 0 ]
 then
   # if the function does not have parameters, it creates an empty file
   rm $par_block
