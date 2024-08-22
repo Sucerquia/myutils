@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # ---- functions --------------------------------------------------------------
-source "$(myutils basics -path)" Installer
-
 print_help() {
 echo "
 This tool installs all the next packages:
@@ -57,7 +55,7 @@ install_from_repository() {
 
 # ---- end of functions -------------------------------------------------------
 
-# ---- variables --------------------------------------------------------------
+# ---- set up -----------------------------------------------------------------
 ase='false'
 pymol='false'
 vpython='false'
@@ -95,12 +93,12 @@ done
 
 original_path=$(pwd)
 
-# ---- end of variables -------------------------------------------------------
+source "$(myutils basics -path)" Installer
+# ---- BODY -------------------------------------------------------------------
 
-# ---- Body -------------------------------------------------------------------
 echo -e "\n are you sure you are in a conda environment?[y/N]"
 read environment
-if [ $environment == "n" ]
+if [ $environment == "n" ] || [ $environment == "N" ] || [ $environment == "" ]
 then
     echo "you need a conda environement to run this code"
     exit 0
@@ -178,3 +176,5 @@ then
 fi
 
 # ---- end body ---------------------------------------------------------------
+
+finish

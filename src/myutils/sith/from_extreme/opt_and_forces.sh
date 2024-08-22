@@ -7,40 +7,46 @@
 #SBATCH --error=%x-%j.e
 #SBATCH --exclusive
 
-
+# ----- definition of functions -----------------------------------------------
 print_help() {
 echo "
 This code submit an optimization job and uses the output to compute the
 forces.
 
-    -f    name if the gaussian input file without extension (.com).
-    -c    run in server.
+  -f  name if the gaussian input file without extension (.com).
+  -c  run in server.
 
-    -h    prints this message.
+  -h  prints this message.
 "
 exit 0
 }
 
+# ---- set up -----------------------------------------------------------------
+c_flag=""
 cascade='false'
 while getopts 'f:ch' flag; do
-    case "${flag}" in
-      f) file=${OPTARG} ;;
-      c) cascade='true' ;;
+  case "${flag}" in
+    f) file=${OPTARG} ;;
+    c) cascade='true' ;;
 
-      h) print_help ;;
-      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
-    esac
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
 done
-# ---- Core -------------------------------------------------------------------
 source "$(myutils basics -path)" $file
 
-c_flag=""
+verbose "JOB information"
+echo " * Date:"
+date
+echo " * Command:"
+echo "$0" "$@"
+
 if $cascade
 then
-    load_modules
-    c_flag="-c"
+  load_modules
+  c_flag="-c"
 fi
-
+# ----- BODY ------------------------------------------------------------------
 g09 "$file.com" "$file.log"
 
 if $(grep -q "NtrErr Called from FileIO." "$file.log")
@@ -50,13 +56,13 @@ then
 fi
 
 grep -q "Normal termination of Gaussian" "$file.log" || \
-    fail "optimization did not work for $file"
+  fail "optimization did not work for $file"
 
 if [[ "$(whoami)" == "hits_"* ]]
 then
-    single_part="--partition=single"
+  single_part="--partition=single"
 else
-    single_part=""
+  single_part=""
 fi
 
 sbatch --job-name="${file:0:6}_forces" $single_part \

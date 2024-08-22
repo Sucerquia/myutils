@@ -218,7 +218,7 @@ class SithAnalysis:
 def set_hes_from_ref(geo_ref, sith_tar, structure):
     """
     Set the hessian in in a target sith taken from a geometry of reference.
-    
+
     Parameters
     ==========
     geo_ref: SITH.Utilities.Geometry
@@ -231,7 +231,7 @@ def set_hes_from_ref(geo_ref, sith_tar, structure):
     Returns
     =======
     (SITH.SITH) returns the sith_tar with the hessian in the defined structure.
-    
+
     Note: All the SITH.SITH.structures are Geometry objects with all the information of the structure.
     """
     for dof in sith_tar.dim_indices:
@@ -240,7 +240,7 @@ def set_hes_from_ref(geo_ref, sith_tar, structure):
         if not (np.all(geo_ref.dim_indices == dof, axis=1).any() \
             or np.all(geo_ref.dim_indices == check2, axis=1).any()):
             raise('this dof does not exist: ', dof)
-        
+
     order = []
     for dof in sith_tar.dim_indices:
         test = dof[dof != 0]
@@ -250,12 +250,12 @@ def set_hes_from_ref(geo_ref, sith_tar, structure):
         except IndexError:
             index = np.where(np.all(geo_ref.dim_indices == check2, axis=1))[0][0]
         order.append(index)
-        
+
     geo_ref.hessian = geo_ref.hessian[order]
     geo_ref.hessian = geo_ref.hessian[:, order]
-    
+
     sith_tar.structures[structure].hessian = geo_ref.hessian
-    
+
     return sith_tar
 
 
@@ -315,7 +315,7 @@ class DataSetAnalysis:
         self.analysis = []
 
         print("Log SITH analysis:\n")
-        
+
         prolines = []
         errors = []
         eff_exclu = []
@@ -334,7 +334,7 @@ class DataSetAnalysis:
                 continue
 
             assert pep.is_dir(), f"{pep} does not exist."
-            
+
             pdb = list(pep.glob(f'*{pdb_pattern}*.pdb'))
             if len(pdb) == 0:
                 raise FileNotFoundError(f"Not '*{pdb_pattern}*.pdb' found in"
@@ -344,7 +344,7 @@ class DataSetAnalysis:
                                  f" {str(pep)}/*{pdb_pattern}*.pdb")
 
             self.pep_infos.append(PepSetter(pdb[0]))
-            
+
             struc = pep / subdir
             structure_files = list(struc.glob(f'*{struc_pattern}*'))
             structure_files.sort()
@@ -359,21 +359,21 @@ class DataSetAnalysis:
             except:
                 self.pep_infos.pop(-1)
                 errors.append(pep.stem)
-            
+
             if n_pep % 20 == 0:
                 print()
             n_pep += 1
-        
+
             print(pep.stem + ' ', end='')
-        
+
         print(f"\n--- A total of {len(self.outcomes)} peptides where added to the "
               "analysis")
-    
+
         if len(prolines) > 0:
             print("--- The next peptides were neglected because they have a "
                   "proline at least:")
             [print(pep + ' ', end='') for pep in prolines]
-    
+
         if len(errors) > 0:
             print("\n--- The next peptides did not woked for some reason. "
                   "Check them individually:")
@@ -382,7 +382,7 @@ class DataSetAnalysis:
             print("--- The next peptides were neglected because they have a "
                   "proline at least:")
             [print(pep + ' ', end='') for pep in eff_exclu]
-    
+
         self.test()
 
     def test(self):
@@ -420,7 +420,7 @@ class DataSetAnalysis:
             es.append(e)
 
         return xs, es
-    
+
     def dof_vs_energy2(self, aa_names, naas=3):
         xs = []
         es = []
@@ -435,7 +435,7 @@ class DataSetAnalysis:
     def plot_le(self, a_names, aminos=3, ax: plt.Axes = None, sp=None,
                 lw=1, ms=1, **kwargs):
         """
-        plots the 
+        plots the
         """
         if 'ax_pref' in kwargs:
             setter = kwargs['ax_pref']
@@ -459,7 +459,7 @@ class DataSetAnalysis:
             es.append(e)
             sp.plot_data(l, e, ax=ax, lw=lw, markersize=ms)
         return ax, ls, es
-    
+
     def le_all(self, a_names, aminos):
         self.ls = []
         self.es = []
@@ -471,7 +471,7 @@ class DataSetAnalysis:
     def plot_DFT_ener(self, ax: plt.Axes = None, sp=None,
                       lw=1, ms=1, **kwargs):
         """
-        plots the 
+        plots the
         """
         setter = kwargs['ax_pref']
         del kwargs['ax_pref']
@@ -500,8 +500,8 @@ class DataSetAnalysis:
             ys.append(y)
 
         return ax, xs, ys
-    
-    def amino_freq(self):    
+
+    def amino_freq(self):
         self.names = []
         for sith in self.outcomes:
             self.names.append(list(sith.name))

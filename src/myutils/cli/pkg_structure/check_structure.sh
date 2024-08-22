@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+# ----- definition of functions -----------------------------------------------
 print_help() {
 echo "
 Check the structure of a package. All checkers run by default.
@@ -14,8 +16,7 @@ Check the structure of a package. All checkers run by default.
 exit 0
 }
 
-# ----- definition of functions finishes --------------------------------------
-
+# ---- set up -----------------------------------------------------------------
 all="true"
 pep8="false"
 shellcheck="false"
@@ -23,47 +24,55 @@ tests="false"
 
 check_dir="$(myutils path)"
 while getopts 'd:psth' flag; do
-    case "${flag}" in
-      d) check_dir=${OPTARG};;
-      p) pep8='true' ; all="false" ;;
-      s) shellcheck='true' ; all="false" ;;
-      t) tests='true' ; all="false" ;;
+  case "${flag}" in
+    d) check_dir=${OPTARG};;
+    p) pep8='true' ; all="false" ;;
+    s) shellcheck='true' ; all="false" ;;
+    t) tests='true' ; all="false" ;;
 
-      h) print_help ;;
-      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
-    esac
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
 done
 
 if $all
 then
-    pep8="true"
-    shellcheck="true"
-    tests="true"
+  pep8="true"
+  shellcheck="true"
+  tests="true"
 fi
 
 if $tests
 then
-    echo ; echo
-    # Ignore directories and files for tests checker
-    ign_dirs='pycache,cli,examples,doc_scripts,pre-deprected,tutorials,tests'
-    ign_fils='__init__.'
-    myutils check_tests -n myutils -d $ign_dirs -f $ign_fils
+  echo ; echo
+  # Ignore directories and files for tests checker
+  ign_dirs='pycache,cli,examples,doc_scripts,pre-deprected,tutorials,tests'
+  ign_fils='__init__.'
+  myutils check_tests -n myutils -d $ign_dirs -f $ign_fils
 fi
 
 if $pep8
 then
-    source "$(myutils basics -path)" PEP8
-    original_cs=$(pwd)
-    cd $check_dir || fail "package path does not exist"
-    echo ; echo
-    pycodestyle -h > /dev/null || fail "You need to install pycodestyle"
-    pycodestyle . --exclude=pre-deprected --ignore W605
-    cd "$original_cs" || fail "returning to former directory"
-    finish "finish"
+  source "$(myutils basics -path)" PEP8
+  original_cs=$(pwd)
+  cd $check_dir || fail "package path does not exist"
+  # take a look in finish to understand next two lines
+  array_bfnames=( "${array_bfnames[@]:1}" )
+  basic_functions_name=${array_bfnames[0]}
+
+  for file in $(find . -name "*.py")
+  do
+    sed -i 's/[[:space:]]*$//g' $file
+    sed -i 's/^[[:space:]]*$//g' $file
+  done
+  echo ; echo
+  pycodestyle -h > /dev/null || fail "You need to install pycodestyle"
+  pycodestyle . --exclude=pre-deprected --ignore W605
+  cd "$original_cs" || fail "returning to former directory"
 fi
 
 if $shellcheck
 then
-    echo ; echo
-    myutils bash_style -d $check_dir
+  echo ; echo
+  myutils bash_style -d $check_dir
 fi

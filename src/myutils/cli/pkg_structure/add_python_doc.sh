@@ -1,8 +1,7 @@
 #!/bin/bash
 
 
-source "$(myutils basics -path)" AddPythonDoc
-
+# ----- definition of functions -----------------------------------------------
 print_help() {
 echo "
 Code that explores the files in the package and automatically create the
@@ -19,8 +18,10 @@ documentation of all classes and functions that finds in it.
 "
 exit 0
 }
-# ----- definition of functions finishes --------------------------------------
 
+source "$(myutils basics -path)" AddPythonDoc
+
+# ---- BODY -------------------------------------------------------------------
 # ==== General variables ======================================================
 mod_path=$(myutils path)   # path to the dir with the files to be documented
 # directories to be ignored during documentation.
@@ -68,6 +69,7 @@ mapfile -t pck_fils < <(eval "find . -type f -not \(" "${bool_ign::-2}" \
 
 for fil in "${pck_fils[@]}"
 do
+  verbose $fil
   ext=$(echo "$fil" | cut -d '.' -f3 )
   if [ "$ext" == 'py' ]
   then
@@ -76,16 +78,42 @@ do
     mapfile -t functions < <(grep "^def " "$fil" | awk '{print $2}' | \
                              cut -d "(" -f 1)
     module=$(echo "myutils"${fil//\.\//\.} | sed "s/\//\./g" | sed "s/\.py//g")
-    echo $module
-    myutils args_and_defaults $module ${functions[@]}
-    # TODO: So far, this code prints the functions and parameters in each python file
-    # separated by @@@... (check args_and_defaults).
-    # The next step will be to check this functions/classes and its parameters and
-    # add the documentation automatically
 
-    # Another important topic is to define automatic documentation of bash scripts.
+    for func in ${functions[@]}
+    do
+      verbose $func
+      # The output of the next function is stored in final_<func>-doc.txt
+      myutils python_doc_fixer -f "$func" -m "$module" || \
+        fail "creating new documentation"
+
+      # search n lines of the beginning of the function, the end of the
+      # heading of the function and the beginning of the documentation
+      n_func=$( grep -n "def $func" $fil | cut -d ":" -f 1 )
+      rel_n_func_end=$( tail -n +$n_func $fil | grep -n ")" | head -n 1 | \
+                        cut -d ':' -f 1)
+      doc_num_start=$(( n_func + rel_n_func_end ))
+
+      # ==== insert checked documentation
+      if awk -v numline=$doc_num_start 'NR==numline' \
+             $fil | grep -q "\"\"\""
+      then
+        # Remove prev documentation first
+        doc_num_end=$(tail -n +$(( doc_num_start + 1 )) $fil | \
+                      grep -n "\"\"\"" | head -n 1 | cut -d ":" -f 1)
+        doc_num_end=$(( doc_num_end + doc_num_start ))
+        sed -i "${doc_num_start},${doc_num_end}d" $fil
+
+      fi 
+      # insert new documentation
+      sed -i "$(( doc_num_start - 1 ))r final_$func-doc.txt" $fil
+
+      # delete documentation file
+      rm final_$func-doc.txt || fail "not final documentation found"
+    done
+    # Classes
+    # TODO: extend this proporsal for classes. python_doc_fixer works also for
+    # this case, just give the number of leading spaces
   fi
 done
 
-
-
+finish

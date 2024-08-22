@@ -1,8 +1,7 @@
 #!/bin/bash
 
-source "$(myutils basics -path)" BashChecker
 
-
+# ----- definition of functions -----------------------------------------------
 print_help() {
 echo "
 Check bash style of all bash files in a directory, and its subdirectories.
@@ -12,8 +11,9 @@ Check bash style of all bash files in a directory, and its subdirectories.
 "
 exit 0
 }
-# ----- definition of functions finishes --------------------------------------
 
+# ----- set up ----------------------------------------------------------------
+bsoriginal_dir=$(pwd)
 directory="$(myutils path)"
 while getopts 'd:h' flag; do
     case "${flag}" in
@@ -24,8 +24,9 @@ while getopts 'd:h' flag; do
     esac
 done
 
-bsoriginal_dir=$(pwd)
+source "$(myutils basics -path)" BashChecker
 
+# ---- BODY -------------------------------------------------------------------
 cd $directory || fail "moving to package directory"
 
 mapfile -t bash_files < <(find . -name "*.sh")
@@ -36,3 +37,5 @@ do
 done
 
 cd "$bsoriginal_dir" || fail "original directory lost"
+
+finish
