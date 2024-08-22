@@ -13,7 +13,7 @@ class StandardPlotter:
                  y: Union[list, tuple, np.ndarray] = None,
                  ax: plt.Axes = None, fig: plt.Figure = None,
                  figwidth: float = 8.9, figheight: float = 8,
-                 ax_pref: dict = None, plot_pref: dict = None):
+                 ax_pref: dict = None, plot_pref: dict = {}):
         """
         Parameters
         ==========
@@ -46,7 +46,6 @@ class StandardPlotter:
         self.change_general_pars({'font.size': 10})
         self.ax_pref = {'xlabel': '',
                         'ylabel': '',
-                        'factor': 10, # Delete
                         'ticks_scale': 0.8,
                         'xticks': None,
                         'yticks': None,
@@ -108,7 +107,7 @@ class StandardPlotter:
             self.change_ax_defaults(**ax_pref)
 
         for ax in self.ax:
-            self.axis_setter(ax, **ax_pref)
+            self.axis_setter(ax, **self.ax_pref)
 
         if x is not None:
             self.plot_data(x, y=y, **plot_pref)
@@ -129,8 +128,6 @@ class StandardPlotter:
             label for the x axis.
         ylabel: str. Default=''
             label for the y axis.
-        factor: float. Default=10
-            fractor to scale the sizes in the plot. Basic size of reference.
         xticks: array. Default=automatic
             numbers to appear in the x axis.
         yticks: array. Default=automatic
@@ -380,7 +377,6 @@ class StandardPlotter:
                         y: Union[list, np.ndarray, tuple] = None,
                         ax: plt.Axes = None,
                         data_label: str = None,
-                        factor: float = 10,
                         pstyle: str = '-',
                         color_plot: Union[list, np.ndarray, tuple] = None,
                         lw: float = 3, **kwargs) -> Line2D:
@@ -400,14 +396,12 @@ class StandardPlotter:
             is not given, a new one will be created.
         data_label: str. Default=None
             label of the curve
-        factor: float
-            fractor to scale the sizes in the plot. Basic size of reference.
         pstyle: str. Default='-'
             matplotlib line style.
         color_plot: RGB array or matplotlib colors. Default=matplotlib palette
             color of the curve
         lw: float. Default=3
-            fraction of factor to define the thickness of the line.
+            thickness of the line.
         **kwargs of plt.plot
 
         Return
@@ -427,7 +421,6 @@ class StandardPlotter:
                   y: Union[list, np.ndarray, tuple] = None,
                   ax: Union[plt.Axes, int] = 0,
                   data_label: str = None,
-                  factor: float = 10,
                   pstyle: str = '-o',
                   color_plot: Union[list, np.ndarray, tuple] = None,
                   lw: float = 3,
@@ -450,14 +443,12 @@ class StandardPlotter:
             is not given, a new one will be created.
         data_label: str. Default=None
             label of the curve
-        factor: float
-            fractor to scale the sizes in the plot. Basic size of reference.
         pstyle: str. Default='-'
             matplotlib line style.
         color_plot: RGB array or matplotlib colors. Default=matplotlib palette
             color of the curve
         lw: float. Default=3
-            fraction of factor to define the thickness of the line.
+            thickness of the line.
         **kwards of plt.plot
 
         Return
@@ -517,7 +508,6 @@ class StandardPlotter:
         for i in range(len(x)):
             p = self._plot_one_curve(x[i], y[i], ax=ax,
                                      data_label=data_label[i],
-                                     factor=factor,
                                      pstyle=pstyle[i],
                                      color_plot=color_plot[i],
                                      lw=lw[i],
@@ -573,8 +563,6 @@ class StandardPlotter:
             is not given, a new one will be created.
         ylabel: str. Default=''
             label for the y right axis.
-        factor: float. Default=10
-            fractor to scale the sizes in the plot. Basic size of reference.
         yticks: array. Default=automatic
             numbers to show up in the y right axis.
         rax_color: RGB array or matplotlib colors. Default=[0.4, 0.4, 0.4]
@@ -608,9 +596,9 @@ class StandardPlotter:
         ax.patch.set_alpha(0)
         ax.tick_params(axis='y', colors=lax_color)
         ax.spines['left'].set_color(lax_color)
-        ax.set_ylabel(pref['ylabel'], fontsize=pref['factor'] * 2.5,
+        ax.set_ylabel(pref['ylabel'], fontsize=mpl.rcParams['font.size'] * pref['labels_scale'],
                       color=lax_color, weight='bold',
-                      labelpad=pref['factor'])
+                      labelpad=pref['ypad'])
 
         ax2 = ax.twinx()
         ax = ax2
