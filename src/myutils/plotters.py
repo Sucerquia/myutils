@@ -21,14 +21,16 @@ class StandardPlotter:
             data to be plotted. It will correspond to the data in the y axis if
             no y is given, or x data in case y is given.
         y: list or array. Default=None
-            data to be plotted. It will correspond to the data in the y. It has
-            to have the same dimension than the x list.
-        ax: axes. Default=None
-            plt.axes object. In case it is not given, a new one will be
-            created.
+            data to be plotted. It will correspond to the data in the y axis.
+            The dimensions have to be broadcastable with x array. Check
+            plot_data for more details.
+        ax: plt.Axes. Default=None
+            Axes to include to StandardPlotter. In case it is not given, a new
+            one will be created into the figure if given or in a new figure
+            otherwise.
         fig: figure. Default=None
-            plt.figure object. In case it is not given, a new one will be
-            created.
+            Figure to include to StandardPlotter. If not given, it will be the In case it is not given, a new
+            one will be created
         figwidth: int. Default=8.57
             width of the figure in centimeters.
         figheight: int. Default=11.43
@@ -40,17 +42,21 @@ class StandardPlotter:
             argument preferences for 'plot_data'. For more details about
             options, check StandardPlotter.plot_data
         """
-        # ==== Default ====
+        # ==== Defaults ====
+        self.change_general_pars({'font.size': 10})
         self.ax_pref = {'xlabel': '',
                         'ylabel': '',
-                        'factor': 10,
+                        'ticks_scale': 0.8,
                         'xticks': None,
                         'yticks': None,
                         'xticklabels': None,
+                        'xpad': 4,
                         'yticklabels': None,
+                        'ypad': 4,
+                        'labels_scale': 1,
                         'xlim': None,
                         'ylim': None,
-                        'color_labels': [0.4, 0.4, 0.4],
+                        'color_labels': [0, 0, 0],
                         'xminor': None,
                         'yminor': None,
                         'grid': False,
@@ -59,20 +65,22 @@ class StandardPlotter:
                         'sci_not': True,
                         'lw_spines': 0.5,
                         'color_spines': [0.1, 0.1, 0.1],
-                        'l_ticks': 2}
+                        'l_ticks': 3}
         self.ax_pref_bck = self.ax_pref.copy()
 
         # ==== Axis and Figure setup ====
         if ax is None and fig is None:
-            self.fig, self.ax = plt.subplots(1, 1, figsize=(figwidth / 2.54,
-                                                            figheight / 2.54),
-                                             dpi=300)
+            self.fig, self.ax = plt.subplots(1, 1)
         elif fig is not None and ax is None:
             self.fig = fig
             self.ax = fig.add_subplot()
         elif fig is None and ax is not None:
-            self.fig = ax.figure
-            self.ax = ax
+            if isinstance(ax, np.ndarray):
+                self.ax = ax.flatten()
+            else:
+                self.ax = np.array([ax])
+            self.fig = self.ax[0].figure
+            self.ax = self.ax[0]
         else:
             self.fig = fig
             self.ax = ax
@@ -81,6 +89,10 @@ class StandardPlotter:
             self.ax = self.ax.flatten()
         else:
             self.ax = np.array([self.ax])
+
+        self.fig.set_size_inches(figwidth / 2.54, figheight / 2.54),
+        self.fig.set_dpi(300)
+
         # TODO: add change of layer per axis.
         self.layer = [0]
         self.spaces = []
@@ -95,7 +107,7 @@ class StandardPlotter:
             self.change_ax_defaults(**ax_pref)
 
         for ax in self.ax:
-            self.axis_setter(ax, **ax_pref)
+            self.axis_setter(ax, **self.ax_pref)
 
         if x is not None:
             self.plot_data(x, y=y, **plot_pref)
@@ -116,8 +128,6 @@ class StandardPlotter:
             label for the x axis.
         ylabel: str. Default=''
             label for the y axis.
-        factor: float. Default=10
-            fractor to scale the sizes in the plot. Basic size of reference.
         xticks: array. Default=automatic
             numbers to appear in the x axis.
         yticks: array. Default=automatic
@@ -193,6 +203,27 @@ class StandardPlotter:
             dictio[parameter] = value
 
         return dictio
+    
+    def change_general_pars(self, new_pars: dict = {}):
+        """
+        Changes the values of values of matplotlib.
+
+        Parameters
+        ==========
+        new_pars: dict. Default={}
+            dictionary with the matplotlib parameters keywords as dictionary
+            keys and the new values as dictionary values. For more information,
+            check mpl.rcParams.
+
+        Returns
+        =======
+        (dict) New mpl.rcParams
+        """
+        for parameter, value in new_pars.items():
+            if parameter not in mpl.rcParams:
+                raise ValueError(f'{parameter} is not part of mpl.rcParams')
+            mpl.rcParams[parameter] = value
+        return mpl.rcParams
 
     def add_space(self, **kwargs):
         """
@@ -239,7 +270,9 @@ class StandardPlotter:
 
         return newax
 
-    def axis_setter(self, ax: Union[plt.Axes, int] = 0, reset: bool = False,
+    def axis_setter(self, ax: Union[plt.Axes, int] = 0,
+                    reset: bool = False,
+                    general_pars: dict = {},
                     **kwargs) -> plt.Axes:
         """
         Adjust the most common parameters of an axes.
@@ -262,6 +295,9 @@ class StandardPlotter:
         further changes. myutils does not pretend to replace matplotlib but
         making it more accesible for scientific proposals.
         """
+        # General parameters
+        self.change_general_pars(general_pars)
+
         if isinstance(ax, int):
             ax = self.ax[ax]
 
@@ -274,7 +310,14 @@ class StandardPlotter:
         pref = ax.preferences
 
         # ==== axis setup ====
-        ax.tick_params(labelsize=pref['factor'] * 1.5)
+        ax.tick_params(axis='both',
+        
+                       which='major',
+                       length=pref['l_ticks'],
+                       width=pref['lw_spines'],
+                       labelsize=mpl.rcParams['font.size'] *
+                                 pref['ticks_scale'])
+    
         # == major ticks
         if pref['xticks'] is not None:
             ax.set_xticks(pref['xticks'], labels=pref['xticklabels'])
@@ -287,8 +330,6 @@ class StandardPlotter:
         if pref['yminor'] is not None:
             ax.set_yticks(pref['yminor'], minor=True)
 
-        ax.tick_params(axis='both', which='major', length=pref['l_ticks'],
-                       width=pref['lw_spines'])
         for side in ['bottom', 'right', 'top', 'left']:
             ax.spines[side].set_linewidth(pref['lw_spines'])
             ax.spines[side].set_color(pref['color_spines'])
@@ -303,16 +344,20 @@ class StandardPlotter:
                 raise ValueError("To add min grid you have to define "
                                  "xminticks or yminticks")
             ax.grid(True, which='minor', color=pref['color_grid'])
+
         # == axis labels
-        ax.set_xlabel(pref['xlabel'], fontsize=pref['factor'] * 2.5,
-                      color=pref['color_labels'], weight='bold',
-                      labelpad=pref['factor'])
-        ax.set_ylabel(pref['ylabel'], fontsize=pref['factor'] * 2.5,
-                      color=pref['color_labels'], weight='bold',
-                      labelpad=pref['factor'])
+        ax.set_xlabel(pref['xlabel'],
+                      fontsize=mpl.rcParams['font.size'] * pref['labels_scale'],
+                      color=pref['color_labels'],
+                      labelpad=pref['xpad'])
+        ax.set_ylabel(pref['ylabel'],
+                      fontsize=mpl.rcParams['font.size'] * pref['labels_scale'],
+                      color=pref['color_labels'],
+                      labelpad=pref['ypad'])
         # == scientific notation for numbers with more than 2 decimals
         if pref['sci_not']:
-            ax.yaxis.offsetText.set_fontsize(pref['factor'] * 1.5)
+            ax.yaxis.offsetText.set_fontsize(mpl.rcParams['font.size'] *
+                                             pref['ticks_scale'])
             formatter = mticker.ScalarFormatter(useMathText=True)
             formatter.set_powerlimits((-2, 2))
             ax.yaxis.set_major_formatter(formatter)
@@ -332,7 +377,6 @@ class StandardPlotter:
                         y: Union[list, np.ndarray, tuple] = None,
                         ax: plt.Axes = None,
                         data_label: str = None,
-                        factor: float = 10,
                         pstyle: str = '-',
                         color_plot: Union[list, np.ndarray, tuple] = None,
                         lw: float = 3, **kwargs) -> Line2D:
@@ -352,14 +396,12 @@ class StandardPlotter:
             is not given, a new one will be created.
         data_label: str. Default=None
             label of the curve
-        factor: float
-            fractor to scale the sizes in the plot. Basic size of reference.
         pstyle: str. Default='-'
             matplotlib line style.
         color_plot: RGB array or matplotlib colors. Default=matplotlib palette
             color of the curve
         lw: float. Default=3
-            fraction of factor to define the thickness of the line.
+            thickness of the line.
         **kwargs of plt.plot
 
         Return
@@ -379,7 +421,6 @@ class StandardPlotter:
                   y: Union[list, np.ndarray, tuple] = None,
                   ax: Union[plt.Axes, int] = 0,
                   data_label: str = None,
-                  factor: float = 10,
                   pstyle: str = '-o',
                   color_plot: Union[list, np.ndarray, tuple] = None,
                   lw: float = 3,
@@ -402,14 +443,12 @@ class StandardPlotter:
             is not given, a new one will be created.
         data_label: str. Default=None
             label of the curve
-        factor: float
-            fractor to scale the sizes in the plot. Basic size of reference.
         pstyle: str. Default='-'
             matplotlib line style.
         color_plot: RGB array or matplotlib colors. Default=matplotlib palette
             color of the curve
         lw: float. Default=3
-            fraction of factor to define the thickness of the line.
+            thickness of the line.
         **kwards of plt.plot
 
         Return
@@ -469,7 +508,6 @@ class StandardPlotter:
         for i in range(len(x)):
             p = self._plot_one_curve(x[i], y[i], ax=ax,
                                      data_label=data_label[i],
-                                     factor=factor,
                                      pstyle=pstyle[i],
                                      color_plot=color_plot[i],
                                      lw=lw[i],
@@ -525,8 +563,6 @@ class StandardPlotter:
             is not given, a new one will be created.
         ylabel: str. Default=''
             label for the y right axis.
-        factor: float. Default=10
-            fractor to scale the sizes in the plot. Basic size of reference.
         yticks: array. Default=automatic
             numbers to show up in the y right axis.
         rax_color: RGB array or matplotlib colors. Default=[0.4, 0.4, 0.4]
@@ -560,9 +596,9 @@ class StandardPlotter:
         ax.patch.set_alpha(0)
         ax.tick_params(axis='y', colors=lax_color)
         ax.spines['left'].set_color(lax_color)
-        ax.set_ylabel(pref['ylabel'], fontsize=pref['factor'] * 2.5,
+        ax.set_ylabel(pref['ylabel'], fontsize=mpl.rcParams['font.size'] * pref['labels_scale'],
                       color=lax_color, weight='bold',
-                      labelpad=pref['factor'])
+                      labelpad=pref['ypad'])
 
         ax2 = ax.twinx()
         ax = ax2
