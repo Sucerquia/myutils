@@ -777,6 +777,17 @@ class StandardPlotter:
         Shows the Figure.
         """
         return plt.show()
+    
+    def save(self, name):
+        """
+        Save figure with proper resolution.
+
+        Parameters
+        ==========
+        name: str.
+            name of the file to store the figure.
+        """
+        self.fig.savefig(name, dpi=300)
 
 
 class Space:
