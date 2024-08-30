@@ -13,7 +13,7 @@ class StandardPlotter:
                  y: Union[list, tuple, np.ndarray] = None,
                  ax: plt.Axes = None, fig: plt.Figure = None,
                  figwidth: float = 8.9, figheight: float = 8,
-                 ax_pref: dict = {}, plot_pref: dict = None):
+                 ax_pref: dict = {}, plot_pref: dict = {}):
         """
         Parameters
         ==========
@@ -379,7 +379,7 @@ class StandardPlotter:
                         data_label: str = None,
                         pstyle: str = '-',
                         color_plot: Union[list, np.ndarray, tuple] = None,
-                        lw: float = 3, **kwargs) -> Line2D:
+                        lw: float = 1, **kwargs) -> Line2D:
         """
         Add a curve to a plot.
 
@@ -423,7 +423,7 @@ class StandardPlotter:
                   data_label: str = None,
                   pstyle: str = '-o',
                   color_plot: Union[list, np.ndarray, tuple] = None,
-                  lw: float = 3,
+                  lw: float = 1,
                   **kwargs) -> list:
         """
         Add data to a curve.
@@ -641,7 +641,8 @@ class StandardPlotter:
         if isinstance(ax, int):
             index = ax
             ax = self.ax[ax]
-        # Axes properties
+
+        # Extract original Axes properties
         borders = ax.get_position().get_points()
         zorder = ax.get_zorder()
         ax.remove()
