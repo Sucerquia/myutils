@@ -664,6 +664,114 @@ class StandardPlotter:
 
         return ax
 
+    # Annotations
+    def draw_brace(self, xspan, yy, text, yspan=1, beta_factor=300, pad=0,
+                   color=None, ax=0,
+                   resolution_factor=100, **kwargs):
+            """
+            Draws an annotated horizontal brace on the axes.
+
+            Parameters
+            ==========
+            xspan: array-like
+                lower and higher boundary of the brace.
+            yy: float
+                y-position of the base of the brace.
+            text: str.
+                text to annotate over the brace.
+            ax: plt.Axes, int
+                Axes to add the brace. Integer, the index to one of the sp.ax.
+            yspan: float. Default=1.
+                y height of the brace from the basis.
+            beta_factor: float. Default=300.
+                factor that regulates the curvature of the brace.
+            pad: float. Default=0
+                distance from the tip of the brace to the text.
+            color: mpl.color. Default=[0.3, 0.3, 0.3]
+                color of the annotation (brace and text).
+            resolution_factor: float. Default=100
+                scale to define the number of points to define the function of
+                the brace.
+            kwargs for plt.plot.
+
+            Return
+            ======
+            (numpy.Array) y points of the brace.
+            """
+            # TODO: add the option to be also a vertical line
+            if isinstance(ax, int):
+                ax = self.ax[ax]
+
+            if color is None:
+                color = [0.3, 0.3, 0.3]
+
+            xmin, xmax = xspan
+            xspan = xmax - xmin
+            ax_xmin, ax_xmax = ax.get_xlim()
+            xax_span = ax_xmax - ax_xmin
+
+            # intermedia points in the x axis
+            resolution = int(xspan / xax_span*resolution_factor) * 2 + 1
+            x = np.linspace(xmin, xmax, resolution)
+
+            # curvature of the brackets: the higher this is, the smaller the
+            # radius
+            beta = beta_factor/xax_span
+            x_half = x[:int(resolution / 2) + 1]
+            y_half_brace = (1 / (1. + np.exp( -beta * (x_half - x_half[0])))
+                            + 1 / (1. + np.exp(-beta * (x_half - x_half[-1]))))
+            y = np.concatenate((y_half_brace, y_half_brace[-2::-1]))
+            y = y * yspan
+
+            # move the bottom of the brackets to zero and then fix it in yy
+            y = y - min(y)
+            y += yy
+
+            ax.plot(x, y, color=color, **kwargs)
+            ax.text((xmax+xmin)/2., max(y) + pad, text, ha='center',
+                    va='bottom', color=color)
+            return y
+    
+    def arrow(self, xy, dxdy, text, color=None, pad=0, ax=0, hw=1, hl=1):
+        """
+        Draws an annotated arrow on the axes.
+
+        Parameters
+        ==========
+        xy: array-like
+            x, y coordinate of the tail of the arrow.
+        dxdy: array-like
+            dx, dy values of the arrow from the (x, y) coordinate.
+        text: str
+            text to annotate on the base of the arrow.
+        color: mpl.color. Default=[0.3, 0.3, 0.3]
+            color of the arrow and the text.
+        pad: float. Default=0
+            vertical distance from the base of the arrow to the base of the
+            text.
+        ax: plt.Axes or int. default=0
+            Axes to add the arrow. Integer, the index to one of the sp.ax.
+        hw: float. Default=1
+            head width.
+        hl: float. Default=1
+            head lenght.
+        """
+        if isinstance(ax, int):
+                ax = self.ax[ax]
+
+        if color is None:
+            color = [0.3, 0.3, 0.3]
+
+        dx, dy = dxdy
+        x, y = xy
+        self.ax[0].arrow(x, y, dx, dy,
+                         fc=color, ec=color,
+                         head_width=hw, head_length=hl)
+        ax.text(x, y + pad, text,
+                va='bottom', ha='center',
+                color=color)
+
+
     def show(self):
         """
         Shows the Figure.
