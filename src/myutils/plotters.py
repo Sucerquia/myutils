@@ -980,7 +980,7 @@ class Space:
     # when rows_cols is not given
     def set_axis(self,
                  axes: Union[list, tuple, np.ndarray] = None,
-                 rows_cols: Union[list, tuple, np.ndarray] = (1, 1),
+                 rows_cols: Union[list, tuple, np.ndarray] = None,
                  borders: Union[list, tuple, np.ndarray] = None,
                  spaces: Union[list, tuple, np.ndarray] = None) -> list:
         """
@@ -993,7 +993,7 @@ class Space:
         axes: list. Default=None
             list of Axes to the adjusted according to the defined parameters.
             In case of None, all the axes in the space are taken.
-        row_cols: tuple. Default=(1, 1)
+        rows_cols: tuple. Default=(1, 1)
             number of rows and cols. the number of axes must be rows x cols.
         borders: list
             positions respect to the space coordinates specified as
@@ -1014,11 +1014,23 @@ class Space:
                 raise ValueError("there are not axes to set up")
             else:
                 axes = self.axes
+
         [[left, bottom], [right, top]] = borders
         [hspace, vspace] = spaces
-        n_rows, n_cols = rows_cols
-        assert len(axes) == n_rows * n_cols, f"axes has {len(axes)} axes " +\
-            f"and rows x cols is {n_rows * n_cols}"
+
+        if rows_cols is None:
+            # Adjust number of rows/cols by minimizing perimeter
+            sum_side = len(axes) + 1
+            for i in np.arange(1, len(axes) + 1):
+                if len(axes) % i == 0 and i + int(len(axes) / i) <= sum_side:
+                    sum_side = i + int(len(axes) / i)
+                    rows_cols = (i, int(len(axes) / i))
+            n_rows, n_cols = rows_cols
+        else:
+            n_rows, n_cols = rows_cols
+            assert len(axes) == n_rows * n_cols, f"axes has {len(axes)} axes " +\
+                f"and rows x cols is {n_rows * n_cols}"
+            
 
         l_horiz = self._measure_size(n_cols, hspace, right - left)
         l_verti = self._measure_size(n_rows, vspace, top - bottom)
