@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # ----- definition of functions starts ----------------------------------------
-
 print_help() {
 echo "
 This tool finds the dofs of all xyz files in each directory of the dataset.

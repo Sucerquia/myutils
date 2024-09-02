@@ -13,7 +13,7 @@ class StandardPlotter:
                  y: Union[list, tuple, np.ndarray] = None,
                  ax: plt.Axes = None, fig: plt.Figure = None,
                  figwidth: float = 8.9, figheight: float = 8,
-                 ax_pref: dict = None, plot_pref: dict = None):
+                 ax_pref: dict = {}, plot_pref: dict = {}):
         """
         Parameters
         ==========
@@ -21,14 +21,16 @@ class StandardPlotter:
             data to be plotted. It will correspond to the data in the y axis if
             no y is given, or x data in case y is given.
         y: list or array. Default=None
-            data to be plotted. It will correspond to the data in the y. It has
-            to have the same dimension than the x list.
-        ax: axes. Default=None
-            plt.axes object. In case it is not given, a new one will be
-            created.
+            data to be plotted. It will correspond to the data in the y axis.
+            The dimensions have to be broadcastable with x array. Check
+            plot_data for more details.
+        ax: plt.Axes. Default=None
+            Axes to include to StandardPlotter. In case it is not given, a new
+            one will be created into the figure if given or in a new figure
+            otherwise.
         fig: figure. Default=None
-            plt.figure object. In case it is not given, a new one will be
-            created.
+            Figure to include to StandardPlotter. If not given, it will be the In case it is not given, a new
+            one will be created
         figwidth: int. Default=8.57
             width of the figure in centimeters.
         figheight: int. Default=11.43
@@ -40,17 +42,21 @@ class StandardPlotter:
             argument preferences for 'plot_data'. For more details about
             options, check StandardPlotter.plot_data
         """
-        # ==== Default ====
+        # ==== Defaults ====
+        self.change_general_pars({'font.size': 10})
         self.ax_pref = {'xlabel': '',
                         'ylabel': '',
-                        'factor': 10,
+                        'ticks_scale': 0.8,
                         'xticks': None,
                         'yticks': None,
                         'xticklabels': None,
+                        'xpad': 4,
                         'yticklabels': None,
+                        'ypad': 4,
+                        'labels_scale': 1,
                         'xlim': None,
                         'ylim': None,
-                        'color_labels': [0.4, 0.4, 0.4],
+                        'color_labels': [0, 0, 0],
                         'xminor': None,
                         'yminor': None,
                         'grid': False,
@@ -59,20 +65,22 @@ class StandardPlotter:
                         'sci_not': True,
                         'lw_spines': 0.5,
                         'color_spines': [0.1, 0.1, 0.1],
-                        'l_ticks': 2}
+                        'l_ticks': 3}
         self.ax_pref_bck = self.ax_pref.copy()
 
         # ==== Axis and Figure setup ====
         if ax is None and fig is None:
-            self.fig, self.ax = plt.subplots(1, 1, figsize=(figwidth / 2.54,
-                                                            figheight / 2.54),
-                                             dpi=300)
+            self.fig, self.ax = plt.subplots(1, 1)
         elif fig is not None and ax is None:
             self.fig = fig
             self.ax = fig.add_subplot()
         elif fig is None and ax is not None:
-            self.fig = ax.figure
-            self.ax = ax
+            if isinstance(ax, np.ndarray):
+                self.ax = ax.flatten()
+            else:
+                self.ax = np.array([ax])
+            self.fig = self.ax[0].figure
+            self.ax = self.ax[0]
         else:
             self.fig = fig
             self.ax = ax
@@ -81,6 +89,10 @@ class StandardPlotter:
             self.ax = self.ax.flatten()
         else:
             self.ax = np.array([self.ax])
+
+        self.fig.set_size_inches(figwidth / 2.54, figheight / 2.54),
+        self.fig.set_dpi(300)
+
         # TODO: add change of layer per axis.
         self.layer = [0]
         self.spaces = []
@@ -95,7 +107,7 @@ class StandardPlotter:
             self.change_ax_defaults(**ax_pref)
 
         for ax in self.ax:
-            self.axis_setter(ax, **ax_pref)
+            self.axis_setter(ax, **self.ax_pref)
 
         if x is not None:
             self.plot_data(x, y=y, **plot_pref)
@@ -116,8 +128,6 @@ class StandardPlotter:
             label for the x axis.
         ylabel: str. Default=''
             label for the y axis.
-        factor: float. Default=10
-            fractor to scale the sizes in the plot. Basic size of reference.
         xticks: array. Default=automatic
             numbers to appear in the x axis.
         yticks: array. Default=automatic
@@ -193,6 +203,27 @@ class StandardPlotter:
             dictio[parameter] = value
 
         return dictio
+    
+    def change_general_pars(self, new_pars: dict = {}):
+        """
+        Changes the values of values of matplotlib.
+
+        Parameters
+        ==========
+        new_pars: dict. Default={}
+            dictionary with the matplotlib parameters keywords as dictionary
+            keys and the new values as dictionary values. For more information,
+            check mpl.rcParams.
+
+        Returns
+        =======
+        (dict) New mpl.rcParams
+        """
+        for parameter, value in new_pars.items():
+            if parameter not in mpl.rcParams:
+                raise ValueError(f'{parameter} is not part of mpl.rcParams')
+            mpl.rcParams[parameter] = value
+        return mpl.rcParams
 
     def add_space(self, **kwargs):
         """
@@ -238,8 +269,11 @@ class StandardPlotter:
         # TODO: update space[0] such that takes into account new axes.
 
         return newax
-                    
-    def axis_setter(self, ax: Union[plt.Axes, int] = 0, reset: bool = False, **kwargs) -> plt.Axes:
+
+    def axis_setter(self, ax: Union[plt.Axes, int] = 0,
+                    reset: bool = False,
+                    general_pars: dict = {},
+                    **kwargs) -> plt.Axes:
         """
         Adjust the most common parameters of an axes.
 
@@ -261,6 +295,9 @@ class StandardPlotter:
         further changes. myutils does not pretend to replace matplotlib but
         making it more accesible for scientific proposals.
         """
+        # General parameters
+        self.change_general_pars(general_pars)
+
         if isinstance(ax, int):
             ax = self.ax[ax]
 
@@ -273,7 +310,14 @@ class StandardPlotter:
         pref = ax.preferences
 
         # ==== axis setup ====
-        ax.tick_params(labelsize=pref['factor'] * 1.5)
+        ax.tick_params(axis='both',
+        
+                       which='major',
+                       length=pref['l_ticks'],
+                       width=pref['lw_spines'],
+                       labelsize=mpl.rcParams['font.size'] *
+                                 pref['ticks_scale'])
+    
         # == major ticks
         if pref['xticks'] is not None:
             ax.set_xticks(pref['xticks'], labels=pref['xticklabels'])
@@ -286,8 +330,6 @@ class StandardPlotter:
         if pref['yminor'] is not None:
             ax.set_yticks(pref['yminor'], minor=True)
 
-        ax.tick_params(axis='both', which='major', length=pref['l_ticks'],
-                       width=pref['lw_spines'])
         for side in ['bottom', 'right', 'top', 'left']:
             ax.spines[side].set_linewidth(pref['lw_spines'])
             ax.spines[side].set_color(pref['color_spines'])
@@ -302,16 +344,20 @@ class StandardPlotter:
                 raise ValueError("To add min grid you have to define "
                                  "xminticks or yminticks")
             ax.grid(True, which='minor', color=pref['color_grid'])
+
         # == axis labels
-        ax.set_xlabel(pref['xlabel'], fontsize=pref['factor'] * 2.5,
-                      color=pref['color_labels'], weight='bold',
-                      labelpad=pref['factor'])
-        ax.set_ylabel(pref['ylabel'], fontsize=pref['factor'] * 2.5,
-                      color=pref['color_labels'], weight='bold',
-                      labelpad=pref['factor'])
+        ax.set_xlabel(pref['xlabel'],
+                      fontsize=mpl.rcParams['font.size'] * pref['labels_scale'],
+                      color=pref['color_labels'],
+                      labelpad=pref['xpad'])
+        ax.set_ylabel(pref['ylabel'],
+                      fontsize=mpl.rcParams['font.size'] * pref['labels_scale'],
+                      color=pref['color_labels'],
+                      labelpad=pref['ypad'])
         # == scientific notation for numbers with more than 2 decimals
         if pref['sci_not']:
-            ax.yaxis.offsetText.set_fontsize(pref['factor'] * 1.5)
+            ax.yaxis.offsetText.set_fontsize(mpl.rcParams['font.size'] *
+                                             pref['ticks_scale'])
             formatter = mticker.ScalarFormatter(useMathText=True)
             formatter.set_powerlimits((-2, 2))
             ax.yaxis.set_major_formatter(formatter)
@@ -331,10 +377,9 @@ class StandardPlotter:
                         y: Union[list, np.ndarray, tuple] = None,
                         ax: plt.Axes = None,
                         data_label: str = None,
-                        factor: float = 10,
                         pstyle: str = '-',
                         color_plot: Union[list, np.ndarray, tuple] = None,
-                        lw: float = 3, **kwargs) -> Line2D:
+                        lw: float = 1, **kwargs) -> Line2D:
         """
         Add a curve to a plot.
 
@@ -351,14 +396,12 @@ class StandardPlotter:
             is not given, a new one will be created.
         data_label: str. Default=None
             label of the curve
-        factor: float
-            fractor to scale the sizes in the plot. Basic size of reference.
         pstyle: str. Default='-'
             matplotlib line style.
         color_plot: RGB array or matplotlib colors. Default=matplotlib palette
             color of the curve
         lw: float. Default=3
-            fraction of factor to define the thickness of the line.
+            thickness of the line.
         **kwargs of plt.plot
 
         Return
@@ -378,10 +421,9 @@ class StandardPlotter:
                   y: Union[list, np.ndarray, tuple] = None,
                   ax: Union[plt.Axes, int] = 0,
                   data_label: str = None,
-                  factor: float = 10,
                   pstyle: str = '-o',
                   color_plot: Union[list, np.ndarray, tuple] = None,
-                  lw: float = 3,
+                  lw: float = 1,
                   **kwargs) -> list:
         """
         Add data to a curve.
@@ -401,14 +443,12 @@ class StandardPlotter:
             is not given, a new one will be created.
         data_label: str. Default=None
             label of the curve
-        factor: float
-            fractor to scale the sizes in the plot. Basic size of reference.
         pstyle: str. Default='-'
             matplotlib line style.
         color_plot: RGB array or matplotlib colors. Default=matplotlib palette
             color of the curve
         lw: float. Default=3
-            fraction of factor to define the thickness of the line.
+            thickness of the line.
         **kwards of plt.plot
 
         Return
@@ -468,7 +508,6 @@ class StandardPlotter:
         for i in range(len(x)):
             p = self._plot_one_curve(x[i], y[i], ax=ax,
                                      data_label=data_label[i],
-                                     factor=factor,
                                      pstyle=pstyle[i],
                                      color_plot=color_plot[i],
                                      lw=lw[i],
@@ -524,8 +563,6 @@ class StandardPlotter:
             is not given, a new one will be created.
         ylabel: str. Default=''
             label for the y right axis.
-        factor: float. Default=10
-            fractor to scale the sizes in the plot. Basic size of reference.
         yticks: array. Default=automatic
             numbers to show up in the y right axis.
         rax_color: RGB array or matplotlib colors. Default=[0.4, 0.4, 0.4]
@@ -544,7 +581,6 @@ class StandardPlotter:
         ======
         (Axes) overlaped axes with the y axis on the right
         """
-
         if rax_color is None:
             rax_color = [0.4, 0.4, 0.4]
         if lax_color is None:
@@ -555,14 +591,14 @@ class StandardPlotter:
             ax.preferences = self.ax_pref.copy()
         self._change_dict(ax.preferences)
         pref = ax.preferences
-        
+
         ax.spines['right'].set_visible(False)
         ax.patch.set_alpha(0)
         ax.tick_params(axis='y', colors=lax_color)
         ax.spines['left'].set_color(lax_color)
-        ax.set_ylabel(pref['ylabel'], fontsize=pref['factor'] * 2.5,
+        ax.set_ylabel(pref['ylabel'], fontsize=mpl.rcParams['font.size'] * pref['labels_scale'],
                       color=lax_color, weight='bold',
-                      labelpad=pref['factor'])
+                      labelpad=pref['ypad'])
 
         ax2 = ax.twinx()
         ax = ax2
@@ -605,7 +641,8 @@ class StandardPlotter:
         if isinstance(ax, int):
             index = ax
             ax = self.ax[ax]
-        # Axes properties
+
+        # Extract original Axes properties
         borders = ax.get_position().get_points()
         zorder = ax.get_zorder()
         ax.remove()
@@ -627,11 +664,130 @@ class StandardPlotter:
 
         return ax
 
+    # Annotations
+    def draw_brace(self, xspan, yy, text, yspan=1, beta_factor=300, pad=0,
+                   color=None, ax=0,
+                   resolution_factor=100, **kwargs):
+            """
+            Draws an annotated horizontal brace on the axes.
+
+            Parameters
+            ==========
+            xspan: array-like
+                lower and higher boundary of the brace.
+            yy: float
+                y-position of the base of the brace.
+            text: str.
+                text to annotate over the brace.
+            ax: plt.Axes, int
+                Axes to add the brace. Integer, the index to one of the sp.ax.
+            yspan: float. Default=1.
+                y height of the brace from the basis.
+            beta_factor: float. Default=300.
+                factor that regulates the curvature of the brace.
+            pad: float. Default=0
+                distance from the tip of the brace to the text.
+            color: mpl.color. Default=[0.3, 0.3, 0.3]
+                color of the annotation (brace and text).
+            resolution_factor: float. Default=100
+                scale to define the number of points to define the function of
+                the brace.
+            kwargs for plt.plot.
+
+            Return
+            ======
+            (numpy.Array) y points of the brace.
+            """
+            # TODO: add the option to be also a vertical line
+            if isinstance(ax, int):
+                ax = self.ax[ax]
+
+            if color is None:
+                color = [0.3, 0.3, 0.3]
+
+            xmin, xmax = xspan
+            xspan = xmax - xmin
+            ax_xmin, ax_xmax = ax.get_xlim()
+            xax_span = ax_xmax - ax_xmin
+
+            # intermedia points in the x axis
+            resolution = int(xspan / xax_span*resolution_factor) * 2 + 1
+            x = np.linspace(xmin, xmax, resolution)
+
+            # curvature of the brackets: the higher this is, the smaller the
+            # radius
+            beta = beta_factor/xax_span
+            x_half = x[:int(resolution / 2) + 1]
+            y_half_brace = (1 / (1. + np.exp( -beta * (x_half - x_half[0])))
+                            + 1 / (1. + np.exp(-beta * (x_half - x_half[-1]))))
+            y = np.concatenate((y_half_brace, y_half_brace[-2::-1]))
+            y = y * yspan
+
+            # move the bottom of the brackets to zero and then fix it in yy
+            y = y - min(y)
+            y += yy
+
+            ax.plot(x, y, color=color, **kwargs)
+            ax.text((xmax+xmin)/2., max(y) + pad, text, ha='center',
+                    va='bottom', color=color)
+            return y
+    
+    def arrow(self, xy, dxdy, text, color=None, pad=0, ax=0, hw=1, hl=1):
+        """
+        Draws an annotated arrow on the axes.
+
+        Parameters
+        ==========
+        xy: array-like
+            x, y coordinate of the tail of the arrow.
+        dxdy: array-like
+            dx, dy values of the arrow from the (x, y) coordinate.
+        text: str
+            text to annotate on the base of the arrow.
+        color: mpl.color. Default=[0.3, 0.3, 0.3]
+            color of the arrow and the text.
+        pad: float. Default=0
+            vertical distance from the base of the arrow to the base of the
+            text.
+        ax: plt.Axes or int. default=0
+            Axes to add the arrow. Integer, the index to one of the sp.ax.
+        hw: float. Default=1
+            head width.
+        hl: float. Default=1
+            head lenght.
+        """
+        if isinstance(ax, int):
+                ax = self.ax[ax]
+
+        if color is None:
+            color = [0.3, 0.3, 0.3]
+
+        dx, dy = dxdy
+        x, y = xy
+        self.ax[0].arrow(x, y, dx, dy,
+                         fc=color, ec=color,
+                         head_width=hw, head_length=hl)
+        ax.text(x, y + pad, text,
+                va='bottom', ha='center',
+                color=color)
+
+
     def show(self):
         """
         Shows the Figure.
         """
         return plt.show()
+    
+    def save(self, name):
+        """
+        Save figure with proper resolution.
+
+        Parameters
+        ==========
+        name: str.
+            name of the file to store the figure.
+        """
+        self.fig.savefig(name, dpi=300)
 
 
 class Space:
@@ -691,8 +847,8 @@ class Space:
                 self.frame.spines[side].set_color('none')
 
     def show_frame(self,
-                   majordelta: float = None,
-                   minordelta: float = None,
+                   majordelta: float = 0.1,
+                   minordelta: float = 0.02,
                    color: Union[list, np.ndarray, tuple, str] = None,
                    layer: str = 'top') -> plt.Axes:
         """
@@ -701,9 +857,9 @@ class Space:
 
         Parameters
         ==========
-        majordelta: float. Default=None
+        majordelta: float. Default=0.1
             value to space the mayor ticks and add the numbers to the ruler.
-        minordelta: float. Default=None
+        minordelta: float. Default=0.02
             value to space the mayor ticks. these numbers are not added to the
             ruler.
         color: RGB array or matplotlib colors. Default=[1, 0, 0]
@@ -722,15 +878,11 @@ class Space:
         Each side of the frame is always going from zero to one
         """
         # == Default
-        if majordelta is None:
-            majorticks = []
-            minorticks = []
-        else:
-            majorticks = np.arange(0, 1.00001, majordelta)
-            minorticks = np.arange(0, 1.00001, minordelta)
-
         if color is None:
             color = [1, 0, 0]
+
+        majorticks = np.arange(0, 1.00001, majordelta)
+        minorticks = np.arange(0, 1.00001, minordelta)
 
         self.sp.axis_setter(ax=self.frame,
                             xticks=majorticks,
@@ -788,7 +940,7 @@ class Space:
         ======
         (plt.Axes) already relocated axes.
         """
-        #TODO: change ax None for 0. default
+        # TODO: change ax None for 0. default
         if ax is None and self.axes[0] is None:
             raise ValueError("To locate an axis, you have to provide an axis"
                              " or add at least one axis to the space")
@@ -823,12 +975,10 @@ class Space:
                     bottom + (top - bottom) * borders[1][1]]]
 
         return borders
-    
-    # TODO: change rows_cols default such that it fits the number of axes
-    # when rows_cols is not given
+
     def set_axis(self,
                  axes: Union[list, tuple, np.ndarray] = None,
-                 rows_cols: Union[list, tuple, np.ndarray] = (1, 1),
+                 rows_cols: Union[list, tuple, np.ndarray] = None,
                  borders: Union[list, tuple, np.ndarray] = None,
                  spaces: Union[list, tuple, np.ndarray] = None) -> list:
         """
@@ -841,7 +991,7 @@ class Space:
         axes: list. Default=None
             list of Axes to the adjusted according to the defined parameters.
             In case of None, all the axes in the space are taken.
-        row_cols: tuple. Default=(1, 1)
+        rows_cols: tuple. Default=(1, 1)
             number of rows and cols. the number of axes must be rows x cols.
         borders: list
             positions respect to the space coordinates specified as
@@ -862,11 +1012,23 @@ class Space:
                 raise ValueError("there are not axes to set up")
             else:
                 axes = self.axes
+
         [[left, bottom], [right, top]] = borders
         [hspace, vspace] = spaces
-        n_rows, n_cols = rows_cols
-        assert len(axes) == n_rows * n_cols, f"axes has {len(axes)} axes " +\
-            f"and rows x cols is {n_rows * n_cols}"
+
+        if rows_cols is None:
+            # Adjust number of rows/cols by minimizing perimeter
+            sum_side = len(axes) + 1
+            for i in np.arange(1, len(axes) + 1):
+                if len(axes) % i == 0 and i + int(len(axes) / i) <= sum_side:
+                    sum_side = i + int(len(axes) / i)
+                    rows_cols = (i, int(len(axes) / i))
+            n_rows, n_cols = rows_cols
+        else:
+            n_rows, n_cols = rows_cols
+            assert len(axes) == n_rows * n_cols, f"axes has {len(axes)} axes " +\
+                f"and rows x cols is {n_rows * n_cols}"
+            
 
         l_horiz = self._measure_size(n_cols, hspace, right - left)
         l_verti = self._measure_size(n_rows, vspace, top - bottom)
@@ -907,504 +1069,3 @@ class Space:
         assert l_side > 0, f"It is impossible to fit {n_elements} plots in " +\
                            f"{partial_size} side with {space_size} separation"
         return l_side
-
-
-'''
-import matplotlib as mpl
-import numpy as np
-
-from myutils.analysis import indexes_per_aminoacid
-from myutils.analysis import dof_classificator
-import matplotlib.patches as mpatches
-from myutils.peptides import info as peptide_info
-
-def plot_gradient(axes, x, y, cmap=None, markersize=1):
-    """
-    Plot line with gradient:
-
-    Parameters
-    ==========
-    axes:
-        matplotlib axes to add the line.
-    x:
-        array with the x values
-    y:
-        array with the y values
-    """
-    if cmap is None:
-        try:
-            import cmocean as cmo
-            cmap = cmo.cm.algae
-        except ImportError:
-            cmap = mpl.colormaps['viridis']
-    points = len(x)
-    k = int(10000 / points)
-    x2 = np.interp(np.arange(points * k), np.arange(points) * k, x)
-    y2 = np.interp(np.arange(points * k), np.arange(points) * k, y)
-    return axes.scatter(x2, y2, c=range(points * k), linewidths=0, marker='o',
-                        s=markersize, cmap=cmap)
-
-
-def plot_angles(sith, cmap=None, gradient=True, markersize=5, step=1):
-    scale = 0.08
-    if cmap is None:
-        try:
-            import cmocean as cmo
-            cmap = cmo.cm.algae
-        except ImportError:
-            cmap = mpl.colormaps['viridis']
-
-    distances = sith._deformed[0].dims[1]
-    n_angles = len(sith._deformed[0].ric[distances:])
-
-    fig = plt.figure(figsize=(10, 10))
-    ax1 = fig.add_subplot(2, 2, 1)
-    ax2 = fig.add_subplot(2, 2, 2, projection='polar')
-    ax3 = fig.add_subplot(2, 2, 3)
-    ax4 = fig.add_subplot(2, 2, 4, projection='polar')
-
-    # Plot values in cartesian
-    boundaries = np.arange(1, len(sith._deformed) + 2, 1)
-    normalize = mpl.colors.BoundaryNorm(boundaries - 0.5, cmap.N)
-    for i, deformed in enumerate(sith._deformed):
-        if gradient:
-            ax1.plot(deformed.ric[distances:], '-o', markersize=1,
-                     color=cmap(normalize(i + 0.5))[:3])
-        else:
-            ax1.plot(deformed.ric[distances:], '-o', markersize=1)
-
-    ax1.plot([0, n_angles], [np.pi, np.pi], '--', color='gray')
-    ax1.plot([0, n_angles], [-np.pi, -np.pi], '--', color='gray')
-    ax1.set_xlabel('Angles and Dihedral Angles', fontsize=20)
-    ax1.set_ylabel('values [radians]', fontsize=20)
-
-    # Plot values in Polar format
-    rics = []
-    for deformed in sith._deformed:
-        rics.append(deformed.ric[distances:])
-
-    rs = np.arange(len(np.array(rics).T[0]))
-    for dof in np.array(rics).T[1:]:
-        if gradient:
-            ax2.plot(dof, rs, lw=0.5, alpha=0.5)
-            ax2.scatter(dof, rs, c=rs, marker='o', s=markersize, cmap=cmap)
-        else:
-            ax2.plot(dof, rs)
-    ax2.set_rticks(rs[::step])
-    ax2.set_ylim([-rs[-1]*scale, rs[-1]*(1 + scale)])
-
-    # Plot changes in cartesian
-    for i, change in enumerate(sith.deltaQ.T[distances:].T):
-        if gradient:
-            ax3.plot(change, color=cmap(normalize(i + 0.5))[:3])
-        else:
-            ax3.plot(change)
-
-    ax3.set_xlabel('Angles and Dihedral Angles', fontsize=20)
-    ax3.set_ylabel('changes [radians]', fontsize=20)
-
-    # Plot changes in Polar format
-    for change in sith.deltaQ.T[distances:]:
-        if gradient:
-            ax4.plot(change, rs, lw=0.5, alpha=0.5)
-            ax4.scatter(change, rs, c=rs, marker='o', s=markersize, cmap=cmap)
-        else:
-            ax4.plot(change, rs)
-    ax4.set_rticks(rs[::step])
-    ax4.set_ylim([-rs[-1]*scale, rs[-1]*(1 + scale)])
-
-    if not gradient:
-        print("Note: in the polar representation, each line is a DOF and " +
-              "each radio is a deformation state. In the cartesian " +
-              "representation, the x axis corresponds to the DOF and the " +
-              "each line is the deformation. \n\n The cartesian " +
-              "representation shows that the values are in the expected " +
-              "range. The polar representation shows that the changes are " +
-              "smooth.")
-    return [ax1, ax2, ax3, ax4]
-
-
-def plot_ramachandran(rama_angles, step=1, marker_size_polar=5,
-                      marker_size_rama=20, label_dots='Amino\nAcids'):
-    """
-    Shows the evolution of each phi-psi angle of each aminoacid in a polar and
-    Ramachandran plot.
-
-    Parameters
-    ==========
-    """
-    fig = plt.figure(figsize=(10, 17))
-
-    ax1 = fig.add_subplot(2, 2, 1, projection='polar')
-    ax2 = fig.add_subplot(2, 2, 2, projection='polar')
-    ax3 = fig.add_subplot(2, 1, 2)
-
-    rs = np.arange(len(rama_angles))
-    for j in range(len(rama_angles[0])):
-        ax3.scatter(rama_angles[:, j][:, 0], rama_angles[:, j][:, 1],
-                    s=marker_size_rama)
-        ax1.plot(rama_angles[:, j][:, 0]*np.pi / 180, rs, '*-',
-                 markersize=marker_size_polar, label=str(j + 1))
-        ax2.plot(rama_angles[:, j][:, 1]*np.pi / 180, rs, '*-',
-                 markersize=marker_size_polar)
-
-    ax1.set_title(r'$\phi$', fontsize=20)
-    leg = ax1.legend(loc=[1, 0])
-    leg.set_title(label_dots)
-    ax2.set_title(r'$\psi$', fontsize=20)
-
-    ax1.set_rlabel_position(315)
-    scale = 0.08
-    ax1.set_rticks(rs[::step])
-    ax1.set_ylim([-rs[-1]*scale, rs[-1]*(1 + scale)])
-
-    ax2.set_rlabel_position(315)
-    ax2.set_rticks(rs[::step])
-    ax2.set_ylim([-rs[-1]*scale, rs[-1]*(1 + scale)])
-
-    ax3.set_position(Bbox([[0.125, 0.125], [0.9, 0.58]]), which='both')
-    ax3.plot([0, 0], [-180, 180], color='gray')
-    ax3.plot([-180, 180], [0, 0], color='gray')
-    ticks = np.arange(-180, 180.1, 45, dtype=int)
-    ax3.set_xticks(ticks)
-    ax3.set_yticks(ticks)
-    ax3.set_xlim([-180.1, 180.1])
-    ax3.set_ylim([-180.1, 180.1])
-    ax3.set_xlabel(r'$\phi$', fontsize=20)
-    ax3.set_ylabel(r'$\psi$', fontsize=20)
-    ax3.grid(True)
-    ax3.tick_params(axis='both', labelsize=15)
-
-    return [ax1, ax2, ax3]
-
-
-def plot_changes(dq, dims, markersize=3, gradient=True):
-    """
-    Plot the changes in the DOFs of an streched config
-
-    Parameters
-    ==========
-
-    dq: array
-        changes saved in sith object as sith.deltaQ
-
-    dims: list
-        dimensions usually saved in sith._deformed[0].dims
-
-
-    Return
-    ======
-    (Axes) matplotlib.Axes object with the plot of the changes.
-
-    NOTE: this function cannot be run from the terminal
-    """
-    nstreched = len(dq)
-    _, axes = plt.subplots(3, 1, figsize=(8, 10))
-    ylabels = [r'$\Delta$ Bonds [Å]',
-               r'$\Delta$ Angles [degrees]',
-               r'$\Delta$ Dihedrals [degrees]']
-    borders = [0, dims[1], dims[1]+dims[2], dims[0]]
-    scales = [1, 180 / np.pi, 180 / np.pi]
-
-    for i in range(3):
-        dof = dq.T[borders[i]:borders[i + 1]]
-        x = np.arange(0, len(dof[0]), 1)
-        if gradient:
-            [plot_gradient(axes[i], x, changes * scales[i],
-                           markersize=markersize)
-             for changes in dof]
-        else:
-            [axes[i].plot(changes * scales[i], '-o', markersize=markersize)
-             for changes in dof]
-            [axes[i].plot]
-
-    [axes[i].set_ylabel(ylabels[i], fontsize=15) for i in range(3)]
-
-    axes[-1].set_xlabel('streching', fontsize=15)
-    [ax.set_xticks(range(nstreched)) for ax in axes]
-    [ax.grid(axis='x', color='0.95') for ax in axes]
-
-    plt.tight_layout()
-
-    return axes
-
-
-def plot_hessian(hessian, ax=None, deci=2, orientation='vertical', cbar=True,
-                 ticks=15):
-    """
-    Function that plots the a matrix using a divergent colormap to separate the
-    negative from the positive values.
-
-    Parameters
-    ==========
-    hessian: NxN numpy.array
-        matrix to be ploted
-    ax: plt.Axes
-        Axis to add the plot. Default: None, in this case, the function creates
-        a new Axis.
-    deci: int
-        number of decimals in the colorbar.
-    orientation: str
-        orientation of the colorbar. Default: 'vertical'.
-    cbar: Bool
-        True to show the colorbar. Default: True
-    ticks: float
-        ticks size.
-
-    Return
-    ======
-    PathCollection
-    """
-
-    if orientation[0] == 'v':
-        pad = 0.02
-        shrink = 1
-        rotation = 0
-    else:
-        pad = 0.15
-        shrink = 0.9
-        rotation = 90
-
-    if ax is None:
-        _, ax = plt.subplots(1, 1, figsize=(10, 10))
-    if orientation[0] == 'v':
-        pad = 0.02
-        shrink = 0.85
-        rotation = 0
-    else:
-        pad = 0.15
-        shrink = 0.9
-        rotation = 90
-
-    cmap = mpl.cm.RdBu_r  # set the colormap to a divergent one
-
-    indexes = np.arange(hessian.shape[0])
-
-    x = [[i for i in indexes] for j in indexes]
-    y = [[j for i in indexes] for j in indexes]
-
-    lim = max(abs(min(hessian.flatten())), max(hessian.flatten()))
-
-    im = ax.scatter(x, y, c=hessian.flatten(), marker='s',
-                    cmap=cmap, vmin=-lim, vmax=lim)
-
-    if cbar:
-        cbar = plt.colorbar(im, ax=ax, format='%1.{}f'.format(deci),
-                            orientation=orientation, pad=pad,
-                            shrink=shrink)
-        cbar.ax.tick_params(labelsize=ticks, rotation=rotation)
-    return im
-
-
-def hessian_blocks(hessian, dims, decis=[2, 2, 2, 2], orientation='vertical',
-                   cbar=True, ticks=15, deltas=[1, 1, 1, 1]):
-
-    fig, ax = plt.subplots(4, 3, figsize=(10, 12))
-    """
-    Plots the hessian matrix of the sith object separating it in blocks
-    corresponding to the different degrees of freedom
-
-    Parameters
-    ==========
-    hessian: NxN numpy.array
-        matrix to be ploted.
-    dims: numpy.array
-        dimentions of the degrees of freedom subblocks.
-    decis: list[ints]
-        number of decimals in each colorbar.
-    orientation: str
-        orientation of the colorbar. Default: 'vertical'.
-    cbar: Bool
-        True to show the colorbar. Default: True
-    ticks: float
-        ticks size. Default: 15.
-    deltas: list[float]
-        deltas in the labels of the degrees of freedom. Default: [1, 1, 1, 1]
-
-    Return
-    ======
-    PathCollection
-    """
-    if orientation[0] == 'v':
-        pad = 0.02
-        shrink = 1
-        rotation = 0
-    else:
-        pad = 0.15
-        shrink = 0.9
-        rotation = 90
-    ax[0][0].set_title('Bonds')
-    plot_hessian(hessian[:dims[1], :dims[1]], ax=ax[0][0],
-                 orientation='vertical', cbar=True, ticks=ticks, deci=decis[0])
-    range_bonds = np.arange(1,
-                            dims[1]+1,
-                            deltas[0])
-    ax[0][0].set_xticks(range_bonds - 1)
-    ax[0][0].set_xticklabels(range_bonds)
-    ax[0][0].set_yticks(range_bonds - 1)
-    ax[0][0].set_yticklabels(range_bonds)
-
-    ax[0][1].set_title('Angles')
-    plot_hessian(hessian[dims[1]:dims[2]+dims[1], dims[1]:dims[2]+dims[1]],
-                 ax=ax[0][1], orientation='vertical', cbar=True, ticks=ticks,
-                 deci=decis[1])
-    range_angles = np.arange(dims[1] + 1,
-                             dims[1] + dims[2] + 1,
-                             deltas[1])
-    ax[0][1].set_xticks(range_angles - dims[1] - 1)
-    ax[0][1].set_xticklabels(range_angles)
-    ax[0][1].set_yticks(range_angles - dims[1] - 1)
-    ax[0][1].set_yticklabels(range_angles)
-
-    ax[0][2].set_title('Dihedrals')
-    plot_hessian(hessian[dims[2]+dims[1]:, dims[2]+dims[1]:], ax=ax[0][2],
-                 orientation='vertical', cbar=True, ticks=ticks, deci=decis[2])
-    range_dihedrals = np.arange(dims[1] + dims[2] + 1,
-                                dims[1] + dims[2] + dims[3] + 1,
-                                deltas[2])
-    ax[0][2].set_xticks(range_dihedrals - dims[1] - dims[2] - 1)
-    ax[0][2].set_xticklabels(range_dihedrals)
-    ax[0][2].set_yticks(range_dihedrals - dims[1] - dims[2] - 1)
-    ax[0][2].set_yticklabels(range_dihedrals)
-
-    ldx = ax[0][0].get_position().get_points()[0][0]
-    ldy = ax[3][0].get_position().get_points()[0][1]
-    rux = ax[0][2].get_position().get_points()[1][0]
-    ruy = ax[1][2].get_position().get_points()[1][1]
-
-    [[ax[i][j].set_visible(False) for i in range(1, 4)] for j in range(1, 3)]
-    im = plot_hessian(hessian, ax=ax[1][0], cbar=False)
-    ax[1][0].plot([dims[1]-0.5, dims[1]-0.5, -0.5, -0.5, dims[1]-0.5],
-                  [-0.5, dims[1]-0.5, dims[1]-0.5, -0.5, -0.5], color='black',
-                  lw=1)
-    range_total = np.arange(1, dims[0]+1, deltas[3])
-    ax[1][0].set_xticks(range_total - 1)
-    ax[1][0].set_xticklabels(range_total)
-    ax[1][0].set_yticks(range_total - 1)
-    ax[1][0].set_yticklabels(range_total)
-
-    ax[1][0].plot([dims[2]-0.5 + dims[1], dims[2]-0.5 + dims[1],
-                   dims[1]-0.5, dims[1]-0.5,
-                   dims[2]-0.5 + dims[1]],
-                  [dims[1]-0.5, dims[2]-0.5 + dims[1],
-                   dims[2]-0.5 + dims[1], dims[1]-0.5,
-                   dims[1]-0.5], color='black', lw=1)
-
-    ax[1][0].plot([dims[3]-0.5 + dims[1] + dims[2],
-                   dims[3]-0.5 + dims[1] + dims[2],
-                   dims[2]-0.5 + dims[1], dims[2]-0.5 + dims[1],
-                   dims[3]-0.5 + dims[1]+dims[2]],
-                  [dims[2]-0.5 + dims[1], dims[3]-0.5 + dims[1]+dims[2],
-                   dims[3]-0.5 + dims[1]+dims[2], dims[2]-0.5 + dims[1],
-                   dims[2]-0.5 + dims[1]], color='black', lw=1)
-
-    cbar = fig.colorbar(im, cax=ax[3][2], format='%1.{}f'.format(decis[3]),
-                        orientation=orientation, pad=pad, shrink=shrink)
-    cbar.ax.tick_params(labelsize=ticks, rotation=rotation)
-
-    ax[3][2].set_position(Bbox([[rux + 0.02, ldy], [rux + 0.05, ruy]]),
-                          which='both')
-    ax[2][0].set_visible(False)
-    ax[3][0].set_visible(False)
-    ax[3][2].set_visible(True)
-
-    ax[1][0].set_position(Bbox([[ldx, ldy], [rux, ruy]]), which='both')
-    ax[1][0].set_aspect('equal')
-    print(im)
-
-    return im
-
-
-
-
-
-
-def inner_ring_angles(angles, lim=[-180, 180]):
-    _, ax = plt.subplots(1, 1, figsize=(5, 5))
-    ax.plot(angles.T[0], angles.T[1], '*')
-    ax.plot([0, 0], [-180, 180], color='gray', lw=0.5)
-    ax.plot([-180, 180], [0, 0], color='gray', lw=0.5)
-    ax.set_xlabel('CB-CA-N-CD')
-    ax.set_ylabel('N-CA-CB-CG')
-    ax.set_xlim(lim)
-    ax.set_ylim(lim)
-
-    return ax
-
-
-# ----------------------------- remove ----------------------------------------
-def min_profile(file, indexes=[3, 2, 0], num_ranges=20):
-    """
-    This function returns the profile of minimum potential energy respect to
-    one variable.
-
-    Parameters
-    ==========
-
-    file: string
-        file that contains the data.
-
-    indexes: list of ints
-        indexes of the columns that contains the data of variable, energy and
-        time. Default indexes are 3, 2, 0 that corresponds to the distance
-        variable, pot energy and time in the file analysis_merged_table.dat
-
-    num_ranges: int
-        number of blocks to divide the variable range. Default 20
-
-    Note: The idea of this function is to split the variable in ranges and to
-    take the minimum energy in each range.
-
-    Return
-    ======
-        Duple with de data time, variable, energy
-    """
-
-    variables, energies, times = np.loadtxt(file,
-                                            usecols=[3, 2, 0],
-                                            unpack=True)
-    subranges = np.linspace(min(variables),
-                            max(variables),
-                            num_ranges)
-
-    split_var = []
-    split_ener = []
-    split_time = []
-
-    for index in range(len(subranges[:-1])):
-        blocks = np.logical_and(variables >= subranges[index],
-                                variables < subranges[index + 1])
-        split_var.append(variables[blocks])
-        split_ener.append(energies[blocks])
-        split_time.append(times[blocks])
-
-    var = [variables[0]]
-    ener = [energies[0]]
-    time = [times[0]]
-
-    for i in range(len(split_var)):
-        try:
-            index = np.where(split_ener[i] == min(split_ener[i]))[0][0]
-            var.append(split_var[i][index])
-            ener.append(split_ener[i][index])
-            time.append(split_time[i][index])
-        except IndexError:
-            continue
-
-    return time, var, ener
-
-
-
-
-def plot_energy_in_lenght(all_le, title, axis=None, fig=None):
-    if axis is None:
-        fig, axis = plt.subplots(figsize=(5, 5))
-    for le in all_le:
-        axis.plot(le[0]-le[0][0], le[1])
-
-    axis.set_title(title)
-    axis.set_xlabel('$\Delta$d [Å]', fontsize=15)
-    axis.set_ylabel('Energy [Ha]', fontsize=15)
-
-    return fig, axis
-'''

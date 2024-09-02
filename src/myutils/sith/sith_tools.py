@@ -15,6 +15,10 @@ def gen_randpep(n):
     n: int
         number of peptides to be picked randomly.
 
+    Return
+    ======
+    # TODO: add return information
+
     Returns
     =======
     (str) Chain of n aminoacis.
@@ -41,6 +45,8 @@ def proline_state(pdb, state, outputwoext=None):
         path to the pdb file that contains the prolines to be modified.
     state: str
         state to set up the prolines. It could be 'endo', 'exo' or 'random'.
+    outputwoext: Default=None # TODO: check default value
+        # TODO: add documentation of this parameter
 
     Return
     ======

@@ -6,6 +6,10 @@ def hide_code():
     This function hides the code cells in a jupyter notebook. It helps to a
     cleaner in visualization of results.
 
+    Return
+    ======
+    # TODO: add return information
+
     Note: this requires
     ipython
     ipywidgets

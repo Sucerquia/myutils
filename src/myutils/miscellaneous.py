@@ -3,7 +3,8 @@ import inspect
 from importlib import import_module
 
 
-def output_terminal(cmd, print_output=True, skip_error=False, print_cmd=False,**kwargs):
+def output_terminal(cmd, print_output=True, skip_error=False, print_cmd=False,
+                    **kwargs):
     """
     Runs a command in a terminal and save the output in a list
     of strings
@@ -12,12 +13,14 @@ def output_terminal(cmd, print_output=True, skip_error=False, print_cmd=False,**
     ==========
     cmd: str
         bash command to be executed in the terminal.
-    print_output: bool (optional)
+    print_output: bool (optional). Default=True # TODO: check default value
         True for printing the output besides of returning it. Default False.
-    skip_error: bool (optional)
+    skip_error: bool (optional). Default=False # TODO: check default value
         True for continuing running although the command fails. Default False.
     **kwargs:
         additional options for subprocess.Popen
+    print_cmd: Default=False # TODO: check default value
+        # TODO: add documentation of this parameter
 
     Return
     ======
@@ -38,7 +41,7 @@ def output_terminal(cmd, print_output=True, skip_error=False, print_cmd=False,**
         output = p.stdout.readline()
         if output:
             out += output
-            if print_output:
+            if print_output and len(output.strip()) != 0:
                 print(output.strip())
     return_code = p.wait()
 
@@ -54,6 +57,17 @@ def _time(keyword, logfile):
     """
     Used in myutils.miscellaneous.time_09. It extracts the time from a
     line of gaussian.
+
+    Parameters
+    ==========
+    keyword: # TODO: check default value
+        # TODO: add documentation of this parameter
+    logfile: # TODO: check default value
+        # TODO: add documentation of this parameter
+
+    Return
+    ======
+    # TODO: add return information
     """
     out = output_terminal("grep '" + keyword + "' " + logfile)
     out = out.split()
@@ -134,19 +148,55 @@ def args_and_defaults(module, *args):
     Parameters
     ==========
     func:
-        function that you want to extract the parameters and default values.    
+        function that you want to extract the parameters and default values.
+    module: # TODO: check default value
+        # TODO: add documentation of this parameter
+    args: # TODO: check default value
+        # TODO: add documentation of this parameter
+
+    Return
+    ======
+    # TODO: add return information
     """
     module = import_module(module)
-    for func in args:
-        method = getattr(module, func)
 
-        signature = inspect.signature(method)
-        
-        print("@@@_Separation_of_function_starts@@@")
-        print(func)
-        for param_name, param in signature.parameters.items():
-            if param.default != inspect.Parameter.empty:
-                print(f"{param_name}: {param.default}")
-            else:
-                print(f"{param_name}")
-        print("@@@_Separation_of_function_ends@@@")
+    method = getattr(module, args[0])
+    for func in args[1:]:
+        method = getattr(method, func)
+
+    signature = inspect.signature(method)
+
+    output = f"\n ### {args[-1]}\n"
+    for param_name, param in signature.parameters.items():
+        if param.default != inspect.Parameter.empty:
+            output += f"{param_name}: Default={param.default}\n"
+        else:
+            output += f"{param_name}:\n"
+    output += "\n"
+    return output
+
+
+# add2executable
+def function_doc(module, *args):
+    """
+    Takes a function and prints its documentation.
+
+    Parameters
+    ==========
+    func:
+        function that you want to extract the documentation.
+    module:
+        # TODO: add documentation of this parameter
+
+    Return
+    ======
+    # TODO: add return information
+    """
+    module = import_module(module)
+
+    method = getattr(module, args[0])
+    for func in args[1:]:
+        method = getattr(method, func)
+
+    return method.__doc__
+

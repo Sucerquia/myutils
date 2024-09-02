@@ -40,7 +40,7 @@ class PepSetter(MoleculeSetter):
             self.amino_info[index][self.name_atoms_raw[i]] = indexes_atoms[i]
 
     def compute_dihedrals(self, atom1index, atom2index, atom3index,
-                          atom4index):
+                          atom4index, structure=None):
         """
         Compute the dihedral angle between 4 atoms. Consider the nexts facts:
 
@@ -68,17 +68,24 @@ class PepSetter(MoleculeSetter):
             index of the atom 3 in g09 convention (starting from 1).
         atom4index: int
             index of the atom 4 in g09 convention (starting from 1).
+        structure: ase.Atoms
+            Structure to obtain the dihedrals. This has to be the same peptide
+            chemistry than the basis.
 
         Return
         ======
         dihedral: float
             dihedral angle as defined in the description in radians.
         """
+        if structure is None:
+            atoms = self.atoms
+        else:
+            atoms = structure
         # axis of rotation of the dihedral angle
-        posat1 = self.atoms[atom1index - 1].position
-        posat2 = self.atoms[atom2index - 1].position
-        posat3 = self.atoms[atom3index - 1].position
-        posat4 = self.atoms[atom4index - 1].position
+        posat1 = atoms[atom1index - 1].position
+        posat2 = atoms[atom2index - 1].position
+        posat3 = atoms[atom3index - 1].position
+        posat4 = atoms[atom4index - 1].position
 
         axis = posat3 - posat2
         # vector 2->1
@@ -207,41 +214,54 @@ class PepSetter(MoleculeSetter):
 
         return self.atoms
 
-    def rama_phi_psi(self):
+    def rama_phi_psi(self, traj=None):
         """
         Compute ramachandran angles of the peptide in degrees. It assumes
         there are ACE and NME capping atoms.
+
+        Parameters
+        ==========
+        traj: array-like
+            chain of ase.Atoms.
 
         Return
         ======
         (array) [#CA x 2float] dihedral angles per alpha carbon for
         Ramachandran plot.
         """
-        angles = []
-        if self.amino_name[1] == 'ACE':
-            for i in range(2, len(self.amino_info)):
-                phi = self.compute_dihedrals(self.amino_info[i - 1]['C'],
-                                             self.amino_info[i]['N'],
-                                             self.amino_info[i]['CA'],
-                                             self.amino_info[i]['C'])
+        if traj is None:
+            traj = [self.atoms]
+        
+        angles_traj = []
+        for structure in traj:
+            angles = []
+            if self.amino_name[1] == 'ACE':
+                for i in range(2, len(self.amino_info)):
+                    phi = self.compute_dihedrals(self.amino_info[i - 1]['C'],
+                                                 self.amino_info[i]['N'],
+                                                 self.amino_info[i]['CA'],
+                                                 self.amino_info[i]['C'],
+                                                 structure=structure)
+                    psi = self.compute_dihedrals(self.amino_info[i + 1]['N'],
+                                                 self.amino_info[i]['C'],
+                                                 self.amino_info[i]['CA'],
+                                                 self.amino_info[i]['N'],
+                                                 structure=structure)
+                    angles.append([phi * 180 / np.pi, psi * 180 / np.pi])
 
-                psi = self.compute_dihedrals(self.amino_info[i + 1]['N'],
-                                             self.amino_info[i]['C'],
-                                             self.amino_info[i]['CA'],
-                                             self.amino_info[i]['N'])
-                angles.append([phi * 180 / np.pi, psi * 180 / np.pi])
+            elif self.amino_name[1] == 'NME':
+                for i in range(2, len(self.amino_info)):
+                    phi = self.compute_dihedrals(self.amino_info[i]['C'],
+                                                 self.amino_info[i]['N'],
+                                                 self.amino_info[i]['CA'],
+                                                 self.amino_info[i + 1]['C'],
+                                                 structure=structure)
+                    psi = self.compute_dihedrals(self.amino_info[i - 1]['N'],
+                                                 self.amino_info[i]['C'],
+                                                 self.amino_info[i]['CA'],
+                                                 self.amino_info[i]['N'],
+                                                 structure=structure)
+                    angles.append([phi * 180 / np.pi, psi * 180 / np.pi])
+            angles_traj.append(angles)
+        return np.array(angles_traj)
 
-        elif self.amino_name[1] == 'NME':
-            for i in range(2, len(self.amino_info)):
-                phi = self.compute_dihedrals(self.amino_info[i]['C'],
-                                             self.amino_info[i]['N'],
-                                             self.amino_info[i]['CA'],
-                                             self.amino_info[i + 1]['C'])
-
-                psi = self.compute_dihedrals(self.amino_info[i - 1]['N'],
-                                             self.amino_info[i]['C'],
-                                             self.amino_info[i]['CA'],
-                                             self.amino_info[i]['N'])
-                angles.append([phi * 180 / np.pi, psi * 180 / np.pi])
-
-        return np.array(angles)
