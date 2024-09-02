@@ -780,4 +780,82 @@ class SithPlotter(PepSetter, SithAnalysis):
             cbar.ax.tick_params(labelsize=ticks, rotation=rotation)
         return im
 
+    def plot_ramachandran(self, step=1, marker_size_polar=5,
+                          marker_size_rama=20, label_dots='Amino\nAcids'):
+        """
+        Shows the evolution of each phi-psi angle of each aminoacid in a polar
+        and Ramachandran plot.
 
+        Parameters
+        ==========
+        """
+        rama_angles = self.rama_phi_psi([struct.atoms
+                                            for struct in self.sith.structures])
+
+        fig, axes = plt.subplots(3, 1)
+        sp = StandardPlotter(fig=fig, ax=axes, figwidth=16,
+                            figheight=22.5, ax_pref={'sci_not': False})
+        scale = 0.05
+        rs = np.arange(len(rama_angles))
+        sp.set_polar(ax=0, r_ticks=rs[::step],
+                    r_lims=[-rs[-1] * scale, rs[-1] * (1 + scale)])
+        sp.set_polar(ax=1, r_ticks=rs[::step],
+                    r_lims=[-rs[-1] * scale, rs[-1] * (1 + scale)])
+        lines = []
+        for j in range(len(rama_angles[0])): # amino acids
+            line, = sp.ax[0].plot(rama_angles[:, j][:, 0]*np.pi/180, rs, '*',
+                                markersize=marker_size_polar, label=str(j+1))
+            lines.append(line)
+            sp.ax[1].plot(rama_angles[:, j][:, 1]*np.pi/180, rs, '*',
+                    markersize=marker_size_polar)
+            sp.ax[2].scatter(rama_angles[:, j][:, 0], rama_angles[:, j][:, 1],
+                            s=marker_size_rama)
+
+        vo = 5/8
+        #adjust cartesian
+        sp.add_space(borders=[[0, 0], [1, vo]],
+                    axes=sp.ax[2])
+        sp.spaces[-1].set_axis(borders=[[0, 0], [1, 1]],
+                            spaces=(0.05, 0.1))
+        sp.spaces[-1].set_axis(borders=[[0.16, 0.12], [0.98, 0.98]])
+        # adjust polar
+        sp.add_space(rows_cols=(1, 2),
+                    borders=[[0, vo], [1, 1]],
+                    axes=sp.ax[[0, 1]])
+        sp.spaces[-1].set_axis(rows_cols=(1, 2),
+                                borders=[[0.06, 0], [0.94, 0.94]],
+                                spaces=(0.13, 0.1))
+
+        leg = sp.spaces[-1].frame.legend(handles=lines,                                 
+                                        loc='upper center',
+                                        bbox_to_anchor=[0.5, 0.4])
+        leg.set_title(label_dots)
+
+        sp.ax[0].set_title(r'$\phi$', fontsize=20)
+        
+        sp.ax[1].set_title(r'$\psi$', fontsize=20)
+
+        sp.ax[0].set_rlabel_position(315)
+        scale = 0.08
+        sp.ax[0].set_rticks(rs[::step])
+        sp.ax[0].set_ylim([-rs[-1]*scale, rs[-1]*(1+scale)])
+
+        sp.ax[1].set_rlabel_position(315)
+        sp.ax[1].set_rticks(rs[::step])
+        sp.ax[1].set_ylim([-rs[-1]*scale, rs[-1]*(1+scale)])
+
+        sp.ax[2].plot([0, 0], [-180, 180], color='gray')
+        sp.ax[2].plot([-180, 180], [0, 0], color='gray')
+        ticks = np.arange(-180, 180.1, 45, dtype=int)
+        sp.ax[2].set_xticks(ticks)
+        sp.ax[2].set_yticks(ticks)
+        sp.ax[2].set_xlim([-180.1, 180.1])
+        sp.ax[2].set_ylim([-180.1, 180.1])
+        sp.ax[2].set_xlabel(r'$\phi$', fontsize=20)
+        sp.ax[2].set_ylabel(r'$\psi$', fontsize=20)
+        sp.ax[2].grid(True)
+        sp.ax[2].tick_params(axis='both', labelsize=15)
+
+        
+        
+        return sp, lines

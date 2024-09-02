@@ -976,8 +976,6 @@ class Space:
 
         return borders
 
-    # TODO: change rows_cols default such that it fits the number of axes
-    # when rows_cols is not given
     def set_axis(self,
                  axes: Union[list, tuple, np.ndarray] = None,
                  rows_cols: Union[list, tuple, np.ndarray] = None,
