@@ -1,10 +1,325 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from myutils.plotters import StandardPlotter
 from SITH.SITH import SITH
 from myutils.peptides import PepSetter
 from pathlib import Path
 from typing import Union, Callable
+from scipy.stats import f_oneway
+import matplotlib.pyplot as plt
+from myutils.plotters import StandardPlotter
+
+
+# region AnalyseData
+def closest_indices(ref, value):
+    """
+    Find the indexes of the points after and before certain value
+
+    Parameters
+    ==========
+    ref: numpy.array
+        list contaning the data.
+    value: float
+        threshold value.
+
+    Returns
+    =======
+    (list) indexes of the next-lower and the next-upper elements in the list.
+    """
+    dif = ref - value
+    # upp = np.where(dif >= 0)[0][0]
+    multi = dif[1:] * dif[:-1]
+    upp = np.where(multi <= 0)[0][-1] + 1
+    low = upp - 1
+
+    return [low, upp]
+
+def cross_val(x, y, val):
+    """
+    Finds the crossing of a linearly interpolated curve with certain value in
+    the y data (horizontal line).
+
+    Parameters
+    ==========
+    x: numpy.array
+        x-data of the curve.
+    y: numpy.array
+        y-data of the curve.
+    val: float
+        threshold value.
+
+    Returns
+    =======
+    (float) x value where the interpolated curve crosses the specified value.
+
+    Note
+    ====
+    If you want to interpolate to a value of x (vertical line), just change x
+    by y when you pass the arguments.
+    """
+    indices = closest_indices(y, val)
+    x1, x2 = np.array(x)[indices]
+    y1, y2 = np.array(y)[indices]
+
+    x = (val - y1) * (x1 - x2) / (y1 - y2) + x1
+    
+    return x
+
+def pep_per_x(xs, ys, value, dsa):
+    """
+    Separate the value of x in which y crosses a certain value, identifying it
+    with an specific peptide.
+
+    Parameters
+    ==========
+    x: numpy.array
+        x-data of the curve.
+    y: numpy.array
+        y-data of the curve.
+    val: float
+        threshold value.
+    dsa: DataSetAnalysis
+        object containing the analysis.
+
+    Returns
+    =======
+    (dict) The name of the peptide as key and the x-value as dict value.
+    """
+    i=0
+    sep_info = {}
+    for x, y in zip(xs, ys):
+        try:
+            x_cross = cross_val(x, y, value)
+            pep = dsa.outcomes[i].name
+            sep_info[pep] = x_cross
+        except IndexError:
+            print(f"{i} didn't even get the maximum energy, the maxener is ",
+                  max(y))
+        i += 1
+    return sep_info
+
+
+def reduce_data(xs, ys, defmin=-100, defmax=100):
+    """
+    Reduces the data to the range of maximum minimum xs (highest of the lowest)
+    and minumim maximum xs (lowest of the highest). Returns a new list of xs
+    and ys where all the minum/maximum xs are the same and the ys of the
+    minumum/maximum xs are found by interpolation. Also makes the
+    transformation new_y -= new_y[:, 0]
+
+    Parameters
+    ==========
+    xs: list of arrays
+        set of xs data.
+    ys: list of arrays
+        set of xs data.
+    defmin: float. default=0
+        first guest of the minimum.
+    defmax: float. default=100
+        first guest of the maximum.
+
+    Returns
+    =======
+    (tuple) list of new xs and new ys
+
+    Note
+    ----
+    if defmin/defmax is higher/lower than the real minimum/maximum, this code
+    would not recognize the proper values. Be sure that defmin/defmax is
+    lower/higher than the lowest/highest of xs.
+    """
+    minx = defmin
+    maxx = defmax
+
+    for i, x in enumerate(xs):
+        if x[0] > minx:
+            minx = x[0]
+        if x[-1] < maxx:
+            maxx = x[-1]
+
+    new_x = []
+    new_y = []
+    for i, x in enumerate(xs):
+        miny = cross_val(ys[i], x, minx)
+        maxy = cross_val(ys[i], x, maxx)
+        condition = np.logical_and(x > minx, x < maxx)
+        conca_x = np.append(x[condition], maxx)
+        conca_y = np.append(ys[i][condition] - miny, maxy - miny)
+        conca_x = np.insert(conca_x, 0, minx)
+        conca_y = np.insert(conca_y, 0, 0)
+        new_x.append(conca_x)
+        new_y.append(conca_y)
+    
+    return new_x, new_y
+
+
+def construct_neigh_dic(dsa, es):
+    """
+    Creates a dictionary with all the combination of two amino acids and stores
+    in each combitation, a list of energies of the peptides with the first
+    amino acid in the middle and the second in any side of the peptide.
+
+    Parameters
+    ==========
+    dsa: DataSetAnalysis
+        object that contains the information of the molecules in the dataset.
+    es: list of arrays
+        list of energies to be analyzed.
+    
+    Return
+    ======
+    (dict) keys: Amino combination, values: list of energies appearing in
+    peptides with those combinations.
+
+    Example
+    =======
+    # if energies per peptides are
+    peptides = {'ABC': 1.5, 'GBA': 2.3}
+    # neigh dictionary would be
+    combi_neigh = {'BC': [1.5, 2.3]}
+    """
+    combi = {}
+    for aa1 in np.unique(dsa.names.flatten()):
+        for aa2 in np.unique(dsa.names.flatten()):
+            combi[aa1+aa2] = []
+
+    for i, e in enumerate(es):
+        pep = dsa.outcomes[i].name
+        combi[pep[1] + pep[0]].append(e[-1])
+        combi[pep[1] + pep[2]].append(e[-1])
+    
+    return combi
+
+
+def separate_by_position(dsa, es, pos):
+    """
+    Stores the last values of "es" that correspond to an amino acid in a
+    specific position.
+
+    Parameters
+    ==========
+    dsa: DataSetAnalysis
+        object that contains the information of the molecules in the dataset.
+    es: list of arrays
+        list of energies to be analyzed.
+    pos: int
+        position to be extracted.
+
+    Return
+    ======
+    (dict) keys: amino acid in the asked position; values: list of energies to
+    be analyzed.
+    """
+    assert len(es) == len(dsa.outcomes)
+    
+    energies = {}
+    for aa in np.unique(dsa.names.flatten()):
+        energies[aa] = []
+
+    for i, e in enumerate(es):
+        pep = dsa.outcomes[i].name
+        energies[pep[pos]].append(e[-1])
+    return energies
+
+
+def mean_n_std(distri):
+    """
+    Extract the mean and standard deviation of a set of values associated to an
+    amino acid in distri.
+
+    Parameters
+    ==========
+    distri: dict
+        keys amino acid, values list of values to obtain mean and standard
+        deviation.
+
+    Return
+    ======
+    (tuple) dictionary of mean, dictionary of standard deviation. Both
+    dictionaries have the shape keys: amino acid; values: mean/std 
+    """
+    mean_peps = {}
+    std_peps = {}
+    for aa in distri.keys():
+        if len(distri[aa]) == 0: 
+            distri[aa] = None
+            mean_peps[aa] = None
+            std_peps[aa] = None
+        else: 
+            mean_peps[aa] = np.mean(distri[aa])
+            std_peps[aa] = np.std(distri[aa])
+    return mean_peps, std_peps
+
+
+def analysis_energy_dof(dsa, es):
+    """
+    Create a list of distributions per each one of the positions.
+
+    Parameters
+    ==========
+    dsa: DataSetAnalysis
+        object that contains the information of the molecules in the dataset.
+    es: list of arrays
+        list of energies to be analyzed.
+
+    Return
+    ======
+    (duple) list of distribution of energies, mean and std per position.
+    Namely, the first element of the first element of the output is the list of
+    energies of the amino acid at the first position.
+    """
+    ener_per_pos1 = separate_by_position(dsa, es, 0)
+    ener_per_pos2 = separate_by_position(dsa, es, 1)
+    ener_per_pos3 = separate_by_position(dsa, es, 2)
+    ener_per_pos = [ener_per_pos1,
+                    ener_per_pos2,
+                    ener_per_pos3]
+
+    mean_per_pos = []
+    stdr_per_pos = []
+    for e_pos in ener_per_pos:
+        mean, std = mean_n_std(e_pos)
+        mean_per_pos.append(mean)
+        stdr_per_pos.append(std)
+    
+    return ener_per_pos, mean_per_pos, stdr_per_pos
+
+
+def statistics(ener_per_pos, pos, aminos):
+    """
+    Compute the p-value and F-statistic between distributions of the amino
+    acids in the dataset for a given position.
+
+    Parameters
+    ==========
+    ener_per_pos: list
+        set of energy data per position, per amino acid.
+    pos: int
+        position to be analyzed.
+    aminos: list
+        list of amino acids in the data set.
+
+    Return
+    ======
+    (tuple) arrays in shape of sqared matrices containing pval and fstat
+    matrix.
+    """
+    pval_matrix = np.empty((len(aminos), len(aminos)))
+    fstat_matrix = np.empty((len(aminos), len(aminos)))
+    for i, aa1 in enumerate(aminos):
+        for j, aa2 in enumerate(aminos):
+            if (ener_per_pos[pos][aa2] is None) or \
+               (ener_per_pos[pos][aa1] is None) :
+                pval_matrix[i][j] = None
+                fstat_matrix[i][j] = None
+                continue
+            data1 = ener_per_pos[pos][aa1]
+            data2 = ener_per_pos[pos][aa2]
+            f_stat, p_value = f_oneway(data1, data2)
+            pval_matrix[i][j] = p_value
+            fstat_matrix[i][j] = f_stat
+
+    return pval_matrix, fstat_matrix
+
+# endregion
 
 
 def dof_classificator_all(dofs_indexes, atoms_per_aminoacids):
@@ -445,50 +760,16 @@ class DataSetAnalysis:
 
         return xs, es
 
-    # Deprected: Remove
-    def plot_le(self, a_names, aminos=3, ax: plt.Axes = None, sp=None,
-                lw=1, ms=1, **kwargs):
-        """
-        plots the
-        """
-        if 'ax_pref' in kwargs:
-            setter = kwargs['ax_pref']
-            del kwargs['ax_pref']
-        else:
-            setter = {}
-
-        if sp is None:
-            sp = StandardPlotter(**kwargs)
-        if ax is None:
-            ax = sp.ax[0]
-        sp.axis_setter(ax=ax,
-                        xlabel=f'Distance({", ".join(a_names)})[\u212B]',
-                        ylabel='Energy[Ha]',
-                        **setter)
-        ls = []
-        es = []
-        for an in self.analysis:
-            l, e = an.le_dof_amino(a_names, aminos)
-            ls.append(l)
-            es.append(e)
-            sp.plot_data(l, e, ax=ax, lw=lw, markersize=ms)
-        return ax, ls, es
-
-    def le_all(self, a_names, aminos):
-        self.ls = []
-        self.es = []
-        for an in self.analysis:
-            l, e = an.le_dof_amino(a_names, aminos)
-            self.ls.append(l)
-            self.es.append(e)
-
     def plot_DFT_ener(self, ax: plt.Axes = None, sp=None,
                       lw=1, ms=1, **kwargs):
         """
         plots the
         """
-        setter = kwargs['ax_pref']
-        del kwargs['ax_pref']
+        if 'ax_pref' in kwargs.keys():
+            setter = kwargs['ax_pref']
+            del kwargs['ax_pref']
+        else:
+            setter = {}
 
         if sp is None:
             sp = StandardPlotter(**kwargs)
@@ -513,7 +794,7 @@ class DataSetAnalysis:
             xs.append(x)
             ys.append(y)
 
-        return ax, xs, ys
+        return sp, xs, ys
 
     def amino_freq(self):
         self.names = []

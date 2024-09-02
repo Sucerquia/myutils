@@ -93,13 +93,7 @@ date
 echo " * Command:"
 echo "$0" "$@"
 
-# load modules
-if $cascade
-then
-  load_modules "$pep" "$method" "$breakages" "$size"
-fi
-
-# ---- BODY -------------------------------------------------------------------
+# ---- Set up -------------------------------------------------------------------
 # random peptide
 if [ ! "${#random}" -eq 0 ]
 then
@@ -119,6 +113,12 @@ if [ "${#pep}" -eq 0 ]
 then 
   fail "This code needs one peptide. Please, define it using the flag -p or
         -R. For more info, use \"myutils workflow -h\""
+fi
+
+# load modules
+if $cascade
+then
+  load_modules "$pep" "$method" "$breakages" "$size"
 fi
 
 ase -h &> /dev/null || fail "This code needs ASE"
