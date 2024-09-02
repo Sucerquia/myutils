@@ -847,8 +847,8 @@ class Space:
                 self.frame.spines[side].set_color('none')
 
     def show_frame(self,
-                   majordelta: float = None,
-                   minordelta: float = None,
+                   majordelta: float = 0.1,
+                   minordelta: float = 0.02,
                    color: Union[list, np.ndarray, tuple, str] = None,
                    layer: str = 'top') -> plt.Axes:
         """
@@ -857,9 +857,9 @@ class Space:
 
         Parameters
         ==========
-        majordelta: float. Default=None
+        majordelta: float. Default=0.1
             value to space the mayor ticks and add the numbers to the ruler.
-        minordelta: float. Default=None
+        minordelta: float. Default=0.02
             value to space the mayor ticks. these numbers are not added to the
             ruler.
         color: RGB array or matplotlib colors. Default=[1, 0, 0]
@@ -878,15 +878,11 @@ class Space:
         Each side of the frame is always going from zero to one
         """
         # == Default
-        if majordelta is None:
-            majorticks = []
-            minorticks = []
-        else:
-            majorticks = np.arange(0, 1.00001, majordelta)
-            minorticks = np.arange(0, 1.00001, minordelta)
-
         if color is None:
             color = [1, 0, 0]
+
+        majorticks = np.arange(0, 1.00001, majordelta)
+        minorticks = np.arange(0, 1.00001, minordelta)
 
         self.sp.axis_setter(ax=self.frame,
                             xticks=majorticks,
