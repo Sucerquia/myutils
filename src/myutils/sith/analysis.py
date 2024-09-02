@@ -431,50 +431,16 @@ class DataSetAnalysis:
 
         return xs, es
 
-    # Deprected: Remove
-    def plot_le(self, a_names, aminos=3, ax: plt.Axes = None, sp=None,
-                lw=1, ms=1, **kwargs):
-        """
-        plots the
-        """
-        if 'ax_pref' in kwargs:
-            setter = kwargs['ax_pref']
-            del kwargs['ax_pref']
-        else:
-            setter = {}
-
-        if sp is None:
-            sp = StandardPlotter(**kwargs)
-        if ax is None:
-            ax = sp.ax[0]
-        sp.axis_setter(ax=ax,
-                        xlabel=f'Distance({", ".join(a_names)})[\u212B]',
-                        ylabel='Energy[Ha]',
-                        **setter)
-        ls = []
-        es = []
-        for an in self.analysis:
-            l, e = an.le_dof_amino(a_names, aminos)
-            ls.append(l)
-            es.append(e)
-            sp.plot_data(l, e, ax=ax, lw=lw, markersize=ms)
-        return ax, ls, es
-
-    def le_all(self, a_names, aminos):
-        self.ls = []
-        self.es = []
-        for an in self.analysis:
-            l, e = an.le_dof_amino(a_names, aminos)
-            self.ls.append(l)
-            self.es.append(e)
-
     def plot_DFT_ener(self, ax: plt.Axes = None, sp=None,
                       lw=1, ms=1, **kwargs):
         """
         plots the
         """
-        setter = kwargs['ax_pref']
-        del kwargs['ax_pref']
+        if 'ax_pref' in kwargs.keys():
+            setter = kwargs['ax_pref']
+            del kwargs['ax_pref']
+        else:
+            setter = {}
 
         if sp is None:
             sp = StandardPlotter(**kwargs)
@@ -499,7 +465,7 @@ class DataSetAnalysis:
             xs.append(x)
             ys.append(y)
 
-        return ax, xs, ys
+        return sp, xs, ys
 
     def amino_freq(self):
         self.names = []
