@@ -29,8 +29,8 @@ class StandardPlotter:
             one will be created into the figure if given or in a new figure
             otherwise.
         fig: figure. Default=None
-            Figure to include to StandardPlotter. If not given, it will be the In case it is not given, a new
-            one will be created
+            Figure to include to StandardPlotter. In case it is not given, a
+            new one will be created
         figwidth: int. Default=8.57
             width of the figure in centimeters.
         figheight: int. Default=11.43
@@ -203,7 +203,7 @@ class StandardPlotter:
             dictio[parameter] = value
 
         return dictio
-    
+
     def change_general_pars(self, new_pars: dict = {}):
         """
         Changes the values of values of matplotlib.
@@ -311,13 +311,12 @@ class StandardPlotter:
 
         # ==== axis setup ====
         ax.tick_params(axis='both',
-        
                        which='major',
                        length=pref['l_ticks'],
                        width=pref['lw_spines'],
-                       labelsize=mpl.rcParams['font.size'] *
-                                 pref['ticks_scale'])
-    
+                       labelsize=mpl.rcParams['font.size']
+                       * pref['ticks_scale'])
+
         # == major ticks
         if pref['xticks'] is not None:
             ax.set_xticks(pref['xticks'], labels=pref['xticklabels'])
@@ -347,17 +346,19 @@ class StandardPlotter:
 
         # == axis labels
         ax.set_xlabel(pref['xlabel'],
-                      fontsize=mpl.rcParams['font.size'] * pref['labels_scale'],
+                      fontsize=mpl.rcParams['font.size']
+                      * pref['labels_scale'],
                       color=pref['color_labels'],
                       labelpad=pref['xpad'])
         ax.set_ylabel(pref['ylabel'],
-                      fontsize=mpl.rcParams['font.size'] * pref['labels_scale'],
+                      fontsize=mpl.rcParams['font.size']
+                      * pref['labels_scale'],
                       color=pref['color_labels'],
                       labelpad=pref['ypad'])
         # == scientific notation for numbers with more than 2 decimals
         if pref['sci_not']:
-            ax.yaxis.offsetText.set_fontsize(mpl.rcParams['font.size'] *
-                                             pref['ticks_scale'])
+            ax.yaxis.offsetText.set_fontsize(mpl.rcParams['font.size']
+                                             * pref['ticks_scale'])
             formatter = mticker.ScalarFormatter(useMathText=True)
             formatter.set_powerlimits((-2, 2))
             ax.yaxis.set_major_formatter(formatter)
@@ -596,7 +597,8 @@ class StandardPlotter:
         ax.patch.set_alpha(0)
         ax.tick_params(axis='y', colors=lax_color)
         ax.spines['left'].set_color(lax_color)
-        ax.set_ylabel(pref['ylabel'], fontsize=mpl.rcParams['font.size'] * pref['labels_scale'],
+        ax.set_ylabel(pref['ylabel'], fontsize=mpl.rcParams['font.size']
+                      * pref['labels_scale'],
                       color=lax_color, weight='bold',
                       labelpad=pref['ypad'])
 
@@ -668,70 +670,70 @@ class StandardPlotter:
     def draw_brace(self, xspan, yy, text, yspan=1, beta_factor=300, pad=0,
                    color=None, ax=0,
                    resolution_factor=100, **kwargs):
-            """
-            Draws an annotated horizontal brace on the axes.
+        """
+        Draws an annotated horizontal brace on the axes.
 
-            Parameters
-            ==========
-            xspan: array-like
-                lower and higher boundary of the brace.
-            yy: float
-                y-position of the base of the brace.
-            text: str.
-                text to annotate over the brace.
-            ax: plt.Axes, int
-                Axes to add the brace. Integer, the index to one of the sp.ax.
-            yspan: float. Default=1.
-                y height of the brace from the basis.
-            beta_factor: float. Default=300.
-                factor that regulates the curvature of the brace.
-            pad: float. Default=0
-                distance from the tip of the brace to the text.
-            color: mpl.color. Default=[0.3, 0.3, 0.3]
-                color of the annotation (brace and text).
-            resolution_factor: float. Default=100
-                scale to define the number of points to define the function of
-                the brace.
-            kwargs for plt.plot.
+        Parameters
+        ==========
+        xspan: array-like
+            lower and higher boundary of the brace.
+        yy: float
+            y-position of the base of the brace.
+        text: str.
+            text to annotate over the brace.
+        ax: plt.Axes, int
+            Axes to add the brace. Integer, the index to one of the sp.ax.
+        yspan: float. Default=1.
+            y height of the brace from the basis.
+        beta_factor: float. Default=300.
+            factor that regulates the curvature of the brace.
+        pad: float. Default=0
+            distance from the tip of the brace to the text.
+        color: mpl.color. Default=[0.3, 0.3, 0.3]
+            color of the annotation (brace and text).
+        resolution_factor: float. Default=100
+            scale to define the number of points to define the function of
+            the brace.
+        kwargs for plt.plot.
 
-            Return
-            ======
-            (numpy.Array) y points of the brace.
-            """
-            # TODO: add the option to be also a vertical line
-            if isinstance(ax, int):
-                ax = self.ax[ax]
+        Return
+        ======
+        (numpy.Array) y points of the brace.
+        """
+        # TODO: add the option to be also a vertical line
+        if isinstance(ax, int):
+            ax = self.ax[ax]
 
-            if color is None:
-                color = [0.3, 0.3, 0.3]
+        if color is None:
+            color = [0.3, 0.3, 0.3]
 
-            xmin, xmax = xspan
-            xspan = xmax - xmin
-            ax_xmin, ax_xmax = ax.get_xlim()
-            xax_span = ax_xmax - ax_xmin
+        xmin, xmax = xspan
+        xspan = xmax - xmin
+        ax_xmin, ax_xmax = ax.get_xlim()
+        xax_span = ax_xmax - ax_xmin
 
-            # intermedia points in the x axis
-            resolution = int(xspan / xax_span*resolution_factor) * 2 + 1
-            x = np.linspace(xmin, xmax, resolution)
+        # intermedia points in the x axis
+        resolution = int(xspan / xax_span * resolution_factor) * 2 + 1
+        x = np.linspace(xmin, xmax, resolution)
 
-            # curvature of the brackets: the higher this is, the smaller the
-            # radius
-            beta = beta_factor/xax_span
-            x_half = x[:int(resolution / 2) + 1]
-            y_half_brace = (1 / (1. + np.exp( -beta * (x_half - x_half[0])))
-                            + 1 / (1. + np.exp(-beta * (x_half - x_half[-1]))))
-            y = np.concatenate((y_half_brace, y_half_brace[-2::-1]))
-            y = y * yspan
+        # curvature of the brackets: the higher this is, the smaller the
+        # radius
+        beta = beta_factor / xax_span
+        x_half = x[:int(resolution / 2) + 1]
+        y_half_brace = (1 / (1. + np.exp(-beta * (x_half - x_half[0])))
+                        + 1 / (1. + np.exp(-beta * (x_half - x_half[-1]))))
+        y = np.concatenate((y_half_brace, y_half_brace[-2::-1]))
+        y = y * yspan
 
-            # move the bottom of the brackets to zero and then fix it in yy
-            y = y - min(y)
-            y += yy
+        # move the bottom of the brackets to zero and then fix it in yy
+        y = y - min(y)
+        y += yy
 
-            ax.plot(x, y, color=color, **kwargs)
-            ax.text((xmax+xmin)/2., max(y) + pad, text, ha='center',
-                    va='bottom', color=color)
-            return y
-    
+        ax.plot(x, y, color=color, **kwargs)
+        ax.text((xmax + xmin) / 2., max(y) + pad, text, ha='center',
+                va='bottom', color=color)
+        return y
+
     def arrow(self, xy, dxdy, text, color=None, pad=0, ax=0, hw=1, hl=1):
         """
         Draws an annotated arrow on the axes.
@@ -757,7 +759,7 @@ class StandardPlotter:
             head lenght.
         """
         if isinstance(ax, int):
-                ax = self.ax[ax]
+            ax = self.ax[ax]
 
         if color is None:
             color = [0.3, 0.3, 0.3]
@@ -771,13 +773,12 @@ class StandardPlotter:
                 va='bottom', ha='center',
                 color=color)
 
-
     def show(self):
         """
         Shows the Figure.
         """
         return plt.show()
-    
+
     def save(self, name):
         """
         Save figure with proper resolution.
@@ -1026,9 +1027,9 @@ class Space:
             n_rows, n_cols = rows_cols
         else:
             n_rows, n_cols = rows_cols
-            assert len(axes) == n_rows * n_cols, f"axes has {len(axes)} axes " +\
-                f"and rows x cols is {n_rows * n_cols}"
-            
+            assert len(axes) == n_rows * n_cols, \
+                   f"axes has {len(axes)} axes " + \
+                   f"and rows x cols is {n_rows * n_cols}"
 
         l_horiz = self._measure_size(n_cols, hspace, right - left)
         l_verti = self._measure_size(n_rows, vspace, top - bottom)

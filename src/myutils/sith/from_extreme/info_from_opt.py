@@ -36,8 +36,8 @@ def info_from_opt(logfile, pdb_reference, pattern):
     atoms = read(logfile, index=':')
 
     # read energies
-    energies = output_terminal("grep 'SCF Done:' " + logfile +
-                               " | awk '{print $5}'",
+    energies = output_terminal("grep 'SCF Done:' " + logfile
+                               + " | awk '{print $5}'",
                                print_output=False)
     energies = np.array(energies.split('\n')[:-1], dtype=float)
 
@@ -53,12 +53,12 @@ def info_from_opt(logfile, pdb_reference, pattern):
         ind3 = ps.amino_info[2]['CB'] - 1
     elif ps.amino_name[4] != 'GLY':
         ind3 = ps.amino_info[4]['CB'] - 1
-    else: # In case of 3 Glycine
+    else:  # In case of 3 Glycine
         ind3 = ps.amino_info[3]['CA'] - 1
 
     # remove configurations that goes up in energy. keep those that goes
     # down only. assuming local optimization
-    i=0
+    i = 0
     while True:
         de = energies[1:] - energies[:-1]
         toremove = np.where(de > 0)[0]
@@ -67,12 +67,12 @@ def info_from_opt(logfile, pdb_reference, pattern):
 
         for index in toremove[::-1]:
             atoms.pop(index + 1)
-        energies = np.delete(energies, toremove+1)
+        energies = np.delete(energies, toremove + 1)
         i += 1
 
     # align all the structures in the same plane. This guarantee that
     # the average of two structures is the intermedia structure between them
-    all_atoms  = [Alignment.align_with_components(conf) for conf in atoms]
+    all_atoms = [Alignment.align_with_components(conf) for conf in atoms]
     for conf in all_atoms:
         ms = MoleculeSetter(conf)
         ms.xy_alignment(ind1, ind2, ind3)
@@ -82,6 +82,7 @@ def info_from_opt(logfile, pdb_reference, pattern):
         write('{}{:03d}.xyz'.format(pattern, i), atoms)
 
     return all_atoms
+
 
 # add2executable
 def reduce_structs(dir, pattern):
@@ -104,7 +105,7 @@ def reduce_structs(dir, pattern):
         dofs = np.loadtxt(file, delimiter='=',
                           comments='      Variables:', usecols=1)
         all_dofs.append(dofs)
-    all_dofs = np.array(all_dofs) # [str][dof]
+    all_dofs = np.array(all_dofs)  # [str][dof]
 
     # jump to furthest repeated structure and save the new order in new_set
     new_set = []  # it will contain the indices of the selected indexes
@@ -115,7 +116,7 @@ def reduce_structs(dir, pattern):
         # rescale distances and angles to have them in the same order of
         # magnitude. I could also evaluate the approximation for distances and
         # then for angles and use logicaland.
-        # TODO replace this by continuous angles()
+        # TODO: replace this by continuous angles()
         condition = d_ij[:, nrs:] < -180
         while condition.any():
             d_ij[:, nrs:][condition] += 360
@@ -124,7 +125,7 @@ def reduce_structs(dir, pattern):
         while condition.any():
             d_ij[:, nrs:][condition] -= 360
             condition = d_ij[:, nrs:] > 180
-        d_ij[:, nrs:] *= 1e-3 # trans 1 degree
+        d_ij[:, nrs:] *= 1e-3  # trans 1 degree
         d_ij = abs(d_ij)
         close = np.isclose(d_ij, 0, atol=1e-3)
         by_struc = np.all(close, axis=1)

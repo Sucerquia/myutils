@@ -199,4 +199,3 @@ def function_doc(module, *args):
         method = getattr(method, func)
 
     return method.__doc__
-

@@ -231,7 +231,7 @@ class PepSetter(MoleculeSetter):
         """
         if traj is None:
             traj = [self.atoms]
-        
+
         angles_traj = []
         for structure in traj:
             angles = []
@@ -264,4 +264,3 @@ class PepSetter(MoleculeSetter):
                     angles.append([phi * 180 / np.pi, psi * 180 / np.pi])
             angles_traj.append(angles)
         return np.array(angles_traj)
-

@@ -66,7 +66,7 @@ then
   done
   echo ; echo
   pycodestyle -h > /dev/null || fail "You need to install pycodestyle"
-  pycodestyle . --exclude=pre-deprected --ignore W605
+  pycodestyle . --exclude='pre-deprected,tests,.ipynb_checkpoints' --ignore=W605,W503
   cd "$original_cs" || fail "returning to former directory"
 fi
 

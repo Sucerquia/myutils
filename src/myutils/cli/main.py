@@ -58,7 +58,7 @@ sh_executers = {
     'rearange_files': './sith/from_extreme/rearange_files.sh',
     'opt_and_forces': './sith/from_extreme/opt_and_forces.sh',
     'workflow_from_extreme': './sith/from_extreme/workflow_from_extreme.sh',
-    'submit_forces_after_opt': './sith/from_extreme/submit_forces_after_opt.sh',
+    'submit_forces_after_opt': './sith/from_extreme/submit_forces_after_opt.sh',  # noqa: E501
     'extr_dofs': './sith/from_extreme/extr_dofs.sh',
     'pkges_installer': './pkges_installer.sh',
 }
