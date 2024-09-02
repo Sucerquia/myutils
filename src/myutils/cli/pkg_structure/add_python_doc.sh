@@ -114,7 +114,7 @@ do
       # The output of the next function is stored in final_<func>_doc.txt
       myutils python_doc_fixer -f "$func" -m "$module" || \
         fail "creating new documentation"
-      wait_until_next_file_exist final_$class-$func.txt
+      wait_until_next_file_exist final_-$func.txt
       # search n lines of the beginning of the function, the end of the
       # heading of the function and the beginning of the documentation
       n_func=$( grep -n "def $func" $fil | cut -d ":" -f 1 )
