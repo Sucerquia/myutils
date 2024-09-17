@@ -27,7 +27,7 @@ done
 
 source "$(myutils basics -path)" Extract_DOFs
 # ---- BODY -------------------------------------------------------------------
-# Next is to reduce, optimize and then try to find intermedias.
+# Reduce, optimize and then try to find intermedias.
 for xyzfile in *"${xyzs}"*.xyz
 do
   tail -n +3 $xyzfile > tmp.xyz
@@ -47,7 +47,7 @@ do
   fi
 
   # save dofs
-  end=$(grep  -n "^ D" ${xyzfile%.xyz}-forces.com | tail -n 1)
+  end=$(grep -n "^ D" ${xyzfile%.xyz}-forces.com | tail -n 1)
   end=${end%:*}
   head -n $end ${xyzfile%.xyz}-forces.com | \
     tail -n +$n > ${xyzfile%.xyz}-dofs.dat

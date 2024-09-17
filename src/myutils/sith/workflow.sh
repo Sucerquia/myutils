@@ -172,12 +172,9 @@ myutils classical_energies
 # compute forces
 verbose "submitting comptutation of forces.";
 
-# compute forces
-verbose "submitting comptutation of forces.";
-
 sbatch -J ${pep}_forces "$( myutils find_forces -path )" -c  -p $pep &&
   echo "computation of forces submitted"
 
-sbatch -J ${pep}_WAR $(myutils workflow_from_extreme -path) -c -l 3 -p "."
+sbatch -J ${pep}_WAR $(myutils workflow_from_extreme -path) -c -p "."
 
 finish "$pep finished"

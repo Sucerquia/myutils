@@ -30,6 +30,7 @@ done
 
 source $(myutils basics -path) "after_opt"
 # ---- BODY -------------------------------------------------------------------
+
 # ==== Reduce number of structures with reduced changes of DOFs
 verbose "Create continuous structutes path."
 echo "Removes high energy "
@@ -42,20 +43,25 @@ myutils extr_dofs -f ${name}-forces > /dev/null || \
 # reduce irrelevant changes, store the new subset in subset
 myutils reduce_structs "." ${name}-forces > /dev/null || \
   fail "reducing structures"
+
+# ==== Create com g09 files
+# Create com file template
 myutils forces_from_xyzs -d . -n ${name}-forces000 -p ${name}-stretched00.pdb \
   > /dev/null|| fail "creating com files using forces_from_xyz"
-# clean files: only leaves the 
+# clean files: only leaves the template
 mv ${name}-forces000.com template.com
 sed -i "s/opt(modredun,calcfc) //g" template.com
 echo "" >> template.com
 rm *forces*
+
+# import xyz files of the subset
 mv subset/* .
 rm -r subset
 
 # Create .com files
 verbose "Create com files."
 str_index=0
-for file in ${name}-forces-*.dat
+for file in ${name}-forces*.dat
 do
   struct_name=${file%.dat}
   echo $struct_name
@@ -75,5 +81,6 @@ done
 rm tmp_001.out
 rm template.com
 rm *.dat
+rm *.pdb
 
 finish
