@@ -394,6 +394,7 @@ def dof_classificator_one(dofs_indexes, atoms_per_aminoacids):
     return list_aminos
 
 
+# Deprecated
 def length_energy(sith, aminos_info, atom_types):
     """
     Return distances between two atom types in one amino acid and the
@@ -437,6 +438,7 @@ def length_energy(sith, aminos_info, atom_types):
     return [values_dof, energies]
 
 
+# Deprecated
 def le_same_aminoacids(sith, peptides_info, atom_types, kind_amino):
     """
     Return distances between two atom types in the same type of amino acid and
@@ -528,7 +530,7 @@ class SithAnalysis:
         ======
         (int) index
         """
-        for i, dof in enumerate(self.sith.structures[0].dim_indices):
+        for i, dof in enumerate(self.sith.dim_indices):
             dof_wo_0 = dof[np.nonzero(dof)[0]]
             target_wo_0 = target[np.nonzero(target)[0]]
 
@@ -556,10 +558,6 @@ def set_hes_from_ref(geo_ref, sith_tar, structure):
 
     Return
     ======
-    # TODO: add return information
-
-    Returns
-    =======
     (SITH.SITH) returns the sith_tar with the hessian in the defined structure.
 
     Note: All the SITH.SITH.structures are Geometry objects with all the

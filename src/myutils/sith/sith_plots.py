@@ -286,7 +286,8 @@ def plot_matrix3(matrix, labels, cbar_label):
 
 class SithPlotter(PepSetter, SithAnalysis):
     """
-    Object that plots the main graphs to analyze sith outcomes"""
+    Object that plots the main graphs to analyze sith outcomes.
+    """
     def __init__(self, sith: SITH, pdb_template: str):
         """
         Parameters

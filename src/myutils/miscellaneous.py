@@ -135,9 +135,9 @@ def optimized_e(file):
     ======
     (float) Potential energy in eV units.
     """
-    out = output_terminal('grep "E(RBMK) =" ' + file)
+    out = output_terminal('grep "E(RBMK) =" ' + file, print_output=False)
     energy = float(out.split()[-5])
-    return energy * 27.21  # energy in eV
+    return energy * 27.2114  # energy in eV
 
 
 # add2executable
