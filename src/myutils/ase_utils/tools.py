@@ -1,6 +1,7 @@
 from myutils.ase_utils.molecules import MoleculeSetter
 from ase.geometry.analysis import Analysis
 from ase.io import read, write
+import glob
 import numpy as np
 import glob
 
@@ -268,3 +269,68 @@ def distance(file, index1, index2):
     d = atoms.get_distance(index1, index2)
 
     return d
+
+
+# add2executable
+def F_max_stretch(ds, pep, fd='frozen_dofs.dat'):
+    '''
+    Compute the force in the end atoms of the configuration of
+    maximum stretching.
+
+    Parameters
+    ==========
+    ds: str
+        path to the directory containing the peptide.
+    pep: str
+        name of the peptide on one letter amino acid code.
+    fd: str. Default=frozen_dofs.dat
+        name of the file containing the constrained atoms in the first
+        line.
+    
+    Return
+    ======
+    (float) Force applied at the extremes of the peptide for the
+    maximum stretched configuration.
+    '''
+
+    fd = ds + pep + '/' + fd
+    with open(fd, 'r') as files:
+        lines = files.read()
+        dof = int(lines.split()[0])
+
+    # find the last stretched conf
+    all_files = glob.glob(ds + pep + '/' + pep  + '*.log')
+    all_files.sort()
+    last_conf = all_files[-1]
+    atoms = read(last_conf)
+    force_mag = np.linalg.norm(atoms.get_forces()[dof - 1])
+
+    return force_mag * 960 # KJmol-1/nm
+    # return force_mag / (6.242E8)
+
+
+def F_stretch(logfile, index):
+    '''
+    Extracts the magnitud of the force applied to an atoms of the configuration
+    of maximum stretching.
+
+    Parameters
+    ==========
+    logfile:
+        file containing the optmimization or force calculation info.
+    index:
+        index of the atom that you want to extract the force. 1-based (like
+        gaussian).
+    
+    Return
+    ======
+    (float) Force applied at the selected atom.
+    '''
+    dof = index
+    conf = logfile
+    
+    atoms = read(conf)
+    force_mag = np.linalg.norm(atoms.get_forces()[dof - 1])
+
+    return force_mag * 960 # KJmol-1/nm
+    # return force_mag / (6.242E8)
