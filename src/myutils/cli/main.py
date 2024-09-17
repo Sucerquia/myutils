@@ -12,6 +12,8 @@ pymodules = {
     'diff_bonds': 'myutils.ase_utils.tools',
     'extract_bonds': 'myutils.ase_utils.tools',
     'change_distance': 'myutils.ase_utils.tools',
+    'create_amber_data': 'myutils.gromacs.ff_parameters',
+    'create_grappa_data': 'myutils.gromacs.ff_parameters',
     'methods_in_class': 'myutils.cli.pkg_structure.documentation_tools',
     'protonate': 'myutils.sith.protonate',
     'proline_state': 'myutils.sith.sith_tools',
