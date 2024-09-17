@@ -43,18 +43,16 @@ def info_from_opt(logfile, pdb_reference, pattern):
 
     # read amino acids info, recognize extreme indexes
     ps = PepSetter(pdb_reference)
-    ind1 = ps.amino_info[1]['CH3'] - 1
-    ind2 = ps.amino_info[5]['CH3'] - 1
+    res = list(ps.amino_info.keys())
+    middle = len(res) // 2 + 1
+    ind1 = ps.amino_info[res[0]]['CH3'] - 1
+    ind2 = ps.amino_info[res[-1]]['CH3'] - 1
 
     # choose third atom for orientation.
-    if ps.amino_name[3] != 'GLY':  # Glycine does not have CB
+    if ps.amino_name[middle] != 'GLY':  # Glycine does not have CB
         ind3 = ps.amino_info[3]['CB'] - 1
-    elif ps.amino_name[2] != 'GLY':
-        ind3 = ps.amino_info[2]['CB'] - 1
-    elif ps.amino_name[4] != 'GLY':
-        ind3 = ps.amino_info[4]['CB'] - 1
     else:  # In case of 3 Glycine
-        ind3 = ps.amino_info[3]['CA'] - 1
+        ind3 = ps.amino_info[middle]['CA'] - 1
 
     # remove configurations that goes up in energy. keep those that goes
     # down only. assuming local optimization
@@ -158,7 +156,7 @@ def reduce_structs(dir, pattern):
     # copy relevant files to a directory called subset
     output_terminal("if [ ! -d subset ]; then mkdir subset; fi")
     for i, struct in enumerate(subdofs):
-        with open('./subset/{}-{:03d}.dat'.format(pattern,
+        with open('./subset/{}{:03d}.dat'.format(pattern,
                                                   i), "w") as i_struct_file:
             for j, dof in enumerate(struct):
                 i_struct_file.write(f'{dofs_ref[j]}={dof}\n')
