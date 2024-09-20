@@ -9,7 +9,7 @@ if [ ${#2} == 0 ]
 then
   eval "BASICVERBOSE_${basic_functions_name[0]}=false"
 else
-  eval "BASICVERBOSE_${basic_functions_name[0]}=$2"
+  eval "BASICVERBOSE_${basic_functions_name[0]}=true"
 fi
 
 # ------ functions ------------------------------------------------------------
