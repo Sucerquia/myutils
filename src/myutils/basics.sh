@@ -144,8 +144,8 @@ load_modules() {
     source /hits/basement/mbm/sucerquia/sw/g09/load_g09.sh
     conda activate myutils
     module purge
-    module use /hits/sw/its/doserbd/haswell/modules/all/GROMACS
-    module load 2020.3-fosscuda-2019b
+    module use /hits/sw/its/doserbd/haswell/modules/all/
+    module load GROMACS/2023.1-foss-2022a
     if [[ "$(hostname)" == *"haswell"* ]]
     then
       module load slurm/20.11.7-1.hits
