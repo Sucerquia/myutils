@@ -33,14 +33,14 @@ source $(myutils basics -path) "after_opt"
 
 # ==== Reduce number of structures with reduced changes of DOFs
 verbose "Create continuous structutes path."
-echo "Removes high energy "
+echo "Removes high energy"
 # The output are the xyz files without peak energies, output name-forces<n>.xyz
 myutils info_from_opt $logfile ${name}-stretched00.pdb ${name}-forces > \
   /dev/null || fail "extracting xyz files from log file"
-# Extract the dofs from the created xyzs. out; name-forces-dofs.dat
+# Extract the dofs from the created xyzs. out; <name>-forces-dofs.dat
 myutils extr_dofs -f ${name}-forces > /dev/null || \
   fail "extracting dofs from xyzs"
-# reduce irrelevant changes, store the new subset in subset
+# reduce irrelevant changes, store the new subset in a dir called subset
 myutils reduce_structs "." ${name}-forces > /dev/null || \
   fail "reducing structures"
 
