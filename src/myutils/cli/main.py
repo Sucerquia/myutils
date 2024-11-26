@@ -31,10 +31,14 @@ sh_executers = {
     'single_g09': './bash_scripts/single_g09.sh',
     'bash-template': './bash_scripts/bash-template.sh',
     'find_blocks': './bash_scripts/find_blocks.sh',
+    'constraint_run': './gromacs/constraint_run.sh',
     'classical_minimization': './gromacs/classical_minimization.sh',
+    'pulling_with_ff': './gromacs/pulling_with_ff.sh',
+    'equilibrate_pdb': './gromacs/equilibrate_pdb.sh',
     'classical_energies': './gromacs/classical_energies.sh',
     'analysis': './gromacs/analysis.sh',
     'pulling': './gromacs/pulling.sh',
+    'extract_distance': './gromacs/extract_distance.sh',
     'peptide_pulling': './gromacs/peptide_pulling.sh',
     'generate_main': './cli/generate_main.sh',
     'bash_style': './cli/pkg_structure/bash_style.sh',
@@ -68,7 +72,11 @@ sh_executers = {
 
 other_files = {
     'pulling_temp': './gromacs/pulling_temp.mdp',
+    'nvt': './gromacs/nvt.mdp',
     'minim': './gromacs/minim.mdp',
+    'ions': './gromacs/ions.mdp',
+    'npt': './gromacs/npt.mdp',
+    'constraint': './gromacs/constraint.mdp',
 }
 
 

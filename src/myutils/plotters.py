@@ -159,7 +159,7 @@ class StandardPlotter:
         color_spines: RGB array or matplotlib colors. Default=[0.1, 0.1, 0.1]
             Color of spines.
         l_ticks: float. Default=2
-            Lenght of ticks.
+            Length of ticks.
 
         Returns
         =======
@@ -484,7 +484,7 @@ class StandardPlotter:
                 else:
                     assert np.array(y).shape[-1] == len(x), "if you give a " +\
                         "set of list in y and only one list in x, all the " +\
-                        "sublist in y has to have the same lenght than x"
+                        "sublist in y has to have the same length than x"
                     x = [x for _ in y]
             # In case of one list of data in x and one list of data in y
             else:
@@ -593,6 +593,7 @@ class StandardPlotter:
         self._change_dict(ax.preferences)
         pref = ax.preferences
 
+        # left axis
         ax.spines['right'].set_visible(False)
         ax.patch.set_alpha(0)
         ax.tick_params(axis='y', colors=lax_color)
@@ -602,11 +603,13 @@ class StandardPlotter:
                       color=lax_color, weight='bold',
                       labelpad=pref['ypad'])
 
+        # Right Axis
         ax2 = ax.twinx()
         ax = ax2
         ax.tick_params(axis='y', colors=rax_color)
-        kwargs['color_labels'] = rax_color
+        [ax.spines[side].set_visible(False) for side in ['top', 'left', 'bottom']]
         kwargs['color_spines'] = rax_color
+        kwargs['color_labels'] = rax_color
         self.axis_setter(ax, **kwargs)
         self.ax = np.append(self.ax, ax)
         return ax
@@ -756,7 +759,7 @@ class StandardPlotter:
         hw: float. Default=1
             head width.
         hl: float. Default=1
-            head lenght.
+            head length.
         """
         if isinstance(ax, int):
             ax = self.ax[ax]
@@ -1049,7 +1052,7 @@ class Space:
                       space_size: float = 0.03,
                       partial_size: float = 1):
         """
-        This method computes the lenght of each axis side such that they end up
+        This method computes the length of each axis side such that they end up
         separated by space_size.
 
         Parameters
@@ -1064,7 +1067,7 @@ class Space:
 
         Return
         ======
-        (float) lenght of the side of each plot.
+        (float) length of the side of each plot.
         """
         l_side = (partial_size - (n_elements - 1) * space_size) / n_elements
         assert l_side > 0, f"It is impossible to fit {n_elements} plots in " +\
