@@ -6,12 +6,12 @@ print_help() {
 echo "
 Check the structure of a package. All checkers run by default.
 
-    -d    src directory of the package. Defatul: \"\$myutils -path\"
-    -p    pep8 convention in all python scripts.
-    -s    ShellCheck in all bash scripts.
-    -t    check tests.
+  -d  src directory of the package. Defatul: \"\$myutils -path\"
+  -p  pep8 convention in all python scripts.
+  -s  ShellCheck in all bash scripts.
+  -t  check tests.
 
-    -h    prints this message.
+  -h  prints this message.
 "
 exit 0
 }
@@ -21,7 +21,6 @@ all="true"
 pep8="false"
 shellcheck="false"
 tests="false"
-
 check_dir="$(myutils path)"
 while getopts 'd:psth' flag; do
   case "${flag}" in
@@ -48,12 +47,12 @@ then
   # Ignore directories and files for tests checker
   ign_dirs='pycache,cli,examples,doc_scripts,pre-deprected,tutorials,tests'
   ign_fils='__init__.'
-  myutils check_tests -n myutils -d $ign_dirs -f $ign_fils
+  myutils check_tests -n myutils -d $ign_dirs -f $ign_fils -v
 fi
 
 if $pep8
 then
-  source "$(myutils basics -path)" PEP8
+  source "$(myutils basics -path)" PEP8 'true'
   original_cs=$(pwd)
   cd $check_dir || fail "package path does not exist"
   # take a look in finish to understand next two lines
@@ -67,12 +66,12 @@ then
   done
   echo ; echo
   pycodestyle -h > /dev/null || fail "You need to install pycodestyle"
-  pycodestyle . --exclude=pre-deprected --ignore W605
+  pycodestyle . --exclude='pre-deprected,tests,.ipynb_checkpoints' --ignore=W605,W503
   cd "$original_cs" || fail "returning to former directory"
 fi
 
 if $shellcheck
 then
   echo ; echo
-  myutils bash_style -d $check_dir
+  myutils bash_style -d $check_dir -v
 fi

@@ -5,9 +5,14 @@
 # ------ variables ------------------------------------------------------------
 array_bfnames=( "$1" "${array_bfnames[@]}" )
 basic_functions_name=${array_bfnames[0]}
+if [ ${#2} == 0 ]
+then
+  eval "BASICVERBOSE_${basic_functions_name[0]}=false"
+else
+  eval "BASICVERBOSE_${basic_functions_name[0]}=true"
+fi
 
 # ------ functions ------------------------------------------------------------
-
 # Function that adjustes the text to 80 characters
 adjust () {
   text="++++++++ ${basic_functions_name[0]}: $*"
@@ -23,22 +28,25 @@ adjust () {
 # prints some text adjusted to 80 characters per line, filling empty spaces
 # with +
 verbose () {
-  # shellcheck disable=SC2068
-  adjust "VERBOSE" $@ "$( date )"
+  if [[ "$(eval "echo \$BASICVERBOSE_${basic_functions_name[0]}")" == "true" ]]
+  then
+    # shellcheck disable=SC2068
+    adjust "VERBOSE" $@ "$( date )"
+  fi
 }
 
 warning () {
   # shellcheck disable=SC2068
-  adjust "WARNING" $@ "$( date )"
+  adjust "WARNING" $@ "$( date )" >&2
 }
 
 finish () {
   if [ "$#" -ne 0 ]
   then
     # shellcheck disable=SC2068
-    adjust $@
+    verbose $@ "$( date )"
   else
-    adjust finish
+    verbose finish "$( date )"
   fi
   echo
   array_bfnames=( "${array_bfnames[@]:1}" )
@@ -55,9 +63,9 @@ fail () {
   exit 1
 }
 
-# function that moves an existing file or directory to <basic_functions_name>-bck_n[.ext] where
-# n is the number of the backup and ext is automatically extracted from the
-# original file
+# function that moves an existing file or directory to 
+# <basic_functions_name>-bck_n[.ext] where n is the number of the backup and
+# ext is automatically extracted from the original file
 create_bck () {
   for to_bck in "$@"
   do
@@ -72,7 +80,7 @@ create_bck () {
         bck_i=$(printf "%03d" $(( 10#$bck_i + 1 )) )
       done
       warning "$to_bck directory already exist. This directory will be
-               backed up in $bck"
+        backed up in $bck"
       mv "$to_bck" "$bck"
     fi
 
@@ -89,13 +97,18 @@ create_bck () {
         bck_i=$(printf "%03d" $(( 10#$bck_i + 1 )) )
       done
       warning "$to_bck file already exist. This directory will be
-               backed up in $bck"
+        backed up in $bck"
       mv "$to_bck" "$bck"
     fi
   done
 }
 
 search_last_bck() {
+  name_file=$1
+  mapfile -t all_bcks < <( ls -1 "$1"-bck_???.* | sort )
+  last_woext=${all_bcks[-1]%.*}
+  # prints the number of the last config
+  echo ${last_woext:0-3}
   name_file=$1
   mapfile -t all_bcks < <( ls -1 "$1"-bck_???.* | sort )
   last_woext=${all_bcks[-1]%.*}
@@ -111,7 +124,8 @@ load_modules() {
   fi
   echo " * This JOB will be run in the Node:"
   echo "$SLURM_JOB_NODELIST"
-  cd "$SLURM_SUBMIT_DIR" || fail "moving to execution directory: $SLURM_SUBMIT_DIR"
+  cd "$SLURM_SUBMIT_DIR" || \
+    fail "moving to execution directory: $SLURM_SUBMIT_DIR"
 
   if [[ "$(whoami)" == "hits_"* ]]
   then
@@ -125,8 +139,8 @@ load_modules() {
     source /hits/basement/mbm/sucerquia/sw/g09/load_g09.sh
     conda activate myutils
     module purge
-    module use /hits/sw/its/doserbd/haswell/modules/all/GROMACS
-    module load 2020.3-fosscuda-2019b
+    module use /hits/sw/its/doserbd/haswell/modules/all/
+    module load GROMACS/2023.1-foss-2022a
     if [[ "$(hostname)" == *"haswell"* ]]
     then
       module load slurm/20.11.7-1.hits
@@ -134,4 +148,11 @@ load_modules() {
   fi
 }
 
-adjust "STARTS"
+wait_until_next_file_exist() {
+  while ! ls | grep -q $1
+  do
+    continue
+  done
+}  
+
+verbose "STARTS"

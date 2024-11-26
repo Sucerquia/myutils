@@ -9,7 +9,8 @@ information in fchk g09 format.
 
   -d  <path>. directory where forces_files.log are located. Default ./forces
 
-  -h  prints this message.
+  -v  verbose.
+  -h   prints this message.
 "
 exit 0
 }
@@ -55,19 +56,21 @@ write_int_vector(){
 # General variables
 forces_directory="./forces"
 
-while getopts 'd:h' flag;
+verbose='false'
+while getopts 'd:vh' flag;
 do
   case "${flag}" in
     d) forces_directory=${OPTARG} ;;
 
+    v)  verbose='true' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
 done
 
-source "$(myutils basics -path)" EXTR_FORCES
-# ---- BODY -------------------------------------------------------------------
+source "$(myutils basics -path)" EXTR_FORCES $verbose
 
+# ---- BODY -------------------------------------------------------------------
 verbose "Extracting forces starts"
 
 # store original location
@@ -102,7 +105,7 @@ do
   
   # region AtomicNumbers_n_coords
   number=$( grep -n "Center     Atomic      Atomic" "$file" \
-      | tail -n 1 | cut -d ":" -f 1 )
+    | tail -n 1 | cut -d ":" -f 1 )
   awk -v num=$(( number + 3 )) 'NR >= num { print $0 }' "$file" > tmp1.txt
 
   # find the end of the block of the internal forces
@@ -111,7 +114,8 @@ do
 
   # store atomic numbers in an array
   mapfile -t atomic_nums < <(awk '{ print $2 }' tmp2.txt)
-  mapfile -t coords < <(awk '{ printf "%f \n %f \n %f \n", $4, $5, $6 }' tmp2.txt)
+  mapfile -t coords < \
+    <(awk '{ printf "%f \n %f \n %f \n", $4, $5, $6 }' tmp2.txt)
 
   # write atomic numbers in the file
   line=$(printf "%-43s" "Atomic numbers")
@@ -156,7 +160,8 @@ do
   # find the begining of the block of the internal forces
   awk '{if( $3 ){ printf "%d\n%d\n0\n0\n", $3, $1 }}' tmp2.txt > tmp1.txt
   awk '{if( $6 ){ printf "%d\n%d\n%d\n0\n", $6, $3, $1 }}' tmp2.txt >> tmp1.txt
-  awk '{if( $9 ){ printf "%d\n%d\n%d\n%d\n", $9, $6, $3, $1 }}' tmp2.txt >> tmp1.txt
+  awk '{if( $9 ){ printf "%d\n%d\n%d\n%d\n", $9, $6, $3, $1 }}' tmp2.txt \
+    >> tmp1.txt
 
   mapfile -t indexes < tmp1.txt
 
@@ -196,7 +201,7 @@ do
 
   # region energy
   ener=$(grep "SCF Done:" $file | \
-      tail -n 1 | awk '{print $5}')
+         tail -n 1 | awk '{print $5}')
   line=$(printf "%-43s" "Total Energy")
   line+="R"
   line+=$(printf "%27s" "$ener")

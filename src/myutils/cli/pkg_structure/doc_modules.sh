@@ -1,21 +1,21 @@
 #!/bin/bash
 
-
 # ----- definition of functions -----------------------------------------------
 print_help() {
 echo "
 Code that explores the files in the package and automatically create the
 documentation of all classes and functions that finds in it.
 
-   -d   <dir1,dir2...> directories to be ignored. Default: 'pycache,tests,cli'
-   -f   <fil1,fil2...> files to be ignored. Default: '__init__'
-   -p   <absolute_path> path directory to be checked (no relative path).
-        Default: \"\$myutils path\"
-   -m   <mod_doc_path> path to the directory that stores the modules
-        documentation. Default: <mod_path>/../../doc/modules
-   -n   <name> pakage name. Default: myutils 
+  -d  <dir1,dir2...> directories to be ignored. Default: 'pycache,tests,cli'
+  -f  <fil1,fil2...> files to be ignored. Default: '__init__'
+  -p  <absolute_path> path directory to be checked (no relative path).
+      Default: \"\$myutils path\"
+  -m  <mod_doc_path> path to the directory that stores the modules
+      documentation. Default: <mod_path>/../../doc/modules
+  -n  <name> pakage name. Default: myutils
 
-   -h   prints this message.
+  -v  verbose.
+  -h  prints this message.
 "
 exit 0
 }
@@ -23,7 +23,7 @@ exit 0
 source "$(myutils basics -path)" BasicModDoc
 # ---- BODY -------------------------------------------------------------------
 # ==== General variables ======================================================
-mod_path=$(myutils path)   # path to the dir with the files to be documented
+mod_path=""   # path to the dir with the files to be documented
 # directories to be ignored during documentation.
 raw_ign_dirs='pycache,tests,cli,ipynb_checkpoints'
 # files to be ignored during the documentation.
@@ -31,25 +31,34 @@ raw_ign_fils='__init__.'
 pkg_name="myutils"
 
 # ==== Costumer set up ========================================================
-directory="$(myutils path)"
-while getopts 'd:f:m:n:p:h' flag;
+directory=""
+verbose='false'
+while getopts 'd:f:m:n:p:vh' flag;
 do
-    case "${flag}" in
-      d) raw_ign_dirs=${OPTARG} ;;
-      f) raw_ign_fils=${OPTARG} ;;
-      m) mod_doc=${OPTARG};;
-      n) pkg_name=${OPTARG};;
-      p) mod_path=${OPTARG};;
+  case "${flag}" in
+    d) raw_ign_dirs=${OPTARG} ;;
+    f) raw_ign_fils=${OPTARG} ;;
+    m) mod_doc=${OPTARG};;
+    n) pkg_name=${OPTARG};;
+    p) mod_path=${OPTARG};;
+    v) verbose='true' ;;
 
-      h) print_help ;;
-      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
-    esac
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
 done
+
+source "$(myutils basics -path)" BasicModDoc $verbose
+
+if [ "$mod_path" == "" ]
+then
+  mod_path=$(myutils path)
+fi
 
 if [ ${#mod_doc} -eq 0 ];
 then
-    # path to module directory
-    mod_doc="$mod_path/../../doc/modules"
+  # path to module directory
+  mod_doc="$mod_path/../../doc/modules"
 fi
 
 [[ "${mod_doc:0:2}" == "./" ]] || mod_doc="./"$mod_doc
@@ -111,11 +120,11 @@ mapfile -t local_dirs < <( find . -type d )
 
 for dir in "${local_dirs[@]}"
 do
-    if [[ ! -d "$mod_path/$dir" ]]
-    then
-        warning "$dir is refered as a module in the documentation, but it does
-            not exist in the package."
-    fi
+  if [[ ! -d "$mod_path/$dir" ]]
+  then
+    warning "$dir is refered as a module in the documentation, but it does
+      not exist in the package."
+  fi
 done
 
 # ==== Files ==================================================================
@@ -126,7 +135,7 @@ cd $mod_path || fail "$mod_path not found"
 
 for ign_fil in "${ignore_files[@]}"
 do
-    bool_ign="$bool_ign -name '*$ign_fil*' -o"
+  bool_ign="$bool_ign -name '*$ign_fil*' -o"
 done
 
 mapfile -t pck_fils < <(eval "find . -type f -not \(" "${bool_ign::-2}" \
@@ -135,11 +144,11 @@ cd "$mod_doc" || fail "$mod_doc not found"
 # create rst files
 for fil in "${pck_fils[@]}"
 do
-    # Python files
-    ext=$(echo "$fil" | cut -d '.' -f3 )
-    if [ "$ext" == 'py' ]
-    then
-        myutils doc_pythonfile -f "$fil" -d "$mod_path" -p "$mod_doc" -n "$pkg_name"
-    fi
-    # TODO: here must be the commands for other kind of files.
+  # Python files
+  ext=$(echo "$fil" | cut -d '.' -f3 )
+  if [ "$ext" == 'py' ]
+  then
+    myutils doc_pythonfile -f "$fil" -d "$mod_path" -p "$mod_doc" -n "$pkg_name"
+  fi
+  # TODO: here must be the commands for other kind of files.
 done

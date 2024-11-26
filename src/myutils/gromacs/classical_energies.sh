@@ -8,8 +8,9 @@ executing directory.
 
   -l  log file of the gromacs outputs. Default /dev/null
   -n  use this flag to NOT transform all xyz files into pdbs. In this case is
-      assumed that the pdbs already exist.
+        assumed that the pdbs already exist.
 
+  -v  verbose.
   -h  prints this message.
 "
 exit 0
@@ -21,22 +22,23 @@ exit 0
 counter=0
 all_xyz2pdb='true'
 output='/dev/null'
-while getopts 'l:nh' flag; do
+verbose='false'
+while getopts 'l:nvh' flag; do
   case "${flag}" in
     l) output=${OPTARG} ;;
     n) all_xyz2pdb='false' ;;
 
+    v) verbose='true' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
 done
-
-source "$(myutils basics -path)" CLASSICAL_E
+source "$(myutils basics -path)" CLASSICAL_E $verbose
 # ----- set up finishes -------------------------------------------------------
 
 # ---- BODY -------------------------------------------------------------------
 verbose "The classical energies of configurations in the next pdb files are
-         going to be computed:"
+  going to be computed:"
 if $all_xyz2pdb
 then
   myutils all_xyz2pdb ./*-stretched00.pdb || fail "error creating pdbs"
@@ -50,7 +52,8 @@ do
     > "$output" 2>&1 || fail "error creating gro file"
   gmx editconf -f minim.gro \
                -o minim_box.gro \
-               -c -d 5.0 -bt cubic > "$output" 2>&1 || fail "error creating box"
+               -c -d 5.0 -bt cubic > "$output" 2>&1 || \
+    fail "error creating box"
   mv minim_box.gro minim.gro || fail "error changing name"
 
   gmx grompp -f "$( myutils minim )" \
@@ -61,8 +64,8 @@ do
 
   gmx mdrun -v -deffnm em > "$output" 2>&1 || fail "error running em"
 
-  echo -e "10 1 2 3 0\n" | gmx energy -f em.edr -o mini.xvg \
-    > "$output" 2>&1|| fail "error computing energy"
+  echo -e "10 1 2 3 0\n" | gmx energy -f em.edr -o mini.xvg > "$output" 2>&1 \
+    || fail "error computing energy"
 
   grep -v "@" mini.xvg | grep -v "#"| head -n 1 | \
     awk -v counter=$counter 'BEGIN{OFS="\t"}

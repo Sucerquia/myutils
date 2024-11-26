@@ -11,6 +11,7 @@ first argument.
       input (replaces the pdb of the input).
   -l  log file of the gromacs outputs. Default /dev/null
 
+  -v  verbose.
   -h  prints this message.
 "
 exit 0
@@ -18,26 +19,28 @@ exit 0
 
 # ---- set up -----------------------------------------------------------------
 output='/dev/null'
-while getopts 'f:o:l:h' flag; do
+verbose='false'
+while getopts 'f:o:l:vh' flag; do
   case "${flag}" in
     f) pdbfile_min=${OPTARG} ;;
     o) output_file=${OPTARG} ;;
     l) output=${OPTARG} ;;
 
+    v) verbose='true' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
 done
 
-source "$(myutils basics -path)" CLASSICAL_MIN
+source "$(myutils basics -path)" CLASSICAL_MIN $verbose
 
 if [ ${#output_file} -eq 0 ]
 then
   output_file=$pdbfile_min
 fi
 
-[ ${#pdbfile_min} -eq 0 ] && fail "You have to give at least one pdb file with the
-  structure you want to optimize. Please check
+[ ${#pdbfile_min} -eq 0 ] && fail "You have to give at least one pdb file with
+  the structure you want to optimize. Please check
   'myutils classical_minimization -h'"
 
 # ---- BODY -------------------------------------------------------------------

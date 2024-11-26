@@ -385,7 +385,8 @@ class Alignment:
     @staticmethod
     def align_with_components(atoms):
         """
-        Aligns the coordinates x, y, z axis with the main vectors (in that order).
+        Aligns the coordinates x, y, z axis with the main vectors (in that
+        order).
 
         Parameters
         ==========
@@ -407,7 +408,7 @@ class Alignment:
         # transform based on dummy atoms
         ms.xy_alignment(-4, -3, -2)
 
-        #remove dummy atoms
+        # remove dummy atoms
         ms.atoms = ms.atoms[:-4]
 
         return ms.atoms
@@ -434,8 +435,8 @@ class PCAMatcher:
         correspondence = -np.ones(n_atoms, dtype=int)
 
         for i in range(n_atoms):
-            distances = np.linalg.norm(self.reference.positions[i] -
-                                       self.to_compare.positions,
+            distances = np.linalg.norm(self.reference.positions[i]
+                                       - self.to_compare.positions,
                                        axis=1)
             i_min = np.where(distances == min(distances))[0][0]
 
@@ -443,8 +444,8 @@ class PCAMatcher:
                 correspondence[i] = int(i_min)
 
         if -1 in correspondence:
-            print('Warning: check repetitions because the next atoms of the reference did'
-                ' not get a correspondent in the test:',
-                np.where(correspondence == -1)[0])
+            print('Warning: check repetitions because the next atoms of the '
+                  'reference did not get a correspondent in the test:',
+                  np.where(correspondence == -1)[0])
 
         return correspondence

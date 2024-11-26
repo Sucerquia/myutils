@@ -14,6 +14,7 @@ Consider the next options:
   -o  pepgen flags
   -p  peptide.
 
+  -v  verbose.
   -h  prints this message.
 "
 exit 0
@@ -27,8 +28,9 @@ read_forces="200"
 analysis="-d -L"
 steps="10000"
 pep_options="-silent"
+verbose='false'
 
-while getopts 'a:f:g:op:s:h' flag; do
+while getopts 'a:f:g:op:s:vh' flag; do
   case "${flag}" in
     a) analysis=${OPTARG} ;;
     f) read_forces=${OPTARG} ;;
@@ -37,12 +39,13 @@ while getopts 'a:f:g:op:s:h' flag; do
     p) pep=${OPTARG} ;;
     s) steps=${OPTARG} ;;
 
+    v) verbose='true' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
 done
 
-source "$(myutils basics -path)" PEP_PULL
+source "$(myutils basics -path)" PEP_PULL $verbose
 
 IFS=',' read -ra forces <<< "$read_forces"
 # check dependencies
@@ -54,7 +57,7 @@ $gmx -h &> /dev/null || fail "This code needs gromacs ($gmx failed)"
 # create peptide
 verbose "Creation and equilibration of $pep starts"
 echo -e "\n $pep $gmx"
-pepgen "$pep" equilibrate -gmx "$gmx" "$pep_options" -e ||
+pepgen "$pep" equilibrate -gmx "$gmx" $pep_options -e --overwrite ||
   fail "Creating peptide $pep"
 
 # pulling
@@ -78,8 +81,8 @@ do
   mkdir "force$forcename" && \
     mv md_0_* "force$forcename" && \
     mv ./*.ndx "force$forcename" && \
-    mv ./*.mdp "force$forcename" || fail "Moving gromacs files to the
-      ditectory force$forcename"
+    mv ./*.mdp "force$forcename" || \
+    fail "Moving gromacs files to the ditectory force$forcename"
 
   verbose "Analysis of $pep and $force starts"
   ( cd "force$forcename" && \

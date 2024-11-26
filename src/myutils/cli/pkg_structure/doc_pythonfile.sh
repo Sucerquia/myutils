@@ -58,8 +58,8 @@ fi
 refinrst=$(grep "${file:2}" "$mod_doc/modules.rst")
 if [ "${#refinrst}" -eq 0 ]
 then
-    sed -i "/toctree/a \ \ \ \ ${file:2}" "$mod_doc/modules.rst"
-    echo "${file:2} was added to $mod_doc/modules.rst"
+  sed -i "/toctree/a \ \ \ \ ${file:2}" "$mod_doc/modules.rst"
+  echo "${file:2} was added to $mod_doc/modules.rst"
 fi
 
 # ==== classes ================================================================
@@ -68,29 +68,29 @@ ref_mod="$pkg_name${path:1}"
 mapfile -t classes < <(grep "^class " "$pkg_path/$file.py" | awk '{print $2}')
 for class in "${classes[@]}"
 do
-    tmp="${class%:*}"
-    to_add="${tmp%\(*}"
-    line=".. autoclass:: $ref_mod.$to_add"
-    # if it does not exist in the documentation file, then it is added.
-    lineinrst=$(grep "$line" "$mod_doc/$file.rst")
-    if [ ${#lineinrst} -eq 0 ]
-    then
-        echo -e "$line\n    :members:" >> "$mod_doc/$file.rst"
-        echo "$line added to $mod_doc/$file.rst"
-    fi
+  tmp="${class%:*}"
+  to_add="${tmp%\(*}"
+  line=".. autoclass:: $ref_mod.$to_add"
+  # if it does not exist in the documentation file, then it is added.
+  lineinrst=$(grep "$line" "$mod_doc/$file.rst")
+  if [ ${#lineinrst} -eq 0 ]
+  then
+    echo -e "$line\n    :members:" >> "$mod_doc/$file.rst"
+    echo "$line added to $mod_doc/$file.rst"
+  fi
 done
 
 # ==== functions ==============================================================
 mapfile -t functions < <(grep "^def " "$pkg_path/$file.py" | awk '{print $2}')
 for funct in "${functions[@]}"
 do
-    tmp=${funct%:*}
-    to_add=${tmp%\(*}
-    line=".. autofunction:: $ref_mod.$to_add"
-    lineinrst=$(grep "$line" "$file.rst")
-    if [ ${#lineinrst} -eq 0 ]
-    then
-        echo -e "$line\n" >> "$mod_doc/$file.rst"
-        echo "$line added to $mod_doc/$file.rst"
-    fi
+  tmp=${funct%:*}
+  to_add=${tmp%\(*}
+  line=".. autofunction:: $ref_mod.$to_add"
+  lineinrst=$(grep "$line" "$file.rst")
+  if [ ${#lineinrst} -eq 0 ]
+  then
+    echo -e "$line\n" >> "$mod_doc/$file.rst"
+    echo "$line added to $mod_doc/$file.rst"
+  fi
 done

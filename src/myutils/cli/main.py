@@ -5,18 +5,21 @@ import sys
 
 
 pymodules = {
+    'F_max_stretch': 'myutils.ase_utils.tools',
     'distance': 'myutils.ase_utils.tools',
     'all_xyz2pdb': 'myutils.ase_utils.tools',
     'conf2pdb': 'myutils.ase_utils.tools',
     'diff_bonds': 'myutils.ase_utils.tools',
     'extract_bonds': 'myutils.ase_utils.tools',
     'change_distance': 'myutils.ase_utils.tools',
+    'create_amber_data': 'myutils.gromacs.ff_parameters',
+    'create_grappa_data': 'myutils.gromacs.ff_parameters',
+    'methods_in_class': 'myutils.cli.pkg_structure.documentation_tools',
     'protonate': 'myutils.sith.protonate',
     'proline_state': 'myutils.sith.sith_tools',
     'gen_randpep': 'myutils.sith.sith_tools',
     'log2xyz': 'myutils.sith.g09_xyz',
     'reduce_structs': 'myutils.sith.from_extreme.info_from_opt',
-    'reduce_structs_pre': 'myutils.sith.from_extreme.info_from_opt',
     'info_from_opt': 'myutils.sith.from_extreme.info_from_opt',
     'function_doc': 'myutils.miscellaneous',
     'args_and_defaults': 'myutils.miscellaneous',
@@ -25,22 +28,27 @@ pymodules = {
 }
 
 sh_executers = {
-    'single_optimization': './bash_scripts/single_optimization.sh',
+    'single_g09': './bash_scripts/single_g09.sh',
     'bash-template': './bash_scripts/bash-template.sh',
     'find_blocks': './bash_scripts/find_blocks.sh',
+    'constraint_run': './gromacs/constraint_run.sh',
     'classical_minimization': './gromacs/classical_minimization.sh',
+    'pulling_with_ff': './gromacs/pulling_with_ff.sh',
+    'equilibrate_pdb': './gromacs/equilibrate_pdb.sh',
     'classical_energies': './gromacs/classical_energies.sh',
     'analysis': './gromacs/analysis.sh',
     'pulling': './gromacs/pulling.sh',
+    'extract_distance': './gromacs/extract_distance.sh',
     'peptide_pulling': './gromacs/peptide_pulling.sh',
     'generate_main': './cli/generate_main.sh',
-    'doc_pythonfile': './cli/pkg_structure/doc_pythonfile.sh',
-    'doc_modules': './cli/pkg_structure/doc_modules.sh',
-    'check_tests': './cli/pkg_structure/check_tests.sh',
-    'add_python_doc': './cli/pkg_structure/add_python_doc.sh',
-    'python_doc_fixer': './cli/pkg_structure/python_doc_fixer.sh',
     'bash_style': './cli/pkg_structure/bash_style.sh',
+    'python_doc_fixer': './cli/pkg_structure/python_doc_fixer.sh',
+    'doc_pythonfile': './cli/pkg_structure/doc_pythonfile.sh',
     'check_structure': './cli/pkg_structure/check_structure.sh',
+    'bash_basic_structure': './cli/pkg_structure/bash_basic_structure.sh',
+    'add_python_doc': './cli/pkg_structure/add_python_doc.sh',
+    'check_tests': './cli/pkg_structure/check_tests.sh',
+    'doc_modules': './cli/pkg_structure/doc_modules.sh',
     'extract_forces': './sith/extract_forces.sh',
     'proline_mod': './sith/proline_mod.sh',
     'workflow': './sith/workflow.sh',
@@ -54,6 +62,7 @@ sh_executers = {
     'submit_forces_after_opt': './sith/from_extreme/submit_forces_after_opt.sh',
     'resubmit_failed': './sith/from_extreme/resubmit_failed.sh',
     'extr_dofs': './sith/from_extreme/extr_dofs.sh',
+    'after_optimization': './sith/from_extreme/after_optimization.sh',
     'workflow_from_extreme': './sith/from_extreme/workflow_from_extreme.sh',
     'opt_and_forces': './sith/from_extreme/opt_and_forces.sh',
     'prepare_and_submit': './sith/from_extreme/prepare_and_submit.sh',
@@ -63,7 +72,11 @@ sh_executers = {
 
 other_files = {
     'pulling_temp': './gromacs/pulling_temp.mdp',
+    'nvt': './gromacs/nvt.mdp',
     'minim': './gromacs/minim.mdp',
+    'ions': './gromacs/ions.mdp',
+    'npt': './gromacs/npt.mdp',
+    'constraint': './gromacs/constraint.mdp',
 }
 
 

@@ -4,55 +4,68 @@ print_help() {
 echo "
 Code takes the documentation of a function and checks the documentation adding
 TODOs in the missing parts. The output is stored in a file called
-final_<method>-doc.txt
+final_<method>_doc.txt
 
-   -f   <method> Function to be checked
-   -m   <module> Module that contains the Function
-   -s   <n_spaces> number of leading spaces.
+  -f  <method> Function to be checked
+  -m  <module> Module that contains the Function
+  -s  <n_spaces> number of leading spaces.
 
-   -h   prints this message.
+  -v  verbose.
+  -h  prints this message.
 "
 exit 0
 }
 # ----- definition of functions finishes --------------------------------------
 
 # ==== Costumer set up ========================================================
-directory="$(myutils path)"
 spaces=0
-while getopts 'f:m:s:h' flag;
+class=""
+function=""
+verbose='false'
+while getopts 'c:f:m:s:vh' flag;
 do
   case "${flag}" in
+    c) class=${OPTARG} ;;
     f) function=${OPTARG} ;;
     m) module=${OPTARG} ;;
     s) num_spaces=${OPTARG} ;;
 
+    v) verbose='true' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
 done
 
-source "$(myutils basics -path)" PythonDocFixer
+source "$(myutils basics -path)" PythonDocFixer $verbose
 # ==== Body ===================================================================
 
 # ==== Initial Blocks =========================================================
-myutils function_doc $module $function | sed 's/^/#new_line/' > \
-  $function-doc.txt
-sed -i 's/[[:space:]]*$//g' $function-doc.txt
-
-# In case the documentation was written without leaving the first line empty
-first_line=$(head -n 1 $function-doc.txt)
-if [ "$first_line" != "#new_line" ]
+if [[ "$class" == "" ]] || [[ "$function" == "" ]]
 then
-  sed -i "1s/^/#new_line\n/" $function-doc.txt
+  leading_spaces=$(printf "%4s")
+else
+  leading_spaces=$(printf "%8s")
 fi
 
-mapfile -t ns_empty < <(cat $function-doc.txt | grep -n "#new_line$" | \
+myutils function_doc $module $class $function | sed 's/^/#new_line/' > \
+  $function.txt || fail "extracting old documentation"
+
+sed -i 's/[[:space:]]*$//g' $function.txt
+
+# In case the documentation was written without leaving the first line empty
+first_line=$(head -n 1 $function.txt)
+if [ "$first_line" != "#new_line" ]
+then
+  sed -i "1s/^/#new_line\n/" $function.txt
+fi
+
+mapfile -t ns_empty < <(cat $function.txt | grep -n "#new_line$" | \
                         cut -d ":" -f1)
 
 # ==== Existing blocks in old documentation
 for (( i=0 ; i < $(( ${#ns_empty[@]} - 1 )) ; i++ ))
 do
-  myutils find_blocks -f $function-doc.txt \
+  myutils find_blocks -f $function.txt \
                       -s ${ns_empty[$i]} \
                       -e ${ns_empty[$(( i + 1 ))]} \
                       -i -o documentation-blocks_$i || \
@@ -61,35 +74,42 @@ do
   # Note for developers: I had to add the next while because the creation of
   # the files was a bit delayed and that created errors trying to find those
   # files later.
-  while ! ls | grep -q documentation-blocks_$i.out
-  do
-    continue
-  done
+  wait_until_next_file_exist documentation-blocks_$i.out
 done
 
 # ==== Block of Parameters in old documentation
 # In case it does not exist, a new block is created
-par_block=$(grep -xl "#new_line    Parameters" documentation-blocks_*)
+par_block=$(grep -Exl "#new_line+[[:space:]]+Parameters" documentation-blocks_*)
 if [ ${#par_block} -eq 0 ]
 then
   cat << EOF > documentation-blocks_parameters.out
-#new_line    Parameters
-#new_line    ==========
+#new_lineParameters
+#new_line==========
 EOF
+  sed -i "s/#new_line/#new_line$leading_spaces/g" \
+    documentation-blocks_parameters.out
   par_block="documentation-blocks_parameters.out"
 fi
 
 # ==== Block of Return in old documentation
 # In case it does not exist, a new block is created
-return_block=$(grep -xl "#new_line    Return" documentation-blocks_*)
+return_block=$(grep -Exl "#new_line+[[:space:]]+Return" documentation-blocks_*)
 if [ ${#return_block} -eq 0 ]
 then
   cat << EOF > documentation-blocks_return.out
-#new_line    Return
-#new_line    ======
-#new_line    # TODO: add return information
+#new_lineReturn
+#new_line======
+#new_line# TODO: add return information
 EOF
+  sed -i "s/#new_line/#new_line$leading_spaces/g" \
+    documentation-blocks_return.out
   return_block="documentation-blocks_return.out"
+fi
+
+# In case of documentation of a class
+if [ "$function" == "" ]
+then
+  echo "" > $return_block
 fi
 
 # ==== Block of Definition in old documentation
@@ -98,7 +118,8 @@ if [[ "$par_block" == "documentation-blocks_0.out" ]] || \
    [[ "$return_block" == "documentation-blocks_0.out" ]] || \
    [ ! -f "documentation-blocks_0.out" ]
 then
-  echo "#new_line    # TODO: Add definition" > documentation-blocks_def.out
+  echo "#new_line$leading_spaces# TODO: Add definition" > \
+    documentation-blocks_def.out
   definition_block="documentation-blocks_def.out"
 else
   definition_block="documentation-blocks_0.out"
@@ -106,11 +127,12 @@ fi
 
 # === Check parameters ========================================================
 # parameters
-mapfile -t parameters < <(myutils args_and_defaults $module $function | \
-    grep -v "###" | grep -vx '' )
+mapfile -t parameters < <(myutils args_and_defaults $module $class \
+                          $function | grep -v "###" | grep -vx '' )
 
 # insert missed parameters
-if [ ${#parameters} -eq 0 ]
+if [ ${#parameters[@]} -eq 1 ] && [[ "${parameters[0]}" == "self:" ]] || \
+   [ ${#parameters} -eq 0 ]
 then
   # if the function does not have parameters, it creates an empty file
   rm $par_block
@@ -118,6 +140,10 @@ then
 else
   for par in "${parameters[@]}"
   do
+    if [[ "$par" == "self:" ]]
+    then
+      continue
+    fi
     par_name=$(echo $par | cut -d ":" -f 1) # name of the parameter
     par_defa=$(echo $par | cut -d ":" -f 2) # default of the parameter
     n_par=$(grep -n $par_name $par_block | \
@@ -125,8 +151,15 @@ else
     if [ ${#n_par} -eq 0 ]
     then
       # if the variable is not defined
-      echo "#new_line    $par # TODO: check default value" >> $par_block
-      echo "#new_line        # TODO: add documentation of this parameter" >> \
+      if [ ${#par_defa} -ne 0 ]
+      then
+        automatic_def_val="# TODO: check default value"
+      else
+        automatic_def_val=""
+      fi
+      echo "#new_line$leading_spaces$par $automatic_def_val" >> \
+        $par_block
+      echo "#new_line$leading_spaces    # TODO: add documentation of this parameter" >> \
         $par_block
     else
       # if the variable is defined. check if the default exists
@@ -139,51 +172,50 @@ else
       # check if the definition of the parameter exist
       if awk -v line=$(( n_par + 1 )) 'NR==line' $par_block | grep -q ":"
       then
-        sed -i "${n_par}a\#new_line        # TODO: add documentation of this parameter" $par_block
+        sed -i "${n_par}a\#new_line$leading_spaces    # TODO: add documentation of this parameter" $par_block
       fi
     fi
   done
 fi
 
 # === Create the final doc block ==============================================
-echo "#new_line    \"\"\"" > final_$function-doc.txt
-cat $definition_block >> final_$function-doc.txt
+echo "#new_line$leading_spaces\"\"\"" > final_$class-$function.txt
+cat $definition_block >> final_$class-$function.txt
 rm $definition_block
 
 n_lines_in_par_block=$(wc -l < $par_block)
 if  [ $n_lines_in_par_block -ne 0 ]
 then
-  echo "#new_line" >> final_$function-doc.txt
-  cat $par_block >> final_$function-doc.txt
+  echo "#new_line" >> final_$class-$function.txt
+  cat $par_block >> final_$class-$function.txt
   rm $par_block
 fi
 
-echo "#new_line" >> final_$function-doc.txt
-cat $return_block >> final_$function-doc.txt
+echo "#new_line" >> final_$class-$function.txt
+cat $return_block >> final_$class-$function.txt
 rm $return_block
 
 # rest of blocks
 for other_doc_block in documentation-blocks*.out
 do
-  echo "#new_line" >> final_$function-doc.txt
-  cat $other_doc_block >> final_$function-doc.txt
+  echo "#new_line" >> final_$class-$function.txt
+  cat $other_doc_block >> final_$class-$function.txt
   rm $other_doc_block
 done
-echo "#new_line    \"\"\"" >> final_$function-doc.txt
+echo "#new_line$leading_spaces\"\"\"" >> final_$class-$function.txt
 
 # ==== cleaning
-sed -i 's/#new_line//g' final_$function-doc.txt
-# Add spaces to the beginning of each line and save to a new file
-spaces=$(printf "%${num_spaces}s")
-sed -i 's/[[:space:]]*$//g' $function-doc.txt
-# Remove empty lines
-sed -i "s/^/${spaces}/" final_$function-doc.txt
+# Remove newline comments
+sed -i 's/#new_line//g' final_$class-$function.txt
+# Remove tailing spaces
+sed -i 's/[[:space:]]*$//g' $function.txt
 
-while [[ "$(tail -n 2 final_$function-doc.txt | head -n 1)" == "" ]]
+# Remove unnecessary empty space
+while [[ "$(tail -n 2 final_$class-$function.txt | head -n 1)" == "" ]]
 do
-  total_lines=$(wc -l < final_$function-doc.txt)
-  sed -i "$(( total_lines - 1 ))d" final_$function-doc.txt
+  total_lines=$(wc -l < final_$class-$function.txt)
+  sed -i "$(( total_lines - 1 ))d" final_$class-$function.txt
 done
-rm $function-doc.txt
+rm $function.txt
 
 finish

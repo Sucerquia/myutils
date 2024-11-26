@@ -13,22 +13,18 @@ def output_terminal(cmd, print_output=True, skip_error=False, print_cmd=False,
     ==========
     cmd: str
         bash command to be executed in the terminal.
-    print_output: bool (optional)
+    print_output: bool (optional). Default=True # TODO: check default value
         True for printing the output besides of returning it. Default False.
-    skip_error: bool (optional)
+    skip_error: bool (optional). Default=False # TODO: check default value
         True for continuing running although the command fails. Default False.
     **kwargs:
         additional options for subprocess.Popen
+    print_cmd: Default=False # TODO: check default value
+        # TODO: add documentation of this parameter
 
     Return
     ======
     (list) [#linesStr] output of the executed command, line by line.
-
-
-
-
-
-    
     """
     if print_cmd:
         print(cmd)
@@ -45,7 +41,7 @@ def output_terminal(cmd, print_output=True, skip_error=False, print_cmd=False,
         output = p.stdout.readline()
         if output:
             out += output
-            if print_output:
+            if print_output and len(output.strip()) != 0:
                 print(output.strip())
     return_code = p.wait()
 
@@ -61,6 +57,17 @@ def _time(keyword, logfile):
     """
     Used in myutils.miscellaneous.time_09. It extracts the time from a
     line of gaussian.
+
+    Parameters
+    ==========
+    keyword: # TODO: check default value
+        # TODO: add documentation of this parameter
+    logfile: # TODO: check default value
+        # TODO: add documentation of this parameter
+
+    Return
+    ======
+    # TODO: add return information
     """
     out = output_terminal("grep '" + keyword + "' " + logfile)
     out = out.split()
@@ -128,9 +135,9 @@ def optimized_e(file):
     ======
     (float) Potential energy in eV units.
     """
-    out = output_terminal('grep "E(RBMK) =" ' + file)
+    out = output_terminal('grep "E(RBMK) =" ' + file, print_output=False)
     energy = float(out.split()[-5])
-    return energy * 27.21  # energy in eV
+    return energy * 27.2114  # energy in eV
 
 
 # add2executable
@@ -142,28 +149,35 @@ def args_and_defaults(module, *args):
     ==========
     func:
         function that you want to extract the parameters and default values.
+    module: # TODO: check default value
+        # TODO: add documentation of this parameter
+    args: # TODO: check default value
+        # TODO: add documentation of this parameter
+
+    Return
+    ======
+    # TODO: add return information
     """
     module = import_module(module)
-    for func in args:
-        method = getattr(module, func)
 
-        signature = inspect.signature(method)
+    method = getattr(module, args[0])
+    for func in args[1:]:
+        method = getattr(method, func)
 
-        #print("@@@_Separation_of_function_starts@@@")
-        #print(func)
-        output = f"\n ### {func}\n"
-        for param_name, param in signature.parameters.items():
-            if param.default != inspect.Parameter.empty:
-                output += f"{param_name}: Default={param.default}\n"
-            else:
-                output += f"{param_name}:\n"
-        output += "\n"
-        #print("@@@_Separation_of_function_ends@@@")
+    signature = inspect.signature(method)
+
+    output = f"\n ### {args[-1]}\n"
+    for param_name, param in signature.parameters.items():
+        if param.default != inspect.Parameter.empty:
+            output += f"{param_name}: Default={param.default}\n"
+        else:
+            output += f"{param_name}:\n"
+    output += "\n"
     return output
 
 
 # add2executable
-def function_doc(module, func):
+def function_doc(module, *args):
     """
     Takes a function and prints its documentation.
 
@@ -171,7 +185,17 @@ def function_doc(module, func):
     ==========
     func:
         function that you want to extract the documentation.
+    module:
+        # TODO: add documentation of this parameter
+
+    Return
+    ======
+    # TODO: add return information
     """
     module = import_module(module)
-    method = getattr(module, func)
+
+    method = getattr(module, args[0])
+    for func in args[1:]:
+        method = getattr(method, func)
+
     return method.__doc__

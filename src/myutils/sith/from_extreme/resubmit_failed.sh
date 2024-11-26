@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source "$(myutils basics -path)" recover
+source "$(myutils basics -path)" recover 'true'
 original_path=$(pwd)
 
 files=$@
@@ -33,9 +33,9 @@ do
     echo $file
     mv ${just_name%.log}.xyz $file
     myutils change_distance \
-          $file ${file%.xyz}-opt \
-          "nofile" 0 0 "scale_distance" \
-          || fail "Preparating g09 input"
+      $file ${file%.xyz}-opt \
+      "nofile" 0 0 "scale_distance" \
+      || fail "Preparating g09 input"
     comfile=${file%.xyz}-opt.com
     echo $comfile
     sed -i '$d' $comfile
@@ -44,14 +44,17 @@ do
     sed -i "3a opt(modredun,calcfc)" "$comfile"
     if [[ "$(whoami)" == "hits_"* ]]
     then
-        single_part="--partition=single"
+      single_part="--partition=single"
     else
-        single_part=""
+      single_part=""
     fi
     sbatch --job-name="${file:0:6}_opt" $single_part \
             --output="${file:0:6}_opt.o" \
             --error="${file:0:6}_opt.e" \
-            $(myutils opt_and_forces -path) -f ${comfile%.com} -c || fail "submitting Job {file:0:6}"
+      $(myutils opt_and_forces -path) -f ${comfile%.com} -c || \
+      fail "submitting Job {file:0:6}"
     cd $original_path
   fi
 done
+
+finish

@@ -19,6 +19,7 @@ called forces.
       stretching-optimization process.
   -p  <pattern> pattern present in the chk files that will be used.
 
+  -v  verbose.
   -h  prints this message.
 
 Note: it replaces the substring 'stretched' by 'forces' in the name.
@@ -41,18 +42,20 @@ compute_forces () {
 cascade='false'
 directory='./'
 pattern=''
-while getopts 'd:cp:h' flag; do
+verbose='false'
+while getopts 'd:cp:vh' flag; do
   case "${flag}" in
     c) cascade='true' ;;
     d) directory=${OPTARG} ;;
     p) pattern=${OPTARG} ;;
 
+    v) verbose='true' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
 done
 
-source "$(myutils basics -path)" FIND_FORCES
+source "$(myutils basics -path)" FIND_FORCES $verbose
 
 verbose "JOB information"
 echo " * Date:"
@@ -62,7 +65,7 @@ echo "$0" "$@"
 
 if $cascade
 then
-    load_modules
+  load_modules
 fi
 
 # ---- set-up ends ------------------------------------------------------------

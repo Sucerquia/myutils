@@ -17,7 +17,8 @@ using BMK exchange-correlation.
       the peptide's directory.
   -s  <size[A]=0.2> of the step that increases the distances.
 
-    -h    prints this message.
+  -v  verbose
+  -h  prints this message.
 "
 exit 0
 }
@@ -32,21 +33,22 @@ n_processors=8
 restart='false'
 size=0.2
 retake='true'
-
-while getopts 'b:p:m:rs:h' flag; do
+verbose='false'
+while getopts 'b:p:m:rs:vh' flag; do
   case "${flag}" in
     b) breakages=${OPTARG} ;;
     p) pep=${OPTARG} ;;
     m) method=${OPTARG} ;;
     r) restart='true' ;;
     s) size=${OPTARG} ;;
-
+    
+    v) verbose='true' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
 done
 
-source "$(myutils basics -path)" STRETCHING
+source "$(myutils basics -path)" STRETCHING $verbose
 
 # starting information
 verbose "JOB information"
@@ -82,10 +84,10 @@ index2=$( grep NME "$pep-stretched00.pdb" | grep CH3 | awk '{print $2}' )
 [[ "$index1" -eq 1 && "$index2" -eq 1 ]] && fail "Not recognized indexes"
 if ! [[ -f 'frozen_dofs.dat' ]]
 then
-    echo "$index1 $index2 F" > frozen_dofs.dat
+  echo "$index1 $index2 F" > frozen_dofs.dat
 fi
 verbose "This code will stretch the atoms with the indexes $index1 $index2
-    (g09 convention)"
+  (g09 convention)"
 
 # ----- set up finishes -------------------------------------------------------
 
@@ -114,17 +116,18 @@ then
     myutils log2xyz "$pep-stretched${nameiplusone}.log" 2> /dev/null && \
     create_bck "$pep-stretched${nameiplusone}."* &&
     lastone=$( search_last_bck $pep-stretched${nameiplusone} ) &&
-      if [ $(( lastone )) -gt 2 ]; then fail "this optimization was" \
+    if [ $(( lastone )) -gt 2 ]; then fail "this optimization was" \
       "restarted more than 3 times and didn't converged."; fi &&
     echo "coping $pep-stretched${nameiplusone}-bck_$lastone.xyz" &&
     myutils change_distance "$pep-stretched${nameiplusone}-bck_$lastone.xyz" \
       "$pep-stretched${nameiplusone}" frozen_dofs.dat 0 0 \
       "$method" && \
-      retake='false' && \
-      warning "The stretching of peptide $pep will be restarted
-               from $(( i + 1 ))"
-    # if i+1 trial doesn't exist
-    $retake && \
+    retake='false' && \
+    warning "The stretching of peptide $pep will be restarted
+      from $(( i + 1 ))"
+
+  # if i+1 trial doesn't exist
+  $retake && \
       warning "The stretching of peptide $pep will be restarted from $i"
 else
   # in case of not restarting
@@ -134,7 +137,7 @@ fi
 
 # ----- stretching starts -----------------------------------------------------
 verbose "Stretching of $pep starts and will run until getting $breakages
-         ruptures"
+  ruptures"
 
 while [[ "$( wc -l < "frozen_dofs.dat" )" -le "$breakages" ]]
 do
@@ -173,23 +176,25 @@ do
 
   # run gaussian
   verbose "Running optmization of stretching ${nameiplusone}"
-  g09 "$pep-stretched${nameiplusone}.com" "$pep-stretched${nameiplusone}.log" || \
+  g09 "$pep-stretched${nameiplusone}.com" \
+      "$pep-stretched${nameiplusone}.log" || \
     { if [ "$(grep -c "Atoms too close." \
-           "$pep-stretched${nameiplusone}.log")" \
-           -eq 1 ]; then fail "Atoms too close for ${nameiplusone}" ; \
+            "$pep-stretched${nameiplusone}.log")" \
+            -eq 1 ]; then fail "Atoms too close for ${nameiplusone}" ; \
       fi ; }
+
   # check convergence from output
   output=$(grep -i optimized "$pep-stretched${nameiplusone}.log" | \
-    grep -c -i Non )
+           grep -c -i Non )
   if [ "$output" -ne 0 ]
   then
     # If the code enters here is because, in a first optimization, it
     # didn't converge so it has to run again to get the optimized 
     # structure. As a second chance to converge.
     verbose "Optimization did not converge with distance $(( i + 1 )) *
-             $size . Then, a new trial will start now"
+      $size . Then, a new trial will start now"
     myutils log2xyz "$pep-stretched${nameiplusone}.log" || fail "
-            Transforming log file to xyz in second trial of optimization"
+      Transforming log file to xyz in second trial of optimization"
     myutils change_distance \
             "$pep-stretched${nameiplusone}.xyz" \
             "$pep-stretched${nameiplustwo}" frozen_dofs.dat 0 0 \
@@ -199,7 +204,7 @@ do
     # then restart the optimization
     mv "$pep-stretched${nameiplustwo}.com" "$pep-stretched${nameiplusone}.com"
     sed -i "s/stretched${nameiplustwo}/stretched${nameiplusone}/g" \
-            "$pep-stretched${nameiplusone}.com"
+      "$pep-stretched${nameiplusone}.com"
     sed -i "1a %NProcShared=$n_processors" "$pep-stretched${nameiplusone}.com"
     sed -i "3a opt(modredun,calcfc)" "$pep-stretched${nameiplusone}.com"
     sed -i '$d' "$pep-stretched${nameiplusone}.com"
@@ -208,28 +213,27 @@ do
     # run optimization
     verbose "Re-running optimization"
     g09 "$pep-stretched${nameiplusone}.com" \
-    "$pep-stretched${nameiplusone}.log"
+        "$pep-stretched${nameiplusone}.log"
   fi
 
   # check the output again
   output=$(grep -i optimized "$pep-stretched${nameiplusone}.log" | \
            grep -c -i Non )
   [ "$output" -ne 0 ] && failed "Optimization when the stretched distance was
-                                 $(( i + 1 ))*0.2 didn't converge. No more
-                                 stretching will be applied"
+      $(( i + 1 ))*0.2 didn't converge. No more stretching will be applied"
 
   # Testing DOFs
   verbose "Testing dofs"
-  myutils log2xyz "$pep-stretched${nameiplusone}.log" || \
-    fail "Transforming log file to xyz"
-
+  myutils log2xyz "$pep-stretched${nameiplusone}.log" || fail "Transforming
+    log file to xyz"
+  
   if [ "$i" -eq -1 ]
   then
     extrad=".."
   else
     # Add extra values to frozen
     extrad=$( myutils diff_bonds "$pep-stretched${namei}.xyz" \
-                      "$pep-stretched${nameiplusone}.xyz" )
+              "$pep-stretched${nameiplusone}.xyz" )
   fi
 
   if [ ${#extrad} -ne 2 ]
@@ -244,9 +248,8 @@ do
     create_bck "$pep-stretched${nameiplusone}"
     cd .. || fail "moving to back directory"
     mv "$pep-stretched${nameiplusone}"* rupture/
-    continue
   else
-    verbose "Non-rupture detected in stretched ${nameiplusone}"
+     verbose "Non-rupture detected in stretched ${nameiplusone}"
   fi
 
   verbose "Stretched ${nameiplusone} finished"
