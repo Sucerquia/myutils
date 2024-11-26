@@ -85,8 +85,9 @@ def info_from_opt(pep):
             inbetween = []
             for n in range(1, n_intermedia + 1):
                 at = Atoms(conf.get_chemical_symbols(),
-                        positions = (1 - fraction * n) * new_set[-1].positions +
-                                    (fraction * n) * conf.positions)
+                           positions = (1 - fraction * n) *
+                                       new_set[-1].positions +
+                                       (fraction * n) * conf.positions)
                 inbetween.append(at)
             new_set.extend(inbetween)
         new_set.append(conf)
@@ -107,13 +108,30 @@ def reduce_structs_pre(dir):
     all_files = glob.glob(f"{dir}/*-dofs.dat")
     all_files.sort()
 
-    dofs_ref = np.loadtxt(all_files[0], delimiter='=', comments='      Variables:', usecols=0, dtype=str)
+    # Next variable is used later to guarantee same dofs and as DOFs definition
+    dofs_ref = np.loadtxt(all_files[0],
+                          delimiter='=',
+                          comments='      Variables:',
+                          usecols=0,
+                          dtype=str)
+
+    # Number of distances in the DOFs
     nrs = len([r for r in dofs_ref if r[1] == 'R'])
+
     all_dofs = []
     for file in all_files:
-        dofs = np.loadtxt(file, delimiter='=', comments='      Variables:', usecols=0, dtype=str)
-        assert (dofs == dofs_ref).all(), f"{file} has different dofs than {all_files[0]}"
-        dofs = np.loadtxt(file, delimiter='=', comments='      Variables:', usecols=1)
+        # check that number of each kind of dofs is the same
+        dofs = np.loadtxt(file,
+                          delimiter='=',
+                          comments='      Variables:',
+                          usecols=0,
+                          dtype=str)
+        assert (dofs == dofs_ref).all(), \
+            f"{file} has different dofs than {all_files[0]}"
+        dofs = np.loadtxt(file,
+                          delimiter='=',
+                          comments='      Variables:',
+                          usecols=1)
         all_dofs.append(dofs)
     all_dofs = np.array(all_dofs)
 
@@ -121,10 +139,10 @@ def reduce_structs_pre(dir):
     lowest_angl = 5
     i = 0
     j = 1
-
     d_ij = (all_dofs[j] - all_dofs[j + 1:])
     d_ij[:, :nrs] *= 10
 
+    # make angles berween -180 to 180
     condition = d_ij[:, nrs:] < -180
     while condition.any():
         d_ij[:, nrs:][condition] += 360
@@ -134,8 +152,8 @@ def reduce_structs_pre(dir):
         d_ij[:, nrs:][condition] -= 360
         condition = d_ij[:, nrs:] > 180
 
+    # reduces by 2 the order of the distances
     d_ij[:, nrs:] *= 1e-2
-
     maxis_d = np.amax(d_ij[:, :nrs], axis=1)
     maxis_a = np.amax(d_ij[:, nrs:], axis=1)
     with open("file.dat", "w") as f:
@@ -153,8 +171,9 @@ def reduce_structs_pre(dir):
             print(j, np.where(by_struc))
     """
     new_set = []
-    j=0
+
     # first jump to repeated structures
+    j = 0  # structures
     while j < len(all_files) - 1:
         new_set.append(j)
         d_ij = (all_dofs[j] - all_dofs[j + 1:])
@@ -201,8 +220,10 @@ def reduce_structs_pre(dir):
 
 # add2executable
 def reduce_structs(dir):
-    """Check all the *-dofs.dat files and remove those files that represent
-    irrelevant changes"""
+    """
+    Check all the *-dofs.dat files and remove those files that represent
+    irrelevant changes. It does not creates intermedias.
+    """
     # find dofs files
     all_files = glob.glob(f"{dir}/*-dofs.dat")
     all_files.sort()
