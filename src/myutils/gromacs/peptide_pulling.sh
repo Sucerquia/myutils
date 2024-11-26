@@ -57,7 +57,7 @@ $gmx -h &> /dev/null || fail "This code needs gromacs ($gmx failed)"
 # create peptide
 verbose "Creation and equilibration of $pep starts"
 echo -e "\n $pep $gmx"
-pepgen "$pep" equilibrate -gmx "$gmx" "$pep_options" -e ||
+pepgen "$pep" equilibrate -gmx "$gmx" $pep_options -e --overwrite ||
   fail "Creating peptide $pep"
 
 # pulling
