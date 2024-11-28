@@ -21,18 +21,27 @@ exit 0
 }
 
 insert_doc() {
-  doc_num_start=$1
-  file_doc=$2
-  func=$3
-  class=$4
+  local doc_num_start=$1
+  local file_doc=$2
+  local func=$3
+  local class=$4
+
   # Remove prev documentation first
   if awk -v numline=$doc_num_start 'NR==numline' \
        $file_doc | grep -q "\"\"\""
   then
-    doc_num_end=$(tail -n +$(( doc_num_start + 1 )) $file_doc | \
-                  grep -n "\"\"\"" | head -n 1 | cut -d ":" -f 1)
-    doc_num_end=$(( doc_num_end + doc_num_start ))
-    sed -i "${doc_num_start},${doc_num_end}d" $file_doc
+    fst_l_doc=$(sed -n "${doc_num_start}{p;q}" $file_doc)
+    wo_starting=${fst_l_doc#*\"\"\"}
+    wo_clossing=${wo_starting%\"\"\"}
+    if [ ${#wo_starting} -eq ${#wo_clossing} ]
+    then
+      doc_num_end=$(tail -n +$(( doc_num_start + 1 )) $file_doc | \
+                    grep -n "\"\"\"" | head -n 1 | cut -d ":" -f 1)
+      doc_num_end=$(( doc_num_end + doc_num_start ))
+      sed -i "${doc_num_start},${doc_num_end}d" $file_doc
+    else
+      sed -i "${doc_num_start}d" $file_doc
+    fi
   fi
 
   # insert new documentation
@@ -43,13 +52,12 @@ insert_doc() {
 
 # ---- BODY -------------------------------------------------------------------
 # ==== General variables ======================================================
-mod_path=""   # path to the dir with the files to be documented
 # directories to be ignored during documentation.
 raw_ign_dirs='pycache,tests,ipynb_checkpoints,tutorials,pre-deprected'
 # files to be ignored during the documentation.
 raw_ign_fils='__init__.'
 pkg_name="myutils"
-
+mod_path=$(myutils path)
 # ==== Costumer set up ========================================================
 verbose='false'
 while getopts 'd:f:m:n:p:vh' flag;
@@ -67,11 +75,6 @@ do
 done
 
 source "$(myutils basics -path)" AddPythonDoc $verbose
-
-if [ "$mod_path" == "" ]
-then
-  mod_path=$(myutils path)
-fi
 
 mapfile -t ignore_dirs < <(echo "$raw_ign_dirs" | tr ',' '\n')
 # files to be ignore during the check.
@@ -102,7 +105,7 @@ do
   # Python files
   if [ "$ext" == 'py' ]
   then
-    module=$(echo "myutils"${fil//\.\//\.} | sed "s/\//\./g" | sed "s/\.py//g")
+    module=$(echo "$pkg_name"${fil//\.\//\.} | sed "s/\//\./g" | sed "s/\.py//g")
     # Functions
     mapfile -t functions < <(grep "^def " "$fil" | awk '{print $2}' | \
                              cut -d "(" -f 1)
@@ -181,9 +184,18 @@ do
                       cut -d ":" -f 1)
         if [ ${#rel_n_meth} -eq 0 ]
         then
-          rel_n_meth=$( grep -En "def $method+[[:space:]]" ${class}_complete.out | \
-                      cut -d ":" -f 1)
+          rel_n_meth=$( grep -En "def $method+[[:space:]]" \
+                        ${class}_complete.out | cut -d ":" -f 1)
         fi
+        
+        # If the function is not defined at all in this file (if the method is
+        # inheritated)
+        if [ ${#rel_n_meth} -eq 0 ]
+        then
+          rm final_$class-$method.txt
+          continue
+        fi
+
         rel_n_meth_end=$( tail -n +$rel_n_meth ${class}_complete.out \
                           | grep -n ")" | head -n 1 | \
                           cut -d ':' -f 1)
@@ -201,5 +213,3 @@ do
 done
 
 finish
-
-

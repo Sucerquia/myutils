@@ -8,11 +8,14 @@ carbon atoms of the NME and ACE caps. Consider the next options:
 
   -f  forces to stretch the peptide in [kJ mol^-1 nm^-1].
   -g  gromacs binary. For example gmx or gmx_mpi. Default gmx.
-  -l  log file of the gromacs outputs. Default /dev/null
-  -s  steps in the MD pulling.
+  -l  log file of the gromacs outputs. Set it as /dev/tty to print the gromacs
+      output on the terminal. Default /dev/null
+  -s  steps in the MD pulling. Default: 10000
 
   -v  verbose.
   -h  prints this message.
+
+Note that the file equilibration must exist.
 "
 exit 0
 }
@@ -22,17 +25,16 @@ exit 0
 # General variables
 output='/dev/null'
 gmx="gmx"
-steps="10000"
-verbose='false'
-
-while getopts 'f:g:l:s:vh' flag; do
+steps="100000"
+verbose=''
+while getopts 'f:g:Gl:s:vh' flag; do
   case "${flag}" in
     f) force=${OPTARG} ;;
     g) gmx=${OPTARG} ;;
     l) output=${OPTARG} ;;
     s) steps=${OPTARG} ;;
 
-    v) verbose='true' ;;
+    v) verbose='-v' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
@@ -52,7 +54,7 @@ $gmx -h &> /dev/null || fail "This code needs gromacs ($gmx failed)"
 verbose "Creates index file of force $force"
 
 echo -e "r ACE & a CH3 \n r NME & a CH3 \n \"ACE_&_CH3\" | \"NME_&_CH3\" \n q\n " \
-  | $gmx make_ndx -f ./equilibrate/npt.gro > "$output" 2>&1 || \
+  | $gmx make_ndx -f ./equilibrate/npt.gro > $output 2>&1 || \
   fail "Creation of index file the pulling for force $force"
 
 sed -i "s/ACE_&_CH3_NME_&_CH3/distance/g" index.ndx && \
@@ -62,7 +64,7 @@ sed -i "s/ACE_&_CH3_NME_&_CH3/distance/g" index.ndx && \
     pulling.mdp"
 
 verbose "Creates MD executable of force $force"
-forcename=$(printf "%04d" "$force")
+forcename=$(printf "%04d" "${force%.*}")
 
 $gmx grompp -f pulling.mdp \
             -c ./equilibrate/npt.gro \

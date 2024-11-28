@@ -7,6 +7,14 @@ from ase.io import write
 
 
 class Protonize:
+    """
+    Protonize charged amino acids to make them more stable in QM.
+
+    Parameters
+    ==========
+    pdb: str.
+        pdb file of the peptide.
+    """
     def __init__(self, pdb):
         self.pepset = PepSetter(pdb)
         self.atoms = self.pepset.atoms
@@ -28,6 +36,13 @@ class Protonize:
 
     # Negative
     def asp(self):
+        """
+        In case ASP
+
+        Return
+        ======
+        (ase.Atoms) atoms to be added.
+        """
         for aa_index in self.matched_aa['ASP']:
             od1 = self.pepset.amino_info[aa_index]['OD1'] - 1
             cg = self.pepset.amino_info[aa_index]['CG'] - 1
@@ -41,6 +56,13 @@ class Protonize:
         return self.atoms2add
 
     def glu(self):
+        """
+        In case of GLU
+
+        Return
+        ======
+        (ase.Atoms) atoms to be added.
+        """
         for aa_index in self.matched_aa['GLU']:
             od1 = self.pepset.amino_info[aa_index]['OE1'] - 1
             cg = self.pepset.amino_info[aa_index]['CD'] - 1
@@ -55,12 +77,26 @@ class Protonize:
 
     # Positive
     def arg(self):
+        """
+        In case of ARG
+
+        Return
+        ======
+        (ase.Atoms) atoms to be added.
+        """
         for aa_index in self.matched_aa['ARG']:
             h = self.pepset.amino_info[aa_index]['2HH2'] - 1
             self.todel.append(h)
         return self.todel
 
     def lys(self):
+        """
+        In case LYS
+
+        Return
+        ======
+        (ase.Atoms) atoms to be added.
+        """
         for aa_index in self.matched_aa['LYS']:
             try:
                 h = self.pepset.amino_info[aa_index]['HZ3'] - 1
@@ -70,6 +106,13 @@ class Protonize:
         return self.todel
 
     def create_atoms(self):
+        """
+        Add the atoms.
+
+        Return
+        ======
+        (None)
+        """
         # Populate Atoms to add
         self.asp()
         self.glu()

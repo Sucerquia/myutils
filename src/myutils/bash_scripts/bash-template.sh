@@ -16,6 +16,9 @@ Use this template to create your scripts with a standard structure
 
   -d  <variable> add the description of the variable.
   -c  usually used when submitted in a cluster to import modules.
+
+  -v  verbose.
+  -h  prints this message.
 "
 exit 0
 }
@@ -24,19 +27,20 @@ exit 0
 # General variables
 def_var="inse here your default"
 cascade='false'
-
-while getopts 'cd:h' flag;
+verbose='false'
+while getopts 'cd:vh' flag;
 do
   case "${flag}" in
     d) def_var=${OPTARG} ;;
     c) cascade='true' ;;
 
+    v) verbose='true' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
 done
 
-source "$(myutils basics -path)" Name_of_your_process
+source "$(myutils basics -path)" Name_of_your_process $verbose
 
 # starting information
 verbose "JOB information"

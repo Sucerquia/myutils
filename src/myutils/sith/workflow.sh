@@ -93,13 +93,7 @@ date
 echo " * Command:"
 echo "$0" "$@"
 
-# load modules
-if $cascade
-then
-  load_modules "$pep" "$method" "$breakages" "$size"
-fi
-
-# ---- BODY -------------------------------------------------------------------
+# ---- Set up -------------------------------------------------------------------
 # random peptide
 if [ ! "${#random}" -eq 0 ]
 then
@@ -119,6 +113,12 @@ if [ "${#pep}" -eq 0 ]
 then 
   fail "This code needs one peptide. Please, define it using the flag -p or
         -R. For more info, use \"myutils workflow -h\""
+fi
+
+# load modules
+if $cascade
+then
+  load_modules "$pep" "$method" "$breakages" "$size"
 fi
 
 ase -h &> /dev/null || fail "This code needs ASE"
@@ -172,12 +172,9 @@ myutils classical_energies
 # compute forces
 verbose "submitting comptutation of forces.";
 
-# compute forces
-verbose "submitting comptutation of forces.";
-
 sbatch -J ${pep}_forces "$( myutils find_forces -path )" -c  -p $pep &&
   echo "computation of forces submitted"
 
-sbatch -J ${pep}_WAR $(myutils workflow_from_extreme -path) -c -l 3 -p "."
+sbatch -J ${pep}_WAR $(myutils workflow_from_extreme -path) -c -p "."
 
 finish "$pep finished"

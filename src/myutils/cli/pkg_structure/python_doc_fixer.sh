@@ -59,6 +59,20 @@ then
   sed -i "1s/^/#new_line\n/" $function.txt
 fi
 
+# in Case the closing """ are not located in a new line
+last_line=$(tail -n 1 $function.txt)
+if [ "$last_line" != "#new_line" ]
+then
+  echo "#new_line" >> $function.txt
+fi
+
+# in case documentation was started from the first line.
+second_line=$(head -n 2 $function.txt | tail -n 1)
+if [[ "${second_line:9:1}" != " " ]]
+then
+  sed -i "2s/#new_line/#new_line$leading_spaces/g" $function.txt
+fi
+
 mapfile -t ns_empty < <(cat $function.txt | grep -n "#new_line$" | \
                         cut -d ":" -f1)
 

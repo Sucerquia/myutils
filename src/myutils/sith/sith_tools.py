@@ -17,10 +17,6 @@ def gen_randpep(n):
 
     Return
     ======
-    # TODO: add return information
-
-    Returns
-    =======
     (str) Chain of n aminoacis.
     """
     n = int(n)
@@ -45,12 +41,14 @@ def proline_state(pdb, state, outputwoext=None):
         path to the pdb file that contains the prolines to be modified.
     state: str
         state to set up the prolines. It could be 'endo', 'exo' or 'random'.
-    outputwoext: Default=None # TODO: check default value
-        # TODO: add documentation of this parameter
+    outputwoext: str. Default=None
+        name of the output without extension. If None, this argument will be
+        set as pdv argument (without the extension).
 
     Return
     ======
-    (list) [#prolines(str)] list of proline states.
+    (list) [#prolines(str)] list of proline states. In between it creates
+    <outputwoext>modpro.pdb.
     """
     pep_info = PepSetter(pdb)
     amino_names = np.array(list(pep_info.amino_name.values()))

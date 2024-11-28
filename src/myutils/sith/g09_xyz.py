@@ -32,16 +32,16 @@ code = {"1": "H", "2": "He", "3": "Li", "4": "Be", "5": "B",
 
 def _getEnergy(structure):
     """
-    # TODO: Add definition
+    Extract the energy of the logfile.
 
     Parameters
     ==========
-    structure: # TODO: check default value
-        # TODO: add documentation of this parameter
+    structure: str
+        info of the structure # TODO: check this, I don't know.
 
     Return
     ======
-    # TODO: add return information
+    (float) DFT energy found by g09. Otherwise, it returns 1000.0
     """
     for line in structure.split("\n"):
         if line.startswith(" SCF Done:"):
@@ -52,18 +52,18 @@ def _getEnergy(structure):
 
 def _findInList(dataList, target):
     """
-    # TODO: Add definition
+    Find something in a list # TODO: correct this, I put something random
 
     Parameters
     ==========
-    dataList: # TODO: check default value
-        # TODO: add documentation of this parameter
-    target: # TODO: check default value
-        # TODO: add documentation of this parameter
+    dataList:
+        List of data
+    target:
+        target
 
     Return
     ======
-    # TODO: add return information
+    (float?) target in the list.
     """
     for i in range(0, len(dataList)):
         if dataList[i].find(target) != -1:
@@ -77,7 +77,7 @@ def _getCoordinates(dataList):
 
     Parameters
     ==========
-    dataList: # TODO: check default value
+    dataList:
         # TODO: add documentation of this parameter
 
     Return

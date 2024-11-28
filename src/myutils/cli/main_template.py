@@ -15,8 +15,12 @@ other_files = {
 
 
 def main():
-    """"
+    """
     This function run each time myutils is called from the terminal.
+
+    Return
+    ======
+    (None)
     """
     # Help menu of this code
     if sys.argv[1] == '-h' or sys.argv[1] == '--help' or sys.argv[1] == 'help':

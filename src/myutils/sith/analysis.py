@@ -1,10 +1,326 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from myutils.plotters import StandardPlotter
 from SITH.SITH import SITH
 from myutils.peptides import PepSetter
 from pathlib import Path
 from typing import Union, Callable
+from scipy.stats import f_oneway
+import matplotlib.pyplot as plt
+from myutils.plotters import StandardPlotter
+
+
+# region AnalyseData
+def closest_indices(ref, value):
+    """
+    Find the indexes of the points after and before certain value
+
+    Parameters
+    ==========
+    ref: numpy.array
+        list contaning the data.
+    value: float
+        threshold value.
+
+    Return
+    ======
+    (list) indexes of the next-lower and the next-upper elements in the list.
+    """
+    dif = ref - value
+    multi = dif[1:] * dif[:-1]
+    upp = np.where(multi <= 0)[0][-1] + 1
+    low = upp - 1
+
+    return [low, upp]
+
+
+def cross_val(x, y, val):
+    """
+    Finds the crossing of a linearly interpolated curve with certain value in
+    the y data (horizontal line).
+
+    Parameters
+    ==========
+    x: numpy.array
+        x-data of the curve.
+    y: numpy.array
+        y-data of the curve.
+    val: float
+        threshold value.
+
+    Return
+    ======
+    (float) x value where the interpolated curve crosses the specified value.
+
+    Note
+    ====
+    If you want to interpolate to a value of x (vertical line), just change x
+    by y when you pass the arguments.
+    """
+    indices = closest_indices(y, val)
+    x1, x2 = np.array(x)[indices]
+    y1, y2 = np.array(y)[indices]
+
+    x = (val - y1) * (x1 - x2) / (y1 - y2) + x1
+
+    return x
+
+
+def pep_per_x(xs, ys, value, dsa):
+    """
+    Separate the value of x in which y crosses a certain value, identifying it
+    with an specific peptide.
+
+    Parameters
+    ==========
+    xs: numpy.array
+        x-data of the curve.
+    ys: numpy.array
+        y-data of the curve.
+    value: float
+        threshold value.
+    dsa: DataSetAnalysis
+        object containing the analysis.
+
+    Return
+    ======
+    (dict) The name of the peptide as key and the x-value as dict value.
+    """
+    i = 0
+    sep_info = {}
+    for x, y in zip(xs, ys):
+        try:
+            x_cross = cross_val(x, y, value)
+            pep = dsa.outcomes[i].name
+            sep_info[pep] = x_cross
+        except IndexError:
+            print(f"{i} didn't even get the maximum energy, the maxener is ",
+                  max(y))
+        i += 1
+    return sep_info
+
+
+def reduce_data(xs, ys, defmin=-100, defmax=100):
+    """
+    Reduces the data to the range of maximum minimum xs (highest of the lowest)
+    and minumim maximum xs (lowest of the highest). Returns a new list of xs
+    and ys where all the minum/maximum xs are the same and the ys of the
+    minumum/maximum xs are found by interpolation. Also makes the
+    transformation new_y -= new_y[:, 0]
+
+    Parameters
+    ==========
+    xs: list of arrays
+        set of xs data.
+    ys: list of arrays
+        set of xs data.
+    defmin: float. Default=-100
+        first guest of the minimum.
+    defmax: float. Default=100
+        first guest of the maximum.
+
+    Return
+    ======
+    (tuple) list of new xs and new ys
+
+    Note
+    ----
+    if defmin/defmax is higher/lower than the real minimum/maximum, this code
+    would not recognize the proper values. Be sure that defmin/defmax is
+    lower/higher than the lowest/highest of xs.
+    """
+    minx = defmin
+    maxx = defmax
+
+    for i, x in enumerate(xs):
+        if x[0] > minx:
+            minx = x[0]
+        if x[-1] < maxx:
+            maxx = x[-1]
+
+    new_x = []
+    new_y = []
+    for i, x in enumerate(xs):
+        miny = cross_val(ys[i], x, minx)
+        maxy = cross_val(ys[i], x, maxx)
+        condition = np.logical_and(x > minx, x < maxx)
+        conca_x = np.append(x[condition], maxx)
+        conca_y = np.append(ys[i][condition] - miny, maxy - miny)
+        conca_x = np.insert(conca_x, 0, minx)
+        conca_y = np.insert(conca_y, 0, 0)
+        new_x.append(conca_x)
+        new_y.append(conca_y)
+
+    return new_x, new_y
+
+
+def construct_neigh_dic(dsa, es):
+    """
+    Creates a dictionary with all the combination of two amino acids and stores
+    in each combitation, a list of energies of the peptides with the first
+    amino acid in the middle and the second in any side of the peptide.
+
+    Parameters
+    ==========
+    dsa: DataSetAnalysis
+        object that contains the information of the molecules in the dataset.
+    es: list of arrays
+        list of energies to be analyzed.
+
+    Return
+    ======
+    (dict) keys: Amino combination, values: list of energies appearing in
+    peptides with those combinations.
+
+    Example
+    =======
+    # if energies per peptides are
+    peptides = {'ABC': 1.5, 'GBA': 2.3}
+    # neigh dictionary would be
+    combi_neigh = {'BC': [1.5, 2.3]}
+    """
+    combi = {}
+    for aa1 in np.unique(dsa.names.flatten()):
+        for aa2 in np.unique(dsa.names.flatten()):
+            combi[aa1 + aa2] = []
+
+    for i, e in enumerate(es):
+        pep = dsa.outcomes[i].name
+        combi[pep[1] + pep[0]].append(e[-1])
+        combi[pep[1] + pep[2]].append(e[-1])
+
+    return combi
+
+
+def separate_by_position(dsa, es, pos):
+    """
+    Stores the last values of "es" that correspond to an amino acid in a
+    specific position.
+
+    Parameters
+    ==========
+    dsa: DataSetAnalysis
+        object that contains the information of the molecules in the dataset.
+    es: list of arrays
+        list of energies to be analyzed.
+    pos: int
+        position to be extracted.
+
+    Return
+    ======
+    (dict) keys: amino acid in the asked position; values: list of energies to
+    be analyzed.
+    """
+    assert len(es) == len(dsa.outcomes)
+
+    energies = {}
+    for aa in np.unique(dsa.names.flatten()):
+        energies[aa] = []
+
+    for i, e in enumerate(es):
+        pep = dsa.outcomes[i].name
+        energies[pep[pos]].append(e[-1])
+    return energies
+
+
+def mean_n_std(distri):
+    """
+    Extract the mean and standard deviation of a set of values associated to an
+    amino acid in distri.
+
+    Parameters
+    ==========
+    distri: dict
+        keys amino acid, values list of values to obtain mean and standard
+        deviation.
+
+    Return
+    ======
+    (tuple) dictionary of mean, dictionary of standard deviation. Both
+    dictionaries have the shape keys: amino acid; values: mean/std
+    """
+    mean_peps = {}
+    std_peps = {}
+    for aa in distri.keys():
+        if len(distri[aa]) == 0:
+            distri[aa] = None
+            mean_peps[aa] = None
+            std_peps[aa] = None
+        else:
+            mean_peps[aa] = np.mean(distri[aa])
+            std_peps[aa] = np.std(distri[aa])
+    return mean_peps, std_peps
+
+
+def analysis_energy_dof(dsa, es):
+    """
+    Create a list of distributions per each one of the positions.
+
+    Parameters
+    ==========
+    dsa: DataSetAnalysis
+        object that contains the information of the molecules in the dataset.
+    es: list of arrays
+        list of energies to be analyzed.
+
+    Return
+    ======
+    (duple) list of distribution of energies, mean and std per position.
+    Namely, the first element of the first element of the output is the list of
+    energies of the amino acid at the first position.
+    """
+    ener_per_pos1 = separate_by_position(dsa, es, 0)
+    ener_per_pos2 = separate_by_position(dsa, es, 1)
+    ener_per_pos3 = separate_by_position(dsa, es, 2)
+    ener_per_pos = [ener_per_pos1,
+                    ener_per_pos2,
+                    ener_per_pos3]
+
+    mean_per_pos = []
+    stdr_per_pos = []
+    for e_pos in ener_per_pos:
+        mean, std = mean_n_std(e_pos)
+        mean_per_pos.append(mean)
+        stdr_per_pos.append(std)
+
+    return ener_per_pos, mean_per_pos, stdr_per_pos
+
+
+def statistics(ener_per_pos, pos, aminos):
+    """
+    Compute the p-value and F-statistic between distributions of the amino
+    acids in the dataset for a given position.
+
+    Parameters
+    ==========
+    ener_per_pos: list
+        set of energy data per position, per amino acid.
+    pos: int
+        position to be analyzed.
+    aminos: list
+        list of amino acids in the data set.
+
+    Return
+    ======
+    (tuple) arrays in shape of sqared matrices containing pval and fstat
+    matrix.
+    """
+    pval_matrix = np.empty((len(aminos), len(aminos)))
+    fstat_matrix = np.empty((len(aminos), len(aminos)))
+    for i, aa1 in enumerate(aminos):
+        for j, aa2 in enumerate(aminos):
+            if (ener_per_pos[pos][aa2] is None) or \
+               (ener_per_pos[pos][aa1] is None):
+                pval_matrix[i][j] = None
+                fstat_matrix[i][j] = None
+                continue
+            data1 = ener_per_pos[pos][aa1]
+            data2 = ener_per_pos[pos][aa2]
+            f_stat, p_value = f_oneway(data1, data2)
+            pval_matrix[i][j] = p_value
+            fstat_matrix[i][j] = f_stat
+
+    return pval_matrix, fstat_matrix
+
+# endregion
 
 
 def dof_classificator_all(dofs_indexes, atoms_per_aminoacids):
@@ -77,6 +393,7 @@ def dof_classificator_one(dofs_indexes, atoms_per_aminoacids):
     return list_aminos
 
 
+# Deprecated
 def length_energy(sith, aminos_info, atom_types):
     """
     Return distances between two atom types in one amino acid and the
@@ -120,6 +437,7 @@ def length_energy(sith, aminos_info, atom_types):
     return [values_dof, energies]
 
 
+# Deprecated
 def le_same_aminoacids(sith, peptides_info, atom_types, kind_amino):
     """
     Return distances between two atom types in the same type of amino acid and
@@ -163,20 +481,38 @@ def le_same_aminoacids(sith, peptides_info, atom_types, kind_amino):
 
 class SithAnalysis:
     """
-    # TODO: Add definition
+    Set of tools to anayze the data extracted from SITH.
 
     Parameters
     ==========
-    sith: 
-        # TODO: add documentation of this parameter
-    pepinfo: 
-        # TODO: add documentation of this parameter
+    sith: SITH.SITH
+       SITH object with all the information inside.
+    pepinfo: dict
+        Information of the peptide. Like amino acids, atoms, and so. It is an
+        attribute of myutils.peptides.PepSetter.
     """
     def __init__(self, sith, pepinfo):
         self.sith = sith
         self.pep_info = pepinfo
 
     def le_dof_amino(self, a_names, aminos):
+        """
+        Value and the change of the energy of a DOF.
+
+        Parameters
+        ==========
+        a_names: list
+            atom names of the atoms forminf the DOF.
+        aminos: list or int
+            index of the residue from which each atoms belongs to. In case of
+            only an integer, all the atoms are assumed to belong to the same
+            residue.
+
+        Return
+        ======
+        (tuple) array of dof values and change dof energies in the extension
+        trajectory in respect to the optimized configuration.
+        """
         # Note: aminos is actually residues
         if isinstance(aminos, int):
             # if all atoms belog to the same aminoacid
@@ -202,16 +538,16 @@ class SithAnalysis:
         """
         Search the index of a specific dof.
 
-        Parameter
-        =========
+        Parameters
+        ==========
         target: np.ndarray
             degree of freedom.
 
         Return
         ======
-        (int) index
+        (int) index of the DOF.
         """
-        for i, dof in enumerate(self.sith.structures[0].dim_indices):
+        for i, dof in enumerate(self.sith.dim_indices):
             dof_wo_0 = dof[np.nonzero(dof)[0]]
             target_wo_0 = target[np.nonzero(target)[0]]
 
@@ -222,7 +558,6 @@ class SithAnalysis:
                (dof_wo_0 == target_wo_0[::-1]).all():
                 return i
         raise ValueError("Non-found dof.")
-
 
 
 def set_hes_from_ref(geo_ref, sith_tar, structure):
@@ -240,29 +575,29 @@ def set_hes_from_ref(geo_ref, sith_tar, structure):
 
     Return
     ======
-    # TODO: add return information
-
-    Returns
-    =======
     (SITH.SITH) returns the sith_tar with the hessian in the defined structure.
 
-    Note: All the SITH.SITH.structures are Geometry objects with all the information of the structure.
+    Note: All the SITH.SITH.structures are Geometry objects with all the
+    information of the structure.
     """
     for dof in sith_tar.dim_indices:
         test = dof[dof != 0]
-        check2 = np.concatenate((test[::-1], np.zeros(4-len(test), dtype=int)))
-        if not (np.all(geo_ref.dim_indices == dof, axis=1).any() \
-            or np.all(geo_ref.dim_indices == check2, axis=1).any()):
-            raise('this dof does not exist: ', dof)
+        check2 = np.concatenate((test[::-1], np.zeros(4 - len(test),
+                                                      dtype=int)))
+        if not (np.all(geo_ref.dim_indices == dof, axis=1).any()
+                or np.all(geo_ref.dim_indices == check2, axis=1).any()):
+            raise ('this dof does not exist: ', dof)
 
     order = []
     for dof in sith_tar.dim_indices:
         test = dof[dof != 0]
-        check2 = np.concatenate((test[::-1], np.zeros(4-len(test), dtype=int)))
+        check2 = np.concatenate((test[::-1], np.zeros(4 - len(test),
+                                                      dtype=int)))
         try:
             index = np.where(np.all(geo_ref.dim_indices == dof, axis=1))[0][0]
         except IndexError:
-            index = np.where(np.all(geo_ref.dim_indices == check2, axis=1))[0][0]
+            index = np.where(np.all(geo_ref.dim_indices == check2,
+                                    axis=1))[0][0]
         order.append(index)
 
     geo_ref.hessian = geo_ref.hessian[order]
@@ -274,48 +609,53 @@ def set_hes_from_ref(geo_ref, sith_tar, structure):
 
 
 class DataSetAnalysis:
-    def __init__(self, inner_steps: Callable,  data_dir: str='./',
+    """
+    Creates the objects of to do the analysis of a bunch of peptides in a
+    data set.
+
+    Parameters
+    ==========
+    data_dir: str or Path
+        directory containing the peptides you want to analyse. HeadUP: this
+        directory has to contain a set of directories with the name of all
+        the peptides (expected as amino code) and nothing else. Note that each
+        one of the these peptides directories can contain subdirectories, which
+        is set with the argument "subdir".
+    subdir: str. Default=""
+        subdirectory (if the case) in each one of the directories in data_dir
+        where the data is stored.
+    exclude_prolines: Bool. Default=True
+        False to include peptides with prolines.
+    pdb_pattern: str. Default='stretched00'
+        every peptide directory has to contain one and only one pdb file
+        containing the molecular information. This code will look for
+        "<data_dir>/<peptide>/*pattern*.pdb".
+    struc_pattern: str. Default='forces'
+        every peptide directory has to contain a set of files containing
+        the structure information requiered by 'sith'. This code will look
+        for files named as "<data_dir>/<peptide>/*pattern*". It will be
+        assumed that the files are organized alphabetically in the order of
+        stretched structure.
+    inner_steps: function. Default=None
+        function with the operations to apply to every sith object -its
+        unique argument- after initialized. Note that it has to have the
+        analysis you want to apply. For example,
+        ```python
+        def inner_steps(sith):
+            sith.rem_first_last(from_last_minimum=True)
+            sith.sith_analysis()
+            return sith
+        ```
+    **kwargs for initializing sith
+    """
+
+    def __init__(self, inner_steps: Callable, data_dir: str = './',
                  subdir='',
                  exclude_prolines=True,
                  exclude=None,
                  pdb_pattern='stretched00',
                  struc_pattern='forces*.fchk',
                  **kwargs):
-        """
-        Creates the objects of to do the analysis of a bunch of peptides in a
-        data set.
-
-        Prameters
-        =========
-        data_dir: str or Path
-            directory containing the peptides you want to analyse. HeadUP: this
-            directory has to contain a set of directories with the name of all
-            the peptides (expected as amino code) and nothing else.
-        exclude_prolines: Bool. Default=True
-            False to include peptides with prolines.
-        pdb_pattern: str. Default='stretched00'
-            every peptide directory has to contain one and only one pdb file
-            containing the molecular information. This code will look for
-            "<data_dir>/<peptide>/*pattern*.pdb".
-        struc_pattern: str. Default='forces'
-            every peptide directory has to contain a set of files containing
-            the structure information requiered by 'sith'. This code will look
-            for files named as "<data_dir>/<peptide>/*pattern*". It will be
-            assumed that the files are organized alphabetically in the order of
-            stretched structure.
-        inner_steps: function. Default=None
-            function with the operations to apply to every sith object -its
-            unique argument- after initialized. Note that it has to have the
-            analysis you want to apply. For example,
-            ```python
-            def inner_steps(sith):
-                sith.rem_first_last(from_last_minimum=True)
-                sith.sith_analysis()
-
-                return sith
-            ```
-        **kwargs initializinf sith
-        """
         if isinstance(data_dir, (Path, str)):
             path = Path(data_dir)
         assert path.is_dir(), f"{data_dir} does not exist."
@@ -354,8 +694,8 @@ class DataSetAnalysis:
                 raise FileNotFoundError(f"Not '*{pdb_pattern}*.pdb' found in"
                                         f"{str(pep)}")
             elif len(pdb) > 1:
-                raise ValueError("There are more than one pdb files with the pattern"
-                                 f" {str(pep)}/*{pdb_pattern}*.pdb")
+                raise ValueError("There are more than one pdb files with the "
+                                 f"pattern {str(pep)}/*{pdb_pattern}*.pdb")
 
             self.pep_infos.append(PepSetter(pdb[0]))
 
@@ -370,7 +710,7 @@ class DataSetAnalysis:
                 self.outcomes.append(sith)
                 self.analysis.append(SithAnalysis(self.outcomes[-1],
                                                   self.pep_infos[-1]))
-            except:
+            except:  # noqa: E722
                 self.pep_infos.pop(-1)
                 errors.append(pep.stem)
 
@@ -380,8 +720,8 @@ class DataSetAnalysis:
 
             print(pep.stem + ' ', end='')
 
-        print(f"\n--- A total of {len(self.outcomes)} peptides where added to the "
-              "analysis")
+        print(f"\n--- A total of {len(self.outcomes)} peptides where added "
+              "to the analysis")
 
         if len(prolines) > 0:
             print("--- The next peptides were neglected because they have a "
@@ -391,7 +731,7 @@ class DataSetAnalysis:
         if len(errors) > 0:
             print("\n--- The next peptides did not woked for some reason. "
                   "Check them individually:")
-            [print(pep+ ' ', end='') for pep in errors]
+            [print(pep + ' ', end='') for pep in errors]
         if len(eff_exclu) > 0:
             print("--- The next peptides were neglected because they have a "
                   "proline at least:")
@@ -400,8 +740,14 @@ class DataSetAnalysis:
         self.test()
 
     def test(self):
-        """check that the first sith has the basic variables. It assumes that
-        the rest also has it"""
+        """
+        check that the first sith has the basic variables. It assumes that
+        the rest also has it
+
+        Return
+        ======
+        (None)
+        """
         assert isinstance(self.outcomes[0].structures_scf_energies, np.ndarray)
         assert isinstance(self.outcomes[0].dims, np.ndarray)
         assert isinstance(self.outcomes[0].structure_energies, np.ndarray)
@@ -409,13 +755,17 @@ class DataSetAnalysis:
         assert isinstance(self.outcomes[0].dim_indices, np.ndarray)
         assert isinstance(self.outcomes[0].structures, list)
 
-    def _populate_variables(self, kindanalysis):
+    def _populate_variables(self):
         """
         This method creates the attributes used fot the analysis extracting the
         values from the sith_objects.
+
+        Return
+        ======
+        (DataSetAnalysis) This same object.
         """
         self.all_dft_energies = []
-        self.all_edm_energies = [] # energy distribution method
+        self.all_edm_energies = []  # energy distribution method
         for ed_obj in self.outcomes:
             self.all_dft_energies.append(ed_obj.structures_scf_energies)
             self.all_edm_energies.append(ed_obj.structure_energies)
@@ -426,6 +776,32 @@ class DataSetAnalysis:
         return self
 
     def dof_vs_energy(self, aa_names, naas=3):
+        """
+        Extract the values of the dofs and the associated dofs energies
+        for a set all the molecules of data set. Check
+        myutils.sith.analysis.SithAnalysis.le_dof_amino
+
+        Parameters
+        ==========
+        aa_names: list
+            Atom names forming the DOF.
+        naas: list or int. Default=3
+            index of the residue from which each atoms belongs to. In case of
+            only an integer, all the atoms are assumed to belong to the same
+            residue.
+
+        Return
+        ======
+        (tuple) list of arrays  with dof values and dof energies in the
+        extension trajectory of each molecule in the dataset.
+
+        Note
+        ----
+        This function returns the absolute value of the DOF, to obtain the
+        same but computing the change in the DOF in respect to the optimized
+        configuration of see
+        myutils.sith.analysis.DataSetAnalysis.dofs_vs_energy_rescaled
+        """
         xs = []
         es = []
         for an in self.analysis:
@@ -435,7 +811,28 @@ class DataSetAnalysis:
 
         return xs, es
 
-    def dof_vs_energy2(self, aa_names, naas=3):
+    def dof_vs_energy_rescaled(self, aa_names, naas=3):
+        """
+        Extract the values of the delta dofs in respect to the optimized
+        configuration and the associated dofs energies for a set all the
+        molecules of data set. Check
+        myutils.sith.analysis.SithAnalysis.le_dof_amino
+
+        Parameters
+        ==========
+        aa_names: list
+            Atom names forming the DOF.
+        naas: list or int. Default=3
+            index of the residue from which each atoms belongs to. In case of
+            only an integer, all the atoms are assumed to belong to the same
+            residue.
+
+        Return
+        ======
+        (tuple) list of arrays with delta dof values and dof energies in the
+        extension trajectory in respect to the optimized configuration of each
+        molecule in the dataset.
+        """
         xs = []
         es = []
         for an in self.analysis:
@@ -445,50 +842,33 @@ class DataSetAnalysis:
 
         return xs, es
 
-    # Deprected: Remove
-    def plot_le(self, a_names, aminos=3, ax: plt.Axes = None, sp=None,
-                lw=1, ms=1, **kwargs):
+    def plot_DFT_ener(self, ax: plt.Axes = None, sp=None,
+                      lw=1, ms=1, **kwargs):
         """
-        plots the
+        Plots the DFT energy of the extension process
+
+        Parameters
+        ==========
+        ax: plt.Axes Default=None
+            Axes to plot in. If Nonne, a new axis is created.
+        sp: StandardPlotter. Default=None
+            myutils.plotters.StandardPlotter
+        lw: float. Default=1
+            line width.
+        ms: float. Default=1
+            marker size.
+        kwargs for StandardPlotters.
+
+        Return
+        ======
+        (StandardPlotter, list, list) Standard plotter, all dofs values,
+        all energy values used for the plot.
         """
-        if 'ax_pref' in kwargs:
+        if 'ax_pref' in kwargs.keys():
             setter = kwargs['ax_pref']
             del kwargs['ax_pref']
         else:
             setter = {}
-
-        if sp is None:
-            sp = StandardPlotter(**kwargs)
-        if ax is None:
-            ax = sp.ax[0]
-        sp.axis_setter(ax=ax,
-                        xlabel=f'Distance({", ".join(a_names)})[\u212B]',
-                        ylabel='Energy[Ha]',
-                        **setter)
-        ls = []
-        es = []
-        for an in self.analysis:
-            l, e = an.le_dof_amino(a_names, aminos)
-            ls.append(l)
-            es.append(e)
-            sp.plot_data(l, e, ax=ax, lw=lw, markersize=ms)
-        return ax, ls, es
-
-    def le_all(self, a_names, aminos):
-        self.ls = []
-        self.es = []
-        for an in self.analysis:
-            l, e = an.le_dof_amino(a_names, aminos)
-            self.ls.append(l)
-            self.es.append(e)
-
-    def plot_DFT_ener(self, ax: plt.Axes = None, sp=None,
-                      lw=1, ms=1, **kwargs):
-        """
-        plots the
-        """
-        setter = kwargs['ax_pref']
-        del kwargs['ax_pref']
 
         if sp is None:
             sp = StandardPlotter(**kwargs)
@@ -513,9 +893,17 @@ class DataSetAnalysis:
             xs.append(x)
             ys.append(y)
 
-        return ax, xs, ys
+        return sp, xs, ys
 
     def amino_freq(self):
+        """
+        Extract the name of the peptides in one-letter-convention for
+        the amino acids.
+
+        Return
+        ======
+        (numpy.array) set of names.
+        """
         self.names = []
         for sith in self.outcomes:
             self.names.append(list(sith.name))

@@ -4,11 +4,15 @@ from ase import Atom
 
 
 class MoleculeSetter:
+    """
+    Tool to edit or extract information from a molecule.
+
+    Parameters
+    ==========
+    atoms: ase.Atoms
+        molecule to be analyzed.
+    """
     def __init__(self, atoms):
-        """
-        Parameters
-        ==========
-        """
         self.atoms = atoms
 
     def rot_x(self, angle):
@@ -126,6 +130,8 @@ class MoleculeSetter:
             indexes of the atoms to apply the transformation. Default None
             that means the transformation is applied to the positions of all
             the atoms.
+        shift: list. Default=None
+            vector to apply a translation.
 
         Return
         ======
@@ -158,7 +164,7 @@ class MoleculeSetter:
         index1 and index2: int
             indexes of the atoms to be aligned with the x-axis. The positive
             direction of x would go from atom 1 to atom 2.
-        index 3: int (optional)
+        index3: int. Default=None
             The atom with index 3 would be in the xy plane in case to be given.
         Center: int (optional)
             It must be index1 or index2, that means the atom with this index
@@ -277,6 +283,8 @@ class MoleculeSetter:
             distance.
         deltad: float
             amount to add to the distance between atoms.
+        index3: int. Default=None
+            The atom with index 3 would be in the xy plane in case to be given.
 
         Return
         ======
@@ -335,6 +343,15 @@ class MoleculeSetter:
 
 
 class Alignment:
+    """
+    Set of tools to apply the necessary transformations for aligning a the
+    three first eigenvectors of PCA with the x, y, z axis, in that order.
+
+    Parameters
+    ==========
+    atoms: ase.Atoms
+        molecule to be aligned.
+    """
     def __init__(self, atoms):
         self.atoms = atoms
         self.ms = MoleculeSetter(self.atoms)
@@ -347,7 +364,14 @@ class Alignment:
         Parameters
         ==========
         atoms: ase.Atoms
+            molecule to be analyzed.
+        indexes: Default="all"
+            subset of atoms to be included in the pca analysis. numbering
+            convention starting from 0.
 
+        Return
+        ======
+        (array) principal components.
         """
         try:
             from sklearn.decomposition import PCA
@@ -372,8 +396,8 @@ class Alignment:
         atoms: ase.Atoms
             Molecule to be moved.
 
-        Returns
-        =======
+        Return
+        ======
         (ase.Atoms) Transformed atoms
         """
         ms = MoleculeSetter(atoms)
@@ -385,15 +409,16 @@ class Alignment:
     @staticmethod
     def align_with_components(atoms):
         """
-        Aligns the coordinates x, y, z axis with the main vectors (in that order).
+        Aligns the coordinates x, y, z axis with the main vectors (in that
+        order).
 
         Parameters
         ==========
         atoms: ase.Atoms
             Molecule to be aligned.
 
-        Returns
-        =======
+        Return
+        ======
         (ase.Atoms) rotated and shifted molecule.
         """
         ms = MoleculeSetter(atoms)
@@ -407,13 +432,23 @@ class Alignment:
         # transform based on dummy atoms
         ms.xy_alignment(-4, -3, -2)
 
-        #remove dummy atoms
+        # remove dummy atoms
         ms.atoms = ms.atoms[:-4]
 
         return ms.atoms
 
 
 class PCAMatcher:
+    """
+    Tools to align two molecules with their PCA main vectors.
+
+    Parameters
+    ==========
+    reference: ase.Atoms
+        reference of the molecule to be matched.
+    to_compare: ase.Atoms
+        molecule to be compared to the reference.
+    """
     def __init__(self, reference, to_compare):
         assert len(reference) == len(to_compare), "The reference and the " + \
             "structure to compare have to have the same number of atoms"
@@ -421,6 +456,13 @@ class PCAMatcher:
         self.to_compare = to_compare.copy()
 
     def align_molecules(self):
+        """
+        Align each molecule with their own main PCA vectors.
+
+        Return
+        ======
+        (tuple) aligned reference and molecule to compare.
+        """
         self.reference = Alignment.center_geo(self.reference)
         self.reference = Alignment.align_with_components(self.reference)
         self.to_compare = Alignment.center_geo(self.to_compare)
@@ -428,14 +470,28 @@ class PCAMatcher:
         return self.reference, self.to_compare
 
     def matching(self):
-        """align before using this function"""
+        """
+        Finds the order of the indices of the molecule which fit with the atoms
+        of the reference. So, if the outcome of this function is "out", then
+        PCAMatcher.to_compare[out[i]] == PCAMatcher.reference[i] should be
+        true.
+
+        Return
+        ======
+        (numpy.array) indices of the molecule that match the indices of the
+        reference.
+
+        Note
+        ----
+        align before using this function
+        """
         self.align_molecules()
         n_atoms = len(self.reference)
         correspondence = -np.ones(n_atoms, dtype=int)
 
         for i in range(n_atoms):
-            distances = np.linalg.norm(self.reference.positions[i] -
-                                       self.to_compare.positions,
+            distances = np.linalg.norm(self.reference.positions[i]
+                                       - self.to_compare.positions,
                                        axis=1)
             i_min = np.where(distances == min(distances))[0][0]
 
@@ -443,8 +499,8 @@ class PCAMatcher:
                 correspondence[i] = int(i_min)
 
         if -1 in correspondence:
-            print('Warning: check repetitions because the next atoms of the reference did'
-                ' not get a correspondent in the test:',
-                np.where(correspondence == -1)[0])
+            print('Warning: check repetitions because the next atoms of the '
+                  'reference did not get a correspondent in the test:',
+                  np.where(correspondence == -1)[0])
 
         return correspondence

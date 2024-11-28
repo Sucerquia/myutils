@@ -13,14 +13,14 @@ def output_terminal(cmd, print_output=True, skip_error=False, print_cmd=False,
     ==========
     cmd: str
         bash command to be executed in the terminal.
-    print_output: bool (optional). Default=True # TODO: check default value
+    print_output: bool (optional). Default=True
         True for printing the output besides of returning it. Default False.
-    skip_error: bool (optional). Default=False # TODO: check default value
+    skip_error: bool (optional). Default=False
         True for continuing running although the command fails. Default False.
     **kwargs:
         additional options for subprocess.Popen
-    print_cmd: Default=False # TODO: check default value
-        # TODO: add documentation of this parameter
+    print_cmd: Default=False
+        print the command that was just executed.
 
     Return
     ======
@@ -55,15 +55,15 @@ def output_terminal(cmd, print_output=True, skip_error=False, print_cmd=False,
 
 def _time(keyword, logfile):
     """
-    Used in myutils.miscellaneous.time_09. It extracts the time from a
+    Used in myutils.miscellaneous.time_g09. It extracts the time from a
     line of gaussian.
 
     Parameters
     ==========
-    keyword: # TODO: check default value
-        # TODO: add documentation of this parameter
-    logfile: # TODO: check default value
-        # TODO: add documentation of this parameter
+    keyword:
+        keyword that contains the line with the time you want to check.
+    logfile:
+        g09 log file containing the time information.
 
     Return
     ======
@@ -135,9 +135,9 @@ def optimized_e(file):
     ======
     (float) Potential energy in eV units.
     """
-    out = output_terminal('grep "E(RBMK) =" ' + file)
+    out = output_terminal('grep "E(RBMK) =" ' + file, print_output=False)
     energy = float(out.split()[-5])
-    return energy * 27.21  # energy in eV
+    return energy * 27.2114  # energy in eV
 
 
 # add2executable
@@ -149,15 +149,15 @@ def args_and_defaults(module, *args):
     ==========
     func:
         function that you want to extract the parameters and default values.
-    module: # TODO: check default value
-        # TODO: add documentation of this parameter
-    args: # TODO: check default value
-        # TODO: add documentation of this parameter
+    module:
+        module to extract arguments and defatuls.
+    *args subclases or modules inside module.
 
     Return
     ======
-    # TODO: add return information
+    (str) set of arguments and defaults.
     """
+    # Deprecated
     module = import_module(module)
 
     method = getattr(module, args[0])
@@ -183,14 +183,13 @@ def function_doc(module, *args):
 
     Parameters
     ==========
-    func:
-        function that you want to extract the documentation.
     module:
-        # TODO: add documentation of this parameter
+        module to extract the documentation.
+    *args subclases or modules inside module.
 
     Return
     ======
-    # TODO: add return information
+    (str) function documentation
     """
     module = import_module(module)
 
@@ -199,4 +198,3 @@ def function_doc(module, *args):
         method = getattr(method, func)
 
     return method.__doc__
-

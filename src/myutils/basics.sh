@@ -9,7 +9,7 @@ if [ ${#2} == 0 ]
 then
   eval "BASICVERBOSE_${basic_functions_name[0]}=false"
 else
-  eval "BASICVERBOSE_${basic_functions_name[0]}=$2"
+  eval "BASICVERBOSE_${basic_functions_name[0]}=true"
 fi
 
 # ------ functions ------------------------------------------------------------
@@ -56,11 +56,6 @@ finish () {
 
 # Function that returns the error message and stops the run if something fails.
 fail () {
-  # shellcheck disable=SC2068
-  adjust "ERROR" $@ "$( date )"
-  # shellcheck disable=SC2068
-  finish "ERROR" $@ "$( date )" >&2
-  exit 1
   # shellcheck disable=SC2068
   adjust "ERROR" $@ "$( date )"
   # shellcheck disable=SC2068
@@ -144,8 +139,8 @@ load_modules() {
     source /hits/basement/mbm/sucerquia/sw/g09/load_g09.sh
     conda activate myutils
     module purge
-    module use /hits/sw/its/doserbd/haswell/modules/all/GROMACS
-    module load 2020.3-fosscuda-2019b
+    module use /hits/sw/its/doserbd/haswell/modules/all/
+    module load GROMACS/2023.1-foss-2022a
     if [[ "$(hostname)" == *"haswell"* ]]
     then
       module load slurm/20.11.7-1.hits
