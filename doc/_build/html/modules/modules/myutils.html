@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myutils package &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=61243dd2"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">install</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">myutils package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/modules/modules/myutils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="myutils-package">
+<h1>myutils package<a class="headerlink" href="#myutils-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="myutils.ase_utils.html">myutils.ase_utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="myutils.ase_utils.html#module-myutils.ase_utils.molecules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment"><code class="docutils literal notranslate"><span class="pre">Alignment</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment.align_with_components"><code class="docutils literal notranslate"><span class="pre">Alignment.align_with_components()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment.center_geo"><code class="docutils literal notranslate"><span class="pre">Alignment.center_geo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment.pca_vectors"><code class="docutils literal notranslate"><span class="pre">Alignment.pca_vectors()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.align_axis"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.align_axis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.align_plane"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.align_plane()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.apply_trans"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.apply_trans()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.create_gaussian_input"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.create_gaussian_input()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.increase_distance"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.increase_distance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.increase_distance_with_constraints"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.increase_distance_with_constraints()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.rot_x"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.rot_x()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.rot_y"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.rot_y()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.rot_z"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.rot_z()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.scale_distance"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.scale_distance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.xy_alignment"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.xy_alignment()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.PCAMatcher"><code class="docutils literal notranslate"><span class="pre">PCAMatcher</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.PCAMatcher.align_molecules"><code class="docutils literal notranslate"><span class="pre">PCAMatcher.align_molecules()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.PCAMatcher.matching"><code class="docutils literal notranslate"><span class="pre">PCAMatcher.matching()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.tools.F_max_stretch"><code class="docutils literal notranslate"><span class="pre">F_max_stretch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.tools.F_stretch"><code class="docutils literal notranslate"><span class="pre">F_stretch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.tools.all_hydrogen_atoms"><code class="docutils literal notranslate"><span class="pre">all_hydrogen_atoms()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.tools.all_xyz2pdb"><code class="docutils literal notranslate"><span class="pre">all_xyz2pdb()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.tools.change_distance"><code class="docutils literal notranslate"><span class="pre">change_distance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.tools.conf2pdb"><code class="docutils literal notranslate"><span class="pre">conf2pdb()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.tools.diff_bonds"><code class="docutils literal notranslate"><span class="pre">diff_bonds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.tools.distance"><code class="docutils literal notranslate"><span class="pre">distance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.tools.extract_bonds"><code class="docutils literal notranslate"><span class="pre">extract_bonds()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.ase_utils.html#module-myutils.ase_utils">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.cli.html">myutils.cli package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="myutils.cli.html#module-myutils.cli.main">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.html#myutils.cli.main.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.html#myutils.cli.main_template.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.cli.html#module-myutils.cli">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.gromacs.html">myutils.gromacs package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#module-myutils.gromacs">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.sith.html">myutils.sith package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#module-myutils.sith.analysis">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.DataSetAnalysis"><code class="docutils literal notranslate"><span class="pre">DataSetAnalysis</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.amino_freq"><code class="docutils literal notranslate"><span class="pre">DataSetAnalysis.amino_freq()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.dof_vs_energy"><code class="docutils literal notranslate"><span class="pre">DataSetAnalysis.dof_vs_energy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.dof_vs_energy_rescaled"><code class="docutils literal notranslate"><span class="pre">DataSetAnalysis.dof_vs_energy_rescaled()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.plot_DFT_ener"><code class="docutils literal notranslate"><span class="pre">DataSetAnalysis.plot_DFT_ener()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.test"><code class="docutils literal notranslate"><span class="pre">DataSetAnalysis.test()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.SithAnalysis"><code class="docutils literal notranslate"><span class="pre">SithAnalysis</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.SithAnalysis.index_dof"><code class="docutils literal notranslate"><span class="pre">SithAnalysis.index_dof()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.SithAnalysis.le_dof_amino"><code class="docutils literal notranslate"><span class="pre">SithAnalysis.le_dof_amino()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.analysis_energy_dof"><code class="docutils literal notranslate"><span class="pre">analysis_energy_dof()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.closest_indices"><code class="docutils literal notranslate"><span class="pre">closest_indices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.construct_neigh_dic"><code class="docutils literal notranslate"><span class="pre">construct_neigh_dic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.cross_val"><code class="docutils literal notranslate"><span class="pre">cross_val()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.dof_classificator_all"><code class="docutils literal notranslate"><span class="pre">dof_classificator_all()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.dof_classificator_one"><code class="docutils literal notranslate"><span class="pre">dof_classificator_one()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.le_same_aminoacids"><code class="docutils literal notranslate"><span class="pre">le_same_aminoacids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.length_energy"><code class="docutils literal notranslate"><span class="pre">length_energy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.mean_n_std"><code class="docutils literal notranslate"><span class="pre">mean_n_std()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.pep_per_x"><code class="docutils literal notranslate"><span class="pre">pep_per_x()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.reduce_data"><code class="docutils literal notranslate"><span class="pre">reduce_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.separate_by_position"><code class="docutils literal notranslate"><span class="pre">separate_by_position()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.set_hes_from_ref"><code class="docutils literal notranslate"><span class="pre">set_hes_from_ref()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.statistics"><code class="docutils literal notranslate"><span class="pre">statistics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.compare_siths.extract_common"><code class="docutils literal notranslate"><span class="pre">extract_common()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.compare_siths.index_dof"><code class="docutils literal notranslate"><span class="pre">index_dof()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.compare_siths.organize_lengths"><code class="docutils literal notranslate"><span class="pre">organize_lengths()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.g09_xyz.log2xyz"><code class="docutils literal notranslate"><span class="pre">log2xyz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.protonate.Protonize"><code class="docutils literal notranslate"><span class="pre">Protonize</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.protonate.Protonize.arg"><code class="docutils literal notranslate"><span class="pre">Protonize.arg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.protonate.Protonize.asp"><code class="docutils literal notranslate"><span class="pre">Protonize.asp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.protonate.Protonize.create_atoms"><code class="docutils literal notranslate"><span class="pre">Protonize.create_atoms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.protonate.Protonize.glu"><code class="docutils literal notranslate"><span class="pre">Protonize.glu()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.protonate.Protonize.lys"><code class="docutils literal notranslate"><span class="pre">Protonize.lys()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.protonate.protonate"><code class="docutils literal notranslate"><span class="pre">protonate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.sith_plots.SithPlotter"><code class="docutils literal notranslate"><span class="pre">SithPlotter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.sith_plots.SithPlotter.add_color_per_amino"><code class="docutils literal notranslate"><span class="pre">SithPlotter.add_color_per_amino()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.sith_plots.SithPlotter.create_blocks"><code class="docutils literal notranslate"><span class="pre">SithPlotter.create_blocks()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_angles"><code class="docutils literal notranslate"><span class="pre">SithPlotter.plot_angles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_energies_in_DOFs"><code class="docutils literal notranslate"><span class="pre">SithPlotter.plot_energies_in_DOFs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_error"><code class="docutils literal notranslate"><span class="pre">SithPlotter.plot_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_hessian"><code class="docutils literal notranslate"><span class="pre">SithPlotter.plot_hessian()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_ramachandran"><code class="docutils literal notranslate"><span class="pre">SithPlotter.plot_ramachandran()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_sith"><code class="docutils literal notranslate"><span class="pre">SithPlotter.plot_sith()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.sith_plots.plot_averages_per_pos"><code class="docutils literal notranslate"><span class="pre">plot_averages_per_pos()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.sith_plots.plot_matrix"><code class="docutils literal notranslate"><span class="pre">plot_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.sith_plots.plot_matrix2"><code class="docutils literal notranslate"><span class="pre">plot_matrix2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.sith_plots.plot_matrix3"><code class="docutils literal notranslate"><span class="pre">plot_matrix3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.sith_tools.gen_randpep"><code class="docutils literal notranslate"><span class="pre">gen_randpep()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.sith_tools.proline_state"><code class="docutils literal notranslate"><span class="pre">proline_state()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#module-myutils.sith">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-myutils.jupyter">
+<span id="submodules"></span><h2>Submodules<a class="headerlink" href="#module-myutils.jupyter" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.jupyter.hide_code">
+<span class="sig-prename descclassname"><span class="pre">myutils.jupyter.</span></span><span class="sig-name descname"><span class="pre">hide_code</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/jupyter.html#hide_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.jupyter.hide_code" title="Link to this definition"></a></dt>
+<dd><p>This function hides the code cells in a jupyter notebook. It helps to a
+cleaner in visualization of results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong># TODO</strong> (<em>add return information</em>)</p></li>
+<li><p><strong>Note</strong> (<em>this requires</em>)</p></li>
+<li><p><em>ipython</em></p></li>
+<li><p><em>ipywidgets</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function" id="module-myutils.miscellaneous">
+<dt class="sig sig-object py" id="myutils.miscellaneous.args_and_defaults">
+<span class="sig-prename descclassname"><span class="pre">myutils.miscellaneous.</span></span><span class="sig-name descname"><span class="pre">args_and_defaults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/miscellaneous.html#args_and_defaults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.miscellaneous.args_and_defaults" title="Link to this definition"></a></dt>
+<dd><p>Takes a function and prints its parameters with their default values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> – function that you want to extract the parameters and default values.</p></li>
+<li><p><strong>module</strong> – module to extract arguments and defatuls.</p></li>
+<li><p><strong>module.</strong> (<em>*args subclases</em><em> or </em><em>modules inside</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(str) set of arguments and defaults.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.miscellaneous.function_doc">
+<span class="sig-prename descclassname"><span class="pre">myutils.miscellaneous.</span></span><span class="sig-name descname"><span class="pre">function_doc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/miscellaneous.html#function_doc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.miscellaneous.function_doc" title="Link to this definition"></a></dt>
+<dd><p>Takes a function and prints its documentation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module</strong> – module to extract the documentation.</p></li>
+<li><p><strong>module.</strong> (<em>*args subclases</em><em> or </em><em>modules inside</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(str) function documentation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.miscellaneous.optimized_e">
+<span class="sig-prename descclassname"><span class="pre">myutils.miscellaneous.</span></span><span class="sig-name descname"><span class="pre">optimized_e</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/miscellaneous.html#optimized_e"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.miscellaneous.optimized_e" title="Link to this definition"></a></dt>
+<dd><p>This code finds the last energy in a log file of gaussian computed using
+RBMK functional. The output is given in eV.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – log gaussian file.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(float) Potential energy in eV units.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.miscellaneous.output_terminal">
+<span class="sig-prename descclassname"><span class="pre">myutils.miscellaneous.</span></span><span class="sig-name descname"><span class="pre">output_terminal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/miscellaneous.html#output_terminal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.miscellaneous.output_terminal" title="Link to this definition"></a></dt>
+<dd><p>Runs a command in a terminal and save the output in a list
+of strings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cmd</strong> (<em>str</em>) – bash command to be executed in the terminal.</p></li>
+<li><p><strong>print_output</strong> (<em>bool. Default=True</em>) – True for printing the output besides of returning it. Default False.</p></li>
+<li><p><strong>skip_error</strong> (<em>bool. Default=False</em>) – True for continuing running although the command fails. Default False.</p></li>
+<li><p><strong>**kwargs</strong> – additional options for subprocess.Popen</p></li>
+<li><p><strong>print_cmd</strong> (<em>Default=False</em>) – print the command that was just executed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(list) [#linesStr] output of the executed command, line by line.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.miscellaneous.time_g09">
+<span class="sig-prename descclassname"><span class="pre">myutils.miscellaneous.</span></span><span class="sig-name descname"><span class="pre">time_g09</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/miscellaneous.html#time_g09"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.miscellaneous.time_g09" title="Link to this definition"></a></dt>
+<dd><p>Function that extracts the time spend for one gaussian simulation from a
+.log file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>logfile</strong> (<em>string</em>) – .log file obtained during a gaussian simulation.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>(float) Time in seconds although the time in minutes, seconds and hours are</em></p></li>
+<li><p><em>printed.</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class" id="module-myutils.peptides">
+<dt class="sig sig-object py" id="myutils.peptides.PepSetter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">myutils.peptides.</span></span><span class="sig-name descname"><span class="pre">PepSetter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pdb_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/peptides.html#PepSetter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.peptides.PepSetter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter" title="myutils.ase_utils.molecules.MoleculeSetter"><code class="xref py py-class docutils literal notranslate"><span class="pre">MoleculeSetter</span></code></a></p>
+<p>The equivalent to myutils.ase_utils.tools.MoleculeSetter but used
+specifically for proteins.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pdb_file</strong> (<em>str</em><em> or </em><em>path</em>) – path to the pdb file containing the information of the protein.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.peptides.PepSetter.build_proline_state">
+<span class="sig-name descname"><span class="pre">build_proline_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aminoacid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/peptides.html#PepSetter.build_proline_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.peptides.PepSetter.build_proline_state" title="Link to this definition"></a></dt>
+<dd><p>Takes a defined peptide with prolines and changes the prolines to endo
+or exo states.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>aminoacid</strong> (<em>int</em>) – number of the aminoacid to modify. It has to correspond with a
+proline aminoacid.</p></li>
+<li><p><strong>state</strong> (<em>str</em>) – ‘endo’ or ‘exo’. States of the proline.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>atoms</strong> – Atoms object with the modified structure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ase.Atoms object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.peptides.PepSetter.compute_dihedrals">
+<span class="sig-name descname"><span class="pre">compute_dihedrals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom1index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom2index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom3index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom4index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">structure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/peptides.html#PepSetter.compute_dihedrals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.peptides.PepSetter.compute_dihedrals" title="Link to this definition"></a></dt>
+<dd><p>Compute the dihedral angle between 4 atoms. Consider the nexts facts:
+* The definition of the index 1, 2, 3 and 4 is as follows:</p>
+<blockquote>
+<div><blockquote>
+<div><blockquote>
+<div><p>1</p>
+</div></blockquote>
+<p><a href="#id1"><span class="problematic" id="id2">3__</span></a>  /</p>
+</div></blockquote>
+<p>/    2</p>
+</div></blockquote>
+<p>4
+* The dihedral is defined here as the angle between the projection of</p>
+<blockquote>
+<div><p>the vector 2-&gt;1 and 3-&gt;4 in the plane generated by the vector 3-&gt;2.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>The zero of the angle is set at the projection of 2-&gt;1 in the 3-&gt;2
+plane.</p></li>
+<li><p>The positive direction of the angle is clock-wise and its range is
+[-pi, pi].</p></li>
+<li><p>The atoms do not have to be bonded.</p></li>
+<li><p>vmd also meassures dihedrals as it is explained here.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atom1index</strong> (<em>int</em>) – index of the atom 1 in g09 convention (starting from 1).</p></li>
+<li><p><strong>atom2index</strong> (<em>int</em>) – index of the atom 2 in g09 convention (starting from 1).</p></li>
+<li><p><strong>atom3index</strong> (<em>int</em>) – index of the atom 3 in g09 convention (starting from 1).</p></li>
+<li><p><strong>atom4index</strong> (<em>int</em>) – index of the atom 4 in g09 convention (starting from 1).</p></li>
+<li><p><strong>structure</strong> (<em>ase.Atoms. Default=None</em>) – Structure to obtain the dihedrals. This has to be the same peptide
+chemistry than the basis.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>dihedral</strong> – dihedral angle as defined in the description in radians.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.peptides.PepSetter.endo_exo_proline">
+<span class="sig-name descname"><span class="pre">endo_exo_proline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/peptides.html#PepSetter.endo_exo_proline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.peptides.PepSetter.endo_exo_proline" title="Link to this definition"></a></dt>
+<dd><p>Computes the dihedral angles a1=(N, Ca, Cb, Cg) and a2=(Cb, Ca, N, Cd)
+in proline amino acids of the peptide. This angles meassure the
+endo-exo states, which must be given by the combination
+[a1 positive, a2 approx 0] for exo, or [a1 negative, a2 approx 0] for
+endo. Ca, Cb, Cg, Cd, N are defined as follows:</p>
+<blockquote>
+<div><blockquote>
+<div><p>Cg</p>
+</div></blockquote>
+<dl>
+<dt>Cb /  Cd</dt><dd><blockquote>
+<div><p>__/</p>
+</div></blockquote>
+<p>Ca  N</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>angles</strong> – set of angles 1 and 2 in each proline.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>array (proline, (angle1, angle2))</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.peptides.PepSetter.rama_phi_psi">
+<span class="sig-name descname"><span class="pre">rama_phi_psi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">traj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/peptides.html#PepSetter.rama_phi_psi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.peptides.PepSetter.rama_phi_psi" title="Link to this definition"></a></dt>
+<dd><p>Compute ramachandran angles of the peptide in degrees. It assumes
+there are ACE and NME capping atoms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>traj</strong> (<em>array-like. Default=None</em>) – chain of ase.Atoms.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>(array) [#CA x 2float] dihedral angles per alpha carbon for</em></p></li>
+<li><p><em>Ramachandran plot.</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class" id="module-myutils.plotters">
+<dt class="sig sig-object py" id="myutils.plotters.Space">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">Space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#myutils.plotters.StandardPlotter" title="myutils.plotters.StandardPlotter"><span class="pre">StandardPlotter</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">borders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/plotters.html#Space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.Space" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Section of a figure that will be used to separate the complete figure
+in squares. You will be able to define all the parameters respect to
+the space of reference. And, to have an idea of which values to use,
+you can use the method show_frame and create a kind of meassure ruler.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sp</strong> (<em>myutils.plotters.StandardPlotter. Default=None</em>) – object StandarPlotter. Set it before creating an space. In case of
+being None, a new StandardPlotter is created.</p></li>
+<li><p><strong>borders</strong> (<em>list. Default=</em><em>[</em><em>[</em><em>0</em><em>, </em><em>0</em><em>]</em><em>, </em><em>[</em><em>1</em><em>, </em><em>1</em><em>]</em><em>]</em>) – [[left, bottom], [right, top]] list defining the borders of the
+space respect to the figure frame. Use sp.spaces[0].showframe() to
+define the values easily.</p></li>
+<li><p><strong>axes</strong> (<em>plt.Axes. Default=sp.ax</em>) – axes to be added to the Space.</p></li>
+<li><p><strong>show_frame</strong> (<em>bool. Default=False</em>) – show the frame of the space.</p></li>
+<li><p><strong>**kwargs</strong> (<em>Space.show_frame arguments.</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.plotters.Space.add_axes">
+<span class="sig-name descname"><span class="pre">add_axes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../_modules/myutils/plotters.html#Space.add_axes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.Space.add_axes" title="Link to this definition"></a></dt>
+<dd><p>Add an axes to the space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ax</strong> (<em>plt.Axes</em>) – Axes to  be added to the frame.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(array) all the axes belonging to the space.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.plotters.Space.locate_ax">
+<span class="sig-name descname"><span class="pre">locate_ax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">borders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Axes</span></span></span><a class="reference internal" href="../../_modules/myutils/plotters.html#Space.locate_ax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.Space.locate_ax" title="Link to this definition"></a></dt>
+<dd><p>set the location of an axes respect to the ruler of the space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>borders</strong> (<em>list. Default=None</em>) – positions respect to the space coordinates specified as
+[[left, bottom], [top, right]]</p></li>
+<li><p><strong>ax</strong> (<em>plt.Axes. Default=Space.axes</em><em>[</em><em>0</em><em>]</em>) – axis to locate.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(plt.Axes) already relocated axes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.plotters.Space.set_axis">
+<span class="sig-name descname"><span class="pre">set_axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">borders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spaces</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="../../_modules/myutils/plotters.html#Space.set_axis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.Space.set_axis" title="Link to this definition"></a></dt>
+<dd><p>Arrange the spaces in the axis of the space. It is assumed that the
+number of axis is equal to rows x columns and they are ordered in
+ascendent order from left to right and from top to bottom.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> (<em>list. Default=None</em>) – list of Axes to the adjusted according to the defined parameters.
+In case of None, all the axes in the space are taken.</p></li>
+<li><p><strong>rows_cols</strong> (<em>tuple. Default=</em><em>(</em><em>1</em><em>, </em><em>1</em><em>)</em>) – number of rows and cols. the number of axes must be rows x cols.</p></li>
+<li><p><strong>borders</strong> (<em>list. Default=None</em>) – positions respect to the space coordinates specified as
+[[left, bottom], [top, right]]</p></li>
+<li><p><strong>spaces</strong> (<em>tuple. Default=</em><em>(</em><em>0.03</em><em>, </em><em>0.03</em><em>)</em>) – horizontal and vertical separation of the axes.</p></li>
+<li><p><strong>rows_cols</strong> – number of rows and columns.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(list) list of relocated axes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.plotters.Space.show_frame">
+<span class="sig-name descname"><span class="pre">show_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">majordelta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minordelta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.02</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'top'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Axes</span></span></span><a class="reference internal" href="../../_modules/myutils/plotters.html#Space.show_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.Space.show_frame" title="Link to this definition"></a></dt>
+<dd><p>Shows the frame of the space with the metrics you choose for the
+measurement ruler.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>majordelta</strong> (<em>float. Default=0.1</em>) – value to space the mayor ticks and add the numbers to the ruler.</p></li>
+<li><p><strong>minordelta</strong> (<em>float. Default=0.02</em>) – value to space the mayor ticks. these numbers are not added to the
+ruler.</p></li>
+<li><p><strong>color</strong> (<em>RGB array</em><em> or </em><em>matplotlib colors. Default=</em><em>[</em><em>1</em><em>, </em><em>0</em><em>, </em><em>0</em><em>]</em>) – color of the grid and frame.</p></li>
+<li><p><strong>layer</strong> (<em>str. Default=&quot;top&quot;</em>) – ‘top’ or ‘bottom’, if you want to see the frame in the front or in
+the back.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(plt.Axes) frame of the space.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each side of the frame is always going from zero to one</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="myutils.plotters.StandardPlotter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">StandardPlotter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Figure</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figwidth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figheight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax_pref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_pref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/plotters.html#StandardPlotter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Creator of standard scientific plots.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>list</em><em> or </em><em>array. Default=None</em>) – data to be plotted. It will correspond to the data in the y axis if
+no y is given, or x data in case y is given.</p></li>
+<li><p><strong>y</strong> (<em>list</em><em> or </em><em>array. Default=None</em>) – data to be plotted. It will correspond to the data in the y. It has
+to have the same dimension than the x list.</p></li>
+<li><p><strong>ax</strong> (<em>axes. Default=None</em>) – plt.axes object. In case it is not given, a new one will be
+created.</p></li>
+<li><p><strong>fig</strong> (<em>figure. Default=None</em>) – plt.figure object. In case it is not given, a new one will be
+created.</p></li>
+<li><p><strong>figwidth</strong> (<em>int. Default=8.57</em>) – width of the figure in centimeters.</p></li>
+<li><p><strong>figheight</strong> (<em>int. Default=11.43</em>) – height of the figure in centimeters.</p></li>
+<li><p><strong>ax_pref</strong> (<em>dict. Default=None</em>) – argument preferences for ‘axis_setter’. For more details about
+options, check StandardPlotter.change_ax_defaults</p></li>
+<li><p><strong>plot_pref</strong> (<em>dict. Default=None</em>) – argument preferences for ‘plot_data’. For more details about
+options, check StandardPlotter.plot_data</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.plotters.StandardPlotter.add_axes">
+<span class="sig-name descname"><span class="pre">add_axes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Axes</span></span></span><a class="reference internal" href="../../_modules/myutils/plotters.html#StandardPlotter.add_axes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.add_axes" title="Link to this definition"></a></dt>
+<dd><p>Creates a new axes in the figure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>space</strong> (<em>bool. Default=False</em>) – True if the axes is the frame of a space.</p></li>
+<li><p><strong>plt.Figure.add_subplots</strong> (<em>**kwargs for</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(plt.Axes) Created axes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.plotters.StandardPlotter.add_space">
+<span class="sig-name descname"><span class="pre">add_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/plotters.html#StandardPlotter.add_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.add_space" title="Link to this definition"></a></dt>
+<dd><p>Creates a subspace of reference to adjust the positions of the
+graphics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>myutils.plotters.Space</strong> (<em>**kwargs of</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(<a class="reference internal" href="#myutils.plotters.Space" title="myutils.plotters.Space">myutils.plotters.Space</a>) subspace of reference.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.plotters.StandardPlotter.arrow">
+<span class="sig-name descname"><span class="pre">arrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dxdy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/plotters.html#StandardPlotter.arrow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.arrow" title="Link to this definition"></a></dt>
+<dd><p>Draws an annotated arrow on the axes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xy</strong> (<em>array-like</em>) – x, y coordinate of the tail of the arrow.</p></li>
+<li><p><strong>dxdy</strong> (<em>array-like</em>) – dx, dy values of the arrow from the (x, y) coordinate.</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – text to annotate on the base of the arrow.</p></li>
+<li><p><strong>color</strong> (<em>mpl.color. Default=</em><em>[</em><em>0.3</em><em>, </em><em>0.3</em><em>, </em><em>0.3</em><em>]</em>) – color of the arrow and the text.</p></li>
+<li><p><strong>pad</strong> (<em>float. Default=0</em>) – vertical distance from the base of the arrow to the base of the
+text.</p></li>
+<li><p><strong>ax</strong> (<em>plt.Axes</em><em> or </em><em>int. default=0</em>) – Axes to add the arrow. Integer, the index to one of the sp.ax.</p></li>
+<li><p><strong>hw</strong> (<em>float. Default=1</em>) – head width.</p></li>
+<li><p><strong>hl</strong> (<em>float. Default=1</em>) – head length.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(None)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.plotters.StandardPlotter.axis_setter">
+<span class="sig-name descname"><span class="pre">axis_setter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">general_pars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Axes</span></span></span><a class="reference internal" href="../../_modules/myutils/plotters.html#StandardPlotter.axis_setter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.axis_setter" title="Link to this definition"></a></dt>
+<dd><p>Adjust the most common parameters of an axes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>int</em><em> or </em><em>axes. Default=0</em>) – plt.axes object or index of the axis in StandardPlotter.</p></li>
+<li><p><strong>reset</strong> (<em>Default=False</em>) – True to change the value of the other options for the default
+values.</p></li>
+<li><p><strong>general_pars</strong> (<em>Default={}</em>) – general parameters to change with
+StandardPlotter.change_general_pars.</p></li>
+<li><p><strong>details</strong> (<em>**kwargs</em><em> of </em><em>the preferences you want to change. For further</em>) – take a look in ax.preferences, where ax is the previous argument.</p></li>
+</ul>
+</dd>
+</dl>
+<p>:param : take a look in ax.preferences, where ax is the previous argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(plt.Axes) Objects used in the plotting.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>StandardPlotter.ax_pref do not contain all the possibilities to adjust
+in a plot using matplotlib. You can use the axis of the output to do
+further changes. myutils does not pretend to replace matplotlib but
+making it more accesible for scientific proposals.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.plotters.StandardPlotter.change_ax_defaults">
+<span class="sig-name descname"><span class="pre">change_ax_defaults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/plotters.html#StandardPlotter.change_ax_defaults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.change_ax_defaults" title="Link to this definition"></a></dt>
+<dd><p>Changes the values of StandardPlot.ax_pref dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reset</strong> (<em>bool. Default=False</em>) – besides of the changes given in the kwargs, reset the other values
+to the default.</p></li>
+<li><p><strong>are</strong> (<em>**kwargs</em><em> of </em><em>the defaults you want to change. The options</em>) – StandardPlot.ax_pref.keys()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(dict) new set of defaults.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The defaults showed before only represent the initial state. If you
+change one of the parameters in some point, it will keep that value
+even after calling this function if you do not specify that parameter.
+For restoring those values, use reset=True.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.plotters.StandardPlotter.change_general_pars">
+<span class="sig-name descname"><span class="pre">change_general_pars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_pars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/plotters.html#StandardPlotter.change_general_pars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.change_general_pars" title="Link to this definition"></a></dt>
+<dd><p>Changes the values of values of matplotlib.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>new_pars</strong> (<em>dict. Default={}</em>) – dictionary with the matplotlib parameters keywords as dictionary
+keys and the new values as dictionary values. For more information,
+check mpl.rcParams.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(dict) New mpl.rcParams</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.plotters.StandardPlotter.draw_brace">
+<span class="sig-name descname"><span class="pre">draw_brace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xspan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yspan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/plotters.html#StandardPlotter.draw_brace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.draw_brace" title="Link to this definition"></a></dt>
+<dd><p>Draws an annotated horizontal brace on the axes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xspan</strong> (<em>array-like</em>) – lower and higher boundary of the brace.</p></li>
+<li><p><strong>yy</strong> (<em>float</em>) – y-position of the base of the brace.</p></li>
+<li><p><strong>text</strong> (<em>str.</em>) – text to annotate over the brace.</p></li>
+<li><p><strong>ax</strong> (<em>plt.Axes</em><em>, </em><em>int</em>) – Axes to add the brace. Integer, the index to one of the sp.ax.</p></li>
+<li><p><strong>yspan</strong> (<em>float. Default=1.</em>) – y height of the brace from the basis.</p></li>
+<li><p><strong>beta_factor</strong> (<em>float. Default=300.</em>) – factor that regulates the curvature of the brace.</p></li>
+<li><p><strong>pad</strong> (<em>float. Default=0</em>) – distance from the tip of the brace to the text.</p></li>
+<li><p><strong>color</strong> (<em>mpl.color. Default=</em><em>[</em><em>0.3</em><em>, </em><em>0.3</em><em>, </em><em>0.3</em><em>]</em>) – color of the annotation (brace and text).</p></li>
+<li><p><strong>resolution_factor</strong> (<em>float. Default=100</em>) – scale to define the number of points to define the function of
+the brace.</p></li>
+<li><p><strong>plt.plot.</strong> (<em>kwargs for</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(numpy.Array) y points of the brace.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.plotters.StandardPlotter.plot_data">
+<span class="sig-name descname"><span class="pre">plot_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pstyle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'-o'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="../../_modules/myutils/plotters.html#StandardPlotter.plot_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.plot_data" title="Link to this definition"></a></dt>
+<dd><p>Add data to a curve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>list</em><em> or </em><em>array. Default=None</em>) – data to be plotted. It will correspond to the data in the y axis if
+no y is given, or x data in case y is given.</p></li>
+<li><p><strong>y</strong> (<em>list</em><em> or </em><em>array. Default=None</em>) – data to be plotted. It will correspond to the data in the y. It has
+to have the same dimension than the x list.</p></li>
+<li><p><strong>color_plot</strong> (<em>RGB array</em><em> or </em><em>matplotlib colors. Default=matplotlib palette</em>) – define the color of the data you want to plot</p></li>
+<li><p><strong>ax</strong> (<em>axes. Default=0</em>) – plt.axes object or index of the axis in StandardPlotter. In case it
+is not given, a new one will be created.</p></li>
+<li><p><strong>data_label</strong> (<em>str. Default=None</em>) – label of the curve</p></li>
+<li><p><strong>pstyle</strong> (<em>str. Default='-'</em>) – matplotlib line style.</p></li>
+<li><p><strong>color_plot</strong> – color of the curve</p></li>
+<li><p><strong>lw</strong> (<em>float. Default=3</em>) – thickness of the line.</p></li>
+<li><p><strong>plt.plot</strong> (<em>**kwargs of</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(list) set of added matplotlib.lines.Line2d.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.plotters.StandardPlotter.raxis">
+<span class="sig-name descname"><span class="pre">raxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rax_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lax_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Axes</span></span></span><a class="reference internal" href="../../_modules/myutils/plotters.html#StandardPlotter.raxis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.raxis" title="Link to this definition"></a></dt>
+<dd><p>Creates an axis on the right, such that your plot can have two set of
+data for the same x values. You will be plotting in a figure as follows</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+<div class="line">y-right</div>
+<div class="line"><br /></div>
+</div>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>int</em><em> or </em><em>axes. Default=0</em>) – plt.axes object or index of the axis in StandardPlotter. In case it
+is not given, a new one will be created.</p></li>
+<li><p><strong>ylabel</strong> (<em>str. Default=''</em>) – label for the y right axis.</p></li>
+<li><p><strong>yticks</strong> (<em>array. Default=automatic</em>) – numbers to show up in the y right axis.</p></li>
+<li><p><strong>rax_color</strong> (<em>RGB array</em><em> or </em><em>matplotlib colors. Default=</em><em>[</em><em>0.4</em><em>, </em><em>0.4</em><em>, </em><em>0.4</em><em>]</em>) – color of the y-right labels</p></li>
+<li><p><strong>lax_color</strong> (<em>RGB array</em><em> or </em><em>matplotlib colors. Default=</em><em>[</em><em>0.4</em><em>, </em><em>0.4</em><em>, </em><em>0.4</em><em>]</em>) – color of the y-left labels</p></li>
+<li><p><strong>yminor</strong> (<em>array. Default=None</em>) – minor ticks to add to the y right axis.</p></li>
+<li><p><strong>grid</strong> (<em>bool. Default=False</em>) – True to grid regarding the main ticks (major)</p></li>
+<li><p><strong>mingrid</strong> (<em>bool. Default=False</em>) – True to grid regarding the secundary ticks (minor)</p></li>
+<li><p><strong>axis.</strong> (<em>**kwargs for axis_setter for the new</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(Axes) overlaped axes with the y axis on the right</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.plotters.StandardPlotter.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/plotters.html#StandardPlotter.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.save" title="Link to this definition"></a></dt>
+<dd><p>Save figure with proper resolution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str.</em>) – name of the file to store the figure.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(None)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.plotters.StandardPlotter.set_polar">
+<span class="sig-name descname"><span class="pre">set_polar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_lims</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_ticks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_border</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Axes</span></span></span><a class="reference internal" href="../../_modules/myutils/plotters.html#StandardPlotter.set_polar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.set_polar" title="Link to this definition"></a></dt>
+<dd><p>Changes and set the axes as a polar plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>plt.Axes</em><em>, </em><em>int</em>) – Axes to transform and set as a polar plot. integer, the index to
+one of the sp.ax</p></li>
+<li><p><strong>r_ticks</strong> (<em>array. Default=None</em><em> (</em><em>&lt;automatic&gt;</em><em>)</em>) – radius of the ticks you want to add. That also includes add the
+numbers.</p></li>
+<li><p><strong>r_lims</strong> (<em>list. Default=None</em>) – minimum or maximum value of the data. Defaults as predicted by
+matplotlib.</p></li>
+<li><p><strong>add_center</strong> (<em>float. Default=0</em>) – shift the minimum value of r limits to this radius.</p></li>
+<li><p><strong>add_border</strong> (<em>float. Default=0</em>) – add this value to the maximum value of r limits.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(plt.Axes) polar Axes.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>add_center and add_border value only makes sense when r_lim is defined.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="myutils.plotters.StandardPlotter.show">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/plotters.html#StandardPlotter.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.show" title="Link to this definition"></a></dt>
+<dd><p>Shows the Figure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong># TODO</strong></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>add return information</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-myutils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-myutils" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

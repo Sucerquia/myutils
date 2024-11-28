@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>myutils.jupyter &mdash; myutils 1.2 documentation</title>
+  <title>myutils.cli package &mdash; myutils 1.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
 
@@ -61,9 +62,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">myutils.jupyter</li>
+      <li class="breadcrumb-item active">myutils.cli package</li>
       <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/modules/modules/myutils.cli.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -71,56 +72,38 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for myutils.jupyter</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+  <section id="myutils-cli-package">
+<h1>myutils.cli package<a class="headerlink" href="#myutils-cli-package" title="Link to this heading"></a></h1>
+<section id="module-myutils.cli.main">
+<span id="submodules"></span><h2>Submodules<a class="headerlink" href="#module-myutils.cli.main" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.cli.main.main">
+<span class="sig-prename descclassname"><span class="pre">myutils.cli.main.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/cli/main.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.cli.main.main" title="Link to this definition"></a></dt>
+<dd><p>This function run each time myutils is called from the terminal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(None)</p>
+</dd>
+</dl>
+</dd></dl>
 
+<dl class="py function" id="module-myutils.cli.main_template">
+<dt class="sig sig-object py" id="myutils.cli.main_template.main">
+<span class="sig-prename descclassname"><span class="pre">myutils.cli.main_template.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/myutils/cli/main_template.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.cli.main_template.main" title="Link to this definition"></a></dt>
+<dd><p>This function run each time myutils is called from the terminal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(None)</p>
+</dd>
+</dl>
+</dd></dl>
 
-<div class="viewcode-block" id="hide_code">
-<a class="viewcode-back" href="../../modules/modules/myutils.html#myutils.jupyter.hide_code">[docs]</a>
-<span class="k">def</span> <span class="nf">hide_code</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function hides the code cells in a jupyter notebook. It helps to a</span>
-<span class="sd">    cleaner in visualization of results.</span>
+</section>
+<section id="module-myutils.cli">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-myutils.cli" title="Link to this heading"></a></h2>
+</section>
+</section>
 
-<span class="sd">    Return</span>
-<span class="sd">    ======</span>
-<span class="sd">    # TODO: add return information</span>
-
-<span class="sd">    Note: this requires</span>
-<span class="sd">    ipython</span>
-<span class="sd">    ipywidgets</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">html</span> <span class="o">=</span> <span class="n">HTML</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;&lt;script&gt;</span>
-<span class="s1">    code_show=true;</span>
-<span class="s1">    function code_toggle() {</span>
-<span class="s1">    if (code_show){</span>
-<span class="s1">    $(&#39;div.input&#39;).hide();</span>
-<span class="s1">    } else {</span>
-<span class="s1">    $(&#39;div.input&#39;).show();</span>
-<span class="s1">    }</span>
-<span class="s1">    code_show = !code_show</span>
-<span class="s1">    }</span>
-<span class="s1">    $( document ).ready(code_toggle);</span>
-<span class="s1">    &lt;/script&gt;</span>
-<span class="s1">    &lt;form action=&quot;javascript:code_toggle()&quot;&gt;&lt;input type=&quot;submit&quot;</span>
-<span class="s1">    value=&quot;Click here to toggle on/off the raw code.&quot;&gt;&lt;/form&gt;&#39;&#39;&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">html</span></div>
-
-
-
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">tips:</span>
-
-<span class="sd">to have interactive plots:</span>
-<span class="sd">   %matplotlib notebook</span>
-
-<span class="sd">to remove outputs completely:</span>
-<span class="sd">   %%capture</span>
-
-<span class="sd">to run a bash line:</span>
-<span class="sd">   ! &lt;command&gt;</span>
-<span class="sd">&quot;&quot;&quot;</span>
-</pre></div>
 
            </div>
           </div>
