@@ -126,7 +126,7 @@ class MoleculeSetter:
         ==========
         trans: array (3x3)
             transformation matrix to be applied to all atom positions.
-        indexes: list or array (optional)
+        indexes: list or array. Defatult=None
             indexes of the atoms to apply the transformation. Default None
             that means the transformation is applied to the positions of all
             the atoms.
@@ -166,7 +166,7 @@ class MoleculeSetter:
             direction of x would go from atom 1 to atom 2.
         index3: int. Default=None
             The atom with index 3 would be in the xy plane in case to be given.
-        Center: int (optional)
+        Center: int. Default=None
             It must be index1 or index2, that means the atom with this index
             will be placed in the origin. In case center=None (default), the
             origin would be in the geometrical center between atoms with index1
@@ -313,14 +313,14 @@ class MoleculeSetter:
 
         Parameters
         ==========
-        out: str (optional)
+        out: str. Defatult=None
             name of the gaussian file (.com) without extension. Default
             chemical formula.
-        charge: int (optional)
+        charge: int. Default=0
             charge of the molecule in electron units. Default 0.
-        xc: str (optional)
+        xc: str. Default='bmk'
             exchange correlation functional used in gaussian. Default bmk
-        basis: str (optional)
+        basis: str. Default='6-31+g'
             basis set used in gaussian. Default 6-31+g
 
         Return

@@ -13,9 +13,9 @@ def output_terminal(cmd, print_output=True, skip_error=False, print_cmd=False,
     ==========
     cmd: str
         bash command to be executed in the terminal.
-    print_output: bool (optional). Default=True
+    print_output: bool. Default=True
         True for printing the output besides of returning it. Default False.
-    skip_error: bool (optional). Default=False
+    skip_error: bool. Default=False
         True for continuing running although the command fails. Default False.
     **kwargs:
         additional options for subprocess.Popen

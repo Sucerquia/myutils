@@ -100,7 +100,7 @@ def log2xyz(finput, foutput=None):
     ==========
     finput: str
         path to the log file.
-    foutput: str (optional). Default=None # TODO: check default value
+    foutput: str. Default=None # TODO: check default value
         name of the output file without extension.
 
     Return
