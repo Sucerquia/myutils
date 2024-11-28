@@ -24,14 +24,14 @@ exit 0
 # ==== General variables ======================================================
 mod_path=$(myutils path)   # path to the dir with the files to be documented
 # directories to be ignored during documentation.
-raw_ign_dirs='tests,cli'
+raw_ign_dirs='tests'
 # files to be ignored during the documentation.
 raw_ign_fils=''
 pkg_name="myutils"
 
 # ==== Costumer set up ========================================================
 directory="$(myutils path)"
-while getopts 'd:f:m:n:p:h' flag;
+while getopts 'd:f:m:n:p:vh' flag;
 do
     case "${flag}" in
       d) raw_ign_dirs=${OPTARG} ;;
@@ -39,18 +39,16 @@ do
       m) mod_doc=${OPTARG};;
       n) pkg_name=${OPTARG};;
       p) mod_path=${OPTARG};;
-
+      
+      v) verbose='true' ;;
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
 
 # Checks and corrects the documentation on the scripts.
-myutils add_python_doc -d $raw_ign_dirs \
-                       -f $raw_ign_fils \
-                       -p $mod_path \
-                       -n $pkg_name || fail "Correcting documentation in the
-                                             scripts"
+adjust "It is recommended to use myutils add_python_doc first in order to" \
+        "have a complete documentation."
 
 # Create rst of python files
 if [ ${#mod_doc} -eq 0 ];
@@ -69,7 +67,7 @@ mapfile -t ignore_files < <(echo "$raw_ign_fils,$raw_ign_dirs" | tr ',' '\n')
 toignore=""
 for ign_dir in "${ignore_dirs[@]}"
 do
-  toignore="$toignore $ign_dir"
+  toignore="$toignore $mod_path/$ign_dir"
   bool_ign="$bool_ign -path '*$ign_dir*' -o"
 done
 
