@@ -81,6 +81,7 @@ sphinx-apidoc -ET -o $mod_doc $mod_path ${toignore[@]}
 
 verbose "bash scripts"
 bash_help_block() {
+  echo
   echo ".. container:: bash-script-title"
   echo
   echo '   **'$1'**'
@@ -100,7 +101,7 @@ mapfile -t scripts < <(eval "find . -type f -not \(" "${bool_ign::-2}" \
 for file in ${scripts[@]}
 do
   # evaluate only .sh files
-  if [[ "${file##.*}" != "sh" ]]
+  if [[ "${file##*.}" != "sh" ]]
   then
     continue
   fi
@@ -113,8 +114,10 @@ do
     path_bash=""
   fi
 
+  title_in_rst=${file//\.\//}
+  title_in_rst=myutils/$title_in_rst
+
   rst_name=${path_bash//\.\//.}
-  title_in_rst=myutils/$rst_name
   rst_name=${rst_name//\//.}
   rst_name=myutils${rst_name}.rst
 
@@ -123,10 +126,10 @@ do
     touch $mod_doc/$rst_name
   fi
 
-  if grep -q $title_in_rst $mod_doc/$rst_name
+  if ! grep -q $title_in_rst $mod_doc/$rst_name
   then
     bash_help_block $title_in_rst $file >> $mod_doc/$rst_name
-  done
+  fi
 done
 
 cd $original_bash_blocks
