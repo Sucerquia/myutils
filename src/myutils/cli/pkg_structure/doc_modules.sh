@@ -31,6 +31,7 @@ pkg_name="myutils"
 
 # ==== Costumer set up ========================================================
 directory="$(myutils path)"
+verbose=''
 while getopts 'd:f:m:n:p:vh' flag;
 do
     case "${flag}" in
@@ -45,6 +46,7 @@ do
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
+source "$(myutils basics -path)" BasicModDoc $verbose
 
 # Checks and corrects the documentation on the scripts.
 adjust "It is recommended to use myutils add_python_doc first in order to" \

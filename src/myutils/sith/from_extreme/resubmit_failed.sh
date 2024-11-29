@@ -1,5 +1,32 @@
 #!/bin/bash
 
+# ----- definition of functions -----------------------------------------------
+print_help() {
+echo "
+Takes all the g09 log files given as arguments. If the log file does not report
+a proper termination, a new job is resubmitted (creating a backup first) using
+'myutils opt_and_forces'.
+
+  -v  verbose
+  -h  prints this message.
+"
+exit 0
+}
+
+# ----- set up starts ---------------------------------------------------------
+# General variables
+verbose='false'
+while getopts 'vh' flag;
+do
+  case "${flag}" in
+    v) verbose='true' ;;
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
+done
+
+# ---- BODY -------------------------------------------------------------------
+
 source "$(myutils basics -path)" recover 'true'
 original_path=$(pwd)
 
@@ -8,6 +35,7 @@ if [ ${#files} -eq 0 ]
 then
     files=$(find . -name *-opt.log | sort)
 fi
+
 for logfile in ${files[@]}
 do
   if [ ! $(grep "Normal termination" $logfile) ]

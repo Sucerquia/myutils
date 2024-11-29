@@ -9,15 +9,41 @@
 #SBATCH --gres=gpu:1
 #SBATCH --exclusive
 
-# This code submit an equilibration and run a pulling simulation using
-# grappa and amber99.
-# TODO: I have to add this part to the workflow such that I don't
-# have to run it afterwards.
+print_help() {
+echo "
+This code submits an equilibration and run a pulling simulation using
+grappa and amber99.
 
-file=$1
-cascade=$2
+  -f  <pdb_file> pdb file of the molecule that you want to equilibrate.
+  -c  run in a cluster.
 
-source "$(myutils basics -path)" PULLING -v
+  -v  verbose.
+  -h  prints this message.
+"
+exit 0
+}
+
+file=''
+cascade=''
+verbose=''
+while getopts 'cf:vh' flag;
+do
+  case "${flag}" in
+    f) file=${OPTARG} ;;
+    c) cascade='true' ;;
+
+    v) verbose='true' ;;
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
+done
+
+source "$(myutils basics -path)" PULLING $verbose
+
+if [ ${#file} -eq 0 ]
+then
+  fail "use the flag -f to give the molecule you want to equilibrate"
+fi
 
 if [ ${#cascade} -eq 0 ]
 then

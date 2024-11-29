@@ -1,5 +1,30 @@
 #!/bin/bash
 
+# ----- definition of functions -----------------------------------------------
+print_help() {
+echo "
+Check the basic structure of all the given files as arguments.
+
+It checks that all the bash scripts have flags support, verbose and help.
+
+  -v  verbose.
+  -c  run in a cluster.
+"
+exit 0
+}
+
+# ----- set up starts ---------------------------------------------------------
+verbose='false'
+while getopts 'vh' flag;
+do
+  case "${flag}" in
+    v) verbose='true' ;;
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
+done
+
+
 # checks that it has the basic structure
 source $(myutils basics -path) just_check 'true'
 
