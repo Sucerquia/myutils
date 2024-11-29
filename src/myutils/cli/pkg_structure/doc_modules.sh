@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source "$(myutils basics -path)" BasicModDoc
-
+  
 print_help() {
 echo "
 Code that explores the files in the package and automatically create the
@@ -74,3 +74,59 @@ do
 done
 
 sphinx-apidoc -ET -o $mod_doc $mod_path ${toignore[@]}
+
+
+
+# --- Bash scripts ------------------------------------------------------------
+
+verbose "bash scripts"
+bash_help_block() {
+  echo ".. container:: bash-script-title"
+  echo
+  echo '   **'$1'**'
+  echo
+  echo ".. container:: bash-script-doc"
+  echo
+  echo "   .. line-block::"
+  $2 -h | sed "s/^/      /g"
+}
+
+original_bash_blocks=$(pwd)
+
+cd $mod_path
+mapfile -t scripts < <(eval "find . -type f -not \(" "${bool_ign::-2}" \
+                        "-prune \)" )
+
+for file in ${scripts[@]}
+do
+  # evaluate only .sh files
+  if [[ "${file##.*}" != "sh" ]]
+  then
+    continue
+  fi
+
+  verbose $file
+
+  path_bash=${file%/*}
+  if [[ "$path_bash" == "." ]]
+  then
+    path_bash=""
+  fi
+
+  rst_name=${path_bash//\.\//.}
+  title_in_rst=myutils/$rst_name
+  rst_name=${rst_name//\//.}
+  rst_name=myutils${rst_name}.rst
+
+  if [ ! -f $mod_doc/$rst_name ]
+  then
+    touch $mod_doc/$rst_name
+  fi
+
+  if grep -q $title_in_rst $mod_doc/$rst_name
+  then
+    bash_help_block $title_in_rst $file >> $mod_doc/$rst_name
+  done
+done
+
+cd $original_bash_blocks

@@ -40,4 +40,10 @@ html_theme_options = {
     'display_version' : True,
     'style_external_links' : True
 }
+
 html_static_path = ['_static']
+
+# Add custom CSS file
+html_css_files = [
+    'custom.css',  # Ensure the file path is correct
+]
