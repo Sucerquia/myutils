@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;no title&gt; &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=2158e23a" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=61243dd2"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">install</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/myutils.cli.pkg_structure.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="bash-script-title docutils container">
+<p><strong>myutils/cli/pkg_structure/add_python_doc.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Code that explores the files in the package and automatically creates the</div>
+<div class="line">documentation of all classes and functions that finds in it.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-d  &lt;dir1,dir2…&gt; directories to be ignored.</div>
+<div class="line-block">
+<div class="line">Default: ‘pycache,tests,tutorials,pre-deprected’</div>
+</div>
+<div class="line">-f  &lt;fil1,fil2…&gt; files to be ignored. Default: ‘__init__’</div>
+<div class="line">-n  &lt;name&gt; pkg name. Default: myutils</div>
+<div class="line">-p  &lt;absolute_path&gt; path directory to be checked (no relative path).</div>
+<div class="line-block">
+<div class="line">Default: “$myutils path”</div>
+<div class="line"><br /></div>
+</div>
+<div class="line">-v  verbose.</div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+<div class="bash-script-title docutils container">
+<p><strong>myutils/cli/pkg_structure/bash_style.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Check bash style of all bash files in a directory, and its subdirectories.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-d  directory. Default: “$myutils -path”</div>
+<div class="line"><br /></div>
+<div class="line">-v  verbose.</div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+<div class="bash-script-title docutils container">
+<p><strong>myutils/cli/pkg_structure/doc_modules.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Code that explores the files in the package and automatically create the</div>
+<div class="line">documentation of all classes and functions that finds in it.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-d   &lt;dir1,dir2…&gt; directories to be ignored. Default: ‘tests,cli’</div>
+<div class="line">-f   &lt;fil1,fil2…&gt; files to be ignored. Default: ‘__init__’</div>
+<div class="line">-p   &lt;absolute_path&gt; path directory to be checked (no relative path).</div>
+<div class="line-block">
+<div class="line">Default: “$myutils path”</div>
+</div>
+<div class="line">-m   &lt;mod_doc_path&gt; absolute path to the directory that stores the modules</div>
+<div class="line-block">
+<div class="line">documentation. Default: &lt;mod_path&gt;/../../doc/modules</div>
+</div>
+<div class="line">-n   &lt;name&gt; pakage name. Default: myutils</div>
+<div class="line"><br /></div>
+<div class="line">-h   prints this message.</div>
+</div>
+</div>
+</div>
+<div class="bash-script-title docutils container">
+<p><strong>myutils/cli/pkg_structure/check_structure.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Check the structure of a package. All checkers run by default.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-d  src directory of the package. Defatul: “$myutils -path”</div>
+<div class="line">-p  pep8 convention in all python scripts.</div>
+<div class="line">-s  ShellCheck in all bash scripts.</div>
+<div class="line">-t  check tests.</div>
+<div class="line"><br /></div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+<div class="bash-script-title docutils container">
+<p><strong>myutils/cli/pkg_structure/python_doc_fixer.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Code takes the documentation of a function and checks the documentation adding</div>
+<div class="line">TODOs in the missing parts. The output is stored in a file called</div>
+<div class="line">final_&lt;method&gt;_doc.txt</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-f  &lt;method&gt; Function to be checked</div>
+<div class="line">-m  &lt;module&gt; Module that contains the Function</div>
+<div class="line">-s  &lt;n_spaces&gt; number of leading spaces.</div>
+<div class="line"><br /></div>
+<div class="line">-v  verbose.</div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+<div class="bash-script-title docutils container">
+<p><strong>myutils/cli/pkg_structure/doc_pythonfile.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Code that automatically creates or update the ‘.rst’ file for the documentation</div>
+<div class="line">of all python classes and functions that finds in a python file. Also add the</div>
+<div class="line">file to &lt;path_to_doc&gt;/modules.rst if it does not exist.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-f  &lt;file&gt; file name with the stem relative to the directory that contains</div>
+<div class="line-block">
+<div class="line">all the python codes to be documented (pkg_path, see -p below).</div>
+</div>
+<div class="line">-m  &lt;mod_doc_path&gt; path to the directory that stores the modules</div>
+<div class="line-block">
+<div class="line">documentation.</div>
+</div>
+<div class="line">-n  &lt;pkg_name&gt; name of the package to be documented.</div>
+<div class="line">-p  &lt;pkg_path&gt; path to directory that contains all the python codes to be</div>
+<div class="line-block">
+<div class="line">documented. Usually src directory.</div>
+</div>
+<div class="line">-h  prints this message.</div>
+<div class="line"><br /></div>
+</div>
+<div class="line">Note: This documentation is used in doc_modules.sh</div>
+</div>
+</div>
+<div class="bash-script-title docutils container">
+<p><strong>myutils/cli/pkg_structure/bash_basic_structure.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Check the basic structure of all the given files as arguments.</div>
+<div class="line"><br /></div>
+<div class="line">It checks that all the bash scripts have flags support, verbose and help.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-v  verbose.</div>
+<div class="line">-c  run in a cluster.</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

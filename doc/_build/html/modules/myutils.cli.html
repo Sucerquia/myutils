@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Overview: module code &mdash; myutils 1.2 documentation</title>
+  <title>myutils.cli package &mdash; myutils 1.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=32ed3f93" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=2158e23a" />
 
   
   <!--[if lt IE 9]>
@@ -62,8 +63,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Overview: module code</li>
+      <li class="breadcrumb-item active">myutils.cli package</li>
       <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/myutils.cli.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -71,23 +73,54 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>All modules for which code is available</h1>
-<ul><li><a href="myutils/ase_utils/molecules.html">myutils.ase_utils.molecules</a></li>
-<li><a href="myutils/ase_utils/tools.html">myutils.ase_utils.tools</a></li>
-<li><a href="myutils/cli/main.html">myutils.cli.main</a></li>
-<li><a href="myutils/cli/main_template.html">myutils.cli.main_template</a></li>
-<li><a href="myutils/jupyter.html">myutils.jupyter</a></li>
-<li><a href="myutils/miscellaneous.html">myutils.miscellaneous</a></li>
-<li><a href="myutils/peptides.html">myutils.peptides</a></li>
-<li><a href="myutils/plotters.html">myutils.plotters</a></li>
-<li><a href="myutils/sith/analysis.html">myutils.sith.analysis</a></li>
-<li><a href="myutils/sith/compare_siths.html">myutils.sith.compare_siths</a></li>
-<li><a href="myutils/sith/from_extreme/info_from_opt.html">myutils.sith.from_extreme.info_from_opt</a></li>
-<li><a href="myutils/sith/g09_xyz.html">myutils.sith.g09_xyz</a></li>
-<li><a href="myutils/sith/protonate.html">myutils.sith.protonate</a></li>
-<li><a href="myutils/sith/sith_plots.html">myutils.sith.sith_plots</a></li>
-<li><a href="myutils/sith/sith_tools.html">myutils.sith.sith_tools</a></li>
-</ul>
+  <section id="myutils-cli-package">
+<h1>myutils.cli package<a class="headerlink" href="#myutils-cli-package" title="Link to this heading"></a></h1>
+<section id="module-myutils.cli.main">
+<span id="submodules"></span><h2>Submodules<a class="headerlink" href="#module-myutils.cli.main" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.cli.main.main">
+<span class="sig-prename descclassname"><span class="pre">myutils.cli.main.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/cli/main.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.cli.main.main" title="Link to this definition"></a></dt>
+<dd><p>This function run each time myutils is called from the terminal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(None)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function" id="module-myutils.cli.main_template">
+<dt class="sig sig-object py" id="myutils.cli.main_template.main">
+<span class="sig-prename descclassname"><span class="pre">myutils.cli.main_template.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/cli/main_template.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.cli.main_template.main" title="Link to this definition"></a></dt>
+<dd><p>This function run each time myutils is called from the terminal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(None)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-myutils.cli">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-myutils.cli" title="Link to this heading"></a></h2>
+<div class="bash-script-title docutils container">
+<p><strong>myutils/cli/generate_main.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Creates the code that would be executed when myutils is called from</div>
+<div class="line">terminal (myutils.cli.main). This code adds all the sh files and all modules</div>
+<div class="line">that contains the comment # add2executable one line before to be defined.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-o  name of the output file. Default: main.py</div>
+<div class="line"><br /></div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
 
            </div>
           </div>
