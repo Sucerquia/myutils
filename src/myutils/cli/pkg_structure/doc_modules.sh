@@ -71,4 +71,4 @@ do
   bool_ign="$bool_ign -path '*$ign_dir*' -o"
 done
 
-sphinx-apidoc -ET -o $mod_doc/modules $mod_path ${toignore[@]}
+sphinx-apidoc -ET -o $mod_doc $mod_path ${toignore[@]}
