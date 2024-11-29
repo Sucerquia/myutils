@@ -6,6 +6,7 @@
   <title>myutils.cli.main &mdash; myutils 1.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=32ed3f93" />
 
   
   <!--[if lt IE 9]>
@@ -79,6 +80,16 @@
 
 
 <span class="n">pymodules</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;function_doc&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.miscellaneous&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;args_and_defaults&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.miscellaneous&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;optimized_e&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.miscellaneous&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;time_g09&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.miscellaneous&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;reduce_structs&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.from_extreme.info_from_opt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;info_from_opt&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.from_extreme.info_from_opt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;log2xyz&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.g09_xyz&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;protonate&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.protonate&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;proline_state&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.sith_tools&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;gen_randpep&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.sith_tools&#39;</span><span class="p">,</span>
     <span class="s1">&#39;F_max_stretch&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.ase_utils.tools&#39;</span><span class="p">,</span>
     <span class="s1">&#39;distance&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.ase_utils.tools&#39;</span><span class="p">,</span>
     <span class="s1">&#39;all_xyz2pdb&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.ase_utils.tools&#39;</span><span class="p">,</span>
@@ -89,73 +100,64 @@
     <span class="s1">&#39;create_amber_data&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.gromacs.ff_parameters&#39;</span><span class="p">,</span>
     <span class="s1">&#39;create_grappa_data&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.gromacs.ff_parameters&#39;</span><span class="p">,</span>
     <span class="s1">&#39;methods_in_class&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.cli.pkg_structure.documentation_tools&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;protonate&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.protonate&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;proline_state&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.sith_tools&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;gen_randpep&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.sith_tools&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;log2xyz&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.g09_xyz&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;reduce_structs&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.from_extreme.info_from_opt&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;info_from_opt&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.from_extreme.info_from_opt&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;function_doc&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.miscellaneous&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;args_and_defaults&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.miscellaneous&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;optimized_e&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.miscellaneous&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;time_g09&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.miscellaneous&#39;</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="n">sh_executers</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;single_g09&#39;</span><span class="p">:</span> <span class="s1">&#39;./bash_scripts/single_g09.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;bash-template&#39;</span><span class="p">:</span> <span class="s1">&#39;./bash_scripts/bash-template.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;find_blocks&#39;</span><span class="p">:</span> <span class="s1">&#39;./bash_scripts/find_blocks.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;constraint_run&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/constraint_run.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;classical_minimization&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/classical_minimization.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;pulling_with_ff&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/pulling_with_ff.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;equilibrate_pdb&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/equilibrate_pdb.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;classical_energies&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/classical_energies.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;analysis&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/analysis.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;pulling&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/pulling.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;extract_distance&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/extract_distance.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;peptide_pulling&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/peptide_pulling.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;generate_main&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/generate_main.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;bash_style&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/bash_style.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;python_doc_fixer&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/python_doc_fixer.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;doc_pythonfile&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/doc_pythonfile.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;check_structure&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/check_structure.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;bash_basic_structure&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/bash_basic_structure.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;add_python_doc&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/add_python_doc.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;check_tests&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/check_tests.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;doc_modules&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/doc_modules.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;extract_forces&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/extract_forces.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;proline_mod&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/proline_mod.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;workflow&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/workflow.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;compute_forces&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/compute_forces.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;prepare_and_submit&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/prepare_and_submit.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;extr_dofs&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/extr_dofs.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;resubmit_failed&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/resubmit_failed.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;opt_and_forces&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/opt_and_forces.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;rearange_files&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/rearange_files.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;workflow_from_extreme&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/workflow_from_extreme.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;submit_forces_after_opt&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/submit_forces_after_opt.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;reduce_ds&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/reduce_ds.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;forces_from_xyzs&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/forces_from_xyzs.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;after_optimization&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/after_optimization.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;find_forces&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/find_forces.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;clean_ds&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/clean_ds.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;proline_mod&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/proline_mod.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;extract_forces&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/extract_forces.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;stretching&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/stretching.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;compute_forces&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/compute_forces.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;reduce_ds&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/reduce_ds.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;rearange_files&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/rearange_files.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;forces_from_xyzs&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/forces_from_xyzs.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;submit_forces_after_opt&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/submit_forces_after_opt.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;resubmit_failed&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/resubmit_failed.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;extr_dofs&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/extr_dofs.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;after_optimization&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/after_optimization.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;workflow_from_extreme&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/workflow_from_extreme.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;opt_and_forces&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/opt_and_forces.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;prepare_and_submit&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/prepare_and_submit.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;basics&#39;</span><span class="p">:</span> <span class="s1">&#39;./basics.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;constraint_run&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/constraint_run.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;peptide_pulling&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/peptide_pulling.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;pulling_with_ff&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/pulling_with_ff.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;equilibrate_pdb&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/equilibrate_pdb.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;pulling&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/pulling.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;classical_minimization&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/classical_minimization.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;analysis&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/analysis.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;classical_energies&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/classical_energies.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;extract_distance&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/extract_distance.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;find_blocks&#39;</span><span class="p">:</span> <span class="s1">&#39;./bash_scripts/find_blocks.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;bash-template&#39;</span><span class="p">:</span> <span class="s1">&#39;./bash_scripts/bash-template.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;single_g09&#39;</span><span class="p">:</span> <span class="s1">&#39;./bash_scripts/single_g09.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;generate_main&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/generate_main.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;bash_basic_structure&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/bash_basic_structure.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;doc_pythonfile&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/doc_pythonfile.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;check_tests&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/check_tests.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;python_doc_fixer&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/python_doc_fixer.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;check_structure&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/check_structure.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;doc_modules&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/doc_modules.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;bash_style&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/bash_style.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;add_python_doc&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/add_python_doc.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;files_tree&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/files_tree.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;pkges_installer&#39;</span><span class="p">:</span> <span class="s1">&#39;./pkges_installer.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;basics&#39;</span><span class="p">:</span> <span class="s1">&#39;./basics.sh&#39;</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="n">other_files</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;pulling_temp&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/pulling_temp.mdp&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;nvt&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/nvt.mdp&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;minim&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/minim.mdp&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;ions&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/ions.mdp&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;npt&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/npt.mdp&#39;</span><span class="p">,</span>
     <span class="s1">&#39;constraint&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/constraint.mdp&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;npt&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/npt.mdp&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;nvt&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/nvt.mdp&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ions&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/ions.mdp&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;minim&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/minim.mdp&#39;</span><span class="p">,</span>
 <span class="p">}</span>
 
 
 <div class="viewcode-block" id="main">
-<a class="viewcode-back" href="../../../modules/modules/myutils.cli.html#myutils.cli.main.main">[docs]</a>
+<a class="viewcode-back" href="../../../modules/myutils.cli.html#myutils.cli.main.main">[docs]</a>
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function run each time myutils is called from the terminal.</span>

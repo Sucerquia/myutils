@@ -1,4 +1,4 @@
-.. _intall:
+.. _install:
 
 =======
 install

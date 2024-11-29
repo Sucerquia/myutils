@@ -22,7 +22,9 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="myutils.ase_utils package" href="myutils.ase_utils.html" />
+    <link rel="prev" title="install" href="../install.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,9 +46,58 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">install</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">myutils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html">myutils.ase_utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.html">myutils.cli package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html">myutils.gromacs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html">myutils.sith package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-myutils.jupyter">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#myutils.jupyter.hide_code"><code class="docutils literal notranslate"><span class="pre">hide_code()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#myutils.miscellaneous.args_and_defaults"><code class="docutils literal notranslate"><span class="pre">args_and_defaults()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#myutils.miscellaneous.function_doc"><code class="docutils literal notranslate"><span class="pre">function_doc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#myutils.miscellaneous.optimized_e"><code class="docutils literal notranslate"><span class="pre">optimized_e()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#myutils.miscellaneous.output_terminal"><code class="docutils literal notranslate"><span class="pre">output_terminal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#myutils.miscellaneous.time_g09"><code class="docutils literal notranslate"><span class="pre">time_g09()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#myutils.peptides.PepSetter"><code class="docutils literal notranslate"><span class="pre">PepSetter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.peptides.PepSetter.build_proline_state"><code class="docutils literal notranslate"><span class="pre">PepSetter.build_proline_state()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.peptides.PepSetter.compute_dihedrals"><code class="docutils literal notranslate"><span class="pre">PepSetter.compute_dihedrals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.peptides.PepSetter.endo_exo_proline"><code class="docutils literal notranslate"><span class="pre">PepSetter.endo_exo_proline()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.peptides.PepSetter.rama_phi_psi"><code class="docutils literal notranslate"><span class="pre">PepSetter.rama_phi_psi()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#myutils.plotters.Space"><code class="docutils literal notranslate"><span class="pre">Space</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.plotters.Space.add_axes"><code class="docutils literal notranslate"><span class="pre">Space.add_axes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.plotters.Space.locate_ax"><code class="docutils literal notranslate"><span class="pre">Space.locate_ax()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.plotters.Space.set_axis"><code class="docutils literal notranslate"><span class="pre">Space.set_axis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.plotters.Space.show_frame"><code class="docutils literal notranslate"><span class="pre">Space.show_frame()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#myutils.plotters.StandardPlotter"><code class="docutils literal notranslate"><span class="pre">StandardPlotter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.plotters.StandardPlotter.add_axes"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.add_axes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.plotters.StandardPlotter.add_space"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.add_space()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.plotters.StandardPlotter.arrow"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.arrow()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.plotters.StandardPlotter.axis_setter"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.axis_setter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.plotters.StandardPlotter.change_ax_defaults"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.change_ax_defaults()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.plotters.StandardPlotter.change_general_pars"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.change_general_pars()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.plotters.StandardPlotter.draw_brace"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.draw_brace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.plotters.StandardPlotter.plot_data"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.plot_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.plotters.StandardPlotter.raxis"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.raxis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.plotters.StandardPlotter.save"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.plotters.StandardPlotter.set_polar"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.set_polar()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.plotters.StandardPlotter.show"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.show()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-myutils">Module contents</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -952,7 +1003,10 @@ matplotlib.</p></li>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../install.html" class="btn btn-neutral float-left" title="install" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="myutils.ase_utils.html" class="btn btn-neutral float-right" title="myutils.ase_utils package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
