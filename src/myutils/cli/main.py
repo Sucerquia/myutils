@@ -66,6 +66,7 @@ sh_executers = {
     'doc_modules': './cli/pkg_structure/doc_modules.sh',
     'bash_style': './cli/pkg_structure/bash_style.sh',
     'add_python_doc': './cli/pkg_structure/add_python_doc.sh',
+    'files_tree': './cli/pkg_structure/files_tree.sh',
     'pkges_installer': './pkges_installer.sh',
     'basics': './basics.sh',
 }

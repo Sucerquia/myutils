@@ -24,7 +24,8 @@ extensions = ["sphinx.ext.autosummary",
               "sphinx.ext.autodoc",
               "sphinx.ext.viewcode",
               'sphinx.ext.napoleon',
-              'sphinx.ext.intersphinx']
+              'sphinx.ext.intersphinx',
+              "sphinxcontrib.mermaid"]
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
