@@ -9,10 +9,11 @@ documentation of all classes and functions that finds in it.
 
    -d   <dir1,dir2...> directories to be ignored. Default: 'tests,cli'
    -f   <fil1,fil2...> files to be ignored. Default: '__init__'
-   -p   <absolute_path> path directory to be checked (no relative path).
-        Default: \"\$myutils path\"
-   -m   <mod_doc_path> absolute path to the directory that stores the modules
-        documentation. Default: <mod_path>/../../doc/modules
+   -p   <relative_path> relative path directory to be checked. Relative in
+        respect to the directory that stores the modules documentation (see the
+        flag -m). Default=../../src/myutils
+   -m   <absolute_path> absolute path to the directory that stores the modules
+        documentation. Default: \$(myutils path)/../../doc/modules
    -n   <name> pakage name. Default: myutils
 
    -h   prints this message.
@@ -22,7 +23,9 @@ exit 0
 # ----- definition of functions finishes --------------------------------------
 
 # ==== General variables ======================================================
-mod_path=$(myutils path)   # path to the dir with the files to be documented
+# relative path to the dir with the files to be documented
+relative_path= "../../src/myutils/"
+
 # directories to be ignored during documentation.
 raw_ign_dirs='tests'
 # files to be ignored during the documentation.
@@ -30,8 +33,8 @@ raw_ign_fils=''
 pkg_name="myutils"
 
 # ==== Costumer set up ========================================================
-directory="$(myutils path)"
 verbose=''
+mod_doc="$(myutils path)/../../doc/modules"
 while getopts 'd:f:m:n:p:vh' flag;
 do
     case "${flag}" in
@@ -39,25 +42,30 @@ do
       f) raw_ign_fils=${OPTARG} ;;
       m) mod_doc=${OPTARG};;
       n) pkg_name=${OPTARG};;
-      p) mod_path=${OPTARG};;
+      p) relative_path=${OPTARG};;
       
       v) verbose='true' ;;
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
+
+# absolute to the dir with the files to be documented
+mod_path=$mod_doc/$relative_path
+
 source "$(myutils basics -path)" BasicModDoc $verbose
+
+# checks existence of paths
+[ -d $mod_doc ] || fail "path to the documentation directory does not exist." \
+                        "Check the flag -m for more details"
+
+[ -d $mod_path ] || fail "path to the directory to be documented does not" \
+                         "exist. Check the flag -p for more details"
+                    
 
 # Checks and corrects the documentation on the scripts.
 adjust "It is recommended to use myutils add_python_doc first in order to" \
         "have a complete documentation."
-
-# Create rst of python files
-if [ ${#mod_doc} -eq 0 ];
-then
-    # path to module directory
-    mod_doc="$mod_path/../../doc/modules"
-fi
 
 # directories to be ignore during the check.
 mapfile -t ignore_dirs < <(echo "$raw_ign_dirs" | tr ',' '\n')
@@ -81,31 +89,53 @@ sphinx-apidoc -ET -o $mod_doc $mod_path ${toignore[@]}
 
 verbose "bash scripts"
 bash_help_block() {
+  file=$2
+  tmp_name=${file##*/}
+  plain_name=${tmp_name%.sh}
   echo
   echo ".. container:: bash-script-title"
   echo
-  echo '   **'$1'**'
+  echo '   |chainlink| :ref:`[script] <'$plain_name'>` **'$1'**'
   echo
   echo ".. container:: bash-script-doc"
   echo
   echo "   .. line-block::"
+
   $2 -h | sed "s/^/      /g"
 }
 
-original_bash_blocks=$(pwd)
+
+create_bashscript_rst() {
+  doc_path=$1
+  rel_path=$2
+  file=$3
+
+  tmp_name=${file##*/}
+  plain_name=${tmp_name%.sh}
+  rst_name=$doc_path/bash_scripts/$plain_name.rst
+
+  echo ".. _$plain_name:" > $rst_name
+  echo "" >> $rst_name
+  script_title="Script of myutils $plain_name"
+  printf '%0.s=' $(seq 1 ${$#script_title}); echo >> $rst_name
+  echo $script_title >> $rst_name
+  printf '%0.s=' $(seq 1 ${$#script_title}); echo >> $rst_name
+  echo ".. literalinclude:: $rel_path/$file" >> $rst_name
+  echo "   :language: bash" >> $rst_name
+}
 
 cd $mod_path
-mapfile -t scripts < <(eval "find . -type f -not \(" "${bool_ign::-2}" \
-                        "-prune \)" )
+mapfile -t scripts < <(eval "find . -type f -not \(" \
+                       "${bool_ign::-2}" "-prune \) -name '*.sh'" )
+
+
+if [ ! -d "$mod_doc/bash_scripts" ] && [ ${#scripts[@]} -ne 0 ]
+then
+  mkdir $mod_doc/bash_scripts
+fi
 
 for file in ${scripts[@]}
 do
-  # evaluate only .sh files
-  if [[ "${file##*.}" != "sh" ]]
-  then
-    continue
-  fi
-
   verbose $file
 
   path_bash=${file%/*}
@@ -124,12 +154,26 @@ do
   if [ ! -f $mod_doc/$rst_name ]
   then
     touch $mod_doc/$rst_name
+    echo
+    title=${rst_name%.rst}
+    printf '%0.s=' $(seq 1 ${$#title}); echo
+    echo $title
+    printf '%0.s=' $(seq 1 ${$#title}); echo
   fi
 
   if ! grep -q $title_in_rst $mod_doc/$rst_name
   then
     bash_help_block $title_in_rst $file >> $mod_doc/$rst_name
+    # Create script file
+    create_bashscript_rst $mod_doc $relative_path $file
   fi
+
+  # Send the alias to the end
+  sed -i "/.. |chainlink| unicode:: U+1F517/d" $mod_doc/$rst_name
+  echo ".. |chainlink| unicode:: U+1F517" >> $mod_doc/$rst_name
 done
 
 cd $original_bash_blocks
+
+# TODO: add section to checkback, namely, look at modules that there is not extra
+# unnecessary files that are not in the source directory
