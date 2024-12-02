@@ -1,7 +1,17 @@
-.. myutils documentation master file, created by
-   sphinx-quickstart on Tue May  2 13:22:11 2023.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. _myutils:
+
+=======
+MyUtils
+=======
+
+MyUtils is a set of tools that you can use for scientific proporsals, mainly
+related with the field of simulations of molecules, although there are some
+parts that could be interesting for all the scientific community. This set of
+tools was created and it is currently maintained by Daniel Sucerquia, PhD
+student at the Heidelberg Institute for Theoretical Studies (HITS) and the
+Max Planck Institute for Polymer Research (MPIP).
+
+This is a general overview of the kind of tools you can find in this project:
 
 .. mermaid::
    :align: center
@@ -25,6 +35,10 @@
      click node8 "modules/myutils.sith.html" _self
        node8 --> node9["from_extreme"]
        click node9 "modules/myutils.sith.from_extreme.html" _self
+
+-------
+Content
+-------
 
 .. toctree::
    about
