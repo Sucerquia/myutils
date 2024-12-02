@@ -24,7 +24,7 @@ exit 0
 
 # ==== General variables ======================================================
 # relative path to the dir with the files to be documented
-relative_path= "../../src/myutils/"
+relative_path="../../src/myutils/"
 
 # directories to be ignored during documentation.
 raw_ign_dirs='tests'
@@ -50,10 +50,10 @@ do
     esac
 done
 
-# absolute to the dir with the files to be documented
-mod_path=$mod_doc/$relative_path
+source "$(myutils basics -path)" BasicModDoc "$verbose"
 
-source "$(myutils basics -path)" BasicModDoc $verbose
+# absolute to the dir with the files to be documented
+mod_path="$mod_doc/$relative_path"
 
 # checks existence of paths
 [ -d $mod_doc ] || fail "path to the documentation directory does not exist." \
@@ -106,21 +106,21 @@ bash_help_block() {
 
 
 create_bashscript_rst() {
-  doc_path=$1
-  rel_path=$2
-  file=$3
+  local doc_path=$1
+  local rel_path=$2
+  local file=$3
 
-  tmp_name=${file##*/}
-  plain_name=${tmp_name%.sh}
-  rst_name=$doc_path/bash_scripts/$plain_name.rst
+  local tmp_name=${file##*/}
+  local plain_name=${tmp_name%.sh}
+  local rst_name="$doc_path/bash_rsts/$plain_name.rst"
 
   echo ".. _$plain_name:" > $rst_name
   echo "" >> $rst_name
   script_title="Script of myutils $plain_name"
-  printf '%0.s=' $(seq 1 ${$#script_title}); echo >> $rst_name
+  { printf '%0.s=' $(seq 1 ${#script_title}); echo ; } >> $rst_name
   echo $script_title >> $rst_name
-  printf '%0.s=' $(seq 1 ${$#script_title}); echo >> $rst_name
-  echo ".. literalinclude:: $rel_path/$file" >> $rst_name
+  { printf '%0.s=' $(seq 1 ${#script_title}); echo ; echo ; } >> $rst_name
+  echo ".. literalinclude:: ../$rel_path/$file" >> $rst_name
   echo "   :language: bash" >> $rst_name
 }
 
@@ -129,13 +129,14 @@ mapfile -t scripts < <(eval "find . -type f -not \(" \
                        "${bool_ign::-2}" "-prune \) -name '*.sh'" )
 
 
-if [ ! -d "$mod_doc/bash_scripts" ] && [ ${#scripts[@]} -ne 0 ]
+if [ ! -d "$mod_doc/bash_rsts" ] && [ ${#scripts[@]} -ne 0 ]
 then
-  mkdir $mod_doc/bash_scripts
+  mkdir $mod_doc/bash_rsts
 fi
 
 for file in ${scripts[@]}
 do
+  echo 
   verbose $file
 
   path_bash=${file%/*}
@@ -156,9 +157,9 @@ do
     touch $mod_doc/$rst_name
     echo
     title=${rst_name%.rst}
-    printf '%0.s=' $(seq 1 ${$#title}); echo
-    echo $title
-    printf '%0.s=' $(seq 1 ${$#title}); echo
+    { printf '%0.s=' $(seq 1 ${#title}); echo ; } >> $mod_doc/$rst_name
+    echo $title >> $mod_doc/$rst_name
+    { printf '%0.s=' $(seq 1 ${#title}); echo ; echo ; } >> $mod_doc/$rst_name
   fi
 
   if ! grep -q $title_in_rst $mod_doc/$rst_name
@@ -170,6 +171,7 @@ do
 
   # Send the alias to the end
   sed -i "/.. |chainlink| unicode:: U+1F517/d" $mod_doc/$rst_name
+
   echo ".. |chainlink| unicode:: U+1F517" >> $mod_doc/$rst_name
 done
 
@@ -177,3 +179,5 @@ cd $original_bash_blocks
 
 # TODO: add section to checkback, namely, look at modules that there is not extra
 # unnecessary files that are not in the source directory
+
+finish
