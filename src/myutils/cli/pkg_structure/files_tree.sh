@@ -1,5 +1,32 @@
 #!/bin/bash
 
+
+print_help() {
+echo "
+Function that creates a mermaid map of a directory structure.
+
+Usage: myutils files_tree <path to dir to be mapped> [ <ignoring patters> ... ]
+
+The output is the string that you have to locate in an rst file in order to
+render your map. In principle, the output can be used in markdown files
+changing the corresponding keywords.
+"
+exit 0
+}
+# ----- definition of functions finishes --------------------------------------
+
+# ==== Costumer set up ========================================================
+verbose=''
+while getopts 'vh' flag;
+do
+    case "${flag}" in
+
+      v) verbose='true' ;;
+      h) print_help ;;
+      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+    esac
+done
+
 # Function to recursively generate Mermaid nodes
 generate_tree() {
     local path="$1"
