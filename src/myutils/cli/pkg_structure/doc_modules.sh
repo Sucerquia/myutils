@@ -23,14 +23,13 @@ exit 0
 # ----- definition of functions finishes --------------------------------------
 
 # ==== General variables ======================================================
-# relative path to the dir with the files to be documented
-relative_path="../../src/myutils/"
-
 # directories to be ignored during documentation.
 raw_ign_dirs='tests'
 # files to be ignored during the documentation.
 raw_ign_fils=''
 pkg_name="myutils"
+# relative path to the dir with the files to be documented
+relative_path=""
 
 # ==== Costumer set up ========================================================
 verbose=''
@@ -49,6 +48,12 @@ do
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
+
+# relative path to the dir with the files to be documented
+if [ ${#relative_path} -eq 0 ]
+then
+  relative_path="../../src/$pkg_name/"
+fi
 
 source "$(myutils basics -path)" BasicModDoc "$verbose"
 
@@ -116,7 +121,7 @@ create_bashscript_rst() {
 
   echo ".. _$plain_name:" > $rst_name
   echo "" >> $rst_name
-  script_title="Script of myutils $plain_name"
+  script_title="Script of $pkg_name $plain_name"
   { printf '%0.s=' $(seq 1 ${#script_title}); echo ; } >> $rst_name
   echo $script_title >> $rst_name
   { printf '%0.s=' $(seq 1 ${#script_title}); echo ; echo ; } >> $rst_name
@@ -146,11 +151,11 @@ do
   fi
 
   title_in_rst=${file//\.\//}
-  title_in_rst=myutils/$title_in_rst
+  title_in_rst=$pkg_name/$title_in_rst
 
   rst_name=${path_bash//\.\//.}
   rst_name=${rst_name//\//.}
-  rst_name=myutils${rst_name}.rst
+  rst_name=$pkg_name${rst_name}.rst
 
   if [ ! -f $mod_doc/$rst_name ]
   then
@@ -160,6 +165,7 @@ do
     { printf '%0.s=' $(seq 1 ${#title}); echo ; } >> $mod_doc/$rst_name
     echo $title >> $mod_doc/$rst_name
     { printf '%0.s=' $(seq 1 ${#title}); echo ; echo ; } >> $mod_doc/$rst_name
+
   fi
 
   if ! grep -q $title_in_rst $mod_doc/$rst_name
