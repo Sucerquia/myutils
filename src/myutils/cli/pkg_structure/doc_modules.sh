@@ -165,7 +165,14 @@ do
     { printf '%0.s=' $(seq 1 ${#title}); echo ; } >> $mod_doc/$rst_name
     echo $title >> $mod_doc/$rst_name
     { printf '%0.s=' $(seq 1 ${#title}); echo ; echo ; } >> $mod_doc/$rst_name
+  fi
 
+  if ! grep -q "${rst_name%.rst}" $mod_doc/$pkg_name.rst
+  then
+    # Next line assumes that the first toctree is the main one
+    mapfile -t lines < <( grep -n ".. toctree::" $mod_doc/$pkg_name.rst | \
+                          cut -d ":" -f 1 )
+    sed -i "$(( ${lines[0]} + 2 ))a \ \ \ ${rst_name%.rst}"
   fi
 
   if ! grep -q $title_in_rst $mod_doc/$rst_name
