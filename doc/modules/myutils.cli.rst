@@ -23,3 +23,15 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+
+.. toctree::
+   :hidden:
+
+   bash_rsts_doc/generate_main
+   bash_rsts_scripts/generate_main
+
+
+generate_main
+-------------
+
+.. include:: bash_rsts_doc/generate_main.rst

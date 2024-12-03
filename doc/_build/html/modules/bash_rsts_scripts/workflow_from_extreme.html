@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Script of myutils workflow_from_extreme &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=32ed3f93" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=61243dd2"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="../bash_rsts_doc/submit_forces_after_opt.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="../bash_rsts_doc/workflow_from_extreme.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../myutils.html">myutils package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../myutils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#module-myutils.sith.from_extreme.info_from_opt">Submodules</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../myutils.sith.from_extreme.html#module-myutils.sith.from_extreme">Module contents</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#after-optimization">after_optimization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#forces-from-xyzs">forces_from_xyzs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#reduce-ds">reduce_ds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#submit-forces-after-opt">submit_forces_after_opt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#workflow-from-extreme">workflow_from_extreme</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#rearange-files">rearange_files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#opt-and-forces">opt_and_forces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#resubmit-failed">resubmit_failed</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#extr-dofs">extr_dofs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#prepare-and-submit">prepare_and_submit</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.bash_scripts.html">myutils.bash_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html">myutils.cli.pkg_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.ase_utils.html">myutils.ase_utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.html">myutils.cli package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.gromacs.html">myutils.gromacs package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../myutils.sith.html">myutils.sith package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="../myutils.sith.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#module-myutils.sith.analysis">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#module-myutils.sith">Module contents</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#stretching">stretching</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#extract-forces">extract_forces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#proline-mod">proline_mod</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#clean-ds">clean_ds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#find-forces">find_forces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#compute-forces">compute_forces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#workflow">workflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../myutils.html#module-myutils.jupyter">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../myutils.html#module-myutils">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../myutils.html#basics">basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../myutils.html#pkges-installer">pkges_installer</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../myutils.html">myutils package</a></li>
+          <li class="breadcrumb-item"><a href="../myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a></li>
+      <li class="breadcrumb-item active">Script of myutils workflow_from_extreme</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/modules/bash_rsts_scripts/workflow_from_extreme.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="script-of-myutils-workflow-from-extreme">
+<span id="workflow-from-extreme"></span><h1>Script of myutils workflow_from_extreme<a class="headerlink" href="#script-of-myutils-workflow-from-extreme" title="Link to this heading"></a></h1>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="c1">#SBATCH -N 1                   # number of nodes</span>
+<span class="c1">#SBATCH -n 9</span>
+<span class="c1">#SBATCH --cpus-per-task=1</span>
+<span class="c1">#SBATCH -t 24:00:00</span>
+<span class="c1">#SBATCH --output=%x-%j.o</span>
+<span class="c1">#SBATCH --error=%x-%j.e</span>
+<span class="c1">#SBATCH --exclusive</span>
+
+
+<span class="c1"># ----- definition of functions starts ----------------------------------------</span>
+print_help<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span>
+<span class="s2">This tool creates the files to do the sith analysis by optimizing a molecule</span>
+<span class="s2">that was just about to get a first rupture, then takes the intermedia steps and</span>
+<span class="s2">find the internal forces. Consider the next options:</span>
+
+<span class="s2">  -c  run in cascade. (modules are loaded)</span>
+<span class="s2">  -p  &lt;peptide&gt;. directory or xyzfile of last conf. Chains of aminoacids to</span>
+<span class="s2">      be evaluated. For example, \&quot;./AAA/\&quot; would optimize the last</span>
+<span class="s2">      stretched a trialanine peptide (where last means after organizing</span>
+<span class="s2">      alphabetically).</span>
+<span class="s2">  -l  &lt;number of amino acids in the peptide&gt; It will be assumed that the</span>
+<span class="s2">      xyz file starts with the letter code of the amino acids.</span>
+
+<span class="s2">  -v  verbose.</span>
+<span class="s2">  -h  prints this message.</span>
+
+<span class="s2">Note: it is assumed that the file of the last configuration is named as:</span>
+<span class="s2">&lt;amino acids-code&gt;-&lt;description&gt;&lt;number of stretching&gt;.xyz</span>
+<span class="s2">&quot;</span>
+<span class="nb">exit</span><span class="w"> </span><span class="m">0</span>
+<span class="o">}</span>
+
+<span class="c1"># ----- definition of functions finishes --------------------------------------</span>
+
+<span class="c1"># ----- set up starts ---------------------------------------------------------</span>
+<span class="nv">cascade</span><span class="o">=</span><span class="s1">&#39;false&#39;</span>
+<span class="nv">ref</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+<span class="nv">verbose</span><span class="o">=</span><span class="s1">&#39;false&#39;</span>
+<span class="k">while</span><span class="w"> </span><span class="nb">getopts</span><span class="w"> </span><span class="s1">&#39;cl:p:vh&#39;</span><span class="w"> </span>flag<span class="p">;</span>
+<span class="k">do</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">flag</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">in</span>
+<span class="w">    </span>c<span class="o">)</span><span class="w"> </span><span class="nv">cascade</span><span class="o">=</span><span class="s1">&#39;true&#39;</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>p<span class="o">)</span><span class="w"> </span><span class="nv">ref</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+
+<span class="w">    </span>v<span class="o">)</span><span class="w"> </span><span class="nv">verbose</span><span class="o">=</span><span class="s1">&#39;true&#39;</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>h<span class="o">)</span><span class="w"> </span>print_help<span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>*<span class="o">)</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;for usage check: myutils &lt;function&gt; -h&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">  </span><span class="k">esac</span>
+<span class="k">done</span>
+
+<span class="nb">source</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>myutils<span class="w"> </span>basics<span class="w"> </span>-path<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>WF_FROM_EXTREME
+
+<span class="k">if</span><span class="w"> </span><span class="nv">$cascade</span>
+<span class="k">then</span>
+<span class="w">    </span>load_modules<span class="w"> </span><span class="c1"># ADD the parameters to resubmit</span>
+<span class="k">fi</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${#</span><span class="nv">ref</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span>
+<span class="k">then</span><span class="w"> </span>
+<span class="w">  </span>fail<span class="w"> </span><span class="s2">&quot;This code needs one reference. Please, define it using the flag -p.</span>
+<span class="s2">    For more info, use \&quot;myutils workflow_from_extreme -h\&quot;&quot;</span>
+<span class="k">fi</span>
+
+<span class="c1"># In case pep is a directory, it searches the last xyz in this dir.</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-d<span class="w"> </span><span class="nv">$ref</span><span class="w"> </span><span class="o">]</span>
+<span class="k">then</span>
+<span class="w">    </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$ref</span>
+<span class="w">    </span><span class="nv">ref</span><span class="o">=</span><span class="si">${</span><span class="nv">ref</span><span class="p">##*/</span><span class="si">}</span>
+<span class="w">    </span>mapfile<span class="w"> </span>-t<span class="w"> </span>previous<span class="w"> </span>&lt;<span class="w"> </span>&lt;<span class="o">(</span><span class="w"> </span>find<span class="w"> </span>.<span class="w"> </span>-maxdepth<span class="w"> </span><span class="m">1</span><span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.xyz&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                                    </span>-not<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*bck*&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="o">)</span>
+<span class="w">    </span><span class="nv">ref</span><span class="o">=</span><span class="si">${</span><span class="nv">previous</span><span class="p">[-1]</span><span class="si">}</span>
+<span class="k">fi</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-f<span class="w"> </span><span class="nv">$ref</span><span class="w"> </span><span class="o">]</span>
+<span class="k">then</span>
+<span class="w">    </span>fail<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ref</span><span class="s2"> does not exist&quot;</span>
+<span class="k">fi</span>
+
+<span class="c1"># ---- BODY -------------------------------------------------------------------</span>
+<span class="c1"># ==== Optimization from extreme</span>
+<span class="nv">xyz</span><span class="o">=</span><span class="si">${</span><span class="nv">ref</span><span class="p">##*/</span><span class="si">}</span>
+<span class="nv">name</span><span class="o">=</span><span class="si">${</span><span class="nv">xyz</span><span class="p">%-*</span><span class="si">}</span>
+
+verbose<span class="w"> </span><span class="s2">&quot;The first g09 process is an optimization starting from </span><span class="nv">$ref</span><span class="s2">&quot;</span>
+
+<span class="c1"># create from_extreme directory</span>
+mkdir<span class="w"> </span>from_extreme
+cp<span class="w"> </span><span class="nv">$xyz</span><span class="w"> </span>from_extreme
+cp<span class="w"> </span>*00.pdb<span class="w"> </span>from_extreme
+<span class="nb">cd</span><span class="w"> </span>from_extreme
+
+<span class="c1"># creates gaussian input that optimizes the structure</span>
+myutils<span class="w"> </span>change_distance<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$xyz</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$name</span><span class="s2">-optext&quot;</span><span class="w"> </span>frozen_dofs.dat<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">&quot;scale_distance&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>fail<span class="w"> </span><span class="s2">&quot;Preparating the input of gaussian&quot;</span>
+rm<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$xyz</span><span class="s2">&quot;</span>
+sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;1a %NProcShared=8&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$name</span><span class="s2">-optext.com&quot;</span>
+sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;3a opt(modredun,calcfc)&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$name</span><span class="s2">-optext.com&quot;</span>
+
+<span class="c1"># run gaussian</span>
+verbose<span class="w"> </span><span class="s2">&quot;Running optmization of stretching </span><span class="si">${</span><span class="nv">nameiplusone</span><span class="si">}</span><span class="s2">&quot;</span>
+g09<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$name</span><span class="s2">-optext.com&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$name</span><span class="s2">-optext.log&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">{</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>grep<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;Atoms too close.&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">         </span><span class="s2">&quot;</span><span class="nv">$name</span><span class="s2">-optext.com&quot;</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">         </span>-eq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span>fail<span class="w"> </span><span class="s2">&quot;Atoms too close for </span><span class="si">${</span><span class="nv">nameiplusone</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="k">fi</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="o">}</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>fail<span class="w"> </span><span class="s2">&quot;running gaussian optimization&quot;</span>
+
+<span class="c1"># check convergence from output</span>
+<span class="nv">output</span><span class="o">=</span><span class="k">$(</span>grep<span class="w"> </span>-i<span class="w"> </span>optimized<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$name</span><span class="s2">-optext.log&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<span class="w">          </span>grep<span class="w"> </span>-c<span class="w"> </span>-i<span class="w"> </span>Non<span class="w"> </span><span class="k">)</span>
+
+<span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$output</span><span class="s2">&quot;</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>fail<span class="w"> </span><span class="s2">&quot;Optimization didn&#39;t converged&quot;</span>
+
+myutils<span class="w"> </span>after_optimization<span class="w"> </span>-l<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$name</span><span class="s2">-optext.log&quot;</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$name</span>
+
+finish<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$name</span><span class="s2"> finish&quot;</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../bash_rsts_doc/workflow_from_extreme.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../bash_rsts_doc/submit_forces_after_opt.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -18,175 +18,77 @@ Module contents
    :undoc-members:
    :show-inheritance:
 
-.. container:: bash-script-title
+.. toctree::
+   :hidden:
 
-   **myutils/sith/from_extreme/after_optimization.sh**
+   bash_rsts_doc/prepare_and_submit
+   bash_rsts_scripts/prepare_and_submit
+   bash_rsts_doc/extr_dofs
+   bash_rsts_scripts/extr_dofs
+   bash_rsts_doc/resubmit_failed
+   bash_rsts_scripts/resubmit_failed
+   bash_rsts_doc/opt_and_forces
+   bash_rsts_scripts/opt_and_forces
+   bash_rsts_doc/rearange_files
+   bash_rsts_scripts/rearange_files
+   bash_rsts_doc/workflow_from_extreme
+   bash_rsts_scripts/workflow_from_extreme
+   bash_rsts_doc/submit_forces_after_opt
+   bash_rsts_scripts/submit_forces_after_opt
+   bash_rsts_doc/reduce_ds
+   bash_rsts_scripts/reduce_ds
+   bash_rsts_doc/forces_from_xyzs
+   bash_rsts_scripts/forces_from_xyzs
+   bash_rsts_doc/after_optimization
+   bash_rsts_scripts/after_optimization
 
-.. container:: bash-script-doc
 
-   .. line-block::
-      
-      Creates the com files from the xyz structures extracted from a g09 log file and
-      submit the corresponding jobs to compute the forces.
-      
-        -l  <log_file> optimization g09 logfile.
-        -n  <name> standard name. Usually pep name.
-      
-        -h  prints this message.
-      
+after_optimization
+------------------
 
-.. container:: bash-script-title
+.. include:: bash_rsts_doc/after_optimization.rst
 
-   **myutils/sith/from_extreme/forces_from_xyzs.sh**
+forces_from_xyzs
+----------------
 
-.. container:: bash-script-doc
+.. include:: bash_rsts_doc/forces_from_xyzs.rst
 
-   .. line-block::
-      
-      Creates a com file for each xyz file with a pattern that it finds in a given
-      directory. The name of each com file is the same than the xyz, but with different
-      extension.
-      
-        -d  directory where the xyz files are.
-        -n  pattern in the name of the desired xyz file.
-        -p  pdb of reference.
-      
-        -h  prints this message.
-      
+reduce_ds
+---------
 
-.. container:: bash-script-title
+.. include:: bash_rsts_doc/reduce_ds.rst
 
-   **myutils/sith/from_extreme/reduce_ds.sh**
+submit_forces_after_opt
+-----------------------
 
-.. container:: bash-script-doc
+.. include:: bash_rsts_doc/submit_forces_after_opt.rst
 
-   .. line-block::
-      
-      This tool finds the dofs of all xyz files in each directory of the dataset.
-      Such that the trajectory is reduced without loosing information.
-      
-        -d  <directory path = ./>. path to the data set of the peptides.
-        -s  <subdir= ./>. subdir of each one of the directories where the xyz files
-            are.
-      
-        -h  prints this message.
-      
+workflow_from_extreme
+---------------------
 
-.. container:: bash-script-title
+.. include:: bash_rsts_doc/workflow_from_extreme.rst
 
-   **myutils/sith/from_extreme/submit_forces_after_opt.sh**
+rearange_files
+--------------
 
-.. container:: bash-script-doc
+.. include:: bash_rsts_doc/rearange_files.rst
 
-   .. line-block::
-      
-      Searches all the <dirs>/forces/*-opt.log files where <dirs> are all the
-      directories in the current location. With those files a job called
-      <file_name>_forces is submitted with sbatch using 'myutils compute_forces'
-      
-        -v  verbose
-        -h  prints this message.
-      
+opt_and_forces
+--------------
 
-.. container:: bash-script-title
+.. include:: bash_rsts_doc/opt_and_forces.rst
 
-   **myutils/sith/from_extreme/workflow_from_extreme.sh**
+resubmit_failed
+---------------
 
-.. container:: bash-script-doc
+.. include:: bash_rsts_doc/resubmit_failed.rst
 
-   .. line-block::
-      
-      This tool creates the files to do the sith analysis by optimizing a molecule
-      that was just about to get a first rupture, then takes the intermedia steps and
-      find the internal forces. Consider the next options:
-      
-        -c  run in cascade. (modules are loaded)
-        -p  <peptide>. directory or xyzfile of last conf. Chains of aminoacids to
-            be evaluated. For example, "./AAA/" would optimize the last
-            stretched a trialanine peptide (where last means after organizing
-            alphabetically).
-        -l  <number of amino acids in the peptide> It will be assumed that the
-            xyz file starts with the letter code of the amino acids.
-      
-        -v  verbose.
-        -h  prints this message.
-      
-      Note: it is assumed that the file of the last configuration is named as:
-      <amino acids-code>-<description><number of stretching>.xyz
-      
+extr_dofs
+---------
 
-.. container:: bash-script-title
+.. include:: bash_rsts_doc/extr_dofs.rst
 
-   **myutils/sith/from_extreme/rearange_files.sh**
+prepare_and_submit
+------------------
 
-.. container:: bash-script-doc
-
-   .. line-block::
-      
-      This tool rearange the files called *<n>*.xyz changing the number <n>
-      for the correspondending in increasing order. it must be executed in the directory
-      where the files to organize are.
-      
-        -h  prints this message.
-      
-
-.. container:: bash-script-title
-
-   **myutils/sith/from_extreme/opt_and_forces.sh**
-
-.. container:: bash-script-doc
-
-   .. line-block::
-      
-      This code submit an optimization job and uses the output to compute the
-      forces.
-      
-        -f  name if the gaussian input file without extension (.com).
-        -c  run in server.
-      
-        -h  prints this message.
-      
-
-.. container:: bash-script-title
-
-   **myutils/sith/from_extreme/resubmit_failed.sh**
-
-.. container:: bash-script-doc
-
-   .. line-block::
-      
-      Takes all the g09 log files given as arguments. If the log file does not report
-      a proper termination, a new job is resubmitted (creating a backup first) using
-      'myutils opt_and_forces'.
-      
-        -v  verbose
-        -h  prints this message.
-      
-
-.. container:: bash-script-title
-
-   **myutils/sith/from_extreme/extr_dofs.sh**
-
-.. container:: bash-script-doc
-
-   .. line-block::
-      
-      This tool extract the dofs of a set of xyz files. The ouput are files called
-      <xyz file with *pattern*>-dofs.dat, where pattern comes from -f flag.
-      
-        -f  <xyz files pattern>. The code will look for *pattern*.xyz
-      
-        -h  prints this message.
-      
-
-.. container:: bash-script-title
-
-   **myutils/sith/from_extreme/prepare_and_submit.sh**
-
-.. container:: bash-script-doc
-
-   .. line-block::
-      
-      Submit opt_and_forces for each one of the xyz files given as positional
-      arguments.
-      
+.. include:: bash_rsts_doc/prepare_and_submit.rst

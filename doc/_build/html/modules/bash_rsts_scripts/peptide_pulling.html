@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Script of myutils peptide_pulling &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=32ed3f93" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=61243dd2"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="../bash_rsts_doc/pulling_with_ff.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="../bash_rsts_doc/peptide_pulling.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../myutils.html">myutils package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../myutils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.bash_scripts.html">myutils.bash_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html">myutils.cli.pkg_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.ase_utils.html">myutils.ase_utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.html">myutils.cli package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../myutils.gromacs.html">myutils.gromacs package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../myutils.gromacs.html#submodules">Submodules</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../myutils.gromacs.html#module-myutils.gromacs">Module contents</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.gromacs.html#extract-distance">extract_distance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.gromacs.html#classical-energies">classical_energies</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.gromacs.html#analysis">analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.gromacs.html#classical-minimization">classical_minimization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.gromacs.html#pulling">pulling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.gromacs.html#equilibrate-pdb">equilibrate_pdb</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.gromacs.html#pulling-with-ff">pulling_with_ff</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.gromacs.html#peptide-pulling">peptide_pulling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.gromacs.html#constraint-run">constraint_run</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.sith.html">myutils.sith package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../myutils.html#module-myutils.jupyter">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../myutils.html#module-myutils">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../myutils.html#basics">basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../myutils.html#pkges-installer">pkges_installer</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../myutils.html">myutils package</a></li>
+          <li class="breadcrumb-item"><a href="../myutils.gromacs.html">myutils.gromacs package</a></li>
+      <li class="breadcrumb-item active">Script of myutils peptide_pulling</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/modules/bash_rsts_scripts/peptide_pulling.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="script-of-myutils-peptide-pulling">
+<span id="peptide-pulling"></span><h1>Script of myutils peptide_pulling<a class="headerlink" href="#script-of-myutils-peptide-pulling" title="Link to this heading"></a></h1>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="c1"># ----- definition of functions starts ----------------------------------------</span>
+print_help<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span>
+<span class="s2">This tool creates the trajectory of a given peptide pulled by an external force.</span>
+<span class="s2">Consider the next options:</span>
+
+<span class="s2">  -a  properties you want to analyse. For example \&quot;-d -r\&quot;. Default \&quot;-d -L\&quot;.</span>
+<span class="s2">      For more information, check: myutils analysis -h</span>
+<span class="s2">  -f  forces to stretch the peptide in [kJ mol^-1 nm^-1]. eg 100,200.</span>
+<span class="s2">      Default 200</span>
+<span class="s2">  -g  gromacs binary. For example gmx or gmx_mpi. Default gmx.</span>
+<span class="s2">  -o  pepgen flags</span>
+<span class="s2">  -p  peptide.</span>
+
+<span class="s2">  -v  verbose.</span>
+<span class="s2">  -h  prints this message.</span>
+<span class="s2">&quot;</span>
+<span class="nb">exit</span><span class="w"> </span><span class="m">0</span>
+<span class="o">}</span>
+<span class="c1"># ----- definition of functions finishes --------------------------------------</span>
+
+<span class="c1"># ----- set up starts ---------------------------------------------------------</span>
+<span class="c1"># General variables</span>
+<span class="nv">gmx</span><span class="o">=</span><span class="s2">&quot;gmx&quot;</span>
+<span class="nv">read_forces</span><span class="o">=</span><span class="s2">&quot;200&quot;</span>
+<span class="nv">analysis</span><span class="o">=</span><span class="s2">&quot;-d -L&quot;</span>
+<span class="nv">steps</span><span class="o">=</span><span class="s2">&quot;10000&quot;</span>
+<span class="nv">pep_options</span><span class="o">=</span><span class="s2">&quot;-silent&quot;</span>
+<span class="nv">verbose</span><span class="o">=</span><span class="s1">&#39;false&#39;</span>
+
+<span class="k">while</span><span class="w"> </span><span class="nb">getopts</span><span class="w"> </span><span class="s1">&#39;a:f:g:op:s:vh&#39;</span><span class="w"> </span>flag<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">flag</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">in</span>
+<span class="w">    </span>a<span class="o">)</span><span class="w"> </span><span class="nv">analysis</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>f<span class="o">)</span><span class="w"> </span><span class="nv">read_forces</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>g<span class="o">)</span><span class="w"> </span><span class="nv">gmx</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>o<span class="o">)</span><span class="w"> </span><span class="nv">pep_options</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>p<span class="o">)</span><span class="w"> </span><span class="nv">pep</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>s<span class="o">)</span><span class="w"> </span><span class="nv">steps</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+
+<span class="w">    </span>v<span class="o">)</span><span class="w"> </span><span class="nv">verbose</span><span class="o">=</span><span class="s1">&#39;true&#39;</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>h<span class="o">)</span><span class="w"> </span>print_help<span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>*<span class="o">)</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;for usage check: myutils &lt;function&gt; -h&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">  </span><span class="k">esac</span>
+<span class="k">done</span>
+
+<span class="nb">source</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>myutils<span class="w"> </span>basics<span class="w"> </span>-path<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>PEP_PULL<span class="w"> </span><span class="nv">$verbose</span>
+
+<span class="nv">IFS</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>-ra<span class="w"> </span>forces<span class="w"> </span><span class="o">&lt;&lt;&lt;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$read_forces</span><span class="s2">&quot;</span>
+<span class="c1"># check dependencies</span>
+pepgen<span class="w"> </span>-h<span class="w"> </span><span class="p">&amp;</span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span>fail<span class="w"> </span><span class="s2">&quot;This code needs pepgen&quot;</span>
+<span class="nv">$gmx</span><span class="w"> </span>-h<span class="w"> </span><span class="p">&amp;</span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span>fail<span class="w"> </span><span class="s2">&quot;This code needs gromacs (</span><span class="nv">$gmx</span><span class="s2"> failed)&quot;</span>
+<span class="c1"># ----- set up finishes -------------------------------------------------------</span>
+
+<span class="c1"># ---- BODY -------------------------------------------------------------------</span>
+<span class="c1"># create peptide</span>
+verbose<span class="w"> </span><span class="s2">&quot;Creation and equilibration of </span><span class="nv">$pep</span><span class="s2"> starts&quot;</span>
+<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;\n </span><span class="nv">$pep</span><span class="s2"> </span><span class="nv">$gmx</span><span class="s2">&quot;</span>
+pepgen<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$pep</span><span class="s2">&quot;</span><span class="w"> </span>equilibrate<span class="w"> </span>-gmx<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$gmx</span><span class="s2">&quot;</span><span class="w"> </span><span class="nv">$pep_options</span><span class="w"> </span>-e<span class="w"> </span>--overwrite<span class="w"> </span><span class="o">||</span>
+<span class="w">  </span>fail<span class="w"> </span><span class="s2">&quot;Creating peptide </span><span class="nv">$pep</span><span class="s2">&quot;</span>
+
+<span class="c1"># pulling</span>
+verbose<span class="w"> </span><span class="s2">&quot;Pulling of </span><span class="nv">$pep</span><span class="s2"> starts&quot;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${#</span><span class="nv">forces</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span>
+<span class="k">then</span>
+<span class="w">  </span>warning<span class="w"> </span><span class="s2">&quot;You didn&#39;t specify which forces you want to use. Then the pulling</span>
+<span class="s2">    will be done using the value by default: 200 [kJ mol^-1 nm^-1]&quot;</span>
+<span class="w">  </span><span class="nv">forces</span><span class="o">=(</span><span class="w"> </span><span class="s2">&quot;200&quot;</span><span class="w"> </span><span class="o">)</span>
+<span class="k">fi</span>
+
+<span class="k">for</span><span class="w"> </span>force<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">forces</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">do</span>
+<span class="w">  </span><span class="nv">forcename</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">printf</span><span class="w"> </span><span class="s2">&quot;%04d&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$force</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
+<span class="w">  </span>verbose<span class="w"> </span><span class="s2">&quot;Force </span><span class="nv">$force</span><span class="s2"> acting </span><span class="nv">$pep</span><span class="s2"> starts&quot;</span>
+<span class="w">  </span>myutils<span class="w"> </span>pulling<span class="w"> </span>-g<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$gmx</span><span class="s2">&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$force</span><span class="s2">&quot;</span><span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$steps</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>fail<span class="w"> </span><span class="s2">&quot;Pulling </span><span class="nv">$pep</span>
+<span class="s2">    with </span><span class="nv">$force</span><span class="s2"> failed&quot;</span>
+
+<span class="w">  </span>create_bck<span class="w"> </span><span class="s2">&quot;force</span><span class="nv">$forcename</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>fail<span class="w"> </span><span class="s2">&quot;creating bck&quot;</span>
+
+<span class="w">  </span>mkdir<span class="w"> </span><span class="s2">&quot;force</span><span class="nv">$forcename</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>mv<span class="w"> </span>md_0_*<span class="w"> </span><span class="s2">&quot;force</span><span class="nv">$forcename</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>mv<span class="w"> </span>./*.ndx<span class="w"> </span><span class="s2">&quot;force</span><span class="nv">$forcename</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>mv<span class="w"> </span>./*.mdp<span class="w"> </span><span class="s2">&quot;force</span><span class="nv">$forcename</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>fail<span class="w"> </span><span class="s2">&quot;Moving gromacs files to the ditectory force</span><span class="nv">$forcename</span><span class="s2">&quot;</span>
+
+<span class="w">  </span>verbose<span class="w"> </span><span class="s2">&quot;Analysis of </span><span class="nv">$pep</span><span class="s2"> and </span><span class="nv">$force</span><span class="s2"> starts&quot;</span>
+<span class="w">  </span><span class="o">(</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;force</span><span class="nv">$forcename</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">file</span><span class="o">=</span><span class="k">$(</span><span class="w"> </span>ls<span class="w"> </span>md_*.gro<span class="k">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">name</span><span class="o">=</span><span class="si">${</span><span class="nv">file</span><span class="p">%%.*</span><span class="si">}</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>myutils<span class="w"> </span>analysis<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$name</span><span class="s2">&quot;</span><span class="w"> </span>-g<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$gmx</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$analysis</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>fail<span class="w"> </span><span class="s2">&quot;Equilibration Analysis.&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nb">cd</span><span class="w"> </span>..<span class="w"> </span><span class="o">)</span>
+<span class="k">done</span>
+
+finish<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$pep</span><span class="s2"> finished&quot;</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../bash_rsts_doc/peptide_pulling.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../bash_rsts_doc/pulling_with_ff.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -24,19 +24,14 @@ Module contents
    :undoc-members:
    :show-inheritance:
 
-.. container:: bash-script-title
+.. toctree::
+   :hidden:
 
-   **myutils/cli/generate_main.sh**
+   bash_rsts_doc/generate_main
+   bash_rsts_scripts/generate_main
 
-.. container:: bash-script-doc
 
-   .. line-block::
-      
-      Creates the code that would be executed when myutils is called from
-      terminal (myutils.cli.main). This code adds all the sh files and all modules
-      that contains the comment # add2executable one line before to be defined.
-      
-        -o  name of the output file. Default: main.py
-      
-        -h  prints this message.
-      
+generate_main
+-------------
+
+.. include:: bash_rsts_doc/generate_main.rst

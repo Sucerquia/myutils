@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>install &mdash; myutils 1.2 documentation</title>
+  <title>Install &mdash; myutils 1.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=32ed3f93" />
@@ -23,6 +23,7 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="myutils package" href="modules/myutils.html" />
     <link rel="prev" title="About" href="about.html" /> 
 </head>
 
@@ -47,7 +48,12 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">install</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules/myutils.html">myutils package</a></li>
 </ul>
 
         </div>
@@ -64,7 +70,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">install</li>
+      <li class="breadcrumb-item active">Install</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/install.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -75,11 +81,28 @@
            <div itemprop="articleBody">
              
   <section id="install">
-<span id="id1"></span><h1>install<a class="headerlink" href="#install" title="Link to this heading"></a></h1>
-<p>run</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">git</span> <span class="n">clone</span>
+<span id="id1"></span><h1>Install<a class="headerlink" href="#install" title="Link to this heading"></a></h1>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading"></a></h2>
+<p>For different parts of the package, different tools are required. None of the
+packages listed below are really mandatory to use Myutils. You can just install
+MyUtils and install the required dependencies once you get an error like modules
+not found. This is just a heads up that this is a very likely error for
+first-time users of MyUtils.</p>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>Run these lines on your terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:Sucerquia/myutils.git
+<span class="nb">cd</span><span class="w"> </span>myutils
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </pre></div>
 </div>
+<p>Note that “-e” flag allows to use MyUtils in such a way that you can make
+changes on it and use them immediately without having to reinstall the package
+again. However, you can avoid this flag and a copy of the package would be
+generated in your python packages path.</p>
+</section>
 </section>
 
 
@@ -87,6 +110,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="about.html" class="btn btn-neutral float-left" title="About" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modules/myutils.html" class="btn btn-neutral float-right" title="myutils package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

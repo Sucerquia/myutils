@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Script of myutils python_doc_fixer &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=32ed3f93" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=61243dd2"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="../bash_rsts_doc/check_structure.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="../bash_rsts_doc/python_doc_fixer.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../myutils.html">myutils package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../myutils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.bash_scripts.html">myutils.bash_scripts</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../myutils.cli.pkg_structure.html">myutils.cli.pkg_structure</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="bash_basic_structure.html">Script of myutils bash_basic_structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="doc_pythonfile.html">Script of myutils doc_pythonfile</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Script of myutils python_doc_fixer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="check_structure.html">Script of myutils check_structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="doc_modules.html">Script of myutils doc_modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_style.html">Script of myutils bash_style</a></li>
+<li class="toctree-l4"><a class="reference internal" href="add_python_doc.html">Script of myutils add_python_doc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="files_tree.html">Script of myutils files_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.cli.pkg_structure.html#files-tree">files_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.cli.pkg_structure.html#add-python-doc">add_python_doc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.cli.pkg_structure.html#bash-style">bash_style</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.cli.pkg_structure.html#doc-modules">doc_modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.cli.pkg_structure.html#check-structure">check_structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.cli.pkg_structure.html#python-doc-fixer">python_doc_fixer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.cli.pkg_structure.html#doc-pythonfile">doc_pythonfile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../myutils.cli.pkg_structure.html#bash-basic-structure">bash_basic_structure</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.ase_utils.html">myutils.ase_utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.html">myutils.cli package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.gromacs.html">myutils.gromacs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.sith.html">myutils.sith package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../myutils.html#module-myutils.jupyter">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../myutils.html#module-myutils">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../myutils.html#basics">basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../myutils.html#pkges-installer">pkges_installer</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../myutils.html">myutils package</a></li>
+          <li class="breadcrumb-item"><a href="../myutils.cli.pkg_structure.html">myutils.cli.pkg_structure</a></li>
+      <li class="breadcrumb-item active">Script of myutils python_doc_fixer</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/modules/bash_rsts_scripts/python_doc_fixer.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="script-of-myutils-python-doc-fixer">
+<span id="python-doc-fixer"></span><h1>Script of myutils python_doc_fixer<a class="headerlink" href="#script-of-myutils-python-doc-fixer" title="Link to this heading"></a></h1>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+print_help<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span>
+<span class="s2">Code takes the documentation of a function and checks the documentation adding</span>
+<span class="s2">TODOs in the missing parts. The output is stored in a file called</span>
+<span class="s2">final_&lt;method&gt;_doc.txt</span>
+
+<span class="s2">  -f  &lt;method&gt; Function to be checked</span>
+<span class="s2">  -m  &lt;module&gt; Module that contains the Function</span>
+<span class="s2">  -s  &lt;n_spaces&gt; number of leading spaces.</span>
+
+<span class="s2">  -v  verbose.</span>
+<span class="s2">  -h  prints this message.</span>
+<span class="s2">&quot;</span>
+<span class="nb">exit</span><span class="w"> </span><span class="m">0</span>
+<span class="o">}</span>
+<span class="c1"># ----- definition of functions finishes --------------------------------------</span>
+
+<span class="c1"># ==== Costumer set up ========================================================</span>
+<span class="nv">spaces</span><span class="o">=</span><span class="m">0</span>
+<span class="nv">class</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="k">function</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="nv">verbose</span><span class="o">=</span><span class="s1">&#39;false&#39;</span>
+<span class="k">while</span><span class="w"> </span><span class="nb">getopts</span><span class="w"> </span><span class="s1">&#39;c:f:m:s:vh&#39;</span><span class="w"> </span>flag<span class="p">;</span>
+<span class="k">do</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">flag</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">in</span>
+<span class="w">    </span>c<span class="o">)</span><span class="w"> </span><span class="nv">class</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>f<span class="o">)</span><span class="w"> </span><span class="k">function</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>m<span class="o">)</span><span class="w"> </span><span class="nv">module</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>s<span class="o">)</span><span class="w"> </span><span class="nv">num_spaces</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+
+<span class="w">    </span>v<span class="o">)</span><span class="w"> </span><span class="nv">verbose</span><span class="o">=</span><span class="s1">&#39;true&#39;</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>h<span class="o">)</span><span class="w"> </span>print_help<span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>*<span class="o">)</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;for usage check: myutils &lt;function&gt; -h&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">  </span><span class="k">esac</span>
+<span class="k">done</span>
+
+<span class="nb">source</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>myutils<span class="w"> </span>basics<span class="w"> </span>-path<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>PythonDocFixer<span class="w"> </span><span class="nv">$verbose</span>
+<span class="c1"># ==== Body ===================================================================</span>
+
+<span class="c1"># ==== Initial Blocks =========================================================</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$class</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$function</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]]</span>
+<span class="k">then</span>
+<span class="w">  </span><span class="nv">leading_spaces</span><span class="o">=</span><span class="k">$(</span><span class="nb">printf</span><span class="w"> </span><span class="s2">&quot;%4s&quot;</span><span class="k">)</span>
+<span class="k">else</span>
+<span class="w">  </span><span class="nv">leading_spaces</span><span class="o">=</span><span class="k">$(</span><span class="nb">printf</span><span class="w"> </span><span class="s2">&quot;%8s&quot;</span><span class="k">)</span>
+<span class="k">fi</span>
+
+myutils<span class="w"> </span>function_doc<span class="w"> </span><span class="nv">$module</span><span class="w"> </span><span class="nv">$class</span><span class="w"> </span><span class="nv">$function</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s/^/#new_line/&#39;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">$function</span>.txt<span class="w"> </span><span class="o">||</span><span class="w"> </span>fail<span class="w"> </span><span class="s2">&quot;extracting old documentation&quot;</span>
+
+sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/[[:space:]]*$//g&#39;</span><span class="w"> </span><span class="nv">$function</span>.txt
+
+<span class="c1"># In case the documentation was written without leaving the first line empty</span>
+<span class="nv">first_line</span><span class="o">=</span><span class="k">$(</span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="nv">$function</span>.txt<span class="k">)</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$first_line</span><span class="s2">&quot;</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="s2">&quot;#new_line&quot;</span><span class="w"> </span><span class="o">]</span>
+<span class="k">then</span>
+<span class="w">  </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;1s/^/#new_line\n/&quot;</span><span class="w"> </span><span class="nv">$function</span>.txt
+<span class="k">fi</span>
+
+<span class="c1"># in Case the closing &quot;&quot;&quot; are not located in a new line</span>
+<span class="nv">last_line</span><span class="o">=</span><span class="k">$(</span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="nv">$function</span>.txt<span class="k">)</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$last_line</span><span class="s2">&quot;</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="s2">&quot;#new_line&quot;</span><span class="w"> </span><span class="o">]</span>
+<span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;#new_line&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="nv">$function</span>.txt
+<span class="k">fi</span>
+
+<span class="c1"># in case documentation was started from the first line.</span>
+<span class="nv">second_line</span><span class="o">=</span><span class="k">$(</span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="nv">$function</span>.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="k">)</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">second_line</span><span class="p">:</span><span class="nv">9</span><span class="p">:</span><span class="nv">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="s2">&quot; &quot;</span><span class="w"> </span><span class="o">]]</span>
+<span class="k">then</span>
+<span class="w">  </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;2s/#new_line/#new_line</span><span class="nv">$leading_spaces</span><span class="s2">/g&quot;</span><span class="w"> </span><span class="nv">$function</span>.txt
+<span class="k">fi</span>
+
+mapfile<span class="w"> </span>-t<span class="w"> </span>ns_empty<span class="w"> </span>&lt;<span class="w"> </span>&lt;<span class="o">(</span>cat<span class="w"> </span><span class="nv">$function</span>.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;#new_line</span>$<span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                        </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;:&quot;</span><span class="w"> </span>-f1<span class="o">)</span>
+
+<span class="c1"># ==== Existing blocks in old documentation</span>
+<span class="k">for</span><span class="w"> </span><span class="o">((</span><span class="w"> </span><span class="nv">i</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="p">;</span><span class="w"> </span>i<span class="w"> </span>&lt;<span class="w"> </span><span class="k">$((</span><span class="w"> </span><span class="si">${#</span><span class="nv">ns_empty</span><span class="p">[@]</span><span class="si">}</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="k">))</span><span class="w"> </span><span class="p">;</span><span class="w"> </span>i++<span class="w"> </span><span class="o">))</span>
+<span class="k">do</span>
+<span class="w">  </span>myutils<span class="w"> </span>find_blocks<span class="w"> </span>-f<span class="w"> </span><span class="nv">$function</span>.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">                      </span>-s<span class="w"> </span><span class="si">${</span><span class="nv">ns_empty</span><span class="p">[</span><span class="nv">$i</span><span class="p">]</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                      </span>-e<span class="w"> </span><span class="si">${</span><span class="nv">ns_empty</span><span class="p">[</span><span class="k">$((</span><span class="w"> </span><span class="nv">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="k">))</span><span class="p">]</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                      </span>-i<span class="w"> </span>-o<span class="w"> </span>documentation-blocks_<span class="nv">$i</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                      </span>fail<span class="w"> </span><span class="s2">&quot;finding blocks&quot;</span>
+
+<span class="w">  </span><span class="c1"># Note for developers: I had to add the next while because the creation of</span>
+<span class="w">  </span><span class="c1"># the files was a bit delayed and that created errors trying to find those</span>
+<span class="w">  </span><span class="c1"># files later.</span>
+<span class="w">  </span>wait_until_next_file_exist<span class="w"> </span>documentation-blocks_<span class="nv">$i</span>.out
+<span class="k">done</span>
+
+<span class="c1"># ==== Block of Parameters in old documentation</span>
+<span class="c1"># In case it does not exist, a new block is created</span>
+<span class="nv">par_block</span><span class="o">=</span><span class="k">$(</span>grep<span class="w"> </span>-Exl<span class="w"> </span><span class="s2">&quot;#new_line+[[:space:]]+Parameters&quot;</span><span class="w"> </span>documentation-blocks_*<span class="k">)</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="si">${#</span><span class="nv">par_block</span><span class="si">}</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span>
+<span class="k">then</span>
+<span class="w">  </span>cat<span class="w"> </span><span class="s">&lt;&lt; EOF &gt; documentation-blocks_parameters.out</span>
+<span class="s">#new_lineParameters</span>
+<span class="s">#new_line==========</span>
+<span class="s">EOF</span>
+<span class="w">  </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/#new_line/#new_line</span><span class="nv">$leading_spaces</span><span class="s2">/g&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>documentation-blocks_parameters.out
+<span class="w">  </span><span class="nv">par_block</span><span class="o">=</span><span class="s2">&quot;documentation-blocks_parameters.out&quot;</span>
+<span class="k">fi</span>
+
+<span class="c1"># ==== Block of Return in old documentation</span>
+<span class="c1"># In case it does not exist, a new block is created</span>
+<span class="nv">return_block</span><span class="o">=</span><span class="k">$(</span>grep<span class="w"> </span>-Exl<span class="w"> </span><span class="s2">&quot;#new_line+[[:space:]]+Return&quot;</span><span class="w"> </span>documentation-blocks_*<span class="k">)</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="si">${#</span><span class="nv">return_block</span><span class="si">}</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span>
+<span class="k">then</span>
+<span class="w">  </span>cat<span class="w"> </span><span class="s">&lt;&lt; EOF &gt; documentation-blocks_return.out</span>
+<span class="s">#new_lineReturn</span>
+<span class="s">#new_line======</span>
+<span class="s">#new_line# TODO: add return information</span>
+<span class="s">EOF</span>
+<span class="w">  </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/#new_line/#new_line</span><span class="nv">$leading_spaces</span><span class="s2">/g&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>documentation-blocks_return.out
+<span class="w">  </span><span class="nv">return_block</span><span class="o">=</span><span class="s2">&quot;documentation-blocks_return.out&quot;</span>
+<span class="k">fi</span>
+
+<span class="c1"># In case of documentation of a class</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$function</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span>
+<span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="nv">$return_block</span>
+<span class="k">fi</span>
+
+<span class="c1"># ==== Block of Definition in old documentation</span>
+<span class="c1"># In case it does not exist, a new block is created</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$par_block</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;documentation-blocks_0.out&quot;</span><span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="se">\</span>
+<span class="w">   </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$return_block</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;documentation-blocks_0.out&quot;</span><span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="se">\</span>
+<span class="w">   </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;documentation-blocks_0.out&quot;</span><span class="w"> </span><span class="o">]</span>
+<span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;#new_line</span><span class="nv">$leading_spaces</span><span class="s2"># TODO: Add definition&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>documentation-blocks_def.out
+<span class="w">  </span><span class="nv">definition_block</span><span class="o">=</span><span class="s2">&quot;documentation-blocks_def.out&quot;</span>
+<span class="k">else</span>
+<span class="w">  </span><span class="nv">definition_block</span><span class="o">=</span><span class="s2">&quot;documentation-blocks_0.out&quot;</span>
+<span class="k">fi</span>
+
+<span class="c1"># === Check parameters ========================================================</span>
+<span class="c1"># parameters</span>
+mapfile<span class="w"> </span>-t<span class="w"> </span>parameters<span class="w"> </span>&lt;<span class="w"> </span>&lt;<span class="o">(</span>myutils<span class="w"> </span>args_and_defaults<span class="w"> </span><span class="nv">$module</span><span class="w"> </span><span class="nv">$class</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                          </span><span class="nv">$function</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;###&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-vx<span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="o">)</span>
+
+<span class="c1"># insert missed parameters</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="si">${#</span><span class="nv">parameters</span><span class="p">[@]</span><span class="si">}</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">parameters</span><span class="p">[0]</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;self:&quot;</span><span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="se">\</span>
+<span class="w">   </span><span class="o">[</span><span class="w"> </span><span class="si">${#</span><span class="nv">parameters</span><span class="si">}</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span>
+<span class="k">then</span>
+<span class="w">  </span><span class="c1"># if the function does not have parameters, it creates an empty file</span>
+<span class="w">  </span>rm<span class="w"> </span><span class="nv">$par_block</span>
+<span class="w">  </span>touch<span class="w"> </span><span class="nv">$par_block</span>
+<span class="k">else</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span>par<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">parameters</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="k">do</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$par</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;self:&quot;</span><span class="w"> </span><span class="o">]]</span>
+<span class="w">    </span><span class="k">then</span>
+<span class="w">      </span><span class="k">continue</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="w">    </span><span class="nv">par_name</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="nv">$par</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;:&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="m">1</span><span class="k">)</span><span class="w"> </span><span class="c1"># name of the parameter</span>
+<span class="w">    </span><span class="nv">par_defa</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="nv">$par</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;:&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="m">2</span><span class="k">)</span><span class="w"> </span><span class="c1"># default of the parameter</span>
+<span class="w">    </span><span class="nv">n_par</span><span class="o">=</span><span class="k">$(</span>grep<span class="w"> </span>-n<span class="w"> </span><span class="nv">$par_name</span><span class="w"> </span><span class="nv">$par_block</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<span class="w">            </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;:&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="m">1</span><span class="k">)</span><span class="w"> </span><span class="c1"># line number of the parameter</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="si">${#</span><span class="nv">n_par</span><span class="si">}</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span>
+<span class="w">    </span><span class="k">then</span>
+<span class="w">      </span><span class="c1"># if the variable is not defined</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="si">${#</span><span class="nv">par_defa</span><span class="si">}</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span>
+<span class="w">      </span><span class="k">then</span>
+<span class="w">        </span><span class="nv">automatic_def_val</span><span class="o">=</span><span class="s2">&quot;# TODO: check default value&quot;</span>
+<span class="w">      </span><span class="k">else</span>
+<span class="w">        </span><span class="nv">automatic_def_val</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="w">      </span><span class="k">fi</span>
+<span class="w">      </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;#new_line</span><span class="nv">$leading_spaces$par</span><span class="s2"> </span><span class="nv">$automatic_def_val</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span><span class="nv">$par_block</span>
+<span class="w">      </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;#new_line</span><span class="nv">$leading_spaces</span><span class="s2">    # TODO: add documentation of this parameter&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span><span class="nv">$par_block</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">      </span><span class="c1"># if the variable is defined. check if the default exists</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="si">${#</span><span class="nv">par_defa</span><span class="si">}</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span>
+<span class="w">      </span><span class="k">then</span>
+<span class="w">        </span>awk<span class="w"> </span>-v<span class="w"> </span><span class="nv">line</span><span class="o">=</span><span class="nv">$n_par</span><span class="w"> </span><span class="s1">&#39;NR==line&#39;</span><span class="w"> </span><span class="nv">$par_block</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span>Default<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="se">\</span>
+<span class="w">          </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">n_par</span><span class="si">}</span><span class="s2">s/</span>$<span class="s2">/\.</span><span class="nv">$par_defa</span><span class="s2"> # TODO: check default value/&quot;</span><span class="w"> </span><span class="nv">$par_block</span>
+<span class="w">      </span><span class="k">fi</span>
+
+<span class="w">      </span><span class="c1"># check if the definition of the parameter exist</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span>awk<span class="w"> </span>-v<span class="w"> </span><span class="nv">line</span><span class="o">=</span><span class="k">$((</span><span class="w"> </span><span class="nv">n_par</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="k">))</span><span class="w"> </span><span class="s1">&#39;NR==line&#39;</span><span class="w"> </span><span class="nv">$par_block</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">&quot;:&quot;</span>
+<span class="w">      </span><span class="k">then</span>
+<span class="w">        </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">n_par</span><span class="si">}</span><span class="s2">a\#new_line</span><span class="nv">$leading_spaces</span><span class="s2">    # TODO: add documentation of this parameter&quot;</span><span class="w"> </span><span class="nv">$par_block</span>
+<span class="w">      </span><span class="k">fi</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="w">  </span><span class="k">done</span>
+<span class="k">fi</span>
+
+<span class="c1"># === Create the final doc block ==============================================</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;#new_line</span><span class="nv">$leading_spaces</span><span class="s2">\&quot;\&quot;\&quot;&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>final_<span class="nv">$class</span>-<span class="nv">$function</span>.txt
+cat<span class="w"> </span><span class="nv">$definition_block</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>final_<span class="nv">$class</span>-<span class="nv">$function</span>.txt
+rm<span class="w"> </span><span class="nv">$definition_block</span>
+
+<span class="nv">n_lines_in_par_block</span><span class="o">=</span><span class="k">$(</span>wc<span class="w"> </span>-l<span class="w"> </span>&lt;<span class="w"> </span><span class="nv">$par_block</span><span class="k">)</span>
+<span class="k">if</span><span class="w">  </span><span class="o">[</span><span class="w"> </span><span class="nv">$n_lines_in_par_block</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span>
+<span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;#new_line&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>final_<span class="nv">$class</span>-<span class="nv">$function</span>.txt
+<span class="w">  </span>cat<span class="w"> </span><span class="nv">$par_block</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>final_<span class="nv">$class</span>-<span class="nv">$function</span>.txt
+<span class="w">  </span>rm<span class="w"> </span><span class="nv">$par_block</span>
+<span class="k">fi</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;#new_line&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>final_<span class="nv">$class</span>-<span class="nv">$function</span>.txt
+cat<span class="w"> </span><span class="nv">$return_block</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>final_<span class="nv">$class</span>-<span class="nv">$function</span>.txt
+rm<span class="w"> </span><span class="nv">$return_block</span>
+
+<span class="c1"># rest of blocks</span>
+<span class="k">for</span><span class="w"> </span>other_doc_block<span class="w"> </span><span class="k">in</span><span class="w"> </span>documentation-blocks*.out
+<span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;#new_line&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>final_<span class="nv">$class</span>-<span class="nv">$function</span>.txt
+<span class="w">  </span>cat<span class="w"> </span><span class="nv">$other_doc_block</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>final_<span class="nv">$class</span>-<span class="nv">$function</span>.txt
+<span class="w">  </span>rm<span class="w"> </span><span class="nv">$other_doc_block</span>
+<span class="k">done</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;#new_line</span><span class="nv">$leading_spaces</span><span class="s2">\&quot;\&quot;\&quot;&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>final_<span class="nv">$class</span>-<span class="nv">$function</span>.txt
+
+<span class="c1"># ==== cleaning</span>
+<span class="c1"># Remove newline comments</span>
+sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/#new_line//g&#39;</span><span class="w"> </span>final_<span class="nv">$class</span>-<span class="nv">$function</span>.txt
+<span class="c1"># Remove tailing spaces</span>
+sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/[[:space:]]*$//g&#39;</span><span class="w"> </span><span class="nv">$function</span>.txt
+
+<span class="c1"># Remove unnecessary empty space</span>
+<span class="k">while</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w"> </span>final_<span class="nv">$class</span>-<span class="nv">$function</span>.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]]</span>
+<span class="k">do</span>
+<span class="w">  </span><span class="nv">total_lines</span><span class="o">=</span><span class="k">$(</span>wc<span class="w"> </span>-l<span class="w"> </span>&lt;<span class="w"> </span>final_<span class="nv">$class</span>-<span class="nv">$function</span>.txt<span class="k">)</span>
+<span class="w">  </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;</span><span class="k">$((</span><span class="w"> </span><span class="nv">total_lines</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="k">))</span><span class="s2">d&quot;</span><span class="w"> </span>final_<span class="nv">$class</span>-<span class="nv">$function</span>.txt
+<span class="k">done</span>
+rm<span class="w"> </span><span class="nv">$function</span>.txt
+
+finish
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../bash_rsts_doc/python_doc_fixer.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../bash_rsts_doc/check_structure.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

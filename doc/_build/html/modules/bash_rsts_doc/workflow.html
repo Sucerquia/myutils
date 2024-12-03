@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;no title&gt; &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=32ed3f93" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=61243dd2"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Script of myutils workflow" href="../bash_rsts_scripts/workflow.html" />
+    <link rel="prev" title="myutils.sith package" href="../myutils.sith.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../myutils.html">myutils package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../myutils.html">myutils package</a></li>
+          <li class="breadcrumb-item"><a href="../myutils.sith.html">myutils.sith package</a></li>
+      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/modules/bash_rsts_doc/workflow.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="bash-script-title docutils container">
+<p><a class="reference internal" href="../bash_rsts_scripts/workflow.html#workflow"><span class="std std-ref">[script]</span></a> <strong>myutils/sith/workflow.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">This tool creates all the stretched structures for a peptide and computes the</div>
+<div class="line">needed quantities for sith. You can use this code to submit a Job in cascade or</div>
+<div class="line">to execute it locally. Consider the next options:</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-b  &lt;number of breakages=1&gt; The simulation will run until getting this number</div>
+<div class="line-block">
+<div class="line">of ruptures in the bonds.</div>
+</div>
+<div class="line">-c  run in cascade. (modules are loaded)</div>
+<div class="line">-d  &lt;reference document=00-aminos.txt&gt; file containing the existing peptides</div>
+<div class="line-block">
+<div class="line">to avoid repetition. Mainly used for generation of random peptides.</div>
+</div>
+<div class="line">-e  &lt;endo&gt; or &lt;exo&gt; states for initial state of proline. Default ‘random’.</div>
+<div class="line">-m  &lt;method=0&gt; Index ofstretching method. To see the options, use</div>
+<div class="line-block">
+<div class="line">‘myutils change_distance -h’ to see the order.</div>
+</div>
+<div class="line">-n  &lt;options&gt; Pepgen options (use &quot; for this)</div>
+<div class="line">-p  &lt;peptide&gt; Chains of aminoacids to be evaluated. For example, “AAA”</div>
+<div class="line-block">
+<div class="line">would analyse a trialanine peptide.</div>
+</div>
+<div class="line">-R  random pepeptide. Give the number of amino acids with this argument.</div>
+<div class="line">-r  restart. In this case, run from the directory of the pre-created</div>
+<div class="line-block">
+<div class="line">peptide.</div>
+</div>
+<div class="line">-s  &lt;size[A]=0.2&gt; of the step that increases the distances.</div>
+<div class="line"><br /></div>
+<div class="line">-v  verbose.</div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../myutils.sith.html" class="btn btn-neutral float-left" title="myutils.sith package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../bash_rsts_scripts/workflow.html" class="btn btn-neutral float-right" title="Script of myutils workflow" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

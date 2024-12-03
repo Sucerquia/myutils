@@ -7,6 +7,9 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   myutils.sith.from_extreme
+   myutils.bash_scripts
+   myutils.cli.pkg_structure
    myutils.ase_utils
    myutils.cli
    myutils.gromacs
@@ -46,3 +49,22 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+
+.. toctree::
+   :hidden:
+
+   bash_rsts_doc/pkges_installer
+   bash_rsts_scripts/pkges_installer
+   bash_rsts_doc/basics
+   bash_rsts_scripts/basics
+
+
+basics
+------
+
+.. include:: bash_rsts_doc/basics.rst
+
+pkges_installer
+---------------
+
+.. include:: bash_rsts_doc/pkges_installer.rst

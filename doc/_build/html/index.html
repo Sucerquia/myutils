@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>&lt;no title&gt; &mdash; myutils 1.2 documentation</title>
+  <title>MyUtils &mdash; myutils 1.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=32ed3f93" />
@@ -55,7 +55,7 @@ window.addEventListener("load", () => mermaid.run());
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/myutils.html">myutils package</a></li>
 </ul>
 
@@ -73,7 +73,7 @@ window.addEventListener("load", () => mermaid.run());
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="breadcrumb-item active">MyUtils</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -83,7 +83,16 @@ window.addEventListener("load", () => mermaid.run());
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <pre align="center" class="mermaid align-center">
+  <section id="myutils">
+<span id="id1"></span><h1>MyUtils<a class="headerlink" href="#myutils" title="Link to this heading"></a></h1>
+<p>MyUtils is a set of tools that you can use for scientific proporsals, mainly
+related with the field of simulations of molecules, although there are some
+parts that could be interesting for all the scientific community. This set of
+tools was created and it is currently maintained by Daniel Sucerquia, PhD
+student at the Heidelberg Institute for Theoretical Studies (HITS) and the
+Max Planck Institute for Polymer Research (MPIP).</p>
+<p>This is a general overview of the kind of tools you can find in this project:</p>
+<pre align="center" class="mermaid align-center">
         graph TD
 node1[&quot;myutils&quot;]
 click node1 &quot;modules/myutils.html&quot; _self
@@ -103,12 +112,55 @@ click node1 &quot;modules/myutils.html&quot; _self
   click node8 &quot;modules/myutils.sith.html&quot; _self
     node8 --&gt; node9[&quot;from_extreme&quot;]
     click node9 &quot;modules/myutils.sith.from_extreme.html&quot; _self
-    </pre><div class="toctree-wrapper compound">
+    </pre><section id="content">
+<h2>Content<a class="headerlink" href="#content" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#installation">Installation</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="modules/myutils.html">myutils package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="modules/myutils.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#module-myutils.sith.from_extreme.info_from_opt">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.delta_angles_continuous"><code class="docutils literal notranslate"><span class="pre">delta_angles_continuous()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.info_from_opt"><code class="docutils literal notranslate"><span class="pre">info_from_opt()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.reduce_structs"><code class="docutils literal notranslate"><span class="pre">reduce_structs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#module-myutils.sith.from_extreme">Module contents</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#after-optimization">after_optimization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#forces-from-xyzs">forces_from_xyzs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#reduce-ds">reduce_ds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#submit-forces-after-opt">submit_forces_after_opt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#workflow-from-extreme">workflow_from_extreme</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#rearange-files">rearange_files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#opt-and-forces">opt_and_forces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#resubmit-failed">resubmit_failed</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#extr-dofs">extr_dofs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#prepare-and-submit">prepare_and_submit</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.bash_scripts.html">myutils.bash_scripts</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.bash_scripts.html#single-g09">single_g09</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.bash_scripts.html#bash-template">bash-template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.bash_scripts.html#find-blocks">find_blocks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html">myutils.cli.pkg_structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html#files-tree">files_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html#add-python-doc">add_python_doc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html#bash-style">bash_style</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html#doc-modules">doc_modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html#check-structure">check_structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html#python-doc-fixer">python_doc_fixer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html#doc-pythonfile">doc_pythonfile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html#bash-basic-structure">bash_basic_structure</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="modules/myutils.ase_utils.html">myutils.ase_utils package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="modules/myutils.ase_utils.html#module-myutils.ase_utils.molecules">Submodules</a><ul>
 <li class="toctree-l5"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment"><code class="docutils literal notranslate"><span class="pre">Alignment</span></code></a><ul>
@@ -157,11 +209,21 @@ click node1 &quot;modules/myutils.html&quot; _self
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="modules/myutils.cli.html#module-myutils.cli">Module contents</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.cli.html#generate-main">generate_main</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="modules/myutils.gromacs.html">myutils.gromacs package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="modules/myutils.gromacs.html#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="modules/myutils.gromacs.html#module-myutils.gromacs">Module contents</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.gromacs.html#extract-distance">extract_distance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.gromacs.html#classical-energies">classical_energies</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.gromacs.html#analysis">analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.gromacs.html#classical-minimization">classical_minimization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.gromacs.html#pulling">pulling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.gromacs.html#equilibrate-pdb">equilibrate_pdb</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.gromacs.html#pulling-with-ff">pulling_with_ff</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.gromacs.html#peptide-pulling">peptide_pulling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.gromacs.html#constraint-run">constraint_run</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="modules/myutils.sith.html">myutils.sith package</a><ul>
@@ -174,6 +236,16 @@ click node1 &quot;modules/myutils.html&quot; _self
 </ul>
 </li>
 <li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#module-myutils.sith.from_extreme">Module contents</a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#after-optimization">after_optimization</a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#forces-from-xyzs">forces_from_xyzs</a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#reduce-ds">reduce_ds</a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#submit-forces-after-opt">submit_forces_after_opt</a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#workflow-from-extreme">workflow_from_extreme</a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#rearange-files">rearange_files</a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#opt-and-forces">opt_and_forces</a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#resubmit-failed">resubmit_failed</a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#extr-dofs">extr_dofs</a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#prepare-and-submit">prepare_and_submit</a></li>
 </ul>
 </li>
 </ul>
@@ -239,6 +311,13 @@ click node1 &quot;modules/myutils.html&quot; _self
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.html#module-myutils.sith">Module contents</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.html#stretching">stretching</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.html#extract-forces">extract_forces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.html#proline-mod">proline_mod</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.html#clean-ds">clean_ds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.html#find-forces">find_forces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.html#compute-forces">compute_forces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.html#workflow">workflow</a></li>
 </ul>
 </li>
 </ul>
@@ -282,10 +361,14 @@ click node1 &quot;modules/myutils.html&quot; _self
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="modules/myutils.html#module-myutils">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/myutils.html#basics">basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/myutils.html#pkges-installer">pkges_installer</a></li>
 </ul>
 </li>
 </ul>
 </div>
+</section>
+</section>
 
 
            </div>

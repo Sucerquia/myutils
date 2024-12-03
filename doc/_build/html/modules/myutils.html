@@ -23,8 +23,8 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="myutils.ase_utils package" href="myutils.ase_utils.html" />
-    <link rel="prev" title="install" href="../install.html" /> 
+    <link rel="next" title="myutils.sith.from_extreme package" href="myutils.sith.from_extreme.html" />
+    <link rel="prev" title="Install" href="../install.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,9 +48,12 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">myutils package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.bash_scripts.html">myutils.bash_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html">myutils.cli.pkg_structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html">myutils.ase_utils package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="myutils.cli.html">myutils.cli package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html">myutils.gromacs package</a></li>
@@ -95,7 +98,13 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#module-myutils">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-myutils">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bash_rsts_scripts/pkges_installer.html">Script of myutils pkges_installer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bash_rsts_scripts/basics.html">Script of myutils basics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#basics">basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pkges-installer">pkges_installer</a></li>
 </ul>
 </li>
 </ul>
@@ -130,6 +139,43 @@
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#module-myutils.sith.from_extreme.info_from_opt">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.delta_angles_continuous"><code class="docutils literal notranslate"><span class="pre">delta_angles_continuous()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.info_from_opt"><code class="docutils literal notranslate"><span class="pre">info_from_opt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.reduce_structs"><code class="docutils literal notranslate"><span class="pre">reduce_structs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#module-myutils.sith.from_extreme">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#after-optimization">after_optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#forces-from-xyzs">forces_from_xyzs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#reduce-ds">reduce_ds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#submit-forces-after-opt">submit_forces_after_opt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#workflow-from-extreme">workflow_from_extreme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#rearange-files">rearange_files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#opt-and-forces">opt_and_forces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#resubmit-failed">resubmit_failed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#extr-dofs">extr_dofs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#prepare-and-submit">prepare_and_submit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.bash_scripts.html">myutils.bash_scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="myutils.bash_scripts.html#single-g09">single_g09</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.bash_scripts.html#bash-template">bash-template</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.bash_scripts.html#find-blocks">find_blocks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.cli.pkg_structure.html">myutils.cli.pkg_structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="myutils.cli.pkg_structure.html#files-tree">files_tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.cli.pkg_structure.html#add-python-doc">add_python_doc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.cli.pkg_structure.html#bash-style">bash_style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.cli.pkg_structure.html#doc-modules">doc_modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.cli.pkg_structure.html#check-structure">check_structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.cli.pkg_structure.html#python-doc-fixer">python_doc_fixer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.cli.pkg_structure.html#doc-pythonfile">doc_pythonfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.cli.pkg_structure.html#bash-basic-structure">bash_basic_structure</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="myutils.ase_utils.html">myutils.ase_utils package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="myutils.ase_utils.html#module-myutils.ase_utils.molecules">Submodules</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment"><code class="docutils literal notranslate"><span class="pre">Alignment</span></code></a><ul>
@@ -178,11 +224,21 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="myutils.cli.html#module-myutils.cli">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.cli.html#generate-main">generate_main</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="myutils.gromacs.html">myutils.gromacs package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#module-myutils.gromacs">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#extract-distance">extract_distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#classical-energies">classical_energies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#analysis">analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#classical-minimization">classical_minimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#pulling">pulling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#equilibrate-pdb">equilibrate_pdb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#pulling-with-ff">pulling_with_ff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#peptide-pulling">peptide_pulling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#constraint-run">constraint_run</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="myutils.sith.html">myutils.sith package</a><ul>
@@ -190,6 +246,16 @@
 <li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#module-myutils.sith.from_extreme.info_from_opt">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#module-myutils.sith.from_extreme">Module contents</a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#after-optimization">after_optimization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#forces-from-xyzs">forces_from_xyzs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#reduce-ds">reduce_ds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#submit-forces-after-opt">submit_forces_after_opt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#workflow-from-extreme">workflow_from_extreme</a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#rearange-files">rearange_files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#opt-and-forces">opt_and_forces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#resubmit-failed">resubmit_failed</a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#extr-dofs">extr_dofs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#prepare-and-submit">prepare_and_submit</a></li>
 </ul>
 </li>
 </ul>
@@ -255,6 +321,13 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#module-myutils.sith">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#stretching">stretching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#extract-forces">extract_forces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#proline-mod">proline_mod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#clean-ds">clean_ds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#find-forces">find_forces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#compute-forces">compute_forces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#workflow">workflow</a></li>
 </ul>
 </li>
 </ul>
@@ -906,8 +979,13 @@ matplotlib.</p></li>
 </section>
 <section id="module-myutils">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-myutils" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="basics">
+<h2>basics<a class="headerlink" href="#basics" title="Link to this heading"></a></h2>
 <div class="bash-script-title docutils container">
-<p><strong>myutils/basics.sh</strong></p>
+<p><a class="reference internal" href="bash_rsts_scripts/basics.html#basics"><span class="std std-ref">[script]</span></a> <strong>myutils/basics.sh</strong></p>
 </div>
 <div class="bash-script-doc docutils container">
 <div class="line-block">
@@ -961,8 +1039,11 @@ matplotlib.</p></li>
 </div>
 </div>
 </div>
+</section>
+<section id="pkges-installer">
+<h2>pkges_installer<a class="headerlink" href="#pkges-installer" title="Link to this heading"></a></h2>
 <div class="bash-script-title docutils container">
-<p><strong>myutils/pkges_installer.sh</strong></p>
+<p><a class="reference internal" href="bash_rsts_scripts/pkges_installer.html#pkges-installer"><span class="std std-ref">[script]</span></a> <strong>myutils/pkges_installer.sh</strong></p>
 </div>
 <div class="bash-script-doc docutils container">
 <div class="line-block">
@@ -1004,8 +1085,8 @@ matplotlib.</p></li>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../install.html" class="btn btn-neutral float-left" title="install" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="myutils.ase_utils.html" class="btn btn-neutral float-right" title="myutils.ase_utils package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../install.html" class="btn btn-neutral float-left" title="Install" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="myutils.sith.from_extreme.html" class="btn btn-neutral float-right" title="myutils.sith.from_extreme package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

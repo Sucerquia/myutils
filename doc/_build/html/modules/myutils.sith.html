@@ -22,7 +22,9 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="bash_rsts_doc/workflow.html" />
+    <link rel="prev" title="Script of myutils extract_distance" href="bash_rsts_scripts/extract_distance.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,9 +46,38 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="myutils.html">myutils package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="myutils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.bash_scripts.html">myutils.bash_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html">myutils.cli.pkg_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html">myutils.ase_utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.html">myutils.cli package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html">myutils.gromacs package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">myutils.sith package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-myutils.sith.analysis">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-myutils.sith">Module contents</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stretching">stretching</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#extract-forces">extract_forces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#proline-mod">proline_mod</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#clean-ds">clean_ds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#find-forces">find_forces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#compute-forces">compute_forces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#workflow">workflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.html#module-myutils.jupyter">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.html#module-myutils">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.html#basics">basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.html#pkges-installer">pkges_installer</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -63,6 +94,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="myutils.html">myutils package</a></li>
       <li class="breadcrumb-item active">myutils.sith package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/modules/myutils.sith.rst.txt" rel="nofollow"> View page source</a>
@@ -87,6 +119,16 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#module-myutils.sith.from_extreme">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#after-optimization">after_optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#forces-from-xyzs">forces_from_xyzs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#reduce-ds">reduce_ds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#submit-forces-after-opt">submit_forces_after_opt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#workflow-from-extreme">workflow_from_extreme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#rearange-files">rearange_files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#opt-and-forces">opt_and_forces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#resubmit-failed">resubmit_failed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#extr-dofs">extr_dofs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#prepare-and-submit">prepare_and_submit</a></li>
 </ul>
 </li>
 </ul>
@@ -1101,8 +1143,13 @@ set as pdv argument (without the extension).</p></li>
 </section>
 <section id="module-myutils.sith">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-myutils.sith" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="stretching">
+<h2>stretching<a class="headerlink" href="#stretching" title="Link to this heading"></a></h2>
 <div class="bash-script-title docutils container">
-<p><strong>myutils/sith/stretching.sh</strong></p>
+<p><a class="reference internal" href="bash_rsts_scripts/stretching.html#stretching"><span class="std std-ref">[script]</span></a> <strong>myutils/sith/stretching.sh</strong></p>
 </div>
 <div class="bash-script-doc docutils container">
 <div class="line-block">
@@ -1134,8 +1181,11 @@ set as pdv argument (without the extension).</p></li>
 </div>
 </div>
 </div>
+</section>
+<section id="extract-forces">
+<h2>extract_forces<a class="headerlink" href="#extract-forces" title="Link to this heading"></a></h2>
 <div class="bash-script-title docutils container">
-<p><strong>myutils/sith/extract_forces.sh</strong></p>
+<p><a class="reference internal" href="bash_rsts_scripts/extract_forces.html#extract-forces"><span class="std std-ref">[script]</span></a> <strong>myutils/sith/extract_forces.sh</strong></p>
 </div>
 <div class="bash-script-doc docutils container">
 <div class="line-block">
@@ -1151,8 +1201,11 @@ set as pdv argument (without the extension).</p></li>
 </div>
 </div>
 </div>
+</section>
+<section id="proline-mod">
+<h2>proline_mod<a class="headerlink" href="#proline-mod" title="Link to this heading"></a></h2>
 <div class="bash-script-title docutils container">
-<p><strong>myutils/sith/proline_mod.sh</strong></p>
+<p><a class="reference internal" href="bash_rsts_scripts/proline_mod.html#proline-mod"><span class="std std-ref">[script]</span></a> <strong>myutils/sith/proline_mod.sh</strong></p>
 </div>
 <div class="bash-script-doc docutils container">
 <div class="line-block">
@@ -1169,8 +1222,11 @@ set as pdv argument (without the extension).</p></li>
 </div>
 </div>
 </div>
+</section>
+<section id="clean-ds">
+<h2>clean_ds<a class="headerlink" href="#clean-ds" title="Link to this heading"></a></h2>
 <div class="bash-script-title docutils container">
-<p><strong>myutils/sith/clean_ds.sh</strong></p>
+<p><a class="reference internal" href="bash_rsts_scripts/clean_ds.html#clean-ds"><span class="std std-ref">[script]</span></a> <strong>myutils/sith/clean_ds.sh</strong></p>
 </div>
 <div class="bash-script-doc docutils container">
 <div class="line-block">
@@ -1188,8 +1244,11 @@ set as pdv argument (without the extension).</p></li>
 </div>
 </div>
 </div>
+</section>
+<section id="find-forces">
+<h2>find_forces<a class="headerlink" href="#find-forces" title="Link to this heading"></a></h2>
 <div class="bash-script-title docutils container">
-<p><strong>myutils/sith/find_forces.sh</strong></p>
+<p><a class="reference internal" href="bash_rsts_scripts/find_forces.html#find-forces"><span class="std std-ref">[script]</span></a> <strong>myutils/sith/find_forces.sh</strong></p>
 </div>
 <div class="bash-script-doc docutils container">
 <div class="line-block">
@@ -1211,8 +1270,11 @@ set as pdv argument (without the extension).</p></li>
 <div class="line">Note: it replaces the substring ‘stretched’ by ‘forces’ in the name.</div>
 </div>
 </div>
+</section>
+<section id="compute-forces">
+<h2>compute_forces<a class="headerlink" href="#compute-forces" title="Link to this heading"></a></h2>
 <div class="bash-script-title docutils container">
-<p><strong>myutils/sith/compute_forces.sh</strong></p>
+<p><a class="reference internal" href="bash_rsts_scripts/compute_forces.html#compute-forces"><span class="std std-ref">[script]</span></a> <strong>myutils/sith/compute_forces.sh</strong></p>
 </div>
 <div class="bash-script-doc docutils container">
 <div class="line-block">
@@ -1227,8 +1289,11 @@ set as pdv argument (without the extension).</p></li>
 </div>
 </div>
 </div>
+</section>
+<section id="workflow">
+<h2>workflow<a class="headerlink" href="#workflow" title="Link to this heading"></a></h2>
 <div class="bash-script-title docutils container">
-<p><strong>myutils/sith/workflow.sh</strong></p>
+<p><a class="reference internal" href="bash_rsts_scripts/workflow.html#workflow"><span class="std std-ref">[script]</span></a> <strong>myutils/sith/workflow.sh</strong></p>
 </div>
 <div class="bash-script-doc docutils container">
 <div class="line-block">
@@ -1274,7 +1339,10 @@ set as pdv argument (without the extension).</p></li>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="bash_rsts_scripts/extract_distance.html" class="btn btn-neutral float-left" title="Script of myutils extract_distance" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="bash_rsts_doc/workflow.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
