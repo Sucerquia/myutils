@@ -100,7 +100,7 @@ bash_help_block() {
   echo
   echo ".. container:: bash-script-title"
   echo
-  echo '   |chainlink| :ref:`[script] <'$plain_name'>` **'$1'**'
+  echo '   :ref:`[script] <'$plain_name'>` **'$1'**'
   echo
   echo ".. container:: bash-script-doc"
   echo
@@ -117,12 +117,12 @@ create_bashscript_rst() {
 
   local tmp_name=${file##*/}
   local plain_name=${tmp_name%.sh}
-  local rst_name="$doc_path/bash_rsts/$plain_name.rst"
+  local rst_name="$doc_path/bash_rsts_scripts/$plain_name.rst"
 
   echo ".. _$plain_name:" > $rst_name
   echo "" >> $rst_name
   script_title="Script of $pkg_name $plain_name"
-  { printf '%0.s=' $(seq 1 ${#script_title}); echo ; } >> $rst_name
+  { echo ; printf '%0.s=' $(seq 1 ${#script_title}) ; echo "" ; } >> $rst_name
   echo $script_title >> $rst_name
   { printf '%0.s=' $(seq 1 ${#script_title}); echo ; echo ; } >> $rst_name
   echo ".. literalinclude:: ../$rel_path/$file" >> $rst_name
@@ -134,14 +134,18 @@ mapfile -t scripts < <(eval "find . -type f -not \(" \
                        "${bool_ign::-2}" "-prune \) -name '*.sh'" )
 
 
-if [ ! -d "$mod_doc/bash_rsts" ] && [ ${#scripts[@]} -ne 0 ]
+if [ ! -d "$mod_doc/bash_rsts_scripts" ] && [ ${#scripts[@]} -ne 0 ]
 then
-  mkdir $mod_doc/bash_rsts
+  mkdir $mod_doc/bash_rsts_scripts
+fi
+
+if [ ! -d "$mod_doc/bash_rsts_doc" ] && [ ${#scripts[@]} -ne 0 ]
+then
+  mkdir $mod_doc/bash_rsts_doc
 fi
 
 for file in ${scripts[@]}
 do
-  echo 
   verbose $file
 
   path_bash=${file%/*}
@@ -157,6 +161,14 @@ do
   rst_name=${rst_name//\//.}
   rst_name=$pkg_name${rst_name}.rst
 
+  tmp_name=${file##*/}
+  plain_name=${tmp_name%.sh}
+
+  # Create documentation and script
+  bash_help_block $title_in_rst $file > $mod_doc/bash_rsts_doc/$plain_name.rst
+  create_bashscript_rst $mod_doc $relative_path $file
+
+  # creates the rst of the stem
   if [ ! -f $mod_doc/$rst_name ]
   then
     touch $mod_doc/$rst_name
@@ -167,6 +179,7 @@ do
     { printf '%0.s=' $(seq 1 ${#title}); echo ; echo ; } >> $mod_doc/$rst_name
   fi
 
+  # Adds stem to doc of package
   if ! grep -q "${rst_name%.rst}" $mod_doc/$pkg_name.rst
   then
     # Next line assumes that the first toctree is the main one
@@ -174,37 +187,32 @@ do
                           cut -d ":" -f 1 )
     sed -i "$(( ${lines[0]} + 2 ))a \ \ \ ${rst_name%.rst}" $mod_doc/$pkg_name.rst
   fi
-
-  if ! grep -q $title_in_rst $mod_doc/$rst_name
+  # add hidden toc
+  if ! grep -q ":hidden:" $mod_doc/$rst_name
   then
-    if ! grep -q ":hidden:" $mod_doc/$rst_name
-    then
-       echo >> $mod_doc/$rst_name
-       echo ".. toctree::" >> $mod_doc/$rst_name
-       echo "   :hidden:" >> $mod_doc/$rst_name
-       echo >> $mod_doc/$rst_name
-       echo >> $mod_doc/$rst_name
-    fi
-
-    tmp_name=${file##*/}
-    plain_name=${tmp_name%.sh} 
-  
-    if ! grep -q $plain_name $mod_doc/$rst_name
-    then
-       mapfile -t lines < <( grep -n ":hidden:" $mod_doc/$rst_name | \
-                             cut -d ":" -f 1 )
-       sed -i "$(( ${lines[0]} + 1 ))a \ \ \ bash_rsts/$plain_name" $mod_doc/$rst_name
-    fi
-
-    bash_help_block $title_in_rst $file >> $mod_doc/$rst_name
-    # Create script file
-    create_bashscript_rst $mod_doc $relative_path $file
+     echo >> $mod_doc/$rst_name
+     echo ".. toctree::" >> $mod_doc/$rst_name
+     echo "   :hidden:" >> $mod_doc/$rst_name
+     echo >> $mod_doc/$rst_name
+     echo >> $mod_doc/$rst_name
   fi
-
-  # Send the alias to the end
-  sed -i "/.. |chainlink| unicode:: U+1F517/d" $mod_doc/$rst_name
-
-  echo ".. |chainlink| unicode:: U+1F517" >> $mod_doc/$rst_name
+  # guarantee doc and script in the hidden toc
+  if ! grep -q $plain_name $mod_doc/$rst_name
+  then
+     mapfile -t lines < <( grep -n ":hidden:" $mod_doc/$rst_name | \
+                           cut -d ":" -f 1 )
+     sed -i "$(( ${lines[0]} + 1 ))a \ \ \ bash_rsts_scripts/$plain_name" $mod_doc/$rst_name
+     sed -i "$(( ${lines[0]} + 1 ))a \ \ \ bash_rsts_doc/$plain_name" $mod_doc/$rst_name
+  fi
+   
+  # Insert block
+  if ! grep -q ".. include:: bash_rsts_doc/$plain_name.rst" $mod_doc/$rst_name
+  then
+    { echo ; echo "$plain_name" ; 
+      printf '%0.s-' $(seq 1 ${#plain_name}); echo ; echo ;
+      echo ".. include:: bash_rsts_doc/$plain_name.rst" ;
+    } >> $mod_doc/$rst_name 
+  fi
 done
 
 cd $original_bash_blocks
