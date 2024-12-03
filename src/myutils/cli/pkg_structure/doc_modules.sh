@@ -172,11 +172,30 @@ do
     # Next line assumes that the first toctree is the main one
     mapfile -t lines < <( grep -n ".. toctree::" $mod_doc/$pkg_name.rst | \
                           cut -d ":" -f 1 )
-    sed -i "$(( ${lines[0]} + 2 ))a \ \ \ ${rst_name%.rst}"
+    sed -i "$(( ${lines[0]} + 2 ))a \ \ \ ${rst_name%.rst}" $mod_doc/$pkg_name.rst
   fi
 
   if ! grep -q $title_in_rst $mod_doc/$rst_name
   then
+    if ! grep -q ":hidden:" $mod_doc/$rst_name
+    then
+       echo >> $mod_doc/$rst_name
+       echo ".. toctree::" >> $mod_doc/$rst_name
+       echo "   :hidden:" >> $mod_doc/$rst_name
+       echo >> $mod_doc/$rst_name
+       echo >> $mod_doc/$rst_name
+    fi
+
+    tmp_name=${file##*/}
+    plain_name=${tmp_name%.sh} 
+  
+    if ! grep -q $plain_name $mod_doc/$rst_name
+    then
+       mapfile -t lines < <( grep -n ":hidden:" $mod_doc/$rst_name | \
+                             cut -d ":" -f 1 )
+       sed -i "$(( ${lines[0]} + 1 ))a \ \ \ bash_rsts/$plain_name" $mod_doc/$rst_name
+    fi
+
     bash_help_block $title_in_rst $file >> $mod_doc/$rst_name
     # Create script file
     create_bashscript_rst $mod_doc $relative_path $file
