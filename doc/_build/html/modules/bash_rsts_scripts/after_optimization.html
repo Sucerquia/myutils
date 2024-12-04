@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Script of myutils after_optimization &mdash; myutils 1.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=32ed3f93" />
 
@@ -157,7 +157,6 @@ print_help<span class="o">()</span><span class="w"> </span><span class="o">{</sp
 
 <span class="c1"># ==== Reduce number of structures with reduced changes of DOFs</span>
 verbose<span class="w"> </span><span class="s2">&quot;Create continuous structutes path.&quot;</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Removes high energy&quot;</span>
 <span class="c1"># The output are the xyz files without peak energies, output name-forces&lt;n&gt;.xyz</span>
 myutils<span class="w"> </span>info_from_opt<span class="w"> </span><span class="nv">$logfile</span><span class="w"> </span><span class="si">${</span><span class="nv">name</span><span class="si">}</span>-stretched00.pdb<span class="w"> </span><span class="si">${</span><span class="nv">name</span><span class="si">}</span>-forces<span class="w"> </span>&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span>fail<span class="w"> </span><span class="s2">&quot;extracting xyz files from log file&quot;</span>
@@ -198,7 +197,7 @@ verbose<span class="w"> </span><span class="s2">&quot;Create com files.&quot;</s
 <span class="w">  </span>cat<span class="w"> </span>tmp_001.out<span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="nv">$struct_name</span>.com
 <span class="w">  </span>sbatch<span class="w"> </span>-J<span class="w"> </span><span class="si">${</span><span class="nv">name</span><span class="si">}</span>_f-<span class="nv">$str_index</span><span class="w"> </span><span class="se">\</span>
 <span class="w">         </span><span class="k">$(</span>myutils<span class="w"> </span>single_g09<span class="w"> </span>-path<span class="k">)</span><span class="w"> </span>-f<span class="w"> </span><span class="nv">$struct_name</span><span class="w"> </span><span class="se">\</span>
-<span class="w">	                                   </span>-c<span class="w"> </span><span class="o">||</span><span class="w"> </span>fail<span class="w"> </span><span class="s2">&quot;submitting forces Job&quot;</span>
+<span class="w">	       </span>-c<span class="w"> </span><span class="o">||</span><span class="w"> </span>fail<span class="w"> </span><span class="s2">&quot;submitting forces Job&quot;</span>
 <span class="w">  </span><span class="nv">str_index</span><span class="o">=</span><span class="k">$((</span><span class="w"> </span><span class="m">10#</span><span class="nv">$str_index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="k">))</span>
 <span class="k">done</span>
 

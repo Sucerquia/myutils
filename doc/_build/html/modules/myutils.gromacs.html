@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>myutils.gromacs package &mdash; myutils 1.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=32ed3f93" />
 
@@ -57,7 +57,7 @@
 <li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html">myutils.ase_utils package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="myutils.cli.html">myutils.cli package</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">myutils.gromacs package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-myutils.gromacs.ff_parameters">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-myutils.gromacs">Module contents</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#extract-distance">extract_distance</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#classical-energies">classical_energies</a></li>
@@ -108,8 +108,91 @@
              
   <section id="myutils-gromacs-package">
 <h1>myutils.gromacs package<a class="headerlink" href="#myutils-gromacs-package" title="Link to this heading"></a></h1>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+<section id="module-myutils.gromacs.ff_parameters">
+<span id="submodules"></span><h2>Submodules<a class="headerlink" href="#module-myutils.gromacs.ff_parameters" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.gromacs.ff_parameters.amber_bond_pars">
+<span class="sig-prename descclassname"><span class="pre">myutils.gromacs.ff_parameters.</span></span><span class="sig-name descname"><span class="pre">amber_bond_pars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pdb</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/gromacs/ff_parameters.html#amber_bond_pars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.gromacs.ff_parameters.amber_bond_pars" title="Link to this definition"></a></dt>
+<dd><p>Extracts the bond parameters predicted by amber.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pdb</strong> (<em>str</em>) – Molecule for which you want to predict the parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(tuple) bond idices, equilibrium distances, harmonic constants.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.gromacs.ff_parameters.create_amber_data">
+<span class="sig-prename descclassname"><span class="pre">myutils.gromacs.ff_parameters.</span></span><span class="sig-name descname"><span class="pre">create_amber_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pdb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/gromacs/ff_parameters.html#create_amber_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.gromacs.ff_parameters.create_amber_data" title="Link to this definition"></a></dt>
+<dd><p>Create the file containing the parameters according to grappa.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pdb</strong> (<em>str</em>) – path to pdb file containing the basic structure. (it is assumed that
+the topollogy remain unchanged)</p></li>
+<li><p><strong>outfile</strong> (<em>str</em>) – path to the outputfile. Tipically a dat file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(tuple) bond_idxs, bond_eqs, bond_ks created by amber.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.gromacs.ff_parameters.create_bondpars_file">
+<span class="sig-prename descclassname"><span class="pre">myutils.gromacs.ff_parameters.</span></span><span class="sig-name descname"><span class="pre">create_bondpars_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bond_idxs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bond_eqs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bond_ks</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/gromacs/ff_parameters.html#create_bondpars_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.gromacs.ff_parameters.create_bondpars_file" title="Link to this definition"></a></dt>
+<dd><p>Creates a file containing the bond parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>outfile</strong> (<em>str</em>) – path to the outputfile. Tipically a dat file.</p></li>
+<li><p><strong>bond_indxs</strong> (<em>list</em>) – set of bonds defined as [atom1, atom2].</p></li>
+<li><p><strong>bond_eqs</strong> (<em>list</em>) – set of equilibrium values of the bonds.</p></li>
+<li><p><strong>bond_ks</strong> (<em>list</em>) – set of harmonic constants.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(tuple) bond_idxs, bond_eqs, bond_ks</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.gromacs.ff_parameters.create_grappa_data">
+<span class="sig-prename descclassname"><span class="pre">myutils.gromacs.ff_parameters.</span></span><span class="sig-name descname"><span class="pre">create_grappa_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pdb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/gromacs/ff_parameters.html#create_grappa_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.gromacs.ff_parameters.create_grappa_data" title="Link to this definition"></a></dt>
+<dd><p>Create the file containing the parameters according to grappa.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pdb</strong> (<em>str</em>) – path to pdb file containing the basic structure. (it is assumed that
+the topollogy remain unchanged)</p></li>
+<li><p><strong>outfile</strong> (<em>str</em>) – path to the outputfile. Tipically a dat file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(tuple) bond_idxs, bond_eqs, bond_ks  created by grappa.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myutils.gromacs.ff_parameters.grappa_bond_pars">
+<span class="sig-prename descclassname"><span class="pre">myutils.gromacs.ff_parameters.</span></span><span class="sig-name descname"><span class="pre">grappa_bond_pars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pdb</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/gromacs/ff_parameters.html#grappa_bond_pars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.gromacs.ff_parameters.grappa_bond_pars" title="Link to this definition"></a></dt>
+<dd><p>Extracts the bond parameters predicted by grappa.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pdb</strong> (<em>str</em>) – Molecule for which you want to predict the parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(tuple) bond idices, equilibrium distances, harmonic constants.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="module-myutils.gromacs">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-myutils.gromacs" title="Link to this heading"></a></h2>

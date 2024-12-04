@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>myutils.sith package &mdash; myutils 1.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=32ed3f93" />
 
@@ -19,6 +19,14 @@
         <script src="../_static/documentation_options.js?v=61243dd2"></script>
         <script src="../_static/doctools.js?v=9a2dae69"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+        <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+        <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+        <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
     <script src="../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -1148,7 +1156,43 @@ set as pdv argument (without the extension).</p></li>
 </section>
 <section id="stretching">
 <h2>stretching<a class="headerlink" href="#stretching" title="Link to this heading"></a></h2>
-<div class="bash-script-title docutils container">
+<pre align="center" class="mermaid align-center">
+        graph TD
+node1([&quot;stretching&quot;])
+  node1 --&gt; node2[&quot;Optimization of the input
+                   structure&quot;]
+  node2 --&gt; node3[&quot;Takes last optimization
+                   stretches it with
+                   'change_distance'&quot;]
+  click node3 &quot;myutils.ase_utils.html#myutils.ase_utils.tools.change_distance&quot; _self
+  node3 --&gt; node4[&quot;Add preferences to g09
+                   input and run it. it's
+                   checked if the
+                   convergence worked; it's
+                   rerun in case of one non
+                   convergence&quot;]
+  node4 --&gt; node5[&quot;Extract xyz from the
+                   optimization process with
+                   'log2xyz'&quot;]
+  click node5 &quot;myutils.sith.html#myutils.sith.g09_xyz.log2xyz&quot; _self
+  node5 --&gt; node6[&quot;Extract diffrent bonds in
+                   respect to the previous
+                   optimization with
+                   'diff_bonds'&quot;]
+  click node6 &quot;myutils.ase_utils.html#myutils.ase_utils.tools.diff_bonds&quot; _self
+  node6 --&gt; node7{&quot;did
+                   a bond
+                   dissapear?&quot;}
+  node7 --&gt; |No| node3
+  node7 --&gt; |Yes| node8{&quot;enough
+                         ruptures?&quot;}
+  node8 --&gt; |No| node9[&quot;save broken structure to
+                        rupture directory with
+                        'create_bck'.&quot;]
+  click node6 &quot;myutils.ase_utils.html#myutils.ase_utils.tools.diff_bonds&quot; _self
+  node9 --&gt; node3
+  node8 --&gt; |Yes| node10([&quot;finish&quot;])
+    </pre><div class="bash-script-title docutils container">
 <p><a class="reference internal" href="bash_rsts_scripts/stretching.html#stretching"><span class="std std-ref">[script]</span></a> <strong>myutils/sith/stretching.sh</strong></p>
 </div>
 <div class="bash-script-doc docutils container">
@@ -1292,7 +1336,26 @@ set as pdv argument (without the extension).</p></li>
 </section>
 <section id="workflow">
 <h2>workflow<a class="headerlink" href="#workflow" title="Link to this heading"></a></h2>
-<div class="bash-script-title docutils container">
+<pre align="center" class="mermaid align-center">
+        graph TD
+node1([&quot;Workflow&quot;])
+  node1 ==&gt; node2[&quot;Creates the peptide with pepgen and minimizes it with
+                   'classical_minimization'&quot;]
+  click node2 &quot;myutils.gromacs.html#classical-minimization&quot; _self
+  node2 --&gt; node3[&quot;'proline_mod'&quot;]
+  click node3 &quot;myutils.sith.html#proline-mod&quot; _self
+  node3 --&gt; node4[&quot;'protonate'&quot;]
+  click node4 &quot;myutils.sith.html#myutils.sith.protonate.protonate&quot; _self
+  node4 --&gt; node5[&quot;**'stretching'**&quot;]
+  click node5 &quot;myutils.sith.html#stretching&quot; _self
+  node1 -.-&gt;|restart| node5
+  node5 --&gt; node6[&quot;'classical_energies'&quot;]
+  click node6 &quot;myutils.gromacs.html#classical-energies&quot; _self
+  node5 --&gt; node7[&quot;'find_forces'&quot;]
+  click node7 &quot;myutils.sith.html#find-forces&quot; _self
+  node5 --&gt; node8[&quot;**'workflow_from_extreme'**&quot;]
+  click node8 &quot;myutils.sith.from_extreme.html#workflow-from-extreme&quot; _self
+    </pre><div class="bash-script-title docutils container">
 <p><a class="reference internal" href="bash_rsts_scripts/workflow.html#workflow"><span class="std std-ref">[script]</span></a> <strong>myutils/sith/workflow.sh</strong></p>
 </div>
 <div class="bash-script-doc docutils container">

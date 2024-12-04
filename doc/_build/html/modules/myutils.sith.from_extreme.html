@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>myutils.sith.from_extreme package &mdash; myutils 1.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=32ed3f93" />
 
@@ -19,6 +19,14 @@
         <script src="../_static/documentation_options.js?v=61243dd2"></script>
         <script src="../_static/doctools.js?v=9a2dae69"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+        <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+        <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+        <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
     <script src="../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -174,7 +182,7 @@ those outliers in the total energy.</p>
 <dt class="sig sig-object py" id="myutils.sith.from_extreme.info_from_opt.reduce_structs">
 <span class="sig-prename descclassname"><span class="pre">myutils.sith.from_extreme.info_from_opt.</span></span><span class="sig-name descname"><span class="pre">reduce_structs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/sith/from_extreme/info_from_opt.html#reduce_structs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.sith.from_extreme.info_from_opt.reduce_structs" title="Link to this definition"></a></dt>
 <dd><p>Check all the <a href="#id1"><span class="problematic" id="id2">*</span></a>-dofs.dat files and remove those files that represent
-irrelevant changes. It does not creates intermedias.</p>
+irrelevant changes. It creates intermedias to guarantee continuous dofs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -201,7 +209,38 @@ irrelevant changes. It does not creates intermedias.</p>
 </section>
 <section id="after-optimization">
 <h2>after_optimization<a class="headerlink" href="#after-optimization" title="Link to this heading"></a></h2>
-<div class="bash-script-title docutils container">
+<pre align="center" class="mermaid align-center">
+        graph TD
+node1([&quot;after_optimization&quot;])
+  node1 --&gt; node2[&quot;Generate a path
+                   of configurations
+                   removing jumping pics
+                   and interpolating if
+                   the end_to_end distance
+                   is larger than 0.2A.
+                   **info_from_opt**&quot;]
+  click node2 &quot;myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.info_from_opt&quot; _self
+  node2 --&gt; node3[&quot;Extract dofs from all
+                   xyz files using **extr_dofs**&quot;]
+  click node3 &quot;myutils.sith.from_extreme.html#extr-dofs&quot; _self
+  node3 --&gt; node4[&quot;Delete irrelevant changes and
+                   adds intermedias to make DOFs
+                   continuous with
+                   **reduce_structs**&quot;]
+  click node4 &quot;myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.reduce_structs&quot; _self
+  node4 --&gt; node5[&quot;Creates a g09 com templete
+                   to compute the forces of the
+                   peptide based on \*-forces000.xyz
+                   **forces_from_xyzs**&quot;]
+  click node5 &quot;myutils.sith.from_extreme.html#forces-from-xyzs&quot; _self
+  node5 --&gt; node6[&quot;Replaces the values of
+                   DOFs in the template for
+                   the continuous ones and
+                   submits all calculations
+                   with sbatch using
+                   **single_g09**&quot;]
+  click node6 &quot;myutils.bash_scripts.html#single-g09&quot; _self
+    </pre><div class="bash-script-title docutils container">
 <p><a class="reference internal" href="bash_rsts_scripts/after_optimization.html#after-optimization"><span class="std std-ref">[script]</span></a> <strong>myutils/sith/from_extreme/after_optimization.sh</strong></p>
 </div>
 <div class="bash-script-doc docutils container">
@@ -281,7 +320,17 @@ irrelevant changes. It does not creates intermedias.</p>
 </section>
 <section id="workflow-from-extreme">
 <h2>workflow_from_extreme<a class="headerlink" href="#workflow-from-extreme" title="Link to this heading"></a></h2>
-<div class="bash-script-title docutils container">
+<pre align="center" class="mermaid align-center">
+        graph TD
+node1([&quot;workflow_from_extreme&quot;])
+  node1 --&gt; node2[&quot;Find last xyz optimization
+                   and start a new optimization
+                   without constraints in a directory
+                   called from_extreme&quot;]
+  node2 --&gt; node3[&quot;used log output for
+                   'after_optimization'&quot;]
+  click node3 &quot;myutils.sith.from_extreme.html#after-optimization&quot; _self
+    </pre><div class="bash-script-title docutils container">
 <p><a class="reference internal" href="bash_rsts_scripts/workflow_from_extreme.html#workflow-from-extreme"><span class="std std-ref">[script]</span></a> <strong>myutils/sith/from_extreme/workflow_from_extreme.sh</strong></p>
 </div>
 <div class="bash-script-doc docutils container">
