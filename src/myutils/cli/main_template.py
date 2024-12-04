@@ -62,7 +62,7 @@ def main():
     elif sys.argv[1] in sh_executers.keys():
         if '-path' in sys.argv[2:]:
             path = str(Path(__file__).parent)[:-3] + \
-                sh_executers[sys.argv[1]][2:]
+                    sh_executers[sys.argv[1]][2:]
             print(path)
         else:
             command = str(Path(__file__).parent)[:-3] + \
@@ -78,6 +78,12 @@ def main():
     # own path
     elif sys.argv[1] == 'path':
         print(str(Path(__file__).parent)[:-3])
+    
+    # open documentation
+    elif sys.argv[1] == 'doc':
+        command = "xdg-open " + str(Path(__file__).parent)[:-3] + \
+            "../../doc/_build/html/index.html"
+        output_terminal(command)
 
     # Not recognized keyword
     else:
