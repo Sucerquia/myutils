@@ -33,7 +33,6 @@ source $(myutils basics -path) "after_opt"
 
 # ==== Reduce number of structures with reduced changes of DOFs
 verbose "Create continuous structutes path."
-echo "Removes high energy"
 # The output are the xyz files without peak energies, output name-forces<n>.xyz
 myutils info_from_opt $logfile ${name}-stretched00.pdb ${name}-forces > \
   /dev/null || fail "extracting xyz files from log file"
@@ -74,7 +73,7 @@ do
   cat tmp_001.out >> $struct_name.com
   sbatch -J ${name}_f-$str_index \
          $(myutils single_g09 -path) -f $struct_name \
-	                                   -c || fail "submitting forces Job"
+	       -c || fail "submitting forces Job"
   str_index=$(( 10#$str_index + 1 ))
 done
 

@@ -75,9 +75,6 @@ def info_from_opt(logfile, pdb_reference, pattern):
         ms = MoleculeSetter(conf)
         ms.xy_alignment(ind1, ind2, ind3)
 
-    # TODO: change from here to consider continuos DOFs instead of continuos
-    # distance. This function can be unified in this and the next one.
-
     # now make the trajectory continuos. if the distance between extremes is
     # larger than 0.2A, configurations with the intermedia distances are
     # created.
@@ -117,7 +114,7 @@ def info_from_opt(logfile, pdb_reference, pattern):
 def reduce_structs(dir, pattern):
     """
     Check all the *-dofs.dat files and remove those files that represent
-    irrelevant changes. It does not creates intermedias.
+    irrelevant changes. It creates intermedias to guarantee continuous dofs.
 
     Parameters
     ==========
@@ -160,15 +157,7 @@ def reduce_structs(dir, pattern):
         # rescale distances and angles to have them in the same order of
         # magnitude. I could also evaluate the approximation for distances and
         # then for angles and use logicaland.
-        # TODO: replace this by continuous angles()
-        condition = d_ij[:, nrs:] < -180
-        while condition.any():
-            d_ij[:, nrs:][condition] += 360
-            condition = d_ij[:, nrs:] < -180
-        condition = d_ij[:, nrs:] > 180
-        while condition.any():
-            d_ij[:, nrs:][condition] -= 360
-            condition = d_ij[:, nrs:] > 180
+        d_ij = delta_angles_continuous(d_ij, nrs)
         d_ij[:, nrs:] *= 1e-3  # trans 1 degree
         d_ij = abs(d_ij)
         close = np.isclose(d_ij, 0, atol=1e-3)
