@@ -1,0 +1,8 @@
+! B3LYP cc-pVDZ AUTOAUX
+%pal nprocs 16 end
+*XYZFile 0 2 opt_cc-pVDZ.xyz
+%EPRNMR
+        GTENSOR   TRUE
+        NUCLEI    = ALL H {SHIFT, AISO, ADIP, AORB}
+        ORI       CenterOfElCharge
+END

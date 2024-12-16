@@ -1,0 +1,3 @@
+! B3LYP EPR-II FREQ
+%pal nprocs 16 end
+*XYZFile 0 2 opt.xyz

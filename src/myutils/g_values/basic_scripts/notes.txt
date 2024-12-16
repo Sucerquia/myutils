@@ -1,0 +1,4 @@
+(Dec 10 2024)
+Our previous experience with PPEs paper (https://doi.org/10.1021/jacs.4c08765)
+we saw that the results with the different basis sets and center methods are
+very similar but it is expected to have the best result with EPRII - GIAO
