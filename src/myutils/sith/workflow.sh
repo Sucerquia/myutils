@@ -177,4 +177,9 @@ sbatch -J ${pep}_forces "$( myutils find_forces -path )" -c  -p $pep &&
 
 sbatch -J ${pep}_WAR $(myutils workflow_from_extreme -path) -c -p "."
 
+verbose "running grappa and amber";
+final_force=$(myutils F_max_stretch ../ $pep)
+sbatch -J ${pep}_ff $(myutils pulling_with_ff -path) -F $final_force -f $pep-stretched00.pdb 
+
+
 finish "$pep finished"

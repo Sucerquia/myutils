@@ -73,8 +73,6 @@ stretching() {
   fi
 }
 
-
-
 # Grappa
 verbose "$i $amino GRAPPA"
 mkdir grappaforced
@@ -88,6 +86,7 @@ then
 fi
 
 stretching "$force" || fail "pulling from $(pwd) $force"
+stretching 3000 || fail "pulling from $(pwd) 3000"
 cd ..
 
 # amber99
@@ -102,7 +101,6 @@ then
 fi
 stretching "$force" || fail "pulling from $(pwd) $force"
 stretching 3000 || fail "pulling from $(pwd) 3000"
-
-cd ../
+cd ..
 
 finish
