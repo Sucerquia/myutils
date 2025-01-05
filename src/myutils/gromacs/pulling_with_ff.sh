@@ -14,7 +14,7 @@ echo "
 This code submits an equilibration and run a pulling simulation using
 grappa and amber99.
 
-  -f  <pdb_file> pdb file of the molecule that you want to equilibrate.
+  -f  <pdb_file> pdb file of the molecule that you want to pull.
   -c  run in a cluster.
 
   -v  verbose.
@@ -26,9 +26,11 @@ exit 0
 file=''
 cascade=''
 verbose=''
-while getopts 'cf:vh' flag;
+while getopts 'acf:F:vh' flag;
 do
   case "${flag}" in
+    a) amino=${OPTARG} ;;
+    F) force=${OPTARG} ;;
     f) file=${OPTARG} ;;
     c) cascade='true' ;;
 
@@ -71,42 +73,36 @@ stretching() {
   fi
 }
 
-mapfile -t aas < <( awk '!/^#/ {print $1}' $file )
-mapfile -t ffs < <( awk '!/^#/ {print $2}' $file )
 
-for (( i=0; i<${#ass[@]}; i++ ))
-do
-  amino=${aas[i]}
-  force=${ffs[i]}
-  cd $amino
 
-  # Grappa
-  echo -e "$i $amino GRAPPA"
-  mkdir grappaforced
-  cp $amino-stretched00.pdb grappaforced || fail "copying pdb"
-  cd grappaforced
-  if [ ! -f "equilibrate/npt.trr" ]
-  then
-    $(myutils equilibrate_pdb -path) -f $amino-stretched00.pdb -v -G grappa \
-      || fail "equilibrating $amino with grappa"
-  fi
+# Grappa
+verbose "$i $amino GRAPPA"
+mkdir grappaforced
+cp $file grappaforced || fail "copying pdb"
+cd grappaforced
 
-  stretching "$force" || fail "pulling from $(pwd) $force"
-  stretching 3000 || fail "pulling from $(pwd) 3000"
-  cd ..
+if [ ! -f "equilibrate/npt.trr" ]
+then
+  $(myutils equilibrate_pdb -path) -f $file -v -G grappa \
+    || fail "equilibrating $amino with grappa"
+fi
 
-  # amber99
-  echo -e "\n\n\n $i $amino amber99 \n\n\n"
-  mkdir amber99forced
-  cp $amino-stretched00.pdb amber99forced 
-  cd amber99forced
-  if [ ! -f "equilibrate/npt.trr" ]
-  then
-    $(myutils equilibrate_pdb -path) -f $amino-stretched00.pdb -v \
-      || fail "equilibrating $amino with amber"
-  fi
-  stretching "$force" || fail "pulling from $(pwd) $force"
-  stretching 3000 || fail "pulling from $(pwd) 3000"
+stretching "$force" || fail "pulling from $(pwd) $force"
+cd ..
 
-  cd ../../
-done
+# amber99
+verbose " $i $amino amber99 "
+mkdir amber99forced
+cp $file amber99forced 
+cd amber99forced
+if [ ! -f "equilibrate/npt.trr" ]
+then
+  $(myutils equilibrate_pdb -path) -f $file -v \
+    || fail "equilibrating $amino with amber"
+fi
+stretching "$force" || fail "pulling from $(pwd) $force"
+stretching 3000 || fail "pulling from $(pwd) 3000"
+
+cd ../
+
+finish
