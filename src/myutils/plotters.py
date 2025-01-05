@@ -235,6 +235,7 @@ class StandardPlotter:
     def axis_setter(self, ax: Union[plt.Axes, int] = 0,
                     reset: bool = False,
                     general_pars: dict = {},
+                    legend=False,
                     **kwargs) -> plt.Axes:
         """
         Adjust the most common parameters of an axes.
@@ -338,6 +339,10 @@ class StandardPlotter:
             ax.set_xlim(pref['xlim'])
         if pref['ylim'] is not None:
             ax.set_ylim(pref['ylim'])
+        
+        # legend
+        if legend:
+            ax.legend(fontsize=mpl.rcParams['font.size'] * pref['labels_scale'])
 
         return ax
 
