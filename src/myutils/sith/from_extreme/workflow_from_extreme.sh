@@ -21,8 +21,6 @@ find the internal forces. Consider the next options:
       be evaluated. For example, \"./AAA/\" would optimize the last
       stretched a trialanine peptide (where last means after organizing
       alphabetically).
-  -l  <number of amino acids in the peptide> It will be assumed that the
-      xyz file starts with the letter code of the amino acids.
 
   -v  verbose.
   -h  prints this message.
