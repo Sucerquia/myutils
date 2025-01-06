@@ -181,10 +181,11 @@ load_modules() {
     source "$HOME/.bashrc"
     # shellcheck disable=SC1091
     source /hits/basement/mbm/sucerquia/sw/g09/load_g09.sh
-    conda activate myutils
+    conda activate sith
     module purge
     module use /hits/sw/its/doserbd/haswell/modules/all/
-    module load GROMACS/2023.1-foss-2022a
+    # TODO: the next line is a bug. it activates python 3.10 that is incompatible with numpy
+    # module load GROMACS/2023.1-foss-2022a
     if [[ "$(hostname)" == *"haswell"* ]]
     then
       module load slurm/20.11.7-1.hits
