@@ -49,7 +49,7 @@ do
   esac
 done
 
-source "$(myutils basics -path)" WF_FROM_EXTREME
+source "$(myutils basics -path)" WF_FROM_EXTREME $verbose
 
 if $cascade
 then

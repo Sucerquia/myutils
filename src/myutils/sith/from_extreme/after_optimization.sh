@@ -17,25 +17,26 @@ exit 0
 # ----- definition of functions finishes --------------------------------------
 
 # ----- set up starts ---------------------------------------------------------
-while getopts 'l:n:h' flag;
+while getopts 'l:n:vh' flag;
 do
   case "${flag}" in
     l) logfile=${OPTARG} ;;
     n) name=${OPTARG} ;;
-
+    
+    v) verbose='true' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
 done
 
-source $(myutils basics -path) "after_opt"
+source $(myutils basics -path) "after_opt" $verbose
 # ---- BODY -------------------------------------------------------------------
 
 # ==== Reduce number of structures with reduced changes of DOFs
 verbose "Create continuous structutes path."
 # The output are the xyz files without peak energies, output name-forces<n>.xyz
 myutils info_from_opt $logfile ${name}-stretched00.pdb ${name}-forces > \
-  /dev/null || fail "extracting xyz files from log file"
+  /dev/null || fail "extracting xyz files from log file from $logfile"
 # Extract the dofs from the created xyzs. out; <name>-forces-dofs.dat
 myutils extr_dofs -f ${name}-forces > /dev/null || \
   fail "extracting dofs from xyzs"
@@ -71,6 +72,7 @@ do
   echo "" >> $struct_name.com
   myutils find_blocks -s "\^\$" -e "\^\$" -f template.com -o tmp > /dev/null
   cat tmp_001.out >> $struct_name.com
+  sed -i "/chk=/c %chk=$struct_name" $struct_name.com
   sbatch -J ${name}_f-$str_index \
          $(myutils single_g09 -path) -f $struct_name \
 	       -c || fail "submitting forces Job"
