@@ -88,7 +88,7 @@ do
   # Note for developers: I had to add the next while because the creation of
   # the files was a bit delayed and that created errors trying to find those
   # files later.
-  wait_until_next_file_exist documentation-blocks_$i.out
+  wait_until_next_file_exist documentation-blocks_${i}_001.out
 done
 
 # ==== Block of Parameters in old documentation

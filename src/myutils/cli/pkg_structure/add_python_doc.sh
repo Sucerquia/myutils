@@ -164,13 +164,13 @@ do
 
       if [ ${#n_end_class} -eq 0 ]
       then
-        tail -n +$(( n_class + 1 )) $fil > ${class}_complete.out
+        tail -n +$(( n_class + 1 )) $fil > ${class}_complete_001.out
       else
         myutils find_blocks -f $fil -s $(( n_class )) \
                             -e $(( n_class + n_end_class - 1 )) \
                             -i -o ${class}_complete || fail "finding the class"
       fi
-      wait_until_next_file_exist ${class}_complete.out
+      wait_until_next_file_exist ${class}_complete_001.out
 
       mapfile -t methods < <(myutils methods_in_class $module $class | \
                              head -n -1)
@@ -180,12 +180,12 @@ do
         echo ${class}.$method
         myutils python_doc_fixer -m $module -c $class -f $method || \
           fail "creating new documentation of $class.$method"
-        rel_n_meth=$( grep -n "def $method(" ${class}_complete.out | \
+        rel_n_meth=$( grep -n "def $method(" ${class}_complete_001.out | \
                       cut -d ":" -f 1)
         if [ ${#rel_n_meth} -eq 0 ]
         then
           rel_n_meth=$( grep -En "def $method+[[:space:]]" \
-                        ${class}_complete.out | cut -d ":" -f 1)
+                        ${class}_complete_001.out | cut -d ":" -f 1)
         fi
         
         # If the function is not defined at all in this file (if the method is
@@ -196,18 +196,18 @@ do
           continue
         fi
 
-        rel_n_meth_end=$( tail -n +$rel_n_meth ${class}_complete.out \
+        rel_n_meth_end=$( tail -n +$rel_n_meth ${class}_complete_001.out \
                           | grep -n ")" | head -n 1 | \
                           cut -d ':' -f 1)
         doc_num_start=$(( n_class + rel_n_meth + rel_n_meth_end ))
         insert_doc $doc_num_start $fil $method $class
-        insert_doc $(( rel_n_meth + rel_n_meth_end )) ${class}_complete.out \
+        insert_doc $(( rel_n_meth + rel_n_meth_end )) ${class}_complete_001.out \
                    $method $class
         # delete documentation file
         rm final_$class-$method.txt || \
           fail "not final documentation found final_$class-$method.txt"
       done
-      rm ${class}_complete.out || fail could not remove complete file
+      rm ${class}_complete_001.out || fail could not remove complete file
     done
   fi
 done
