@@ -45,7 +45,7 @@ do
   newzmat -ixyz -ozmat -rebuildzmat tmp ${file%.xyz} > /dev/null || \
     fail "executing newzmat"
   sed -i "s/-- No Title Specified --/Computation of forces/g" ${file%.xyz}.com
-  sed -i "s/\# HF\/6-31G\* Test/%chk=${file%.xyz}\n%NProcShared=8\n#P bmk\/6-31+g opt(modredun,calcfc) force/g" ${file%*.xyz}.com
+  sed -i "s/\# HF\/6-31G\* Test/%chk=$name_opt\n%NProcShared=8\n#P bmk\/6-31+g opt(modredun)/g" ${file%*.xyz}.com
   echo -e "$index1 $index2 F" >>  ${file%.xyz}.com
 done
 rm tmp.xyz
