@@ -48,7 +48,7 @@ do
 
     if [[ "$(whoami)" == "hits_"* ]]
     then
-      single_part="--partition=single"
+      single_part="--partition=cpu-single"
     else
       single_part=""
     fi

@@ -42,7 +42,7 @@ resubmit () {
   sleep 23h 58m ; \
   if [[ "$(whoami)" == "hits_"* ]]
   then
-    single_part="--partition=single"
+    single_part="--partition=cpu-single"
   else
     single_part=""
   fi
