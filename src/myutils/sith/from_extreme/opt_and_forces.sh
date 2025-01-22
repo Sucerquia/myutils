@@ -16,6 +16,7 @@ forces.
   -f  name if the gaussian input file without extension (.com).
   -c  run in server.
 
+  -v  verbose.
   -h  prints this message.
 "
 exit 0
@@ -24,16 +25,17 @@ exit 0
 # ---- set up -----------------------------------------------------------------
 c_flag=""
 cascade='false'
-while getopts 'f:ch' flag; do
+while getopts 'f:cvh' flag; do
   case "${flag}" in
     f) file=${OPTARG} ;;
     c) cascade='true' ;;
-
+    
+    v) verbose='true' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
 done
-source "$(myutils basics -path)" $file
+source "$(myutils basics -path)" $file $verbose
 
 verbose "JOB information"
 echo " * Date:"
@@ -47,12 +49,16 @@ then
   c_flag="-c"
 fi
 # ----- BODY ------------------------------------------------------------------
+verbose "submit constrained optimization"
 g09 "$file.com" "$file.log"
 
 if $(grep -q "NtrErr Called from FileIO." "$file.log")
 then
-  myutils resubmit_failed "$file.log"
-  fail "$file failed, it will be submitted again"
+  myutils resubmit_failed \
+          -e "$(myutils opt_and_forces -path ) -c -v '$verbose' -f " \
+          -c "$file.com" -l "$file.log" -j $SLURM_JOB_NAME -v || \
+    fail "resubmitting $file after NtrErr Called from FileIO"
+  fail "$file failed, it was submitted again"
 fi
 
 grep -q "Normal termination of Gaussian" "$file.log" || \
@@ -65,9 +71,8 @@ else
   single_part=""
 fi
 
-sbatch --job-name="${file:0:6}_forces" $single_part \
-       --output="${file:0:6}_forces.o" \
-       --error="${file:0:6}_forces.e" \
-       $(myutils compute_forces -path) -f $file.chk -c || fail "submitting forces"
+verbose "submit forces computation"
+sbatch --job-name="${SLURM_JOB_NAME}_forces" $single_part \
+       $(myutils compute_forces -path) -f $file.chk -c -v || fail "submitting forces"
 
 finish "optmimization"
