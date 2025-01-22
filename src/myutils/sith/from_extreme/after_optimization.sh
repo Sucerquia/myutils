@@ -29,30 +29,33 @@ do
   esac
 done
 
-source $(myutils basics -path) "after_opt" $verbose
+source $(myutils basics -path) "AfterOpt" $verbose
+
+load_modules
 # ---- BODY -------------------------------------------------------------------
 
 # ==== Reduce number of structures with reduced changes of DOFs
 verbose "Create continuous structutes path."
-# The output are the xyz files without peak energies, output name-forces<n>.xyz
-myutils info_from_opt $logfile ${name}-stretched00.pdb ${name}-forces > \
-  /dev/null || fail "extracting xyz files from log file from $logfile"
-# Extract the dofs from the created xyzs. out; <name>-forces-dofs.dat
-myutils extr_dofs -f ${name}-forces > /dev/null || \
+# The output are the xyz files without peak energies, output name-conopt<n>.xyz
+echo myutils info_from_opt $logfile ../${name}-stretched00.pdb ${name}-conopt
+
+myutils info_from_opt $logfile ../${name}-stretched00.pdb ${name}-conopt \
+  || fail "extracting xyz files from log file from $logfile"
+# Extract the dofs from the created xyzs. out; <name>-conopt-dofs.dat
+myutils extr_dofs -f ${name}-conopt > /dev/null || \
   fail "extracting dofs from xyzs"
 # reduce irrelevant changes, store the new subset in a dir called subset
-myutils reduce_structs "." ${name}-forces > /dev/null || \
+myutils reduce_structs "." ${name}-conopt > /dev/null || \
   fail "reducing structures"
 
 # ==== Create com g09 files
 # Create com file template
-myutils forces_from_xyzs -d . -n ${name}-forces000 -p ${name}-stretched00.pdb \
+myutils opt_from_xyzs -d . -n ${name}-conopt000 -p ../${name}-stretched00.pdb \
   > /dev/null|| fail "creating com files using forces_from_xyz"
 # clean files: only leaves the template
-mv ${name}-forces000.com template.com
-sed -i "s/opt(modredun,calcfc) //g" template.com
+mv ${name}-conopt000.com template.com
 echo "" >> template.com
-rm *forces*
+rm *conopt*
 
 # import xyz files of the subset
 mv subset/* .
@@ -61,7 +64,7 @@ rm -r subset
 # Create .com files
 verbose "Create com files."
 str_index=0
-for file in ${name}-forces*.dat
+for file in ${name}-conopt*.dat
 do
   struct_name=${file%.dat}
   echo $struct_name
@@ -73,9 +76,11 @@ do
   myutils find_blocks -s "\^\$" -e "\^\$" -f template.com -o tmp > /dev/null
   cat tmp_001.out >> $struct_name.com
   sed -i "/chk=/c %chk=$struct_name" $struct_name.com
-  sbatch -J ${name}_f-$str_index \
-         $(myutils single_g09 -path) -f $struct_name \
-	       -c || fail "submitting forces Job"
+
+  
+  # This one can sbatch each job
+  sbatch -J ${name}${str_index}cono $( myutils opt_and_forces -path ) \
+    -f $struct_name -c -v
   str_index=$(( 10#$str_index + 1 ))
 done
 
