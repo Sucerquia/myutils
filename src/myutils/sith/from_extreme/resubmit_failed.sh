@@ -105,9 +105,6 @@ else
 fi
 
 cd $origin_resub
-pwd
-echo sbatch --job-name=$jobname $single_part \
-  "$toexecute"
 
 sbatch --job-name=$jobname $single_part \
   $toexecute || \

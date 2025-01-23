@@ -77,10 +77,16 @@ do
   cat tmp_001.out >> $struct_name.com
   sed -i "/chk=/c %chk=$struct_name" $struct_name.com
 
-  
+  if [[ "$(whoami)" == "hits_"* ]]
+  then
+    single_part="--partition=cpu-single"
+  else
+    single_part=""
+  fi
+
   # This one can sbatch each job
-  sbatch -J ${name}${str_index}cono $( myutils opt_and_forces -path ) \
-    -f $struct_name -c -v
+  sbatch -J ${name}${str_index}cono $single_part \
+    $( myutils opt_and_forces -path ) -f $struct_name -c -v
   str_index=$(( 10#$str_index + 1 ))
 done
 
