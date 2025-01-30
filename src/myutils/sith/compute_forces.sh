@@ -36,7 +36,7 @@ compute_forces () {
       $for_name.com || \
       fail "creating matrix" ;
     }
-  sed -i "/#P bmk\/6-31+g opt(modredun/c %chk=$for_name\n%NProcShared=8\n#P bmk\/6-31+g force" $for_name.com
+  sed -i "/#P bmk\/6-31+g opt(modredun/c %mem=60000MB\n%chk=$for_name\n%NProcShared=8\n#P bmk\/6-31+g force" $for_name.com
   verbose "executes g09 computation of forces for $for_name.com"
   g09 $for_name.com || fail "computing forces"
   formchk -3 $for_name.chk

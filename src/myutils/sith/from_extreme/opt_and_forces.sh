@@ -35,7 +35,7 @@ while getopts 'f:cvh' flag; do
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
 done
-source "$(myutils basics -path)" $file $verbose
+source "$(myutils basics -path)" opt_forces $verbose
 
 verbose "JOB information"
 echo " * Date:"
@@ -49,13 +49,14 @@ then
   c_flag="-c"
 fi
 # ----- BODY ------------------------------------------------------------------
-verbose "submit constrained optimization"
+verbose "submit constrained optimization $file"
+grep -q "%mem" $file.com || sed -i "1a %mem=60000MB" $file.com
 g09 "$file.com" "$file.log"
 
 if $(grep -q "NtrErr Called from FileIO." "$file.log")
 then
   myutils resubmit_failed \
-          -e "$(myutils opt_and_forces -path ) -c -v '$verbose' -f " \
+          -e "$(myutils opt_and_forces -path ) -c -v -f $file" \
           -c "$file.com" -l "$file.log" -j $SLURM_JOB_NAME -v || \
     fail "resubmitting $file after NtrErr Called from FileIO"
   fail "$file failed, it was submitted again"
