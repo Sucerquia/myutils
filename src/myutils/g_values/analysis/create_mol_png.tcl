@@ -1,4 +1,5 @@
 # Load the molecule in VMD and display it in CPK representation, then save the image as a PNG file.
+# execute as vmd -e create_mol_png.tcl -args
 
 f { $argc < 2 } {
     puts "Usage: vmd -e create_mol_png.tcl -args input_file output_file"

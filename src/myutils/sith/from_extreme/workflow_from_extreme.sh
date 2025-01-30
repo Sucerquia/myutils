@@ -21,8 +21,8 @@ find the internal forces. Consider the next options:
       be evaluated. For example, \"./AAA/\" would optimize the last
       stretched a trialanine peptide (where last means after organizing
       alphabetically).
-  -l  <number of amino acids in the peptide> It will be assumed that the
-      xyz file starts with the letter code of the amino acids.
+  -r  Use if the job corresponds to a restart, in which case, no directory will
+      be created and the new <peptide>-optext.com is assumed to exist.
 
   -v  verbose.
   -h  prints this message.
@@ -39,11 +39,13 @@ exit 0
 cascade='false'
 ref=''
 verbose='false'
-while getopts 'cl:p:vh' flag;
+restart='false'
+while getopts 'cp:rvh' flag;
 do
   case "${flag}" in
     c) cascade='true' ;;
     p) ref=${OPTARG} ;;
+    r) restart='true' ;;
 
     v) verbose='true' ;;
     h) print_help ;;
@@ -51,7 +53,7 @@ do
   esac
 done
 
-source "$(myutils basics -path)" WF_FROM_EXTREME
+source "$(myutils basics -path)" WF_FROM_EXTREME $verbose
 
 if $cascade
 then
@@ -86,33 +88,66 @@ name=${xyz%-*}
 
 verbose "The first g09 process is an optimization starting from $ref"
 
-# create from_extreme directory
-mkdir from_extreme
-cp $xyz from_extreme
-cp *00.pdb from_extreme
-cd from_extreme
-
-# creates gaussian input that optimizes the structure
-myutils change_distance "$xyz" "$name-optext" frozen_dofs.dat 0 0 \
-  "scale_distance" || fail "Preparating the input of gaussian"
-rm "$xyz"
-sed -i "1a %NProcShared=8" "$name-optext.com"
-sed -i "3a opt(modredun,calcfc)" "$name-optext.com"
+if [[ "$restart" == "false" ]]
+then
+  # create from_extreme directory
+  mkdir from_extreme
+  cp $xyz from_extreme
+  cp *00.pdb from_extreme
+  cd from_extreme
+  
+  # creates gaussian input that optimizes the structure
+  myutils change_distance "$xyz" "$name-optext" frozen_dofs.dat 0 0 \
+    "scale_distance" || fail "Preparating the input of gaussian"
+  rm "$xyz"
+  sed -i "1a %NProcShared=8" "$name-optext.com"
+  sed -i "3a opt(modredun,calcfc)" "$name-optext.com"
+else
+  cd from_extreme
+fi
 
 # run gaussian
 verbose "Running optmization of stretching ${nameiplusone}"
-g09 "$name-optext.com" "$name-optext.log" || \
-  { if [ "$(grep -c "Atoms too close." \
-         "$name-optext.com")" \
-         -eq 1 ]; then fail "Atoms too close for ${nameiplusone}" ; \
-    fi ; } || fail "running gaussian optimization"
 
-# check convergence from output
-output=$(grep -i optimized "$name-optext.log" | \
-          grep -c -i Non )
+if ! grep -q "Normal termination" "$name-optext.log"
+then
+  g09 "$name-optext.com" "$name-optext.log" || \
+    { if [ "$(grep -c "Atoms too close." \
+          "$name-optext.com")" \
+          -eq 1 ]; then fail "Atoms too close for ${nameiplusone}" ; \
+      fi ; } || fail "running gaussian optimization"
 
-[ "$output" -ne 0 ] && fail "Optimization didn't converged"
+  # Restart in case of i/0 problems
+  if $(grep -q "NtrErr Called from FileIO." "$name-optext.log")
+  then
+    verbose "resubmit because of FileIO error"
+    cd ../../
+    $(myutils resubmit_failed -path) \
+      -e "$(myutils workflow_from_extreme -path) -r -p ${name} -c " \
+      -d ${name}/from_extreme/ -c ${name}-optext.com -l ${name}-optext.log \
+      -j ${SLURM_JOB_NAME} || \
+      fail "resubmitting $file after NtrErr Called from FileIO"
+    fail "$file failed, it was submitted again"
+  fi
+  # check convergence from output
+  output=$(grep -i optimized "$name-optext.log" | \
+           grep -c -i Non )
 
-myutils after_optimization -l "$name-optext.log" -n $name
+  [ "$output" -ne 0 ] && fail "Optimization didn't converged"
+fi
+
+# concatenate all the generated logfiles
+if [[ $(ls *optext*.log | wc -l ) -gt 1 ]];
+then
+  # in case of an optimization was already made in a bck process
+  grep -q "Normal termination of Gaussian" *optext-bck*.log && rm *-optext.log
+  create_bck $name-optext.log
+  for bck_logfile in $(ls $name-optext*.log | sort )
+  do
+    cat $bck_logfile >> $name-optext.log
+  done
+fi
+
+$(myutils after_optimization -path) -l "$name-optext.log" -n $name -v
 
 finish "$name finish"

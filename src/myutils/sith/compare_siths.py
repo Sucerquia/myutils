@@ -83,3 +83,37 @@ def extract_common(sith1, sith2):
             continue
 
     return np.array(sith1_indx), np.array(sith2_indx)
+
+
+def extract_diff(sith1, sith2):
+    """
+    Finds the indexes of the DOfs that are in sith1 that are not in sith2 and
+    the other way around.
+
+    Parameters
+    ==========
+    sith1: SITH.SITH
+        object to compare.
+    sith2: SITH.SITH
+        object to compare.
+
+    Return
+    ======
+    (tuple), list of indexes in sith1 that are in sith2, organized list.
+    """
+    sith1_indx = []
+    sith2_indx = []
+    for i, dof in enumerate(np.array(sith1.dim_indices)):
+        try:
+            index_dof(sith2, dof)
+        except ValueError:
+            sith1_indx.append(i)
+
+    for i, dof in enumerate(np.array(sith2.dim_indices)):
+        try:
+            index_dof(sith1, dof)            
+        except ValueError:
+            sith2_indx.append(i)
+            continue
+
+    return np.array(sith1_indx), np.array(sith2_indx)

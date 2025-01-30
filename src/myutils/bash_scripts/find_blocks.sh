@@ -14,10 +14,9 @@ options:
       included in the block.
   -i  use this flag if the start and the end are indexes
   -o  <output='output'> 'terminal' or the name of the output without
-      extension. In the later case, the output will be stored in a file
-      called <output>.dat if the flag -i is given or in files called
-      <output>_<n>.dat, where n is the number of appearence of the block in
-      the file.
+      extension. In the later case, the output will be stored in files
+      called <output>_<n>.dat, where n is the number of appearence of the block
+      in the file with 3-digits format (leading zeros); n starts in 001.
 
   -v  verbose of what's the code doing.
   -h  prints this message.
@@ -64,28 +63,39 @@ fi
 # ----- set up finishes -------------------------------------------------------
 
 # ---- Body -------------------------------------------------------------------
+w="001"
 
 if $index
 then
   awk -v ini=$starts -v end=$ends 'NR > ini && NR < end' $file \
-    > "$output".out
+    > "$output"_"$w".out
   if [[ "$output" == "terminal" ]]
   then
-    cat "$output".out
-    rm "$output".out
+    cat "$output"_"$w".out
+    rm "$output"_"$w".out
   fi
   finish
-else
-  if [[ $starts == "empty_starting_pattern" ]]
-  then
-    nsta=( 0 )
-  else
-    mapfile -t nsta < <( grep -n "$starts" "$file" | \
-      awk -F ":" '{print $1}' )
-  fi
 fi
 
-w="001"
+if [[ $starts == "empty_starting_pattern" ]]
+then
+  nsta=( 0 )
+else
+  mapfile -t nsta < <( grep -n "$starts" "$file" | \
+    awk -F ":" '{print $1}' )
+fi
+
+if [[ $ends == "empty_ending_pattern" ]]
+then
+  tail -n +"$(( ${nsta[0]} + 1 ))" $file > "$output"_"$w".out
+  if [[ "$output" == "terminal" ]]
+  then
+    cat "$output"_"$w".out
+    rm "$output"_"$w".out
+  fi
+  finish
+fi
+
 for (( i=0; i<${#nsta[@]}; i++ ))
 do
   if [[ "$starts" == "$ends" ]]

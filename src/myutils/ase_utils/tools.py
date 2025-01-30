@@ -1,9 +1,49 @@
 from myutils.ase_utils.molecules import MoleculeSetter
 from ase.geometry.analysis import Analysis
 from ase.io import read, write
-import glob
 import numpy as np
 import glob
+from ase.constraints import FixAtoms
+
+
+# add2executable
+def shake_except(xyz_file, file_cons, modify_input=True, stdev=0.05):
+    """
+    Modify a xyz file by adding random noise to the position of the atoms
+    except for those listed in the first line of a file.
+
+    Parameters
+    ==========
+    xyz_file: int
+        original xyz file to be modified.
+    file_cons:
+        file containing the atoms to avoid to be modified by the shaking.
+    modify_input: bool. Defatuly=True
+        True to modify the input file.
+    scale: float. Default=0.05
+        max magnitud of the noise to be added in each coordinate of each atom
+        in Angstrom.
+
+    Retun
+    =====
+    (ase.Atoms) new object atoms with the modified positions.
+    """
+    atoms = read(xyz_file)
+    cons = np.loadtxt(file_cons, usecols=[0, 1], dtype=int) - 1
+    if type(cons[0]) is np.int64:
+        cons = np.array([list(cons)])
+    
+    c = FixAtoms(indices=cons[0])
+    atoms.set_constraint(c)
+    atoms.rattle(stdev=stdev, rng=np.random)
+
+    if modify_input:
+        write(xyz_file, atoms)
+
+    manipulator = MoleculeSetter(atoms)
+    manipulator.xy_alignment(cons[0][0], cons[0][1], center=cons[0][0])
+
+    return atoms
 
 
 # add2executable

@@ -168,23 +168,22 @@ load_modules() {
   fi
   echo " * This JOB will be run in the Node:"
   echo "$SLURM_JOB_NODELIST"
-  cd "$SLURM_SUBMIT_DIR" || \
-    fail "moving to execution directory: $SLURM_SUBMIT_DIR"
 
   if [[ "$(whoami)" == "hits_"* ]]
   then
     # shellcheck disable=SC1091
-    source $(ws_find sw_hits_mbm)/gaussian/load_g09.sh
+    source $(ws_find sw)/gaussian/load_g09.sh
     module purge
     module load chem/gromacs/2022.2-cuda-11.6
   else
     source "$HOME/.bashrc"
     # shellcheck disable=SC1091
     source /hits/basement/mbm/sucerquia/sw/g09/load_g09.sh
-    conda activate myutils
+    conda activate sith
     module purge
     module use /hits/sw/its/doserbd/haswell/modules/all/
-    module load GROMACS/2023.1-foss-2022a
+    # TODO: the next line is a bug. it activates python 3.10 that is incompatible with numpy
+    # module load GROMACS/2023.1-foss-2022a
     if [[ "$(hostname)" == *"haswell"* ]]
     then
       module load slurm/20.11.7-1.hits

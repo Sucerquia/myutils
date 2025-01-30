@@ -222,6 +222,8 @@ class StandardPlotter:
         (plt.Axes) Created axes.
         """
         newax = self.fig.add_subplot(**kwargs)
+        newax.preferences = self.ax_pref.copy()
+        
         if space:
             newax.set_zorder(self.layer[0])
         else:
@@ -235,6 +237,7 @@ class StandardPlotter:
     def axis_setter(self, ax: Union[plt.Axes, int] = 0,
                     reset: bool = False,
                     general_pars: dict = {},
+                    legend=False,
                     **kwargs) -> plt.Axes:
         """
         Adjust the most common parameters of an axes.
@@ -338,6 +341,10 @@ class StandardPlotter:
             ax.set_xlim(pref['xlim'])
         if pref['ylim'] is not None:
             ax.set_ylim(pref['ylim'])
+        
+        # legend
+        if legend:
+            ax.legend(fontsize=mpl.rcParams['font.size'] * pref['labels_scale'])
 
         return ax
 
@@ -567,7 +574,7 @@ class StandardPlotter:
         ax.spines['left'].set_color(lax_color)
         ax.set_ylabel(pref['ylabel'], fontsize=mpl.rcParams['font.size']
                       * pref['labels_scale'],
-                      color=lax_color, weight='bold',
+                      color=lax_color,
                       labelpad=pref['ypad'])
 
         # Right Axis
@@ -644,7 +651,7 @@ class StandardPlotter:
     # Annotations
     def draw_brace(self, xspan, yy, text, yspan=1, beta_factor=300, pad=0,
                    color=None, ax=0,
-                   resolution_factor=100, **kwargs):
+                   resolution_factor=100, fontsize=None, **kwargs):
         """
         Draws an annotated horizontal brace on the axes.
 
@@ -681,6 +688,10 @@ class StandardPlotter:
 
         if color is None:
             color = [0.3, 0.3, 0.3]
+        
+        pref = ax.preferences
+        if fontsize is None:
+            fontsize = mpl.rcParams['font.size'] * pref['ticks_scale']
 
         xmin, xmax = xspan
         xspan = xmax - xmin
@@ -706,10 +717,11 @@ class StandardPlotter:
 
         ax.plot(x, y, color=color, **kwargs)
         ax.text((xmax + xmin) / 2., max(y) + pad, text, ha='center',
-                va='bottom', color=color)
+                va='bottom', color=color, fontsize=fontsize)
         return y
 
-    def arrow(self, xy, dxdy, text, color=None, pad=0, ax=0, hw=1, hl=1):
+    def arrow(self, xy, dxdy, text, color=None, pad=0, ax=0, hw=1, hl=1,
+              fontsize=None):
         """
         Draws an annotated arrow on the axes.
 
@@ -742,6 +754,10 @@ class StandardPlotter:
 
         if color is None:
             color = [0.3, 0.3, 0.3]
+        
+        pref = ax.preferences
+        if fontsize is None:
+            fontsize = mpl.rcParams['font.size'] * pref['ticks_scale']
 
         dx, dy = dxdy
         x, y = xy
@@ -749,7 +765,7 @@ class StandardPlotter:
                          fc=color, ec=color,
                          head_width=hw, head_length=hl)
         ax.text(x, y + pad, text,
-                va='bottom', ha='center',
+                va='bottom', ha='center', fontsize=fontsize,
                 color=color)
 
     def show(self):

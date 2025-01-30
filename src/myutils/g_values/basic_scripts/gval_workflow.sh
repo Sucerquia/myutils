@@ -32,7 +32,7 @@ optimization='true'
 basis='both'
 charge=0
 
-while getopts 'c:b:d:m:or:h' flag;
+while getopts 'c:b:d:m:oh' flag;
 do
     case "${flag}" in
       c) charge=${OPTARG} ;;
@@ -40,12 +40,14 @@ do
       d) directory=${OPTARG} ;;
       m) mult=${OPTARG} ;;
       o) optimization='false' ;;
-      r) reference=${OPTARG} ;;
 
       h) print_help ;;
       *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
     esac
 done
+
+reference=$(myutils gval_workflow -path)
+reference=${reference%/basic_scripts*}
 
 cd $directory
 cp $reference/basic_scripts/*.inp .

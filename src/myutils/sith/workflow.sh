@@ -42,7 +42,7 @@ resubmit () {
   sleep 23h 58m ; \
   if [[ "$(whoami)" == "hits_"* ]]
   then
-    single_part="--partition=single"
+    single_part="--partition=cpu-single"
   else
     single_part=""
   fi
@@ -172,9 +172,21 @@ myutils classical_energies
 # compute forces
 verbose "submitting comptutation of forces.";
 
-sbatch -J ${pep}_forces "$( myutils find_forces -path )" -c  -p $pep &&
+if [[ "$(whoami)" == "hits_"* ]]
+then
+  single_part="--partition=cpu-single"
+else
+  single_part=""
+fi
+
+sbatch $single_part -J ${pep}_forces "$( myutils find_forces -path )" -c  -p $pep &&
   echo "computation of forces submitted"
 
-sbatch -J ${pep}_WAR $(myutils workflow_from_extreme -path) -c -p "."
+sbatch $single_part -J ${pep}_WAR $(myutils workflow_from_extreme -path) -c -p "." -v
+
+verbose "running grappa and amber";
+final_force=$(myutils F_max_stretch ../ $pep)
+sbatch $single_part -J ${pep}_ff $(myutils pulling_with_ff -path) -F $final_force -f $pep-stretched00.pdb 
+
 
 finish "$pep finished"
