@@ -66,7 +66,7 @@ done
 
 # Other files
 line2add=$(grep -n "other_files = {" "cli/$output" | cut -d ":" -f 1)
-mapfile -t mdp_files < <(find . -name "*.mdp")
+mapfile -t mdp_files < <(find . \( -name '*.mdp' -o -name '*.tcl' \) )
 for file in "${mdp_files[@]}"
 do
   reverted=$( echo "$file" | rev )
