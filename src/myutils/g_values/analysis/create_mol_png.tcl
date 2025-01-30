@@ -21,6 +21,7 @@ mol addrep top
 color Name C gray
 
 # Set rendering parameters
+display resetview
 display projection orthographic
 display depthcue off
 axes location off
@@ -28,7 +29,11 @@ axes location off
 color Display Background white
 
 # Render the scene and save it as a PNG
-render snapshot $output_file
+
+render snapshot temp.tga
+exec convert temp.tga $output_file
+exec rm temp.tga
 
 # Exit VMD
 exit
+

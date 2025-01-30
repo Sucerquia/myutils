@@ -48,12 +48,12 @@ def several_gvals(names: str, experiment: np.ndarray, path: str = './'):
     res = []
     for method in methods:
         values = extract_gvals(path + '/' + method)
-        errors = experiment - values
+        errors = np.abs(experiment - values)
         maxerror = np.max(errors)
-        avr = np.mean(errors)
-        values = np.append(values.astype('<U45'),
+        avg = np.mean(errors)
+        values = np.append(values.astype('<U100'),
                            ["{:.7f}".format(round(maxerror, 7)),
-                            "{:.7f}".format(round(avr, 7))])
+                            "{:.7f}".format(round(avg, 7))])
         res.append(values)
     
     return res
@@ -90,7 +90,7 @@ def create_table_per_method(data: np.ndarray,
     header = np.array(["", "\\text{experiments}"] +
                       [f"\\text{meth}" for meth in methods])
     rows_labels = ["g_x", "g_y", "g_z", "\\text{max absolute error}",
-                "\\text{average error}"]
+                "\\text{Mean absolute error}"]
 
     table = np.insert(res, 0, np.append(experiment.astype(str), ["", ""]),
                       axis=1)
@@ -150,10 +150,10 @@ def create_table_per_system(experiment: list,
     
     # header
     header = np.array(["System", "$g_x$", "$g_y$", "$g_z$", "Max absolute error",
-                       "Average error"])
+                       "Mean absolute error"])
     
     # experiment
-    experiment = np.append(np.array(experiment).astype('<U45'), ["", ""])
+    experiment = np.append(np.array(experiment).astype('<U100'), ["", ""])
     experiment = np.insert(experiment, 0, "Experiment")
 
     # arrange resuls
@@ -196,7 +196,7 @@ def extract_values(systems: list, orca_files: list, experiment: list):
     ======
     (dict) shape={<sytem_path>: np.array([methods E.g. cc-pVDZ, cc-pVDZ i,
                                           gvalues[g-x, g-y, g-z,
-                                                  maxerror, average-error]]
+                                                  maxerror, mean-abs-error]]
     """
     all_gvalues = {}
     for system in systems:
