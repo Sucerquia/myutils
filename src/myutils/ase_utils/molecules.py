@@ -330,7 +330,8 @@ class MoleculeSetter:
         if out is None:
             out = self.atoms.get_chemical_formula()
 
-        calculator = Gaussian(label=out,
+        calculator = Gaussian(mem='60GB',
+                              label=out,
                               chk=out,
                               xc=xc,
                               basis=basis,
