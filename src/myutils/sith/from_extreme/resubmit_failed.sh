@@ -73,7 +73,8 @@ create_bck ${logfile%.log}.*
 create_bck ${comfile%.log}.*
 mv tmp_log $logfile
 mv tmp_com $comfile
-sed -i "%mem=60000MB" $file.com
+grep -iq "%mem" $comfile || sed -i "1i \%mem=60000MB" $comfile
+
 
 # extract xyz
 myutils log2xyz "$logfile" || fail "Extracting xyz from logfile"
@@ -93,7 +94,7 @@ echo "" >> $comfile
 cat output_001.out >> $comfile
 sed -i '$d' $comfile
 echo $frozen >> $comfile
-grep -q "%mem" $comfile || sed -i "1i %mem=60000MB" $comfile
+grep -iq "%mem" $comfile || sed -i "1i \%mem=60000MB" $comfile
 
 # remove unnecessary
 rm output_001.out

@@ -55,7 +55,7 @@ g09 "$file.com" "$file.log"
 
 if $(grep -q "NtrErr Called from FileIO." "$file.log")
 then
-  myutils resubmit_failed \
+  $(myutils resubmit_failed -path) \
           -e "$(myutils opt_and_forces -path ) -c -v -f $file" \
           -c "$file.com" -l "$file.log" -j $SLURM_JOB_NAME -v || \
     fail "resubmitting $file after NtrErr Called from FileIO"
