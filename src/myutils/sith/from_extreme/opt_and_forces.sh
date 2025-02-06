@@ -57,7 +57,8 @@ if $(grep -q "NtrErr Called from FileIO." "$file.log")
 then
   $(myutils resubmit_failed -path) \
           -e "$(myutils opt_and_forces -path ) -c -v -f $file" \
-          -c "$file.com" -l "$file.log" -j $SLURM_JOB_NAME -v || \
+          -c "$file.com" -l "$file.log" -j $SLURM_JOB_NAME \
+          -f "$(head -n 1 ../frozen_dofs.dat)" -v || \
     fail "resubmitting $file after NtrErr Called from FileIO"
   fail "$file failed, it was submitted again"
 fi
