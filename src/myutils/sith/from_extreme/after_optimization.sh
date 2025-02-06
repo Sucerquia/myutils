@@ -37,8 +37,6 @@ load_modules
 # ==== Reduce number of structures with reduced changes of DOFs
 verbose "Create continuous structutes path."
 # The output are the xyz files without peak energies, output name-conopt<n>.xyz
-echo myutils info_from_opt $logfile ../${name}-stretched00.pdb ${name}-conopt
-
 myutils info_from_opt $logfile ../${name}-stretched00.pdb ${name}-conopt \
   || fail "extracting xyz files from log file from $logfile"
 # Extract the dofs from the created xyzs. out; <name>-conopt-dofs.dat

@@ -97,7 +97,7 @@ then
   cd from_extreme
   
   # creates gaussian input that optimizes the structure
-  myutils change_distance "$xyz" "$name-optext" frozen_dofs.dat 0 0 \
+  myutils change_distance "$xyz" "$name-optext" no_frozen_dofs 0 0 \
     "scale_distance" || fail "Preparating the input of gaussian"
   rm "$xyz"
   sed -i "1a %NProcShared=8" "$name-optext.com"
@@ -148,6 +148,7 @@ then
   done
 fi
 
+verbose "starting after optimization"
 $(myutils after_optimization -path) -l "$name-optext.log" -n $name -v
 
 finish "$name finish"
