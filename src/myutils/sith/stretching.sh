@@ -172,7 +172,7 @@ do
     "$pep-stretched${nameiplusone}.com"  
   fi
   sed -i "1a %NProcShared=$n_processors" "$pep-stretched${nameiplusone}.com"
-  sed -i "3a opt(modredun,calcfc)" "$pep-stretched${nameiplusone}.com"
+  sed -i "/#P/a opt(modredun,calcfc)" "$pep-stretched${nameiplusone}.com"
 
   # run gaussian
   verbose "Running optmization of stretching ${nameiplusone}"
@@ -206,7 +206,7 @@ do
     sed -i "s/stretched${nameiplustwo}/stretched${nameiplusone}/g" \
       "$pep-stretched${nameiplusone}.com"
     sed -i "1a %NProcShared=$n_processors" "$pep-stretched${nameiplusone}.com"
-    sed -i "3a opt(modredun,calcfc)" "$pep-stretched${nameiplusone}.com"
+    sed -i "/#P/a opt(modredun,calcfc)" "$pep-stretched${nameiplusone}.com"
     sed -i '$d' "$pep-stretched${nameiplusone}.com"
     cat frozen_dofs.dat >> \
       "$pep-stretched${nameiplusone}.com"

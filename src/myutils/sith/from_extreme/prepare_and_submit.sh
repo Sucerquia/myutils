@@ -44,7 +44,7 @@ do
     sed -i '$d' ${file%.xyz}-opt.com
     echo "$index1 $index2 F" >> ${file%.xyz}-opt.com
     sed -i "1a %NProcShared=8" "${file%.xyz}-opt.com"
-    sed -i "3a opt(modredun,calcfc)" "${file%.xyz}-opt.com"
+    sed -i "/#P/a opt(modredun,calcfc)" "${file%.xyz}-opt.com"
 
     if [[ "$(whoami)" == "hits_"* ]]
     then

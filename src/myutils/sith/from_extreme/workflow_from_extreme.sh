@@ -101,7 +101,7 @@ then
     "scale_distance" || fail "Preparating the input of gaussian"
   rm "$xyz"
   sed -i "1a %NProcShared=8" "$name-optext.com"
-  sed -i "3a opt(modredun,calcfc)" "$name-optext.com"
+  sed -i "/#P/a opt(modredun,calcfc)" "$name-optext.com"
 else
   cd from_extreme
 fi
