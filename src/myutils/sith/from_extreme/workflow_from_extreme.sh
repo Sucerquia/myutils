@@ -102,8 +102,6 @@ then
   rm "$xyz"
   sed -i "1a %NProcShared=8" "$name-optext.com"
   sed -i "/#P/a opt(modredun,calcfc)" "$name-optext.com"
-else
-  cd from_extreme
 fi
 
 # run gaussian
@@ -113,18 +111,17 @@ if ! grep -q "Normal termination" "$name-optext.log"
 then
   g09 "$name-optext.com" "$name-optext.log" || \
     { if [ "$(grep -c "Atoms too close." \
-          "$name-optext.com")" \
-          -eq 1 ]; then fail "Atoms too close for ${nameiplusone}" ; \
+           "$name-optext.com")" \
+           -eq 1 ]; then fail "Atoms too close for ${nameiplusone}" ; \
       fi ; } || fail "running gaussian optimization"
 
   # Restart in case of i/0 problems
   if $(grep -q "NtrErr Called from FileIO." "$name-optext.log")
   then
     verbose "resubmit because of FileIO error"
-    cd ../../
     $(myutils resubmit_failed -path) \
-      -e "$(myutils workflow_from_extreme -path) -r -p ${name} -c " \
-      -d ${name}/from_extreme/ -c ${name}-optext.com -l ${name}-optext.log \
+      -e "$(myutils workflow_from_extreme -path) -r -p ${name}-optext.log -c " \
+      -c ${name}-optext.com -l ${name}-optext.log \
       -j ${SLURM_JOB_NAME} || \
       fail "resubmitting $file after NtrErr Called from FileIO"
     fail "$file failed, it was submitted again"
