@@ -344,7 +344,7 @@ class StandardPlotter:
         
         # legend
         if legend:
-            ax.legend(fontsize=mpl.rcParams['font.size'] * pref['labels_scale'])
+            ax.legend(fontsize=mpl.rcParams['font.size'] * pref['ticks_scale'])
 
         return ax
 

@@ -377,6 +377,7 @@ class SithPlotter(PepSetter, SithAnalysis):
                   jump_stretching: int = 1,
                   show_amino_legends: bool = False, ax_pref: dict = {},
                   sp_pref={},
+                  pad_cbar=10,
                   **kwargs) -> Tuple[plt.Figure, plt.Axes]:
         """
         This function plots the energies per degrees of freedom from
@@ -464,7 +465,8 @@ class SithPlotter(PepSetter, SithAnalysis):
             cbar.set_label(label="Stretched",
                            fontsize=mpl.rcParams['font.size']
                            * sp.ax_pref['labels_scale'],
-                           rotation=90)
+                           rotation=90,
+                           labelpad=pad_cbar)
             cbar.ax.tick_params(length=0)
             space_bar.locate_ax(borders=[[0, 0.13], [0.2, 0.95]])
 
@@ -480,7 +482,8 @@ class SithPlotter(PepSetter, SithAnalysis):
         colors = self.add_color_per_amino(ax)
         if show_amino_legends:
             ax.legend(handles=list(colors.values()), loc='upper right',
-                      fontsize=8)
+                      fontsize=mpl.rcParams['font.size']
+                       * sp.ax_pref['ticks_scale'])
         ax.set_xlim([dofs[0] - 0.5, dofs[-1] + 0.5])
 
         return sp
