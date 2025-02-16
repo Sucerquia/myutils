@@ -37,7 +37,7 @@ cd ../ || fail "moving to package directory"
 
 # python modules
 line2add=$(grep -n "pymodules = {" "cli/$output" | cut -d ":" -f 1)
-mapfile -t py_files < <(find . -name "*.py")
+mapfile -t py_files < <(find . -name "*.py" | sort)
 for file in "${py_files[@]}"
 do
   file=${file#*/}
@@ -53,7 +53,7 @@ done
 
 # bash scripts
 line2add=$(grep -n "sh_executers = {" "cli/$output" | cut -d ":" -f 1)
-mapfile -t sh_files < <(find . -name "*.sh")
+mapfile -t sh_files < <(find . -name "*.sh" | sort)
 for file in "${sh_files[@]}"
 do
   reverted=$( echo "$file" | rev )
@@ -66,7 +66,7 @@ done
 
 # Other files
 line2add=$(grep -n "other_files = {" "cli/$output" | cut -d ":" -f 1)
-mapfile -t mdp_files < <(find . \( -name '*.mdp' -o -name '*.tcl' \) )
+mapfile -t mdp_files < <(find . \( -name '*.mdp' -o -name '*.tcl' -o -name '*.m' \)  | sort )
 for file in "${mdp_files[@]}"
 do
   reverted=$( echo "$file" | rev )
