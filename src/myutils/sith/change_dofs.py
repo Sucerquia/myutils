@@ -6,10 +6,23 @@ import sys
 from pytest import approx
 
 
+def permute_atoms(atoms, indexes):
+    indexes = list(indexes)
+    indexes.sort()
+
+    atoms = atoms[:indexes[0]] + \
+            atoms[indexes[1]] + \
+            atoms[indexes[0] + 1: indexes[1]] + \
+            atoms[indexes[0]] + \
+            atoms[indexes[1] + 1:]
+    
+    return atoms
+
 def extract_dofs(indexes, atoms):
     distance = atoms.get_distance(*indexes[:2])
     angle = atoms.get_angle(*indexes[:3])
     dihedral = atoms.get_dihedral(*indexes)
+    # dihedral in range -180 to 180
     while dihedral > 180:
         dihedral -= 360
 
@@ -35,7 +48,8 @@ def test_dofs(atoms, indexes, file):
 
 def def_line(indexes, element):
     a1, a2, a3, a4 = indexes
-    return f'{element},{a2},R{a1},{a3},A{a1},{a4},D{a1}'
+    print(f'new_line: {a1}, {a2}, {a3}, {a4}')
+    return f'{element},{a2},R{a1},{a3},A{a1},{a4},D{a1},0'
 
 
 def change_def(new_i, element, atoms, file):
@@ -55,7 +69,7 @@ def change_def(new_i, element, atoms, file):
     dist, angl, dihe = extract_dofs(new_i, atoms)
 
     # Change value
-    output_terminal(f'sed -i "s/,R{tochange},/c{new_line}/g" {file}')
+    output_terminal(f'sed -i "/,R{tochange},/c\ {new_line}" {file}')
     output_terminal(f'sed -i "/R{tochange}=/c\ R{tochange}={dist}" {file}')
     output_terminal(f'sed -i "/A{tochange}=/c\ A{tochange}={angl}" {file}')
     output_terminal(f'sed -i "/D{tochange}=/c\ D{tochange}={dihe}" {file}')
@@ -87,8 +101,8 @@ def find_CAC_NC(amino_info, atoms, i_pro):
     c_pre = pre_amino['C'] - 1
     c_cur = amino['C'] - 1
     c_pos = post_amino['C'] - 1
-    n_i = amino['CA'] - 1
-    ca_i = amino['N'] - 1
+    ca_i = amino['CA'] - 1
+    n_i = amino['N'] - 1
 
     # find Ca-C and N-C
     ca_dist = 100
@@ -99,14 +113,13 @@ def find_CAC_NC(amino_info, atoms, i_pro):
         # Ca-C
         d = atoms.get_distance(i, ca_i)
         if d < ca_dist:
-            ca_dist = d
-            cac = i 
+            ca_dist = d.copy()
+            cac = i + 1
         # C-N
         d = atoms.get_distance(i, n_i)
         if d < n_dist:
-            n_dist = d
-            cn = i
-
+            n_dist = d.copy()
+            cn = i + 1
     return cac, cn
 
 
@@ -137,10 +150,11 @@ def change_prolines_dofs(comfile, molecule, pdb_template, option):
     """
     pep_set = PepSetter(pdb_template)
     atoms = read(molecule)
-    pros_i = np.where(np.array(list(pep_set.amino_name.values())) == 'PRO ')[0] + 1
+    pros_i = np.where(np.array(list(pep_set.amino_name.values())) == 'PRO')[0] + 1
 
     for i_pro in pros_i:
         amino = pep_set.amino_info[i_pro]
+        print(i_pro, amino)
         Ca_i = amino['CA']
         Cb_i = amino['CB']
         HB1_i = amino['2HB']
@@ -161,17 +175,17 @@ def change_prolines_dofs(comfile, molecule, pdb_template, option):
 
         # option 1 (Default)
         set1(Ca_i, Cb_i, HB1_i, HB2_i, Cg_i, HG1_i, HG2_i, Cd_i, HD1_i,
-                HD2_i, N_i, CCA_i, CN_i, atoms, comfile)
+             HD2_i, N_i, CCA_i, CN_i, atoms, comfile)
 
         if option == '2':
             # only changes Cgamma
-            set2(Ca_i, Cb_i, Cg_i, Cd_i, HG1_i, HG2_i, N_i, atoms, comfile)
+            set2(Cg_i, Cd_i, N_i, Ca_i, HG1_i, HG2_i, atoms, comfile)
         
         if option == '3':
             # First change Cgamma
-            set2(Ca_i, Cb_i, Cg_i, Cd_i, HG1_i, HG2_i, N_i, atoms, comfile)
+            atoms, Cg_i, Cd_i = set2(Cg_i, Cd_i, N_i, Ca_i, HG1_i, HG2_i, atoms, comfile)
             # and then change Cbeta
-            set3()
+            set3(Cb_i, Cg_i, Cd_i, N_i, HB1_i, HB2_i, atoms, comfile)
 
         if option == '4':
             # Only changes Cdelta
@@ -180,6 +194,7 @@ def change_prolines_dofs(comfile, molecule, pdb_template, option):
 
 def set1(Ca_i, Cb_i, HB1_i, HB2_i, Cg_i, HG1_i, HG2_i, Cd_i, HD1_i,
             HD2_i, N_i, CCA_i, CN_i, atoms, comfile):
+    print("Using set 1")
 
     # change betas dofs
     change_def(np.array([Cb_i, Ca_i, N_i, CN_i]),
@@ -207,6 +222,8 @@ def set1(Ca_i, Cb_i, HB1_i, HB2_i, Cg_i, HG1_i, HG2_i, Cd_i, HD1_i,
 
 
 def set2(Cg_i, Cd_i, N_i, Ca_i, HG1_i, HG2_i, atoms, comfile):
+    print("Using set 2")
+
     # change Cg dofs
     change_def(np.array([Cg_i, Cd_i, N_i, Ca_i]),
                'C', atoms, comfile)
@@ -218,9 +235,18 @@ def set2(Cg_i, Cd_i, N_i, Ca_i, HG1_i, HG2_i, atoms, comfile):
     # change Gg1 dofs
     change_def(np.array([HG2_i, Cg_i, Cd_i, N_i]),
                'H', atoms, comfile)
-    output_terminal(f'myutils switch_atoms_in_com {Cg_i} {Cd_i} {comfile}')
+ 
+    # swapping atoms Cg_i Cd_i
+    print(f'swapping atoms {Cg_i} {Cd_i}')
+    output_terminal(f'myutils swap_atoms_in_com -a {Cg_i} -b {Cd_i} -f {comfile}')
+    atoms = permute_atoms(atoms, [Cg_i - 1, Cd_i - 1])
+    tmp  = Cg_i ; Cg_i = Cd_i ; Cd_i = tmp
+    return atoms, Cg_i, Cd_i
+
 
 def set3(Cb_i, Cg_i, Cd_i, N_i, HB1_i, HB2_i, atoms, comfile):
+    print("Using set 3")
+
     # change Cg dofs
     change_def(np.array([Cb_i, Cg_i, Cd_i, N_i]),
                'C', atoms, comfile)
@@ -232,12 +258,17 @@ def set3(Cb_i, Cg_i, Cd_i, N_i, HB1_i, HB2_i, atoms, comfile):
     # change Gg1 dofs
     change_def(np.array([HB2_i, Cb_i, Cg_i, Cd_i]),
                'H', atoms, comfile)
-
-    output_terminal(f'myutils switch_atoms_in_com {Cb_i} {Cg_i} {comfile}')
-    output_terminal(f'myutils switch_atoms_in_com {Cg_i} {Cd_i} {comfile}')
+    
+    print(f'swapping atoms {Cb_i} {Cg_i}')
+    output_terminal(f'myutils swap_atoms_in_com -a {Cb_i} -b {Cg_i} -f {comfile}')
+    tmp  = Cb_i ; Cb_i = Cg_i ; Cg_i = tmp
+    print(f'swapping atoms {Cg_i} {Cd_i}')
+    output_terminal(f'myutils swap_atoms_in_com -a {Cg_i} -b {Cd_i} -f {comfile}')
 
 
 def set4(Cd_i, Cg_i, Cb_i, Ca_i, HD1_i, HD2_i, atoms, comfile):
+    print("Using set 4")
+
     # change Cg dofs
     change_def(np.array([Cd_i, Cg_i, Cb_i, Ca_i]),
                'C', atoms, comfile)
