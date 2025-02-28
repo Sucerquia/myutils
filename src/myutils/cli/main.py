@@ -19,6 +19,7 @@ pymodules = {
     'create_table_per_system': 'myutils.g_values.analysis.postpro',
     'create_table_per_method': 'myutils.g_values.analysis.postpro',
     'extract_gvals': 'myutils.g_values.analysis.postpro',
+    'create_fit_file': 'myutils.g_values.analysis.best_fit',
     'create_amber_data': 'myutils.gromacs.ff_parameters',
     'create_grappa_data': 'myutils.gromacs.ff_parameters',
     'methods_in_class': 'myutils.cli.pkg_structure.documentation_tools',
@@ -39,7 +40,7 @@ sh_executers = {
     'proline_mod': './sith/proline_mod.sh',
     'workflow_from_extreme': './sith/from_extreme/workflow_from_extreme.sh',
     'workflow_from_extreme2': './sith/from_extreme/second_version/workflow_from_extreme2.sh',
-    'after_optimization2': './sith/from_extreme/second_version/after_optimization2.sh',
+    'continuous_path': './sith/from_extreme/second_version/continuous_path.sh',
     'resubmit_failed': './sith/from_extreme/resubmit_failed.sh',
     'rearange_files': './sith/from_extreme/rearange_files.sh',
     'prepare_and_submit': './sith/from_extreme/prepare_and_submit.sh',
@@ -56,6 +57,7 @@ sh_executers = {
     'gval_workflow': './g_values/basic_scripts/gval_workflow.sh',
     'create_g09_BDEs': './g_values/basic_scripts/create_g09_BDEs.sh',
     'clean_directories': './g_values/basic_scripts/clean_directories.sh',
+    'extract_EPRspec': './g_values/analysis/extract_EPRspec.sh',
     'pulling_with_ff': './gromacs/pulling_with_ff.sh',
     'pulling': './gromacs/pulling.sh',
     'peptide_pulling': './gromacs/peptide_pulling.sh',
@@ -82,6 +84,7 @@ sh_executers = {
 }
 
 other_files = {
+    'EPR_abspect': './g_values/analysis/EPR_abspect.m',
     'create_mol_png': './g_values/analysis/create_mol_png.tcl',
     'pulling_temp': './gromacs/pulling_temp.mdp',
     'nvt': './gromacs/nvt.mdp',
