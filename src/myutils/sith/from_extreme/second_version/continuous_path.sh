@@ -28,38 +28,44 @@ do
   esac
 done
 
-source $(myutils basics -path) "AfterOpt" $verbose
+source $(myutils basics -path) "AfterOpt2" $verbose
 
 load_modules
 # ---- BODY -------------------------------------------------------------------
 
 cd $name
 
-mkdir forces2
+mkdir continuous
 
-cp *stretched*.xyz forces2
-cd forces2
+cp *stretched*.xyz continuous
+cd continuous
 for xyz_file in *.xyz
 do
-  mv $xyz_file ${xyz_file//stretched/constrained}
+  mv $xyz_file ${xyz_file//stretched/continuous}
 done
 
+if [[ "${name: 0: 2}" == "./" ]]
+then
+  name=${name#./}
+fi
+name=${name%/}
+
 # This is created from the stretching process
-# Extract the dofs from the created xyzs. out; <name>-constrained-dofs.dat
-myutils extr_dofs -f constrained > /dev/null || \
+# Extract the dofs from the created xyzs. out; <name>-continuous-dofs.dat
+myutils extr_dofs -f $name-continuous > /dev/null || \
   fail "extracting dofs from xyzs"
 # reduce irrelevant changes, store the new subset in a dir called subset
-myutils reduce_structs "." constrained > /dev/null || \
+myutils reduce_structs "." ${name}-continuous > /dev/null || \
   fail "reducing structures"
 
 # ==== Create com g09 files
 # Create com file template
-myutils opt_from_xyzs -d . -n ${name}-constrained000 -p ../${name}-stretched00.pdb \
+myutils opt_from_xyzs -d . -n ${name}-continuous000 -p ../${name}-stretched00.pdb \
   > /dev/null|| fail "creating com files using forces_from_xyz"
 # clean files: only leaves the template
-mv ${name}-constrained000.com template.com
+mv ${name}-continuous000.com template.com
 echo "" >> template.com
-rm *constrained*
+rm *continuous*
 
 # import xyz files of the subset
 mv subset/* .
@@ -68,7 +74,7 @@ rm -r subset
 # Create .com files
 verbose "Create com files."
 str_index=0
-for file in ${name}-constrained*.dat
+for file in ${name}-continuous*.dat
 do
   struct_name=${file%.dat}
   echo $struct_name
