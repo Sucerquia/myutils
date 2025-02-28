@@ -41,7 +41,7 @@ class StandardPlotter:
                  y: Union[list, tuple, np.ndarray] = None,
                  ax: plt.Axes = None, fig: plt.Figure = None,
                  figwidth: float = 8.9, figheight: float = 8,
-                 ax_pref: dict = {}, plot_pref: dict = None):
+                 ax_pref: dict = {}, plot_pref: dict = {}):
         # ==== Default ====
         self.ax_pref = {'xlabel': '',
                         'ylabel': '',
