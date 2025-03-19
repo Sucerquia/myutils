@@ -1,3 +1,7 @@
+from myutils.plotters import StandardPlotter
+import matplotlib.pyplot as plt
+import numpy as np
+from glob import glob
 from myutils.miscellaneous import output_terminal
 import numpy as np
 
@@ -203,3 +207,77 @@ def extract_values(systems: list, orca_files: list, experiment: list):
         all_gvalues[system] = several_gvals(orca_files, experiment, system)
 
     return all_gvalues
+
+
+# add2executable
+def extract_system_info(sys_path: str, exp_values: str):
+    """
+    Creates gvalues_table.md and gvalues.png
+
+    Parameters
+    ==========
+    sys_path: str
+        path to the folder containing the candidates.
+    exp_values: str
+        String of the list of expected experimental values in shape of python
+        list, f.e. '[2.0062, 2.0055, 2.0022]'
+    
+    Return
+    ======
+    (StandardPlotter) StandardPlotter used to plot the gvalues.
+    """
+    experiment = exec(exp_values)
+    # Create table
+    subsystems = [subsys for subsys in glob(f'{sys_path}/*/')
+                  if '/opt/' not in subsys]
+    subsystems.sort()
+    table = create_table_per_system(experiment=experiment, systems=subsystems)
+
+    with open(f'{sys_path}/gvalues_table.md', 'w') as table_file:
+        for line in table:
+            table_file.write(line)
+
+    # Extract gvalues
+    gvals = []
+
+    for system in subsystems:
+        gvals.append(several_gvals(names='EPRII.out', experiment=experiment,
+                                   path=system)[0])
+    gvals = np.array(gvals, dtype=float)
+
+    # Names
+    systems = subsystems.copy()
+    for i in range(len(systems)):
+        systems[i] = f"{systems[i].split('/')[-2]}"
+    
+    fig, axes = plt.subplots(3,1)
+    sp = StandardPlotter(fig=fig, ax=axes,
+                        ax_pref={'xticks': np.array(range(len(gvals))) + 1,
+                                'xticklabels': systems})
+
+    # gx
+    sp.plot_data(gvals[:,0], pstyle='o', ms=2)
+    sp.plot_data([1, len(systems)], [experiment[0], experiment[0]], pstyle='--')
+    sp.axis_setter(0,
+                xticks=np.array(range(len(systems))) + 1,
+                xticklabels= [''] * len(systems),
+                ylabel=r'g$_x$')
+
+    # gy
+    sp.plot_data(gvals[:,1], ax = 1, pstyle='o', ms=2)
+    sp.plot_data([1, len(systems)], [experiment[1], experiment[1]], pstyle='--', ax = 1)
+    sp.axis_setter(1,
+                xticks=np.array(range(len(systems))) + 1,
+                xticklabels= [''] * len(systems),
+                ylabel=r'g$_y$')
+
+    # gz
+    sp.plot_data(gvals[:,2], ax = 2, pstyle='o', ms=2)
+    sp.plot_data([1, len(systems)], [experiment[2], experiment[2]], pstyle='--', ax = 2)
+    sp.axis_setter(2,
+                ylabel=r'g$_z$')
+
+    sp.ax[2].tick_params(axis='x', rotation=90)
+    sp.spaces[0].set_axis(rows_cols=(3,1), borders=[[0.2, 0.15], [0.99,0.99]])
+    sp.save(f'{sys_path}/gvalues.png')
+    return sp

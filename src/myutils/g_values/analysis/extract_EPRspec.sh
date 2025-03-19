@@ -1,14 +1,5 @@
 #!/bin/bash
 
-#SBATCH -N 1                   # number of nodes
-#SBATCH -n 9
-#SBATCH --cpus-per-task=1
-#SBATCH -t 24:00:00
-#SBATCH --output=%x-%j.o
-#SBATCH --error=%x-%j.e
-#SBATCH --exclusive
-
-
 # ----- definition of functions -----------------------------------------------
 print_help() {
 echo "
@@ -56,13 +47,13 @@ do
   esac
 done
 
-if [[ ${#experiment} -eq 0 ]]
+if [ ! -f $experiment ]
 then
   fail "you have to give the mat file of the field of the experiment using the
     flag -e. Check 'myutil extract_EPRspect -h' for details."
 fi
 
-source "$(myutils basics -path)" ExtVals $verbose
+source "$(myutils basics -path)" ExtGVals $verbose
 alias matlab="/usr/local/MATLAB/R2024b/bin/matlab -softwareopengl"
 
 # starting information
@@ -74,11 +65,6 @@ echo "$0" "$@"
 
 
 # ---- BODY --------------- ----------------------------------------------------
-
-if [ -f ${#experiment} ]
-then
-  fail "please, provide an experimental field file using the flag -e."
-fi
 
 variable_name=${experiment##*/}
 variable_name=${variable_name%.mat}
