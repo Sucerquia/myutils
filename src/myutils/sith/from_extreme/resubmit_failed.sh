@@ -30,17 +30,17 @@ exit 0
 
 # ----- set up starts ---------------------------------------------------------
 # General variables
-frozen=''
+frozen_file='../frozen_dofs.dat'
 verbose='false'
 directory='./'
-toexecute="$( myutils single_g09 -path ) -c -f "
+toexecute=""
 jobname=""
 while getopts 'd:e:c:f:l:j:vh' flag;
 do
   case "${flag}" in
     d) directory=${OPTARG} ;;
     e) toexecute=${OPTARG} ;;
-    f) frozen=${OPTARG} ;;
+    f) frozen_file=${OPTARG} ;;
     c) comfile=${OPTARG} ;;
     l) logfile=${OPTARG} ;;
     j) jobname=${OPTARG} ;;
@@ -50,6 +50,11 @@ do
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
 done
+
+if [[ $toexecute == "" ]]
+then
+  toexecute="$( myutils single_g09 -path ) -c -f ${comfile%.com}"
+fi
 
 if [[ $jobname == "" ]]
 then
@@ -81,7 +86,7 @@ myutils log2xyz "$logfile" || fail "Extracting xyz from logfile"
 file=${logfile%.log}.xyz
 
 # TODO: change this to just consider the frozen dofs when they are defined with the flag -f
-myutils shake_except $file ../frozen_dofs.dat
+myutils shake_except $file $frozen_file
 
 # create comfile
 myutils change_distance \
@@ -93,7 +98,7 @@ mv tmp_first-block.com $comfile
 echo "" >> $comfile
 cat output_001.out >> $comfile
 sed -i '$d' $comfile
-echo $frozen >> $comfile
+head -n 1 $frozen_file >> $comfile
 grep -iq "%mem" $comfile || sed -i "1i \%mem=60000MB" $comfile
 
 # remove unnecessary
@@ -107,10 +112,10 @@ else
   single_part=""
 fi
 
-cd $origin_resub
-
 sbatch --job-name=$jobname $single_part \
   $toexecute || \
   fail "submitting $toexecute "
+
+cd $origin_resub
 
 finish

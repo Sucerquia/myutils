@@ -661,6 +661,7 @@ class DataSetAnalysis:
         assert path.is_dir(), f"{data_dir} does not exist."
 
         peptides = list(path.glob('*/'))
+        peptides.sort()
         assert len(peptides) != 0, f"There are not directories in {data_dir}"
 
         self.pep_infos = []
