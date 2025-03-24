@@ -73,11 +73,33 @@ class TheoMatchExpe:
         total = np.sum(self.coeffs)
         self.percentages = 100 * self.coeffs.flatten() / total
         if print_analysis:
-            for i, name in enumerate(self.files):
-                print(name, " (%): ", self.percentages[i])
+            for i in np.argsort(-self.percentages):
+                print(self.files[i], " (%): ", self.percentages[i])
 
         return self.percentages
     
+    def gradual_cleaning(self, threshold=5, steps=0.1):
+        """
+        Removes gradually the candidates that do not weight much in the fitting
+        up to having all the candidates with a minimum percentage in the fitting.
+
+        Parameters
+        ==========
+        threshold: float. Default=50
+            minimum percentage por candidate to be considered into the fitting.
+        steps: float. Default=0.1
+            size of the steps in the filtering.
+        
+        Return
+        ======
+        (np.array) new set of intensities.
+        """
+        for intermedia in np.arange(0, threshold, steps):
+            output = self.clean_candidates(threshold=intermedia)
+        output = self.clean_candidates(threshold=threshold)
+
+        return output
+
     def clean_candidates(self, threshold=1):
         """
         Removes the candidates that are expected to be less than certain
