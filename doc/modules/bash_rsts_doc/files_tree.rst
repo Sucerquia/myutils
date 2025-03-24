@@ -1,4 +1,8 @@
 
+==========
+files_tree
+==========
+
 .. container:: bash-script-title
 
    :ref:`[script] <files_tree>` **myutils/cli/pkg_structure/files_tree.sh**

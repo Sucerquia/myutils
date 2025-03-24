@@ -59,6 +59,8 @@ Module contents
 .. toctree::
    :hidden:
 
+   bash_rsts_doc/swap_atoms_in_com
+   bash_rsts_scripts/swap_atoms_in_com
    bash_rsts_doc/workflow
    bash_rsts_scripts/workflow
    bash_rsts_doc/compute_forces
@@ -170,3 +172,8 @@ workflow
      click node8 "myutils.sith.from_extreme.html#workflow-from-extreme" _self
 
 .. include:: bash_rsts_doc/workflow.rst
+
+swap_atoms_in_com
+-----------------
+
+.. include:: bash_rsts_doc/swap_atoms_in_com.rst

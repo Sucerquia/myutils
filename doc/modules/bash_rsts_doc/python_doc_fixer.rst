@@ -1,4 +1,8 @@
 
+================
+python_doc_fixer
+================
+
 .. container:: bash-script-title
 
    :ref:`[script] <python_doc_fixer>` **myutils/cli/pkg_structure/python_doc_fixer.sh**

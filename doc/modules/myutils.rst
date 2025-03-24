@@ -7,6 +7,9 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   myutils.sith.from_extreme.second_version
+   myutils.g_values.basic_scripts
+   myutils.g_values.analysis
    myutils.sith.from_extreme
    myutils.bash_scripts
    myutils.cli.pkg_structure

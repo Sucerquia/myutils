@@ -1,4 +1,8 @@
 
+===========
+proline_mod
+===========
+
 .. container:: bash-script-title
 
    :ref:`[script] <proline_mod>` **myutils/sith/proline_mod.sh**

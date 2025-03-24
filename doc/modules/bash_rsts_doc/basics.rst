@@ -1,4 +1,8 @@
 
+======
+basics
+======
+
 .. container:: bash-script-title
 
    :ref:`[script] <basics>` **myutils/basics.sh**

@@ -1,11 +1,11 @@
 
-=====================
-workflow_from_extreme
-=====================
+======================
+workflow_from_extreme2
+======================
 
 .. container:: bash-script-title
 
-   :ref:`[script] <workflow_from_extreme>` **myutils/sith/from_extreme/workflow_from_extreme.sh**
+   :ref:`[script] <workflow_from_extreme2>` **myutils/sith/from_extreme/second_version/workflow_from_extreme2.sh**
 
 .. container:: bash-script-doc
 

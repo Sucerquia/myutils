@@ -21,6 +21,8 @@ Module contents
 .. toctree::
    :hidden:
 
+   bash_rsts_doc/opt_from_xyzs
+   bash_rsts_scripts/opt_from_xyzs
    bash_rsts_doc/prepare_and_submit
    bash_rsts_scripts/prepare_and_submit
    bash_rsts_doc/extr_dofs
@@ -140,3 +142,8 @@ prepare_and_submit
 ------------------
 
 .. include:: bash_rsts_doc/prepare_and_submit.rst
+
+opt_from_xyzs
+-------------
+
+.. include:: bash_rsts_doc/opt_from_xyzs.rst

@@ -1,4 +1,8 @@
 
+========
+clean_ds
+========
+
 .. container:: bash-script-title
 
    :ref:`[script] <clean_ds>` **myutils/sith/clean_ds.sh**

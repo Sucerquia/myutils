@@ -1,4 +1,8 @@
 
+===========
+doc_modules
+===========
+
 .. container:: bash-script-title
 
    :ref:`[script] <doc_modules>` **myutils/cli/pkg_structure/doc_modules.sh**

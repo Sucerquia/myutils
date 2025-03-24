@@ -1,7 +1,11 @@
 
+=============
+opt_from_xyzs
+=============
+
 .. container:: bash-script-title
 
-   :ref:`[script] <forces_from_xyzs>` **myutils/sith/from_extreme/forces_from_xyzs.sh**
+   :ref:`[script] <opt_from_xyzs>` **myutils/sith/from_extreme/opt_from_xyzs.sh**
 
 .. container:: bash-script-doc
 

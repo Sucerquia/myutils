@@ -1,4 +1,8 @@
 
+==============
+add_python_doc
+==============
+
 .. container:: bash-script-title
 
    :ref:`[script] <add_python_doc>` **myutils/cli/pkg_structure/add_python_doc.sh**

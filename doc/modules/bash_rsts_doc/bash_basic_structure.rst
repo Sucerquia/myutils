@@ -1,4 +1,8 @@
 
+====================
+bash_basic_structure
+====================
+
 .. container:: bash-script-title
 
    :ref:`[script] <bash_basic_structure>` **myutils/cli/pkg_structure/bash_basic_structure.sh**

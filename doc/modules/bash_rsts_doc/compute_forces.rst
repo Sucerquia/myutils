@@ -1,4 +1,8 @@
 
+==============
+compute_forces
+==============
+
 .. container:: bash-script-title
 
    :ref:`[script] <compute_forces>` **myutils/sith/compute_forces.sh**
@@ -7,11 +11,12 @@
 
    .. line-block::
       
-      This tool computes the forces in all chk files and store them in a directory
-      called forces.
+      This tool computes the forces in from a chk file. The output replaces the
+      string 'conopt' for 'forces'.
       
         -c  run in cascade.
         -f  <chk file> of the configuration that you want to compute the forces.
       
+        -v  verbose.
         -h  prints this message.
       

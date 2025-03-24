@@ -1,4 +1,8 @@
 
+=============
+bash-template
+=============
+
 .. container:: bash-script-title
 
    :ref:`[script] <bash-template>` **myutils/bash_scripts/bash-template.sh**
