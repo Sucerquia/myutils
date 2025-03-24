@@ -210,12 +210,11 @@ do
      sed -i "$(( ${lines[0]} + 1 ))a \ \ \ bash_rsts_scripts/$plain_name" $mod_doc/$rst_name
      sed -i "$(( ${lines[0]} + 1 ))a \ \ \ bash_rsts_doc/$plain_name" $mod_doc/$rst_name
   fi
-   
+  
   # Insert block
   if ! grep -q ".. include:: bash_rsts_doc/$plain_name.rst" $mod_doc/$rst_name
   then
-    { echo ; echo "$plain_name" ; 
-      printf '%0.s-' $(seq 1 ${#plain_name}); echo ; echo ;
+    { echo ; echo ;
       echo ".. include:: bash_rsts_doc/$plain_name.rst" ;
     } >> $mod_doc/$rst_name 
   fi
