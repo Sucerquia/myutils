@@ -14,17 +14,11 @@ myutils.bash_scripts
    bash_rsts_scripts/single_g09
 
 
-single_g09
-----------
 
 .. include:: bash_rsts_doc/single_g09.rst
 
-bash-template
--------------
 
 .. include:: bash_rsts_doc/bash-template.rst
 
-find_blocks
------------
 
 .. include:: bash_rsts_doc/find_blocks.rst

@@ -77,8 +77,6 @@ Module contents
    bash_rsts_scripts/stretching
 
 
-stretching
-----------
 
 .. mermaid::
    :align: center
@@ -121,33 +119,21 @@ stretching
 
 .. include:: bash_rsts_doc/stretching.rst
 
-extract_forces
---------------
 
 .. include:: bash_rsts_doc/extract_forces.rst
 
-proline_mod
------------
 
 .. include:: bash_rsts_doc/proline_mod.rst
 
-clean_ds
---------
 
 .. include:: bash_rsts_doc/clean_ds.rst
 
-find_forces
------------
 
 .. include:: bash_rsts_doc/find_forces.rst
 
-compute_forces
---------------
 
 .. include:: bash_rsts_doc/compute_forces.rst
 
-workflow
---------
 
 .. mermaid::
    :align: center
@@ -173,7 +159,5 @@ workflow
 
 .. include:: bash_rsts_doc/workflow.rst
 
-swap_atoms_in_com
------------------
 
 .. include:: bash_rsts_doc/swap_atoms_in_com.rst

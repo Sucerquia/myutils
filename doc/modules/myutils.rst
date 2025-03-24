@@ -62,12 +62,8 @@ Module contents
    bash_rsts_scripts/basics
 
 
-basics
-------
 
 .. include:: bash_rsts_doc/basics.rst
 
-pkges_installer
----------------
 
 .. include:: bash_rsts_doc/pkges_installer.rst

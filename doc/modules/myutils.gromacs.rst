@@ -41,47 +41,29 @@ Module contents
    bash_rsts_scripts/extract_distance
 
 
-extract_distance
-----------------
 
 .. include:: bash_rsts_doc/extract_distance.rst
 
-classical_energies
-------------------
 
 .. include:: bash_rsts_doc/classical_energies.rst
 
-analysis
---------
 
 .. include:: bash_rsts_doc/analysis.rst
 
-classical_minimization
-----------------------
 
 .. include:: bash_rsts_doc/classical_minimization.rst
 
-pulling
--------
 
 .. include:: bash_rsts_doc/pulling.rst
 
-equilibrate_pdb
----------------
 
 .. include:: bash_rsts_doc/equilibrate_pdb.rst
 
-pulling_with_ff
----------------
 
 .. include:: bash_rsts_doc/pulling_with_ff.rst
 
-peptide_pulling
----------------
 
 .. include:: bash_rsts_doc/peptide_pulling.rst
 
-constraint_run
---------------
 
 .. include:: bash_rsts_doc/constraint_run.rst
