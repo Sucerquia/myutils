@@ -5,7 +5,7 @@ print_help() {
 echo "
 Extract the EPR absorption spectrum from an orca output file.
 
-  -e  <file.mat> experiment field file to reconstruct the absorption spectrum.
+  -e  <file.dat> experimental field vs absorption file.
   -f  Use this flag to take into account hyperfine corrections. This uses a lot
       of RAM memory. Be sure that you have enough memory or that you filtered
       the nuclei to compute hyperfine correction.
@@ -65,17 +65,13 @@ echo "$0" "$@"
 
 
 # ---- BODY --------------- ----------------------------------------------------
-
-variable_name=${experiment##*/}
-variable_name=${variable_name%.mat}
-
 cat << EOF > matlab_file_extract_spect.m
 clear, clf, clc
-load('${experiment}');
-
+data = readmatrix('${experiment}');
+field = data(:,1)
 % ==== Experiment
 Exp.mwFreq = $MicroWaveExper;
-Exp.Range = [min($variable_name) max($variable_name)];
+Exp.Range = [min(field) max(field)];
 Exp.nPoints = $ndpoints;
 Exp.Harmonic = 0;
 
