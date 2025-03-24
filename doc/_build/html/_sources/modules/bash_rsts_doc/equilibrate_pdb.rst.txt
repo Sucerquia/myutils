@@ -1,4 +1,8 @@
 
+===============
+equilibrate_pdb
+===============
+
 .. container:: bash-script-title
 
    :ref:`[script] <equilibrate_pdb>` **myutils/gromacs/equilibrate_pdb.sh**

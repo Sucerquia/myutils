@@ -1,4 +1,8 @@
 
+===============
+check_structure
+===============
+
 .. container:: bash-script-title
 
    :ref:`[script] <check_structure>` **myutils/cli/pkg_structure/check_structure.sh**

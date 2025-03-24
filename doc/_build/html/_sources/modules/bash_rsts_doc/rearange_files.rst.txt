@@ -1,4 +1,8 @@
 
+==============
+rearange_files
+==============
+
 .. container:: bash-script-title
 
    :ref:`[script] <rearange_files>` **myutils/sith/from_extreme/rearange_files.sh**

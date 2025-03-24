@@ -1,4 +1,8 @@
 
+==========
+bash_style
+==========
+
 .. container:: bash-script-title
 
    :ref:`[script] <bash_style>` **myutils/cli/pkg_structure/bash_style.sh**

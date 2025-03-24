@@ -1,4 +1,8 @@
 
+=============
+generate_main
+=============
+
 .. container:: bash-script-title
 
    :ref:`[script] <generate_main>` **myutils/cli/generate_main.sh**

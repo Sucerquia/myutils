@@ -1,4 +1,8 @@
 
+==================
+classical_energies
+==================
+
 .. container:: bash-script-title
 
    :ref:`[script] <classical_energies>` **myutils/gromacs/classical_energies.sh**

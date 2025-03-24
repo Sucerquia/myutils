@@ -1,4 +1,8 @@
 
+======================
+classical_minimization
+======================
+
 .. container:: bash-script-title
 
    :ref:`[script] <classical_minimization>` **myutils/gromacs/classical_minimization.sh**

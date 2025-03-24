@@ -1,4 +1,8 @@
 
+========
+analysis
+========
+
 .. container:: bash-script-title
 
    :ref:`[script] <analysis>` **myutils/gromacs/analysis.sh**

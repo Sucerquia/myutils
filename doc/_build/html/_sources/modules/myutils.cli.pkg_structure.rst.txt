@@ -24,42 +24,26 @@ myutils.cli.pkg_structure
    bash_rsts_scripts/files_tree
 
 
-files_tree
-----------
 
 .. include:: bash_rsts_doc/files_tree.rst
 
-add_python_doc
---------------
 
 .. include:: bash_rsts_doc/add_python_doc.rst
 
-bash_style
-----------
 
 .. include:: bash_rsts_doc/bash_style.rst
 
-doc_modules
------------
 
 .. include:: bash_rsts_doc/doc_modules.rst
 
-check_structure
----------------
 
 .. include:: bash_rsts_doc/check_structure.rst
 
-python_doc_fixer
-----------------
 
 .. include:: bash_rsts_doc/python_doc_fixer.rst
 
-doc_pythonfile
---------------
 
 .. include:: bash_rsts_doc/doc_pythonfile.rst
 
-bash_basic_structure
---------------------
 
 .. include:: bash_rsts_doc/bash_basic_structure.rst

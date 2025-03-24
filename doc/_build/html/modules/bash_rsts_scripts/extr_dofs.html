@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Script of myutils extr_dofs &mdash; myutils 1.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=32ed3f93" />
 
@@ -23,8 +23,8 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="../bash_rsts_doc/resubmit_failed.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="../bash_rsts_doc/extr_dofs.html" /> 
+    <link rel="next" title="resubmit_failed" href="../bash_rsts_doc/resubmit_failed.html" />
+    <link rel="prev" title="extr_dofs" href="../bash_rsts_doc/extr_dofs.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -51,23 +51,35 @@
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../myutils.html">myutils package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../myutils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../myutils.sith.from_extreme.second_version.html">myutils.sith.from_extreme.second_version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.sith.from_extreme.second_version.html#continuous-path">continuous_path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.sith.from_extreme.second_version.html#workflow-from-extreme2">workflow_from_extreme2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.basic_scripts.html">myutils.g_values.basic_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.basic_scripts.html#gval-workflow">gval_workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.basic_scripts.html#submit">submit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.basic_scripts.html#clean-directories">clean_directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.basic_scripts.html#create-g09-bdes">create_g09_BDEs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.analysis.html">myutils.g_values.analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.analysis.html#gval-postpro">gval_postpro</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.analysis.html#extract-eprspec">extract_EPRspec</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#module-myutils.sith.from_extreme.info_from_opt">Submodules</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="../myutils.sith.from_extreme.html#module-myutils.sith.from_extreme">Module contents</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#after-optimization">after_optimization</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#forces-from-xyzs">forces_from_xyzs</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#reduce-ds">reduce_ds</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#submit-forces-after-opt">submit_forces_after_opt</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#workflow-from-extreme">workflow_from_extreme</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#rearange-files">rearange_files</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#opt-and-forces">opt_and_forces</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#resubmit-failed">resubmit_failed</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#extr-dofs">extr_dofs</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.from_extreme.html#prepare-and-submit">prepare_and_submit</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../myutils.bash_scripts.html">myutils.bash_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.bash_scripts.html#single-g09">single_g09</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.bash_scripts.html#bash-template">bash-template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.bash_scripts.html#find-blocks">find_blocks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html">myutils.cli.pkg_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#files-tree">files_tree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#add-python-doc">add_python_doc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#bash-style">bash_style</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#doc-modules">doc_modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#check-structure">check_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#python-doc-fixer">python_doc_fixer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#doc-pythonfile">doc_pythonfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#bash-basic-structure">bash_basic_structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../myutils.ase_utils.html">myutils.ase_utils package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../myutils.cli.html">myutils.cli package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../myutils.gromacs.html">myutils.gromacs package</a></li>
@@ -75,21 +87,12 @@
 <li class="toctree-l4 current"><a class="reference internal" href="../myutils.sith.html#subpackages">Subpackages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#module-myutils.sith.analysis">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#module-myutils.sith">Module contents</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#stretching">stretching</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#extract-forces">extract_forces</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#proline-mod">proline_mod</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#clean-ds">clean_ds</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#find-forces">find_forces</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#compute-forces">compute_forces</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../myutils.sith.html#workflow">workflow</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../myutils.html#module-myutils.jupyter">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../myutils.html#module-myutils">Module contents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../myutils.html#basics">basics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../myutils.html#pkges-installer">pkges_installer</a></li>
 </ul>
 </li>
 </ul>
@@ -191,8 +194,8 @@ finish
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../bash_rsts_doc/extr_dofs.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../bash_rsts_doc/resubmit_failed.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../bash_rsts_doc/extr_dofs.html" class="btn btn-neutral float-left" title="extr_dofs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../bash_rsts_doc/resubmit_failed.html" class="btn btn-neutral float-right" title="resubmit_failed" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

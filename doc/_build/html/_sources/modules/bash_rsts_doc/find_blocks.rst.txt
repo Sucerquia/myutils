@@ -1,4 +1,8 @@
 
+===========
+find_blocks
+===========
+
 .. container:: bash-script-title
 
    :ref:`[script] <find_blocks>` **myutils/bash_scripts/find_blocks.sh**
@@ -18,10 +22,9 @@
             included in the block.
         -i  use this flag if the start and the end are indexes
         -o  <output='output'> 'terminal' or the name of the output without
-            extension. In the later case, the output will be stored in a file
-            called <output>.dat if the flag -i is given or in files called
-            <output>_<n>.dat, where n is the number of appearence of the block in
-            the file.
+            extension. In the later case, the output will be stored in files
+            called <output>_<n>.dat, where n is the number of appearence of the block
+            in the file with 3-digits format (leading zeros); n starts in 001.
       
         -v  verbose of what's the code doing.
         -h  prints this message.

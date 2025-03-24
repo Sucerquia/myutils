@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Script of myutils gval_postpro &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=32ed3f93" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=61243dd2"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="myutils.sith.from_extreme package" href="../myutils.sith.from_extreme.html" />
+    <link rel="prev" title="gval_postpro" href="../bash_rsts_doc/gval_postpro.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../myutils.html">myutils package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../myutils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../myutils.sith.from_extreme.second_version.html">myutils.sith.from_extreme.second_version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.sith.from_extreme.second_version.html#continuous-path">continuous_path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.sith.from_extreme.second_version.html#workflow-from-extreme2">workflow_from_extreme2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.basic_scripts.html">myutils.g_values.basic_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.basic_scripts.html#gval-workflow">gval_workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.basic_scripts.html#submit">submit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.basic_scripts.html#clean-directories">clean_directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.basic_scripts.html#create-g09-bdes">create_g09_BDEs</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../myutils.g_values.analysis.html">myutils.g_values.analysis</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../bash_rsts_doc/extract_EPRspec.html">extract_EPRspec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="extract_EPRspec.html">Script of myutils extract_EPRspec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../bash_rsts_doc/gval_postpro.html">gval_postpro</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Script of myutils gval_postpro</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.analysis.html#gval-postpro">gval_postpro</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.analysis.html#extract-eprspec">extract_EPRspec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.bash_scripts.html">myutils.bash_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.bash_scripts.html#single-g09">single_g09</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.bash_scripts.html#bash-template">bash-template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.bash_scripts.html#find-blocks">find_blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html">myutils.cli.pkg_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#files-tree">files_tree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#add-python-doc">add_python_doc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#bash-style">bash_style</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#doc-modules">doc_modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#check-structure">check_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#python-doc-fixer">python_doc_fixer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#doc-pythonfile">doc_pythonfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#bash-basic-structure">bash_basic_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.ase_utils.html">myutils.ase_utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.html">myutils.cli package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.gromacs.html">myutils.gromacs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.sith.html">myutils.sith package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../myutils.html#module-myutils.jupyter">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../myutils.html#module-myutils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../myutils.html">myutils package</a></li>
+          <li class="breadcrumb-item"><a href="../myutils.g_values.analysis.html">myutils.g_values.analysis</a></li>
+      <li class="breadcrumb-item active">Script of myutils gval_postpro</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/modules/bash_rsts_scripts/gval_postpro.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="script-of-myutils-gval-postpro">
+<span id="gval-postpro"></span><h1>Script of myutils gval_postpro<a class="headerlink" href="#script-of-myutils-gval-postpro" title="Link to this heading"></a></h1>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="c1"># ----- definition of functions -----------------------------------------------</span>
+print_help<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span>
+<span class="s2">Create all the files after complete the computation of the gvalues with Orca.</span>
+
+<span class="s2">  -c  &lt;molecule candidate&gt; Name of the radical candidate. It is assumed that</span>
+<span class="s2">      the files related with this candidate are in a directory with the same</span>
+<span class="s2">      name.</span>
+<span class="s2">  -E  &lt;experimental values&gt; guess of the gvalues obtained experimentally in</span>
+<span class="s2">      python list format, f.e. &#39;[2.0062, 2.0055, 2.0022]&#39;</span>
+<span class="s2">  -e  &lt;file.dat&gt; experimental field vs absorption file.</span>
+<span class="s2">  -f  Use this flag to take into account hyperfine corrections. This uses a lot</span>
+<span class="s2">      of RAM memory. Be sure that you have enough memory or that you filtered.</span>
+<span class="s2">  -O  &lt;file.out=&#39;EPRII_i.o&#39;&gt; orca output file with computed EPR quantities.</span>
+<span class="s2">  -o  &lt;output.dat=&#39;spectrum_wo_hyFiCorr.dat&#39;&gt; dat output file where you want to</span>
+<span class="s2">      save the field vs spectrum.</span>
+<span class="s2">  -m  &lt;float=179.813&gt; experimental value of the microwave frequency. The</span>
+<span class="s2">      default value corresponds to G-band experiments.</span>
+<span class="s2">  -n  &lt;int=501&gt; number of data points used to predict the absorption spectrum</span>
+
+<span class="s2">  -v  verbose.</span>
+<span class="s2">  -h  prints this message.</span>
+
+<span class="s2">This code should produce:</span>
+
+<span class="s2"> - A render of each model called opt_EPRII.png</span>
+<span class="s2"> - The computed spectrum obtained by easyspin in a file called spectrum_wo_hyFiCorr.dat</span>
+<span class="s2"> - A plot of the gvalues of all the candidates called gvalues.png</span>
+<span class="s2"> - A table of the gvalues in gvalues_table.md</span>
+<span class="s2"> - A file called vmd_image.md in each one of the directories of the candidates.</span>
+
+<span class="s2">This code should be executed in the folder containing the candidate.</span>
+<span class="s2">&quot;</span>
+<span class="nb">exit</span><span class="w"> </span><span class="m">0</span>
+<span class="o">}</span>
+
+create_vmd_image_md<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="nv">name</span><span class="o">=</span><span class="nv">$1</span><span class="p">;</span>
+<span class="w">  </span><span class="nv">subline</span><span class="o">=</span><span class="k">$(</span><span class="nb">printf</span><span class="w"> </span><span class="s2">&quot;%0.s=&quot;</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="si">${#</span><span class="nv">name</span><span class="si">}</span><span class="k">)</span><span class="w"> </span><span class="k">)</span><span class="p">;</span>
+<span class="w">  </span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF &gt; ./vmd_image.md</span>
+<span class="s">$name</span>
+<span class="s">$subline</span>
+
+<span class="s">&lt;div align=&quot;center&quot;&gt;</span>
+<span class="s">  &lt;img src=&quot;./opt_EPRII.png&quot;  width=&quot;500&quot;&gt;</span>
+<span class="s">&lt;/div&gt;</span>
+<span class="s">EOF</span>
+<span class="o">}</span>
+
+<span class="c1"># ----- set up starts ---------------------------------------------------------</span>
+<span class="c1"># General variables</span>
+<span class="nv">orca_output</span><span class="o">=</span><span class="s2">&quot;EPRII_i.out&quot;</span>
+<span class="nv">MicroWaveExper</span><span class="o">=</span><span class="m">179</span>.813
+<span class="nv">ndpoints</span><span class="o">=</span><span class="m">501</span>
+<span class="nv">hyperfine</span><span class="o">=</span><span class="s1">&#39;false&#39;</span>
+<span class="nv">output</span><span class="o">=</span><span class="s2">&quot;spectrum_wo_hyFiCorr.dat&quot;</span>
+<span class="nv">experiment</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+<span class="nv">verbose</span><span class="o">=</span><span class="s1">&#39;false&#39;</span>
+<span class="nv">exper_values</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+<span class="nv">hyperfine</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+<span class="nv">mol_cand</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+<span class="k">while</span><span class="w"> </span><span class="nb">getopts</span><span class="w"> </span><span class="s1">&#39;c:E:e:fO:o:m:n:vh&#39;</span><span class="w"> </span>flag<span class="p">;</span>
+<span class="k">do</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">flag</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">in</span>
+<span class="w">    </span>c<span class="o">)</span><span class="w"> </span><span class="nv">mol_cand</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>E<span class="o">)</span><span class="w"> </span><span class="nv">exper_values</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>e<span class="o">)</span><span class="w"> </span><span class="nv">experiment</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>f<span class="o">)</span><span class="w"> </span><span class="nv">hyperfine</span><span class="o">=</span><span class="s1">&#39;-f&#39;</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>O<span class="o">)</span><span class="w"> </span><span class="nv">orca_output</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>o<span class="o">)</span><span class="w"> </span><span class="nv">output</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>m<span class="o">)</span><span class="w"> </span><span class="nv">MicroWaveExper</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>n<span class="o">)</span><span class="w"> </span><span class="nv">ndpoints</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+
+<span class="w">    </span>v<span class="o">)</span><span class="w"> </span><span class="nv">verbose</span><span class="o">=</span><span class="s1">&#39;true&#39;</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>h<span class="o">)</span><span class="w"> </span>print_help<span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>*<span class="o">)</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;for usage check: myutils &lt;function&gt; -h&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">  </span><span class="k">esac</span>
+<span class="k">done</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-d<span class="w"> </span><span class="nv">$mol_cand</span><span class="w"> </span><span class="o">]</span>
+<span class="k">then</span>
+<span class="w">  </span>fail<span class="w"> </span><span class="s2">&quot;You have to provide a the name of a molecule that is a candidate. Use</span>
+<span class="s2">        the flag -c for this proporsal&quot;</span>
+<span class="k">fi</span>
+<span class="nb">cd</span><span class="w"> </span><span class="nv">$mol_cand</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="si">${#</span><span class="nv">exper_values</span><span class="si">}</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]]</span>
+<span class="k">then</span>
+<span class="w">  </span>fail<span class="w"> </span><span class="s2">&quot;You have to provide tempted experimental gvals, f.e. &#39;[2.0062, 2.0055, 2.0022]&#39;&quot;</span>
+<span class="k">fi</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-f<span class="w"> </span><span class="nv">$experiment</span><span class="w"> </span><span class="o">]</span>
+<span class="k">then</span>
+<span class="w">  </span>fail<span class="w"> </span><span class="s2">&quot;You have to give the dat file of the field of the experiment using the</span>
+<span class="s2">    flag -e. Check &#39;myutils extract_EPRspec -h&#39; for details.&quot;</span>
+<span class="k">fi</span>
+
+<span class="nb">source</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>myutils<span class="w"> </span>basics<span class="w"> </span>-path<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>CandInfo<span class="w"> </span><span class="nv">$verbose</span>
+
+<span class="c1"># starting information</span>
+verbose<span class="w"> </span><span class="s2">&quot;JOB information&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot; * Date:&quot;</span>
+date
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot; * Command:&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$0</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
+
+
+<span class="c1"># ---- BODY --------------- ----------------------------------------------------</span>
+<span class="nv">reference</span><span class="o">=</span><span class="k">$(</span>myutils<span class="w"> </span>gval_workflow<span class="w"> </span>-path<span class="k">)</span>
+<span class="nv">reference</span><span class="o">=</span><span class="si">${</span><span class="nv">reference</span><span class="p">%/basic_scripts*</span><span class="si">}</span>
+
+<span class="c1"># Creates gvalues_table.md and gvalues.png</span>
+verbose<span class="w"> </span><span class="s2">&quot;create gvalues_table.md and gvalues.png&quot;</span>
+myutils<span class="w"> </span>extract_system_info<span class="w"> </span><span class="s1">&#39;./&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$exper_values</span><span class="s2">&quot;</span>
+
+<span class="k">for</span><span class="w"> </span>candidate<span class="w"> </span><span class="k">in</span><span class="w"> </span>*-*/
+<span class="k">do</span>
+<span class="w">  </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$candidate</span>
+
+<span class="w">  </span>verbose<span class="w"> </span><span class="s2">&quot;Render image of the candidate </span><span class="nv">$candidate</span><span class="s2">&quot;</span>
+<span class="w">  </span>cp<span class="w"> </span><span class="nv">$reference</span>/analysis/create_mol_png.tcl<span class="w"> </span>.
+<span class="w">  </span>vmd<span class="w"> </span>-e<span class="w"> </span>create_mol_png.tcl<span class="w"> </span>-args<span class="w"> </span>opt_EPRII.xyz<span class="w"> </span>opt_EPRII.png
+<span class="w">  </span>rm<span class="w"> </span>create_mol_png.tcl
+<span class="w">  </span>
+<span class="w">  </span>verbose<span class="w"> </span><span class="s2">&quot;Compute the spectrum with easyspin&quot;</span>
+<span class="w">  </span><span class="k">$(</span>myutils<span class="w"> </span>extract_EPRspec<span class="w"> </span>-path<span class="k">)</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">$experiment</span><span class="w"> </span><span class="nv">$hyperfine</span><span class="w"> </span>-O<span class="w"> </span><span class="nv">$orca_output</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                                   </span>-o<span class="w"> </span><span class="nv">$output</span><span class="w"> </span>-m<span class="w"> </span><span class="nv">$MicroWaveExper</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$ndpoints</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                                   </span>-v<span class="w"> </span><span class="o">||</span><span class="w"> </span>fail<span class="w"> </span><span class="se">\</span>
+<span class="w">                                   </span><span class="s2">&quot;error extracting spectrum of </span><span class="nv">$candidate</span><span class="s2">&quot;</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="c1"># Create vmd_image.md</span>
+<span class="w">  </span><span class="nv">name</span><span class="o">=</span><span class="nv">$mol_cand</span>/<span class="nv">$candidate</span>
+<span class="w">  </span>create_vmd_image_md<span class="w"> </span><span class="nv">$name</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span>exper_spect<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="si">${</span><span class="nv">experiment</span><span class="p">%/*</span><span class="si">}</span>/*.dat
+<span class="w">  </span><span class="k">do</span>
+<span class="w">    </span><span class="c1"># add fit to experimental spectrum</span>
+<span class="w">    </span><span class="nv">name_w_ext</span><span class="o">=</span><span class="si">${</span><span class="nv">exper_spect</span><span class="p">##*/</span><span class="si">}</span>
+<span class="w">    </span><span class="nv">name</span><span class="o">=</span><span class="si">${</span><span class="nv">name_w_ext</span><span class="p">%.dat</span><span class="si">}</span>.png
+<span class="w">    </span>myutils<span class="w"> </span>spect_w_experiment<span class="w"> </span><span class="nv">$exper_spect</span><span class="w"> </span><span class="nv">$output</span><span class="w"> </span><span class="nv">$name</span>
+<span class="w">    </span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF &gt;&gt; ./vmd_image.md</span>
+
+<span class="s">&lt;div align=&quot;center&quot;&gt;</span>
+<span class="s">  &lt;img src=&quot;./$name&quot;  width=&quot;500&quot;&gt;</span>
+<span class="s">&lt;/div&gt;</span>
+<span class="s">EOF</span>
+<span class="w">  </span><span class="k">done</span>
+<span class="w">  </span><span class="nb">cd</span><span class="w"> </span>../
+<span class="k">done</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../bash_rsts_doc/gval_postpro.html" class="btn btn-neutral float-left" title="gval_postpro" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../myutils.sith.from_extreme.html" class="btn btn-neutral float-right" title="myutils.sith.from_extreme package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

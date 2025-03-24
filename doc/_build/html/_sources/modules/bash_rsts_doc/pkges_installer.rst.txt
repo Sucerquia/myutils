@@ -1,4 +1,8 @@
 
+===============
+pkges_installer
+===============
+
 .. container:: bash-script-title
 
    :ref:`[script] <pkges_installer>` **myutils/pkges_installer.sh**

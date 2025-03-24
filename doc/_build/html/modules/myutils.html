@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>myutils package &mdash; myutils 1.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=32ed3f93" />
 
@@ -23,7 +23,7 @@
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="myutils.sith.from_extreme package" href="myutils.sith.from_extreme.html" />
+    <link rel="next" title="myutils.sith.from_extreme.second_version" href="myutils.sith.from_extreme.second_version.html" />
     <link rel="prev" title="Install" href="../install.html" /> 
 </head>
 
@@ -51,9 +51,31 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">myutils package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.second_version.html">myutils.sith.from_extreme.second_version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.second_version.html#continuous-path">continuous_path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.second_version.html#workflow-from-extreme2">workflow_from_extreme2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html">myutils.g_values.basic_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html#gval-workflow">gval_workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html#submit">submit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html#clean-directories">clean_directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html#create-g09-bdes">create_g09_BDEs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.analysis.html">myutils.g_values.analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.analysis.html#gval-postpro">gval_postpro</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.analysis.html#extract-eprspec">extract_EPRspec</a></li>
 <li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="myutils.bash_scripts.html">myutils.bash_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.bash_scripts.html#single-g09">single_g09</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.bash_scripts.html#bash-template">bash-template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.bash_scripts.html#find-blocks">find_blocks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html">myutils.cli.pkg_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#files-tree">files_tree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#add-python-doc">add_python_doc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#bash-style">bash_style</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#doc-modules">doc_modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#check-structure">check_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#python-doc-fixer">python_doc_fixer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#doc-pythonfile">doc_pythonfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#bash-basic-structure">bash_basic_structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html">myutils.ase_utils package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="myutils.cli.html">myutils.cli package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html">myutils.gromacs package</a></li>
@@ -69,6 +91,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#myutils.miscellaneous.time_g09"><code class="docutils literal notranslate"><span class="pre">time_g09()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#myutils.peptides.PepSetter"><code class="docutils literal notranslate"><span class="pre">PepSetter</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#myutils.peptides.PepSetter.build_proline_state"><code class="docutils literal notranslate"><span class="pre">PepSetter.build_proline_state()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#myutils.peptides.PepSetter.compute_angle"><code class="docutils literal notranslate"><span class="pre">PepSetter.compute_angle()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#myutils.peptides.PepSetter.compute_dihedrals"><code class="docutils literal notranslate"><span class="pre">PepSetter.compute_dihedrals()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#myutils.peptides.PepSetter.endo_exo_proline"><code class="docutils literal notranslate"><span class="pre">PepSetter.endo_exo_proline()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#myutils.peptides.PepSetter.rama_phi_psi"><code class="docutils literal notranslate"><span class="pre">PepSetter.rama_phi_psi()</span></code></a></li>
@@ -99,12 +122,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-myutils">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bash_rsts_doc/pkges_installer.html">pkges_installer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="bash_rsts_scripts/pkges_installer.html">Script of myutils pkges_installer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bash_rsts_doc/basics.html">basics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="bash_rsts_scripts/basics.html">Script of myutils basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#basics">basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pkges-installer">pkges_installer</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#basics">basics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#pkges-installer">pkges_installer</a></li>
 </ul>
 </li>
 </ul>
@@ -139,6 +164,17 @@
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="myutils.sith.from_extreme.second_version.html">myutils.sith.from_extreme.second_version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.sith.from_extreme.second_version.html#continuous-path">continuous_path</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.sith.from_extreme.second_version.html#workflow-from-extreme2">workflow_from_extreme2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.g_values.basic_scripts.html">myutils.g_values.basic_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.g_values.basic_scripts.html#gval-workflow">gval_workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.g_values.basic_scripts.html#submit">submit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.g_values.basic_scripts.html#clean-directories">clean_directories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.g_values.basic_scripts.html#create-g09-bdes">create_g09_BDEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.g_values.analysis.html">myutils.g_values.analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.g_values.analysis.html#gval-postpro">gval_postpro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.g_values.analysis.html#extract-eprspec">extract_EPRspec</a></li>
 <li class="toctree-l1"><a class="reference internal" href="myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#module-myutils.sith.from_extreme.info_from_opt">Submodules</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.delta_angles_continuous"><code class="docutils literal notranslate"><span class="pre">delta_angles_continuous()</span></code></a></li>
@@ -146,36 +182,32 @@
 <li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.reduce_structs"><code class="docutils literal notranslate"><span class="pre">reduce_structs()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#module-myutils.sith.from_extreme">Module contents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#after-optimization">after_optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#forces-from-xyzs">forces_from_xyzs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#reduce-ds">reduce_ds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#submit-forces-after-opt">submit_forces_after_opt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#workflow-from-extreme">workflow_from_extreme</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#rearange-files">rearange_files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#opt-and-forces">opt_and_forces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#resubmit-failed">resubmit_failed</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#extr-dofs">extr_dofs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#prepare-and-submit">prepare_and_submit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.from_extreme.html#module-myutils.sith.from_extreme">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html#after-optimization">after_optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html#workflow-from-extreme">workflow_from_extreme</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html#rearange-files">rearange_files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html#opt-and-forces">opt_and_forces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html#resubmit-failed">resubmit_failed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html#extr-dofs">extr_dofs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html#prepare-and-submit">prepare_and_submit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html#opt-from-xyzs">opt_from_xyzs</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="myutils.bash_scripts.html">myutils.bash_scripts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="myutils.bash_scripts.html#single-g09">single_g09</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.bash_scripts.html#bash-template">bash-template</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.bash_scripts.html#find-blocks">find_blocks</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="myutils.cli.pkg_structure.html">myutils.cli.pkg_structure</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="myutils.cli.pkg_structure.html#files-tree">files_tree</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.cli.pkg_structure.html#add-python-doc">add_python_doc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.cli.pkg_structure.html#bash-style">bash_style</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.cli.pkg_structure.html#doc-modules">doc_modules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.cli.pkg_structure.html#check-structure">check_structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.cli.pkg_structure.html#python-doc-fixer">python_doc_fixer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.cli.pkg_structure.html#doc-pythonfile">doc_pythonfile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.cli.pkg_structure.html#bash-basic-structure">bash_basic_structure</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.bash_scripts.html">myutils.bash_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.bash_scripts.html#single-g09">single_g09</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.bash_scripts.html#bash-template">bash-template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.bash_scripts.html#find-blocks">find_blocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.cli.pkg_structure.html">myutils.cli.pkg_structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.cli.pkg_structure.html#files-tree">files_tree</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.cli.pkg_structure.html#add-python-doc">add_python_doc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.cli.pkg_structure.html#bash-style">bash_style</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.cli.pkg_structure.html#doc-modules">doc_modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.cli.pkg_structure.html#check-structure">check_structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.cli.pkg_structure.html#python-doc-fixer">python_doc_fixer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.cli.pkg_structure.html#doc-pythonfile">doc_pythonfile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="myutils.cli.pkg_structure.html#bash-basic-structure">bash_basic_structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="myutils.ase_utils.html">myutils.ase_utils package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="myutils.ase_utils.html#module-myutils.ase_utils.molecules">Submodules</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment"><code class="docutils literal notranslate"><span class="pre">Alignment</span></code></a><ul>
@@ -212,6 +244,7 @@
 <li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.tools.diff_bonds"><code class="docutils literal notranslate"><span class="pre">diff_bonds()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.tools.distance"><code class="docutils literal notranslate"><span class="pre">distance()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.tools.extract_bonds"><code class="docutils literal notranslate"><span class="pre">extract_bonds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html#myutils.ase_utils.tools.shake_except"><code class="docutils literal notranslate"><span class="pre">shake_except()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="myutils.ase_utils.html#module-myutils.ase_utils">Module contents</a></li>
@@ -223,29 +256,26 @@
 <li class="toctree-l3"><a class="reference internal" href="myutils.cli.html#myutils.cli.main_template.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.cli.html#module-myutils.cli">Module contents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.cli.html#generate-main">generate_main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.cli.html#module-myutils.cli">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.html#generate-main">generate_main</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="myutils.gromacs.html">myutils.gromacs package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#module-myutils.gromacs.ff_parameters">Submodules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html#myutils.gromacs.ff_parameters.amber_bond_pars"><code class="docutils literal notranslate"><span class="pre">amber_bond_pars()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html#myutils.gromacs.ff_parameters.create_amber_data"><code class="docutils literal notranslate"><span class="pre">create_amber_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html#myutils.gromacs.ff_parameters.create_bondpars_file"><code class="docutils literal notranslate"><span class="pre">create_bondpars_file()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html#myutils.gromacs.ff_parameters.create_grappa_data"><code class="docutils literal notranslate"><span class="pre">create_grappa_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html#myutils.gromacs.ff_parameters.grappa_bond_pars"><code class="docutils literal notranslate"><span class="pre">grappa_bond_pars()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#module-myutils.gromacs">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html#extract-distance">extract_distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html#classical-energies">classical_energies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html#analysis">analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html#classical-minimization">classical_minimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html#pulling">pulling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html#equilibrate-pdb">equilibrate_pdb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html#pulling-with-ff">pulling_with_ff</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html#peptide-pulling">peptide_pulling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html#constraint-run">constraint_run</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#module-myutils.gromacs">Module contents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#extract-distance">extract_distance</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#classical-energies">classical_energies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#analysis">analysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#classical-minimization">classical_minimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#pulling">pulling</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#equilibrate-pdb">equilibrate_pdb</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#pulling-with-ff">pulling_with_ff</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#peptide-pulling">peptide_pulling</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.gromacs.html#constraint-run">constraint_run</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="myutils.sith.html">myutils.sith package</a><ul>
@@ -253,16 +283,6 @@
 <li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#module-myutils.sith.from_extreme.info_from_opt">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#module-myutils.sith.from_extreme">Module contents</a></li>
-<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#after-optimization">after_optimization</a></li>
-<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#forces-from-xyzs">forces_from_xyzs</a></li>
-<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#reduce-ds">reduce_ds</a></li>
-<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#submit-forces-after-opt">submit_forces_after_opt</a></li>
-<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#workflow-from-extreme">workflow_from_extreme</a></li>
-<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#rearange-files">rearange_files</a></li>
-<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#opt-and-forces">opt_and_forces</a></li>
-<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#resubmit-failed">resubmit_failed</a></li>
-<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#extr-dofs">extr_dofs</a></li>
-<li class="toctree-l4"><a class="reference internal" href="myutils.sith.from_extreme.html#prepare-and-submit">prepare_and_submit</a></li>
 </ul>
 </li>
 </ul>
@@ -296,6 +316,7 @@
 <li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.set_hes_from_ref"><code class="docutils literal notranslate"><span class="pre">set_hes_from_ref()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.analysis.statistics"><code class="docutils literal notranslate"><span class="pre">statistics()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.compare_siths.extract_common"><code class="docutils literal notranslate"><span class="pre">extract_common()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.compare_siths.extract_diff"><code class="docutils literal notranslate"><span class="pre">extract_diff()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.compare_siths.index_dof"><code class="docutils literal notranslate"><span class="pre">index_dof()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.compare_siths.organize_lengths"><code class="docutils literal notranslate"><span class="pre">organize_lengths()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.g09_xyz.log2xyz"><code class="docutils literal notranslate"><span class="pre">log2xyz()</span></code></a></li>
@@ -327,14 +348,17 @@
 <li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#myutils.sith.sith_tools.proline_state"><code class="docutils literal notranslate"><span class="pre">proline_state()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#module-myutils.sith">Module contents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#stretching">stretching</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#extract-forces">extract_forces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#proline-mod">proline_mod</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#clean-ds">clean_ds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#find-forces">find_forces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#compute-forces">compute_forces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#workflow">workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.sith.html#module-myutils.sith">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#stretching">stretching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#extract-forces">extract_forces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#proline-mod">proline_mod</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#clean-ds">clean_ds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#find-forces">find_forces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#compute-forces">compute_forces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#workflow">workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html#swap-atoms-in-com">swap_atoms_in_com</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -484,21 +508,55 @@ proline aminoacid.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="myutils.peptides.PepSetter.compute_angle">
+<span class="sig-name descname"><span class="pre">compute_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom1index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom2index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom3index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">structure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/peptides.html#PepSetter.compute_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.peptides.PepSetter.compute_angle" title="Link to this definition"></a></dt>
+<dd><p>Compute the angle between 3 atoms. Consider the nexts facts:
+- The definition of the index 1, 2 and 3 is as follows:</p>
+<blockquote>
+<div><p>1</p>
+</div></blockquote>
+<dl class="simple">
+<dt><a href="#id1"><span class="problematic" id="id2">3__</span></a>  /</dt><dd><p>2</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>Consider the right hand rule to define the positive and negative</p></li>
+</ul>
+<p>value.
+- The angle is always positive and its range is [0, pi].
+- The atoms do not have to be bonded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atom1index</strong> (<em>int</em>) – index of the atom 1 in g09 convention (starting from 1).</p></li>
+<li><p><strong>atom2index</strong> (<em>int</em>) – index of the atom 2 in g09 convention (starting from 1).</p></li>
+<li><p><strong>atom3index</strong> (<em>int</em>) – index of the atom 3 in g09 convention (starting from 1).</p></li>
+<li><p><strong>structure</strong> (<em>ase.Atoms. Default=None</em>) – Structure to obtain the dihedrals. This has to be the same peptide
+chemistry than the basis.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(float) Angle as defined in the description in radians.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="myutils.peptides.PepSetter.compute_dihedrals">
 <span class="sig-name descname"><span class="pre">compute_dihedrals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom1index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom2index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom3index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom4index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">structure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/peptides.html#PepSetter.compute_dihedrals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.peptides.PepSetter.compute_dihedrals" title="Link to this definition"></a></dt>
 <dd><p>Compute the dihedral angle between 4 atoms. Consider the nexts facts:
-* The definition of the index 1, 2, 3 and 4 is as follows:</p>
+- The definition of the index 1, 2, 3 and 4 is as follows:</p>
 <blockquote>
 <div><blockquote>
 <div><blockquote>
 <div><p>1</p>
 </div></blockquote>
-<p><a href="#id1"><span class="problematic" id="id2">3__</span></a>  /</p>
+<p><a href="#id1"><span class="problematic" id="id3">3__</span></a>  /</p>
 </div></blockquote>
 <p>/    2</p>
 </div></blockquote>
 <p>4
-* The dihedral is defined here as the angle between the projection of</p>
+- The dihedral is defined here as the angle between the projection of</p>
 <blockquote>
 <div><p>the vector 2-&gt;1 and 3-&gt;4 in the plane generated by the vector 3-&gt;2.</p>
 </div></blockquote>
@@ -689,7 +747,7 @@ the back.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="myutils.plotters.StandardPlotter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">StandardPlotter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Figure</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figwidth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figheight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax_pref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_pref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#StandardPlotter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">myutils.plotters.</span></span><span class="sig-name descname"><span class="pre">StandardPlotter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Figure</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figwidth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figheight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax_pref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_pref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#StandardPlotter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Creator of standard scientific plots.</p>
 <dl class="field-list simple">
@@ -746,7 +804,7 @@ graphics.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="myutils.plotters.StandardPlotter.arrow">
-<span class="sig-name descname"><span class="pre">arrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dxdy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#StandardPlotter.arrow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.arrow" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">arrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dxdy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#StandardPlotter.arrow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.arrow" title="Link to this definition"></a></dt>
 <dd><p>Draws an annotated arrow on the axes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -770,7 +828,7 @@ text.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="myutils.plotters.StandardPlotter.axis_setter">
-<span class="sig-name descname"><span class="pre">axis_setter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">general_pars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Axes</span></span></span><a class="reference internal" href="../_modules/myutils/plotters.html#StandardPlotter.axis_setter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.axis_setter" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">axis_setter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">general_pars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Axes</span></span></span><a class="reference internal" href="../_modules/myutils/plotters.html#StandardPlotter.axis_setter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.axis_setter" title="Link to this definition"></a></dt>
 <dd><p>Adjust the most common parameters of an axes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -842,7 +900,7 @@ check mpl.rcParams.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="myutils.plotters.StandardPlotter.draw_brace">
-<span class="sig-name descname"><span class="pre">draw_brace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xspan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yspan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#StandardPlotter.draw_brace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.draw_brace" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">draw_brace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xspan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yspan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/myutils/plotters.html#StandardPlotter.draw_brace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myutils.plotters.StandardPlotter.draw_brace" title="Link to this definition"></a></dt>
 <dd><p>Draws an annotated horizontal brace on the axes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -988,9 +1046,8 @@ matplotlib.</p></li>
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-myutils" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 </div>
-</section>
 <section id="basics">
-<h2>basics<a class="headerlink" href="#basics" title="Link to this heading"></a></h2>
+<h3>basics<a class="headerlink" href="#basics" title="Link to this heading"></a></h3>
 <div class="bash-script-title docutils container">
 <p><a class="reference internal" href="bash_rsts_scripts/basics.html#basics"><span class="std std-ref">[script]</span></a> <strong>myutils/basics.sh</strong></p>
 </div>
@@ -1048,7 +1105,7 @@ matplotlib.</p></li>
 </div>
 </section>
 <section id="pkges-installer">
-<h2>pkges_installer<a class="headerlink" href="#pkges-installer" title="Link to this heading"></a></h2>
+<h3>pkges_installer<a class="headerlink" href="#pkges-installer" title="Link to this heading"></a></h3>
 <div class="bash-script-title docutils container">
 <p><a class="reference internal" href="bash_rsts_scripts/pkges_installer.html#pkges-installer"><span class="std std-ref">[script]</span></a> <strong>myutils/pkges_installer.sh</strong></p>
 </div>
@@ -1087,13 +1144,14 @@ matplotlib.</p></li>
 </div>
 </section>
 </section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../install.html" class="btn btn-neutral float-left" title="Install" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="myutils.sith.from_extreme.html" class="btn btn-neutral float-right" title="myutils.sith.from_extreme package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="myutils.sith.from_extreme.second_version.html" class="btn btn-neutral float-right" title="myutils.sith.from_extreme.second_version" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

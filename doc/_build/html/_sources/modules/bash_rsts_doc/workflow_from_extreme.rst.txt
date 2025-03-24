@@ -1,4 +1,8 @@
 
+=====================
+workflow_from_extreme
+=====================
+
 .. container:: bash-script-title
 
    :ref:`[script] <workflow_from_extreme>` **myutils/sith/from_extreme/workflow_from_extreme.sh**
@@ -16,8 +20,8 @@
             be evaluated. For example, "./AAA/" would optimize the last
             stretched a trialanine peptide (where last means after organizing
             alphabetically).
-        -l  <number of amino acids in the peptide> It will be assumed that the
-            xyz file starts with the letter code of the amino acids.
+        -r  Use if the job corresponds to a restart, in which case, no directory will
+            be created and the new <peptide>-optext.com is assumed to exist.
       
         -v  verbose.
         -h  prints this message.

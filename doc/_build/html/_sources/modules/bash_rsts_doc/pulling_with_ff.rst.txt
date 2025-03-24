@@ -1,4 +1,8 @@
 
+===============
+pulling_with_ff
+===============
+
 .. container:: bash-script-title
 
    :ref:`[script] <pulling_with_ff>` **myutils/gromacs/pulling_with_ff.sh**
@@ -10,7 +14,7 @@
       This code submits an equilibration and run a pulling simulation using
       grappa and amber99.
       
-        -f  <pdb_file> pdb file of the molecule that you want to equilibrate.
+        -f  <pdb_file> pdb file of the molecule that you want to pull.
         -c  run in a cluster.
       
         -v  verbose.
