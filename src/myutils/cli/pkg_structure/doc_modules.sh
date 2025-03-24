@@ -36,17 +36,17 @@ verbose=''
 mod_doc="$(myutils path)/../../doc/modules"
 while getopts 'd:f:m:n:p:vh' flag;
 do
-    case "${flag}" in
-      d) raw_ign_dirs=${OPTARG} ;;
-      f) raw_ign_fils=${OPTARG} ;;
-      m) mod_doc=${OPTARG};;
-      n) pkg_name=${OPTARG};;
-      p) relative_path=${OPTARG};;
-      
-      v) verbose='true' ;;
-      h) print_help ;;
-      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
-    esac
+  case "${flag}" in
+    d) raw_ign_dirs=${OPTARG} ;;
+    f) raw_ign_fils=${OPTARG} ;;
+    m) mod_doc=${OPTARG};;
+    n) pkg_name=${OPTARG};;
+    p) relative_path=${OPTARG};;
+    
+    v) verbose='true' ;;
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
 done
 
 # relative path to the dir with the files to be documented
@@ -97,6 +97,12 @@ bash_help_block() {
   file=$2
   tmp_name=${file##*/}
   plain_name=${tmp_name%.sh}
+
+  script_title="$plain_name"
+
+  { echo ; printf '%0.s=' $(seq 1 ${#script_title}) ; echo "" ; }
+  echo $script_title
+  { printf '%0.s=' $(seq 1 ${#script_title}) ; echo "" ; }
   echo
   echo ".. container:: bash-script-title"
   echo
