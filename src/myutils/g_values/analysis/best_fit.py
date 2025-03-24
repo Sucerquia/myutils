@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.optimize import nnls
 from myutils.miscellaneous import output_terminal
+from myutils.plotters import StandardPlotter
 
 
 class TheoMatchExpe:
@@ -215,3 +216,69 @@ def create_fit_file(output,
         outfile.write('# field intensity\n')
         for f, i in zip(field, inten):
             outfile.write(f'{f} \t {i} \n')
+
+
+# add2executable
+def spect_w_experiment(experiment, theory, output):
+    """
+    Fits the peak of the theoretical spectrum into the experimental value at
+    that value of the field.
+
+    Parameters
+    ==========
+    experiment: str
+        path to the .dat file containing the experimental field and the
+        intensity.
+    theory: str
+        path to the .dat file containing the theoretical field and the
+        intensity of the given candidate.
+    output: str
+        name of the png file where the output is stored.
+    
+    Return
+    ======
+    (StandardPlotter) StandardPlotter used to plot.
+    """
+    fieldexp, intensexp = np.loadtxt(experiment, unpack=True)
+    field, intens = np.loadtxt(theory, unpack=True)
+
+    maxintensity_index = intens.argmax()
+    target_field_val = field[maxintensity_index]
+    closest_exp_index = np.abs(fieldexp - target_field_val).argmin()
+    experiment_val =intensexp[closest_exp_index]
+    intens = intens * experiment_val / intens[maxintensity_index]
+
+    sp = StandardPlotter(ax_pref={'xlabel': 'Field [T]',
+                                  'ylabel': 'Intensity [a.u]'})
+    sp.plot_data(field, intens, pstyle='-', data_label='Theory')
+    sp.plot_data(fieldexp, intensexp, pstyle='-', color_plot='black', data_label='Experiment')
+    sp.spaces[0].set_axis(borders=[[0.15, 0.15], [0.98, 0.98]])
+    sp.axis_setter(legend=True)
+    sp.save(output)
+
+
+# add2executable
+def best_fit(experiment, output, fieldrange, *argv):
+    if fieldrange == '':
+        fieldrange = None
+    else:
+        fieldrange = eval(fieldrange)
+    files = list(argv)
+    tme = TheoMatchExpe(files,
+                        experiment_file=experiment,
+                        fieldrange=fieldrange)
+    tme.gradual_cleaning(threshold=5)
+    tme.proportions(print_analysis=True)
+
+    sp = StandardPlotter(ax_pref={'xlabel': 'Field [T]',
+                                  'ylabel': 'Intensity [a.u]'},
+                     plot_pref={'pstyle': '-'})
+    sp.plot_data(tme.fieldexp, tme.intensexp, pstyle='-', color_plot='black', data_label='Experiment')
+    sp.plot_data(tme.field, tme.intensfit, pstyle='-', data_label='Fit')                     
+    sp.plot_data(tme.field, tme.coeffs * tme.intensities, pstyle='--');
+    if fieldrange is not None:
+        sp.plot_data([fieldrange[0], fieldrange[0]], [0, 1], pstyle=':', color_plot='gray');
+        sp.plot_data([fieldrange[1], fieldrange[1]], [0, 1], pstyle=':', color_plot='gray');
+    sp.spaces[0].set_axis(borders=[[0.15, 0.15], [0.98, 0.98]])
+    sp.axis_setter(legend=True)
+    sp.save(output)
