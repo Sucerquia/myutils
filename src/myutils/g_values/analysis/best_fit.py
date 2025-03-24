@@ -16,7 +16,6 @@ class TheoMatchExpe:
     basis_location: str. Default='../'
         location where to search for the files with the basis_pattern.
 
-    
     Note
     ====
     This script assumes that the basis files has a common pattern and they are all
@@ -25,12 +24,24 @@ class TheoMatchExpe:
     """
     def __init__(self,
                  files,
-                 experiment_file='../experiments/field_vs_spectrum2024.dat'):
-    
-        self.fieldexp, self.intensexp = np.loadtxt(experiment_file, unpack=True)
-        self.files = np.array(files)
+                 experiment_file='../experiments/field_vs_spectrum2024.dat',
+                 fieldrange=None):
 
+        self.fieldexp, self.intensexp = np.loadtxt(experiment_file, unpack=True)
+        
+
+        self.files = np.array(files)
         self.field = np.loadtxt(self.files[0], usecols=0)
+        if fieldrange is None:
+            # takes all the range
+            self.conditiontheo = self.field == self.field
+            self.conditionexp = self.fieldexp == self.fieldexp
+        else:
+            self.conditiontheo = np.logical_and(self.field > fieldrange[0],
+                                                self.field < fieldrange[1])
+            self.conditionexp = np.logical_and(self.fieldexp > fieldrange[0],
+                                               self.fieldexp < fieldrange[1])
+
         self.intensities = []
         for file in self.files:
             intensity = np.loadtxt(file, usecols=1)
@@ -38,9 +49,9 @@ class TheoMatchExpe:
         self.intensities = np.array(self.intensities)
 
         # Interpolate and find coeffs
-        A = np.column_stack([np.interp(self.fieldexp,
-                                       self.field, bf) for bf in self.intensities])
-        self.coeffs = nnls(A, self.intensexp)[0].reshape(len(self.intensities), 1)
+        A = np.column_stack([np.interp(self.fieldexp[self.conditionexp],
+                                       self.field[self.conditiontheo], bf[self.conditiontheo]) for bf in self.intensities])
+        self.coeffs = nnls(A, self.intensexp[self.conditionexp])[0].reshape(len(self.intensities), 1)
         self.intensfit = np.sum(self.coeffs * self.intensities, axis=0)
         self.proportions()
 
@@ -91,10 +102,10 @@ class TheoMatchExpe:
         self.intensities = self.intensities[condition]
 
         # refitting
-        A = np.column_stack([np.interp(self.fieldexp,
-                                       self.field, bf) for bf in self.intensities])
+        A = np.column_stack([np.interp(self.fieldexp[self.conditionexp],
+                                       self.field[self.conditiontheo], bf[self.conditiontheo]) for bf in self.intensities])
         
-        self.coeffs = nnls(A, self.intensexp)[0].reshape(len(self.intensities), 1)
+        self.coeffs = nnls(A, self.intensexp[self.conditionexp])[0].reshape(len(self.intensities), 1)
         self.intensfit = np.sum(self.coeffs * self.intensities, axis=0)
         self.proportions()
         self.clean_candidates(threshold=threshold)
