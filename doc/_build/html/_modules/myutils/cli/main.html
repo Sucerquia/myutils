@@ -4,8 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>myutils.cli.main &mdash; myutils 1.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/thebelab.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=32ed3f93" />
 
   
@@ -18,6 +21,18 @@
         <script src="../../../_static/documentation_options.js?v=61243dd2"></script>
         <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+        <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+        <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+        <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -45,7 +60,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/myutils.html">myutils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/tutorials.html">Tutorials</a></li>
 </ul>
 
         </div>
@@ -73,23 +90,34 @@
            <div itemprop="articleBody">
              
   <h1>Source code for myutils.cli.main</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
-<span class="kn">from</span> <span class="nn">myutils.miscellaneous</span> <span class="kn">import</span> <span class="n">output_terminal</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">import</span> <span class="nn">sys</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">importlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">import_module</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">myutils.miscellaneous</span><span class="w"> </span><span class="kn">import</span> <span class="n">output_terminal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 
 
 <span class="n">pymodules</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;proline_state&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.sith_tools&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;gen_randpep&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.sith_tools&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;protonate&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.protonate&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;log2xyz&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.g09_xyz&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;reduce_structs&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.from_extreme.info_from_opt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;info_from_opt&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.from_extreme.info_from_opt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;change_prolines_dofs&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.change_dofs&#39;</span><span class="p">,</span>
     <span class="s1">&#39;function_doc&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.miscellaneous&#39;</span><span class="p">,</span>
     <span class="s1">&#39;args_and_defaults&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.miscellaneous&#39;</span><span class="p">,</span>
     <span class="s1">&#39;optimized_e&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.miscellaneous&#39;</span><span class="p">,</span>
     <span class="s1">&#39;time_g09&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.miscellaneous&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;reduce_structs&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.from_extreme.info_from_opt&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;info_from_opt&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.from_extreme.info_from_opt&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;log2xyz&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.g09_xyz&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;protonate&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.protonate&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;proline_state&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.sith_tools&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;gen_randpep&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.sith.sith_tools&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;extract_system_info&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.analysis.postpro&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;create_table_per_system&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.analysis.postpro&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;create_table_per_method&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.analysis.postpro&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;extract_gvals&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.analysis.postpro&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;best_fit&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.analysis.best_fit&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;spect_w_experiment&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.analysis.best_fit&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;create_fit_file&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.analysis.best_fit&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;create_amber_data&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.gromacs.ff_parameters&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;create_grappa_data&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.gromacs.ff_parameters&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;methods_in_class&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.cli.pkg_structure.documentation_tools&#39;</span><span class="p">,</span>
     <span class="s1">&#39;F_max_stretch&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.ase_utils.tools&#39;</span><span class="p">,</span>
     <span class="s1">&#39;distance&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.ase_utils.tools&#39;</span><span class="p">,</span>
     <span class="s1">&#39;all_xyz2pdb&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.ase_utils.tools&#39;</span><span class="p">,</span>
@@ -97,68 +125,75 @@
     <span class="s1">&#39;diff_bonds&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.ase_utils.tools&#39;</span><span class="p">,</span>
     <span class="s1">&#39;extract_bonds&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.ase_utils.tools&#39;</span><span class="p">,</span>
     <span class="s1">&#39;change_distance&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.ase_utils.tools&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;create_amber_data&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.gromacs.ff_parameters&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;create_grappa_data&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.gromacs.ff_parameters&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;methods_in_class&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.cli.pkg_structure.documentation_tools&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;shake_except&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.ase_utils.tools&#39;</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="n">sh_executers</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;workflow&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/workflow.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;compute_forces&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/compute_forces.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;prepare_and_submit&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/prepare_and_submit.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;extr_dofs&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/extr_dofs.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;resubmit_failed&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/resubmit_failed.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;opt_and_forces&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/opt_and_forces.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;rearange_files&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/rearange_files.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;swap_atoms_in_com&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/swap_atoms_in_com.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;stretching&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/stretching.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;proline_mod&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/proline_mod.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;workflow_from_extreme&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/workflow_from_extreme.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;submit_forces_after_opt&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/submit_forces_after_opt.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;reduce_ds&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/reduce_ds.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;forces_from_xyzs&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/forces_from_xyzs.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;workflow_from_extreme2&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/second_version/workflow_from_extreme2.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;continuous_path&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/second_version/continuous_path.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;resubmit_failed&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/resubmit_failed.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;rearange_files&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/rearange_files.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;prepare_and_submit&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/prepare_and_submit.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;opt_from_xyzs&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/opt_from_xyzs.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;opt_and_forces&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/opt_and_forces.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;extr_dofs&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/extr_dofs.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;after_optimization&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/from_extreme/after_optimization.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;find_forces&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/find_forces.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;clean_ds&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/clean_ds.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;proline_mod&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/proline_mod.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;extract_forces&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/extract_forces.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;stretching&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/stretching.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;constraint_run&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/constraint_run.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;peptide_pulling&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/peptide_pulling.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;compute_forces&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/compute_forces.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;clean_ds&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/clean_ds.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;pkges_installer&#39;</span><span class="p">:</span> <span class="s1">&#39;./pkges_installer.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;submit&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/basic_scripts/submit.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;gval_workflow&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/basic_scripts/gval_workflow.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;create_g09_BDEs&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/basic_scripts/create_g09_BDEs.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;clean_directories&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/basic_scripts/clean_directories.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;gval_postpro&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/analysis/gval_postpro.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;extract_EPRspec&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/analysis/extract_EPRspec.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;pulling_with_ff&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/pulling_with_ff.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;equilibrate_pdb&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/equilibrate_pdb.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;pulling&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/pulling.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;classical_minimization&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/classical_minimization.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;analysis&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/analysis.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;classical_energies&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/classical_energies.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;peptide_pulling&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/peptide_pulling.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;extract_distance&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/extract_distance.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;equilibrate_pdb&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/equilibrate_pdb.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;constraint_run&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/constraint_run.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;classical_minimization&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/classical_minimization.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;classical_energies&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/classical_energies.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;analysis&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/analysis.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;python_doc_fixer&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/python_doc_fixer.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;files_tree&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/files_tree.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;doc_pythonfile&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/doc_pythonfile.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;doc_modules&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/doc_modules.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;check_tests&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/check_tests.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;check_structure&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/check_structure.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;bash_style&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/bash_style.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;bash_basic_structure&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/bash_basic_structure.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;add_python_doc&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/add_python_doc.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;generate_main&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/generate_main.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;basics&#39;</span><span class="p">:</span> <span class="s1">&#39;./basics.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;single_g09&#39;</span><span class="p">:</span> <span class="s1">&#39;./bash_scripts/single_g09.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;find_blocks&#39;</span><span class="p">:</span> <span class="s1">&#39;./bash_scripts/find_blocks.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;bash-template&#39;</span><span class="p">:</span> <span class="s1">&#39;./bash_scripts/bash-template.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;single_g09&#39;</span><span class="p">:</span> <span class="s1">&#39;./bash_scripts/single_g09.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;generate_main&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/generate_main.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;bash_basic_structure&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/bash_basic_structure.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;doc_pythonfile&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/doc_pythonfile.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;check_tests&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/check_tests.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;python_doc_fixer&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/python_doc_fixer.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;check_structure&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/check_structure.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;doc_modules&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/doc_modules.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;bash_style&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/bash_style.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;add_python_doc&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/add_python_doc.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;files_tree&#39;</span><span class="p">:</span> <span class="s1">&#39;./cli/pkg_structure/files_tree.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;pkges_installer&#39;</span><span class="p">:</span> <span class="s1">&#39;./pkges_installer.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;basics&#39;</span><span class="p">:</span> <span class="s1">&#39;./basics.sh&#39;</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="n">other_files</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;EPR_abspect&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/analysis/EPR_abspect.m&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;create_mol_png&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/analysis/create_mol_png.tcl&#39;</span><span class="p">,</span>
     <span class="s1">&#39;pulling_temp&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/pulling_temp.mdp&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;constraint&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/constraint.mdp&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;npt&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/npt.mdp&#39;</span><span class="p">,</span>
     <span class="s1">&#39;nvt&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/nvt.mdp&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;ions&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/ions.mdp&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;npt&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/npt.mdp&#39;</span><span class="p">,</span>
     <span class="s1">&#39;minim&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/minim.mdp&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ions&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/ions.mdp&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;constraint&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/constraint.mdp&#39;</span><span class="p">,</span>
 <span class="p">}</span>
 
 
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../../../modules/myutils.cli.html#myutils.cli.main.main">[docs]</a>
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function run each time myutils is called from the terminal.</span>
 
@@ -206,7 +241,7 @@
     <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">sh_executers</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">if</span> <span class="s1">&#39;-path&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
             <span class="n">path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">)[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> \
-                <span class="n">sh_executers</span><span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="mi">2</span><span class="p">:]</span>
+                    <span class="n">sh_executers</span><span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="mi">2</span><span class="p">:]</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">command</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">)[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> \
@@ -222,6 +257,12 @@
     <span class="c1"># own path</span>
     <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;path&#39;</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">)[:</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span>
+    
+    <span class="c1"># open documentation</span>
+    <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;doc&#39;</span><span class="p">:</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;xdg-open &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">)[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> \
+            <span class="s2">&quot;../../doc/_build/html/index.html&quot;</span>
+        <span class="n">output_terminal</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
 
     <span class="c1"># Not recognized keyword</span>
     <span class="k">else</span><span class="p">:</span>

@@ -4,8 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>myutils.ase_utils.tools &mdash; myutils 1.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/thebelab.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=32ed3f93" />
 
   
   <!--[if lt IE 9]>
@@ -17,6 +21,18 @@
         <script src="../../../_static/documentation_options.js?v=61243dd2"></script>
         <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+        <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+        <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+        <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -44,7 +60,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/myutils.html">myutils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/tutorials.html">Tutorials</a></li>
 </ul>
 
         </div>
@@ -72,18 +90,61 @@
            <div itemprop="articleBody">
              
   <h1>Source code for myutils.ase_utils.tools</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">myutils.ase_utils.molecules</span> <span class="kn">import</span> <span class="n">MoleculeSetter</span>
-<span class="kn">from</span> <span class="nn">ase.geometry.analysis</span> <span class="kn">import</span> <span class="n">Analysis</span>
-<span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">read</span><span class="p">,</span> <span class="n">write</span>
-<span class="kn">import</span> <span class="nn">glob</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">glob</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">myutils.ase_utils.molecules</span><span class="w"> </span><span class="kn">import</span> <span class="n">MoleculeSetter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase.geometry.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">Analysis</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read</span><span class="p">,</span> <span class="n">write</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase.constraints</span><span class="w"> </span><span class="kn">import</span> <span class="n">FixAtoms</span>
+
+
+<span class="c1"># add2executable</span>
+<div class="viewcode-block" id="shake_except">
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.tools.shake_except">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">shake_except</span><span class="p">(</span><span class="n">xyz_file</span><span class="p">,</span> <span class="n">file_cons</span><span class="p">,</span> <span class="n">modify_input</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stdev</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Modify a xyz file by adding random noise to the position of the atoms</span>
+<span class="sd">    except for those listed in the first line of a file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    xyz_file: int</span>
+<span class="sd">        original xyz file to be modified.</span>
+<span class="sd">    file_cons:</span>
+<span class="sd">        file containing the atoms to avoid to be modified by the shaking.</span>
+<span class="sd">    modify_input: bool. Defatuly=True</span>
+<span class="sd">        True to modify the input file.</span>
+<span class="sd">    scale: float. Default=0.05</span>
+<span class="sd">        max magnitud of the noise to be added in each coordinate of each atom</span>
+<span class="sd">        in Angstrom.</span>
+
+<span class="sd">    Retun</span>
+<span class="sd">    =====</span>
+<span class="sd">    (ase.Atoms) new object atoms with the modified positions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">atoms</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">xyz_file</span><span class="p">)</span>
+    <span class="n">cons</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">file_cons</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">cons</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">:</span>
+        <span class="n">cons</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="n">cons</span><span class="p">)])</span>
+    
+    <span class="n">c</span> <span class="o">=</span> <span class="n">FixAtoms</span><span class="p">(</span><span class="n">indices</span><span class="o">=</span><span class="n">cons</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">atoms</span><span class="o">.</span><span class="n">set_constraint</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">atoms</span><span class="o">.</span><span class="n">rattle</span><span class="p">(</span><span class="n">stdev</span><span class="o">=</span><span class="n">stdev</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">modify_input</span><span class="p">:</span>
+        <span class="n">write</span><span class="p">(</span><span class="n">xyz_file</span><span class="p">,</span> <span class="n">atoms</span><span class="p">)</span>
+
+    <span class="n">manipulator</span> <span class="o">=</span> <span class="n">MoleculeSetter</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
+    <span class="n">manipulator</span><span class="o">.</span><span class="n">xy_alignment</span><span class="p">(</span><span class="n">cons</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">cons</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">center</span><span class="o">=</span><span class="n">cons</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">atoms</span></div>
+
 
 
 <span class="c1"># add2executable</span>
 <div class="viewcode-block" id="change_distance">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.tools.change_distance">[docs]</a>
-<span class="k">def</span> <span class="nf">change_distance</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">file_cons</span><span class="p">,</span> <span class="n">deltad</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.tools.change_distance">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">change_distance</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">file_cons</span><span class="p">,</span> <span class="n">deltad</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Take a configuration and increase the distance between two atoms. With the</span>
 <span class="sd">    new structure, it creates a gaussian file without specifing the kind of</span>
@@ -138,8 +199,8 @@
 
 <span class="c1"># add2executable</span>
 <div class="viewcode-block" id="extract_bonds">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.tools.extract_bonds">[docs]</a>
-<span class="k">def</span> <span class="nf">extract_bonds</span><span class="p">(</span><span class="n">readable_file</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.tools.extract_bonds">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_bonds</span><span class="p">(</span><span class="n">readable_file</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Guesses the bonds in a molecule according to</span>
 <span class="sd">    ase.neighborlist.natural_cutoffs.</span>
@@ -171,8 +232,8 @@
 
 <span class="c1"># add2executable</span>
 <div class="viewcode-block" id="diff_bonds">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.tools.diff_bonds">[docs]</a>
-<span class="k">def</span> <span class="nf">diff_bonds</span><span class="p">(</span><span class="n">conf1</span><span class="p">,</span> <span class="n">conf2</span><span class="p">,</span> <span class="n">frozen_dofs</span><span class="o">=</span><span class="s1">&#39;frozen_dofs.dat&#39;</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.tools.diff_bonds">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">diff_bonds</span><span class="p">(</span><span class="n">conf1</span><span class="p">,</span> <span class="n">conf2</span><span class="p">,</span> <span class="n">frozen_dofs</span><span class="o">=</span><span class="s1">&#39;frozen_dofs.dat&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function returns the bonds that are in one conf but not in the other.</span>
 
@@ -215,8 +276,8 @@
 
 <span class="c1"># add2executable</span>
 <div class="viewcode-block" id="conf2pdb">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.tools.conf2pdb">[docs]</a>
-<span class="k">def</span> <span class="nf">conf2pdb</span><span class="p">(</span><span class="n">confile</span><span class="p">,</span> <span class="n">pdbtemplate</span><span class="p">,</span> <span class="n">pdboutput</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.tools.conf2pdb">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">conf2pdb</span><span class="p">(</span><span class="n">confile</span><span class="p">,</span> <span class="n">pdbtemplate</span><span class="p">,</span> <span class="n">pdboutput</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform a configuration in a file (xyz, log...) into a pdb using a pdb</span>
 <span class="sd">    file as template.</span>
@@ -265,8 +326,8 @@
 
 <span class="c1"># add2executable</span>
 <div class="viewcode-block" id="all_xyz2pdb">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.tools.all_xyz2pdb">[docs]</a>
-<span class="k">def</span> <span class="nf">all_xyz2pdb</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">output_patern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xyzdir</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.tools.all_xyz2pdb">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">all_xyz2pdb</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">output_patern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xyzdir</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform all xyz files of the directory where it is executed into a pdb</span>
 <span class="sd">    using a pdb file as template.</span>
@@ -310,8 +371,8 @@
 
 
 <div class="viewcode-block" id="all_hydrogen_atoms">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.tools.all_hydrogen_atoms">[docs]</a>
-<span class="k">def</span> <span class="nf">all_hydrogen_atoms</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.tools.all_hydrogen_atoms">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">all_hydrogen_atoms</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Finds the indexes of all the hydrogen atoms in the peptide from Atoms</span>
 <span class="sd">    object.</span>
@@ -336,8 +397,8 @@
 
 <span class="c1"># add2executable</span>
 <div class="viewcode-block" id="distance">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.tools.distance">[docs]</a>
-<span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">index1</span><span class="p">,</span> <span class="n">index2</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.tools.distance">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">distance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">index1</span><span class="p">,</span> <span class="n">index2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the distance between two atoms in the last configuration</span>
 <span class="sd">    of a trajectory file (e.g. .log file from gaussian).</span>
@@ -370,8 +431,8 @@
 
 <span class="c1"># add2executable</span>
 <div class="viewcode-block" id="F_max_stretch">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.tools.F_max_stretch">[docs]</a>
-<span class="k">def</span> <span class="nf">F_max_stretch</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">pep</span><span class="p">,</span> <span class="n">fd</span><span class="o">=</span><span class="s1">&#39;frozen_dofs.dat&#39;</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.tools.F_max_stretch">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">F_max_stretch</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">pep</span><span class="p">,</span> <span class="n">fd</span><span class="o">=</span><span class="s1">&#39;frozen_dofs.dat&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the force in the end atoms of the configuration of</span>
 <span class="sd">    maximum stretching.</span>
@@ -410,8 +471,8 @@
 
 
 <div class="viewcode-block" id="F_stretch">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.tools.F_stretch">[docs]</a>
-<span class="k">def</span> <span class="nf">F_stretch</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.tools.F_stretch">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">F_stretch</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extracts the magnitud of the force applied to an atoms of the configuration</span>
 <span class="sd">    of maximum stretching.</span>

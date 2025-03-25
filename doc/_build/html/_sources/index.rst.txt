@@ -44,6 +44,7 @@ Content
    about
    install
    modules/myutils
+   tutorials/tutorials
 
 
 

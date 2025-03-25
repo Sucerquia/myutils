@@ -4,8 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>myutils.sith.sith_plots &mdash; myutils 1.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/thebelab.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=32ed3f93" />
 
   
   <!--[if lt IE 9]>
@@ -17,6 +21,18 @@
         <script src="../../../_static/documentation_options.js?v=61243dd2"></script>
         <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+        <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+        <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+        <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -44,7 +60,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/myutils.html">myutils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/tutorials.html">Tutorials</a></li>
 </ul>
 
         </div>
@@ -72,22 +90,22 @@
            <div itemprop="articleBody">
              
   <h1>Source code for myutils.sith.sith_plots</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">myutils.plotters</span> <span class="kn">import</span> <span class="n">StandardPlotter</span>
-<span class="kn">from</span> <span class="nn">myutils.peptides</span> <span class="kn">import</span> <span class="n">PepSetter</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
-<span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="k">as</span> <span class="nn">mpatches</span>
-<span class="kn">from</span> <span class="nn">SITH.SITH</span> <span class="kn">import</span> <span class="n">SITH</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
-<span class="kn">from</span> <span class="nn">myutils.sith.analysis</span> <span class="kn">import</span> <span class="n">SithAnalysis</span>
-<span class="kn">import</span> <span class="nn">cmocean</span> <span class="k">as</span> <span class="nn">cmo</span>
-<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">TwoSlopeNorm</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">myutils.plotters</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardPlotter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">myutils.peptides</span><span class="w"> </span><span class="kn">import</span> <span class="n">PepSetter</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpatches</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">SITH.SITH</span><span class="w"> </span><span class="kn">import</span> <span class="n">SITH</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">myutils.sith.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">SithAnalysis</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cmocean</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cmo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">TwoSlopeNorm</span>
 
 
 <div class="viewcode-block" id="plot_averages_per_pos">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.sith_plots.plot_averages_per_pos">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_averages_per_pos</span><span class="p">(</span><span class="n">ener_per_pos</span><span class="p">,</span> <span class="n">mean_per_pos</span><span class="p">,</span> <span class="n">stdr_per_pos</span><span class="p">,</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.sith_plots.plot_averages_per_pos">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_averages_per_pos</span><span class="p">(</span><span class="n">ener_per_pos</span><span class="p">,</span> <span class="n">mean_per_pos</span><span class="p">,</span> <span class="n">stdr_per_pos</span><span class="p">,</span>
                           <span class="n">aminos</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">ylim</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot the mean value with error bars (std) per position (rows), per</span>
@@ -160,8 +178,8 @@
 
 
 <div class="viewcode-block" id="plot_matrix">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.sith_plots.plot_matrix">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">n_per_ele</span><span class="p">,</span> <span class="n">cbar_label</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.sith_plots.plot_matrix">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">n_per_ele</span><span class="p">,</span> <span class="n">cbar_label</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot a matrix as a heatmap and show a value per combination.</span>
 
@@ -238,8 +256,8 @@
 
 
 <div class="viewcode-block" id="plot_matrix2">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.sith_plots.plot_matrix2">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_matrix2</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">cbar_label</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.sith_plots.plot_matrix2">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_matrix2</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">cbar_label</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot a matrix as a heatmap. The colormap is plt.get_cmap(&#39;coolwarm&#39;) and is</span>
 <span class="sd">    divergent, with 0.05 in the middle.</span>
@@ -307,8 +325,8 @@
 
 
 <div class="viewcode-block" id="plot_matrix3">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.sith_plots.plot_matrix3">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_matrix3</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">cbar_label</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.sith_plots.plot_matrix3">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_matrix3</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">cbar_label</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot a matrix as a heatmap and show a value per combination.</span>
 
@@ -371,12 +389,12 @@
 
 
 <div class="viewcode-block" id="SithPlotter">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter">[docs]</a>
-<span class="k">class</span> <span class="nc">SithPlotter</span><span class="p">(</span><span class="n">PepSetter</span><span class="p">,</span> <span class="n">SithAnalysis</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SithPlotter</span><span class="p">(</span><span class="n">PepSetter</span><span class="p">,</span> <span class="n">SithAnalysis</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Object that plots the main graphs to analyze sith outcomes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sith</span><span class="p">:</span> <span class="n">SITH</span><span class="p">,</span> <span class="n">pdb_template</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sith</span><span class="p">:</span> <span class="n">SITH</span><span class="p">,</span> <span class="n">pdb_template</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ==========</span>
@@ -390,8 +408,8 @@
         <span class="n">SithAnalysis</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sith</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SithPlotter.plot_energies_in_DOFs">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_energies_in_DOFs">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_energies_in_DOFs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_energies_in_DOFs">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_energies_in_DOFs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                               <span class="n">jump_stretching</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
                               <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">,</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -459,8 +477,8 @@
 
 
 <div class="viewcode-block" id="SithPlotter.plot_sith">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_sith">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_sith</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dofs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_sith">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_sith</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dofs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                   <span class="n">e_dofs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                   <span class="n">xlabel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
                   <span class="n">sp</span><span class="p">:</span> <span class="n">StandardPlotter</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -470,6 +488,7 @@
                   <span class="n">jump_stretching</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
                   <span class="n">show_amino_legends</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">ax_pref</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span>
                   <span class="n">sp_pref</span><span class="o">=</span><span class="p">{},</span>
+                  <span class="n">pad_cbar</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                   <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">,</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function plots the energies per degrees of freedom from</span>
@@ -526,7 +545,7 @@
         <span class="c1"># Setup default</span>
         <span class="k">if</span> <span class="n">cmap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="kn">import</span> <span class="nn">cmocean</span> <span class="k">as</span> <span class="nn">cmo</span>
+                <span class="kn">import</span><span class="w"> </span><span class="nn">cmocean</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cmo</span>
                 <span class="n">cmap</span> <span class="o">=</span> <span class="n">cmo</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">algae</span>
             <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
                 <span class="n">cmap</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">[</span><span class="s1">&#39;viridis&#39;</span><span class="p">]</span>
@@ -557,7 +576,8 @@
             <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Stretched&quot;</span><span class="p">,</span>
                            <span class="n">fontsize</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span>
                            <span class="o">*</span> <span class="n">sp</span><span class="o">.</span><span class="n">ax_pref</span><span class="p">[</span><span class="s1">&#39;labels_scale&#39;</span><span class="p">],</span>
-                           <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+                           <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+                           <span class="n">labelpad</span><span class="o">=</span><span class="n">pad_cbar</span><span class="p">)</span>
             <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">space_bar</span><span class="o">.</span><span class="n">locate_ax</span><span class="p">(</span><span class="n">borders</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">]])</span>
 
@@ -573,15 +593,16 @@
         <span class="n">colors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_color_per_amino</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">show_amino_legends</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">colors</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span>
-                      <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+                      <span class="n">fontsize</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span>
+                       <span class="o">*</span> <span class="n">sp</span><span class="o">.</span><span class="n">ax_pref</span><span class="p">[</span><span class="s1">&#39;ticks_scale&#39;</span><span class="p">])</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">dofs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">dofs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="n">sp</span></div>
 
 
 <div class="viewcode-block" id="SithPlotter.add_color_per_amino">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.add_color_per_amino">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_color_per_amino</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.add_color_per_amino">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_color_per_amino</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add an colored rectangle in the background for every DOF belonging to</span>
 <span class="sd">        an aminoacid.</span>
@@ -615,7 +636,7 @@
         <span class="k">return</span> <span class="n">patches</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_dof_classificator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_dof_classificator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;&quot;</span>
 <span class="sd">        classify the degrees of freedom according to the aminoacid del belong.</span>
 
@@ -639,8 +660,8 @@
         <span class="k">return</span> <span class="n">dof_per_amino</span>
 
 <div class="viewcode-block" id="SithPlotter.create_blocks">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.create_blocks">[docs]</a>
-    <span class="k">def</span> <span class="nf">create_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classified</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.create_blocks">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">classified</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="n">blocks</span> <span class="o">=</span> <span class="p">[[</span><span class="n">classified</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">classified</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]]]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">classified</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">:]:</span>
             <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">blocks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
@@ -651,8 +672,8 @@
 
 
 <div class="viewcode-block" id="SithPlotter.plot_angles">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_angles">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_angles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_angles">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_angles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                     <span class="n">cmap</span><span class="p">:</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Colormap</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="n">step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
                     <span class="n">sp_pref</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{})</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">,</span>
@@ -699,7 +720,7 @@
 
         <span class="k">if</span> <span class="n">cmap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="kn">import</span> <span class="nn">cmocean</span> <span class="k">as</span> <span class="nn">cmo</span>
+                <span class="kn">import</span><span class="w"> </span><span class="nn">cmocean</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cmo</span>
                 <span class="n">cmap</span> <span class="o">=</span> <span class="n">cmo</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">algae</span>
             <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
                 <span class="n">cmap</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colormaps</span><span class="p">[</span><span class="s1">&#39;viridis&#39;</span><span class="p">]</span>
@@ -751,8 +772,8 @@
 
 
 <div class="viewcode-block" id="SithPlotter.plot_error">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_error">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_error">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                    <span class="n">classical</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                    <span class="n">sp_pref</span><span class="o">=</span><span class="p">{})</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -841,8 +862,8 @@
 
 
 <div class="viewcode-block" id="SithPlotter.plot_hessian">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_hessian">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_hessian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deci</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_hessian">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_hessian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deci</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                      <span class="n">ticks</span><span class="o">=</span><span class="mi">15</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function that plots the a matrix using a divergent colormap to separate</span>
@@ -912,8 +933,8 @@
 
 
 <div class="viewcode-block" id="SithPlotter.plot_ramachandran">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_ramachandran">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_ramachandran</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">marker_size_polar</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_ramachandran">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_ramachandran</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">marker_size_polar</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
                           <span class="n">marker_size_rama</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">label_dots</span><span class="o">=</span><span class="s1">&#39;Amino</span><span class="se">\n</span><span class="s1">Acids&#39;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Shows the evolution of each phi-psi angle of each aminoacid in a polar</span>

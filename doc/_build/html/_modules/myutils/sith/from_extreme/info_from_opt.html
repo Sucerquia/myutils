@@ -4,9 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>myutils.sith.from_extreme.info_from_opt &mdash; myutils 1.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=2158e23a" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/thebelab.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=32ed3f93" />
 
   
   <!--[if lt IE 9]>
@@ -18,6 +21,18 @@
         <script src="../../../../_static/documentation_options.js?v=61243dd2"></script>
         <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../../_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+        <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+        <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+        <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../../../about.html" />
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -45,7 +60,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../about.html">About</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/myutils.html">myutils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/tutorials.html">Tutorials</a></li>
 </ul>
 
         </div>
@@ -73,23 +90,23 @@
            <div itemprop="articleBody">
              
   <h1>Source code for myutils.sith.from_extreme.info_from_opt</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">read</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">myutils.miscellaneous</span> <span class="kn">import</span> <span class="n">output_terminal</span>
-<span class="kn">from</span> <span class="nn">ase.visualize</span> <span class="kn">import</span> <span class="n">view</span>
-<span class="kn">from</span> <span class="nn">myutils.ase_utils.molecules</span> <span class="kn">import</span> <span class="n">MoleculeSetter</span><span class="p">,</span> <span class="n">Alignment</span>
-<span class="kn">from</span> <span class="nn">myutils.peptides</span> <span class="kn">import</span> <span class="n">PepSetter</span>
-<span class="kn">from</span> <span class="nn">ase</span> <span class="kn">import</span> <span class="n">Atoms</span>
-<span class="kn">from</span> <span class="nn">ase.io</span> <span class="kn">import</span> <span class="n">write</span>
-<span class="kn">import</span> <span class="nn">glob</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">myutils.miscellaneous</span><span class="w"> </span><span class="kn">import</span> <span class="n">output_terminal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase.visualize</span><span class="w"> </span><span class="kn">import</span> <span class="n">view</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">myutils.ase_utils.molecules</span><span class="w"> </span><span class="kn">import</span> <span class="n">MoleculeSetter</span><span class="p">,</span> <span class="n">Alignment</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">myutils.peptides</span><span class="w"> </span><span class="kn">import</span> <span class="n">PepSetter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase</span><span class="w"> </span><span class="kn">import</span> <span class="n">Atoms</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
 
 
 <span class="c1"># add2executable</span>
 <div class="viewcode-block" id="info_from_opt">
 <a class="viewcode-back" href="../../../../modules/myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.info_from_opt">[docs]</a>
-<span class="k">def</span> <span class="nf">info_from_opt</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="n">pdb_reference</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">info_from_opt</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="n">pdb_reference</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extracts configurations from a g09 optimization trajectory and removes</span>
 <span class="sd">    those outliers in the total energy.</span>
@@ -152,9 +169,6 @@
         <span class="n">ms</span> <span class="o">=</span> <span class="n">MoleculeSetter</span><span class="p">(</span><span class="n">conf</span><span class="p">)</span>
         <span class="n">ms</span><span class="o">.</span><span class="n">xy_alignment</span><span class="p">(</span><span class="n">ind1</span><span class="p">,</span> <span class="n">ind2</span><span class="p">,</span> <span class="n">ind3</span><span class="p">)</span>
 
-    <span class="c1"># TODO: change from here to consider continuos DOFs instead of continuos</span>
-    <span class="c1"># distance. This function can be unified in this and the next one.</span>
-
     <span class="c1"># now make the trajectory continuos. if the distance between extremes is</span>
     <span class="c1"># larger than 0.2A, configurations with the intermedia distances are</span>
     <span class="c1"># created.</span>
@@ -194,10 +208,10 @@
 <span class="c1"># add2executable</span>
 <div class="viewcode-block" id="reduce_structs">
 <a class="viewcode-back" href="../../../../modules/myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.reduce_structs">[docs]</a>
-<span class="k">def</span> <span class="nf">reduce_structs</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">reduce_structs</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check all the *-dofs.dat files and remove those files that represent</span>
-<span class="sd">    irrelevant changes. It does not creates intermedias.</span>
+<span class="sd">    irrelevant changes. It creates intermedias to guarantee continuous dofs.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -240,15 +254,7 @@
         <span class="c1"># rescale distances and angles to have them in the same order of</span>
         <span class="c1"># magnitude. I could also evaluate the approximation for distances and</span>
         <span class="c1"># then for angles and use logicaland.</span>
-        <span class="c1"># TODO: replace this by continuous angles()</span>
-        <span class="n">condition</span> <span class="o">=</span> <span class="n">d_ij</span><span class="p">[:,</span> <span class="n">nrs</span><span class="p">:]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">180</span>
-        <span class="k">while</span> <span class="n">condition</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
-            <span class="n">d_ij</span><span class="p">[:,</span> <span class="n">nrs</span><span class="p">:][</span><span class="n">condition</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">360</span>
-            <span class="n">condition</span> <span class="o">=</span> <span class="n">d_ij</span><span class="p">[:,</span> <span class="n">nrs</span><span class="p">:]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">180</span>
-        <span class="n">condition</span> <span class="o">=</span> <span class="n">d_ij</span><span class="p">[:,</span> <span class="n">nrs</span><span class="p">:]</span> <span class="o">&gt;</span> <span class="mi">180</span>
-        <span class="k">while</span> <span class="n">condition</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
-            <span class="n">d_ij</span><span class="p">[:,</span> <span class="n">nrs</span><span class="p">:][</span><span class="n">condition</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">360</span>
-            <span class="n">condition</span> <span class="o">=</span> <span class="n">d_ij</span><span class="p">[:,</span> <span class="n">nrs</span><span class="p">:]</span> <span class="o">&gt;</span> <span class="mi">180</span>
+        <span class="n">d_ij</span> <span class="o">=</span> <span class="n">delta_angles_continuous</span><span class="p">(</span><span class="n">d_ij</span><span class="p">,</span> <span class="n">nrs</span><span class="p">)</span>
         <span class="n">d_ij</span><span class="p">[:,</span> <span class="n">nrs</span><span class="p">:]</span> <span class="o">*=</span> <span class="mf">1e-3</span>  <span class="c1"># trans 1 degree</span>
         <span class="n">d_ij</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">d_ij</span><span class="p">)</span>
         <span class="n">close</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">d_ij</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
@@ -293,7 +299,7 @@
 
 <div class="viewcode-block" id="delta_angles_continuous">
 <a class="viewcode-back" href="../../../../modules/myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.delta_angles_continuous">[docs]</a>
-<span class="k">def</span> <span class="nf">delta_angles_continuous</span><span class="p">(</span><span class="n">d_ij</span><span class="p">,</span> <span class="n">nrs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">delta_angles_continuous</span><span class="p">(</span><span class="n">d_ij</span><span class="p">,</span> <span class="n">nrs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Make the difference of the angles continuous considering the periodicity of</span>
 <span class="sd">    them.</span>

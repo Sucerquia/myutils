@@ -4,8 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>myutils.miscellaneous &mdash; myutils 1.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=32ed3f93" />
 
   
   <!--[if lt IE 9]>
@@ -17,6 +21,18 @@
         <script src="../../_static/documentation_options.js?v=61243dd2"></script>
         <script src="../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+        <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+        <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+        <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -44,7 +60,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/myutils.html">myutils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
 </ul>
 
         </div>
@@ -72,14 +90,14 @@
            <div itemprop="articleBody">
              
   <h1>Source code for myutils.miscellaneous</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="kn">import</span> <span class="nn">inspect</span>
-<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">import_module</span>
 
 
 <div class="viewcode-block" id="output_terminal">
-<a class="viewcode-back" href="../../modules/modules/myutils.html#myutils.miscellaneous.output_terminal">[docs]</a>
-<span class="k">def</span> <span class="nf">output_terminal</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">print_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">skip_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">print_cmd</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.miscellaneous.output_terminal">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">output_terminal</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">print_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">skip_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">print_cmd</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                     <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Runs a command in a terminal and save the output in a list</span>
@@ -130,7 +148,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_time</span><span class="p">(</span><span class="n">keyword</span><span class="p">,</span> <span class="n">logfile</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_time</span><span class="p">(</span><span class="n">keyword</span><span class="p">,</span> <span class="n">logfile</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Used in myutils.miscellaneous.time_g09. It extracts the time from a</span>
 <span class="sd">    line of gaussian.</span>
@@ -162,8 +180,8 @@
 
 <span class="c1"># add2executable</span>
 <div class="viewcode-block" id="time_g09">
-<a class="viewcode-back" href="../../modules/modules/myutils.html#myutils.miscellaneous.time_g09">[docs]</a>
-<span class="k">def</span> <span class="nf">time_g09</span><span class="p">(</span><span class="n">logfile</span><span class="p">):</span>
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.miscellaneous.time_g09">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">time_g09</span><span class="p">(</span><span class="n">logfile</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function that extracts the time spend for one gaussian simulation from a</span>
 <span class="sd">    .log file.</span>
@@ -202,8 +220,8 @@
 
 <span class="c1"># add2executable</span>
 <div class="viewcode-block" id="optimized_e">
-<a class="viewcode-back" href="../../modules/modules/myutils.html#myutils.miscellaneous.optimized_e">[docs]</a>
-<span class="k">def</span> <span class="nf">optimized_e</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.miscellaneous.optimized_e">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">optimized_e</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This code finds the last energy in a log file of gaussian computed using</span>
 <span class="sd">    RBMK functional. The output is given in eV.</span>
@@ -225,8 +243,8 @@
 
 <span class="c1"># add2executable</span>
 <div class="viewcode-block" id="args_and_defaults">
-<a class="viewcode-back" href="../../modules/modules/myutils.html#myutils.miscellaneous.args_and_defaults">[docs]</a>
-<span class="k">def</span> <span class="nf">args_and_defaults</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.miscellaneous.args_and_defaults">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">args_and_defaults</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Takes a function and prints its parameters with their default values.</span>
 
@@ -264,8 +282,8 @@
 
 <span class="c1"># add2executable</span>
 <div class="viewcode-block" id="function_doc">
-<a class="viewcode-back" href="../../modules/modules/myutils.html#myutils.miscellaneous.function_doc">[docs]</a>
-<span class="k">def</span> <span class="nf">function_doc</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.miscellaneous.function_doc">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">function_doc</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Takes a function and prints its documentation.</span>
 

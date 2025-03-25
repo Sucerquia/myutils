@@ -4,8 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>myutils.ase_utils.molecules &mdash; myutils 1.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/thebelab.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=32ed3f93" />
 
   
   <!--[if lt IE 9]>
@@ -17,6 +21,18 @@
         <script src="../../../_static/documentation_options.js?v=61243dd2"></script>
         <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+        <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+        <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+        <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -44,7 +60,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/myutils.html">myutils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/tutorials.html">Tutorials</a></li>
 </ul>
 
         </div>
@@ -72,14 +90,14 @@
            <div itemprop="articleBody">
              
   <h1>Source code for myutils.ase_utils.molecules</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">ase.calculators.gaussian</span> <span class="kn">import</span> <span class="n">Gaussian</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">ase</span> <span class="kn">import</span> <span class="n">Atom</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ase.calculators.gaussian</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gaussian</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ase</span><span class="w"> </span><span class="kn">import</span> <span class="n">Atom</span>
 
 
 <div class="viewcode-block" id="MoleculeSetter">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter">[docs]</a>
-<span class="k">class</span> <span class="nc">MoleculeSetter</span><span class="p">:</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MoleculeSetter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Tool to edit or extract information from a molecule.</span>
 
@@ -88,12 +106,12 @@
 <span class="sd">    atoms: ase.Atoms</span>
 <span class="sd">        molecule to be analyzed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span> <span class="o">=</span> <span class="n">atoms</span>
 
 <div class="viewcode-block" id="MoleculeSetter.rot_x">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.rot_x">[docs]</a>
-    <span class="k">def</span> <span class="nf">rot_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.rot_x">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rot_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Rotation matrix around x axis.</span>
 
@@ -115,8 +133,8 @@
 
 
 <div class="viewcode-block" id="MoleculeSetter.rot_y">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.rot_y">[docs]</a>
-    <span class="k">def</span> <span class="nf">rot_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.rot_y">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rot_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retuns the rotation matrix around y axis.</span>
 
@@ -138,8 +156,8 @@
 
 
 <div class="viewcode-block" id="MoleculeSetter.rot_z">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.rot_z">[docs]</a>
-    <span class="k">def</span> <span class="nf">rot_z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.rot_z">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rot_z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retuns the rotation matrix around z axis.</span>
 
@@ -161,8 +179,8 @@
 
 
 <div class="viewcode-block" id="MoleculeSetter.align_axis">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.align_axis">[docs]</a>
-    <span class="k">def</span> <span class="nf">align_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.align_axis">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">align_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Apply the necessary rotations to set a vector aligned with positive x</span>
 <span class="sd">        axis.</span>
@@ -187,8 +205,8 @@
 
 
 <div class="viewcode-block" id="MoleculeSetter.align_plane">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.align_plane">[docs]</a>
-    <span class="k">def</span> <span class="nf">align_plane</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.align_plane">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">align_plane</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Rotation around x axis to set a vector in the xy plane.</span>
 
@@ -210,8 +228,8 @@
 
 
 <div class="viewcode-block" id="MoleculeSetter.apply_trans">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.apply_trans">[docs]</a>
-    <span class="k">def</span> <span class="nf">apply_trans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trans</span><span class="p">,</span> <span class="n">indexes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.apply_trans">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">apply_trans</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trans</span><span class="p">,</span> <span class="n">indexes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Apply a transformation to all vector positions of some atoms.</span>
 
@@ -248,8 +266,8 @@
 
 
 <div class="viewcode-block" id="MoleculeSetter.xy_alignment">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.xy_alignment">[docs]</a>
-    <span class="k">def</span> <span class="nf">xy_alignment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index1</span><span class="p">,</span> <span class="n">index2</span><span class="p">,</span> <span class="n">index3</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.xy_alignment">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">xy_alignment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index1</span><span class="p">,</span> <span class="n">index2</span><span class="p">,</span> <span class="n">index3</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Transform the positions of the atoms such that the atoms of indexes1</span>
 <span class="sd">        and index2 are aligned in the x axis. The atom with index3 would be in</span>
@@ -292,8 +310,8 @@
 
 
 <div class="viewcode-block" id="MoleculeSetter.increase_distance">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.increase_distance">[docs]</a>
-    <span class="k">def</span> <span class="nf">increase_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraints</span><span class="p">,</span> <span class="n">deltad</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.increase_distance">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">increase_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraints</span><span class="p">,</span> <span class="n">deltad</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        increase the distance between two atoms by moving them and keeping the</span>
 <span class="sd">        rest of the atoms in the same place.</span>
@@ -318,8 +336,8 @@
 
 
 <div class="viewcode-block" id="MoleculeSetter.increase_distance_with_constraints">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.increase_distance_with_constraints">[docs]</a>
-    <span class="k">def</span> <span class="nf">increase_distance_with_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraints</span><span class="p">,</span> <span class="n">deltad</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.increase_distance_with_constraints">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">increase_distance_with_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraints</span><span class="p">,</span> <span class="n">deltad</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Take a configuration and increase the distance between two atoms by</span>
 <span class="sd">        moving those atoms and all constraints containing them and keeping</span>
@@ -374,8 +392,8 @@
 
 
 <div class="viewcode-block" id="MoleculeSetter.scale_distance">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.scale_distance">[docs]</a>
-    <span class="k">def</span> <span class="nf">scale_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraints</span><span class="p">,</span> <span class="n">deltad</span><span class="p">,</span> <span class="n">index3</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.scale_distance">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">scale_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraints</span><span class="p">,</span> <span class="n">deltad</span><span class="p">,</span> <span class="n">index3</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Increase the distance between two atoms by aligning those atoms with</span>
 <span class="sd">        the x axis and scaling the x-coordinate of all intermedia atoms.</span>
@@ -412,8 +430,8 @@
 
 
 <div class="viewcode-block" id="MoleculeSetter.create_gaussian_input">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.create_gaussian_input">[docs]</a>
-    <span class="k">def</span> <span class="nf">create_gaussian_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">charge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">xc</span><span class="o">=</span><span class="s1">&#39;bmk&#39;</span><span class="p">,</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.create_gaussian_input">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_gaussian_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">charge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">xc</span><span class="o">=</span><span class="s1">&#39;bmk&#39;</span><span class="p">,</span>
                               <span class="n">basis</span><span class="o">=</span><span class="s1">&#39;6-31+g&#39;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates a g09 .com file without specifing the kind of calculus to run</span>
@@ -438,7 +456,8 @@
         <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_chemical_formula</span><span class="p">()</span>
 
-        <span class="n">calculator</span> <span class="o">=</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">out</span><span class="p">,</span>
+        <span class="n">calculator</span> <span class="o">=</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">mem</span><span class="o">=</span><span class="s1">&#39;60GB&#39;</span><span class="p">,</span>
+                              <span class="n">label</span><span class="o">=</span><span class="n">out</span><span class="p">,</span>
                               <span class="n">chk</span><span class="o">=</span><span class="n">out</span><span class="p">,</span>
                               <span class="n">xc</span><span class="o">=</span><span class="n">xc</span><span class="p">,</span>
                               <span class="n">basis</span><span class="o">=</span><span class="n">basis</span><span class="p">,</span>
@@ -453,8 +472,8 @@
 
 
 <div class="viewcode-block" id="Alignment">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment">[docs]</a>
-<span class="k">class</span> <span class="nc">Alignment</span><span class="p">:</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Alignment</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set of tools to apply the necessary transformations for aligning a the</span>
 <span class="sd">    three first eigenvectors of PCA with the x, y, z axis, in that order.</span>
@@ -464,14 +483,14 @@
 <span class="sd">    atoms: ase.Atoms</span>
 <span class="sd">        molecule to be aligned.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span> <span class="o">=</span> <span class="n">atoms</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ms</span> <span class="o">=</span> <span class="n">MoleculeSetter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Alignment.pca_vectors">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment.pca_vectors">[docs]</a>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment.pca_vectors">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">pca_vectors</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">indexes</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pca_vectors</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">indexes</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Find the eigen vectors in the Principal Component Analysis.</span>
 
@@ -488,7 +507,7 @@
 <span class="sd">        (array) principal components.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.decomposition</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCA</span>
         <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ModuleNotFoundError</span><span class="p">(</span><span class="s2">&quot;This code requires sklearn&quot;</span><span class="p">)</span>
 
@@ -502,9 +521,9 @@
 
 
 <div class="viewcode-block" id="Alignment.center_geo">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment.center_geo">[docs]</a>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment.center_geo">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">center_geo</span><span class="p">(</span><span class="n">atoms</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">center_geo</span><span class="p">(</span><span class="n">atoms</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Moves the coordinates origin to the geometrical center atoms.</span>
 
@@ -525,9 +544,9 @@
 
 
 <div class="viewcode-block" id="Alignment.align_with_components">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment.align_with_components">[docs]</a>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment.align_with_components">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">align_with_components</span><span class="p">(</span><span class="n">atoms</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">align_with_components</span><span class="p">(</span><span class="n">atoms</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Aligns the coordinates x, y, z axis with the main vectors (in that</span>
 <span class="sd">        order).</span>
@@ -561,8 +580,8 @@
 
 
 <div class="viewcode-block" id="PCAMatcher">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.PCAMatcher">[docs]</a>
-<span class="k">class</span> <span class="nc">PCAMatcher</span><span class="p">:</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.PCAMatcher">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PCAMatcher</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Tools to align two molecules with their PCA main vectors.</span>
 
@@ -573,15 +592,15 @@
 <span class="sd">    to_compare: ase.Atoms</span>
 <span class="sd">        molecule to be compared to the reference.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">to_compare</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">to_compare</span><span class="p">):</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_compare</span><span class="p">),</span> <span class="s2">&quot;The reference and the &quot;</span> <span class="o">+</span> \
             <span class="s2">&quot;structure to compare have to have the same number of atoms&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reference</span> <span class="o">=</span> <span class="n">reference</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">to_compare</span> <span class="o">=</span> <span class="n">to_compare</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
 <div class="viewcode-block" id="PCAMatcher.align_molecules">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.PCAMatcher.align_molecules">[docs]</a>
-    <span class="k">def</span> <span class="nf">align_molecules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.PCAMatcher.align_molecules">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">align_molecules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Align each molecule with their own main PCA vectors.</span>
 
@@ -597,8 +616,8 @@
 
 
 <div class="viewcode-block" id="PCAMatcher.matching">
-<a class="viewcode-back" href="../../../modules/modules/myutils.ase_utils.html#myutils.ase_utils.molecules.PCAMatcher.matching">[docs]</a>
-    <span class="k">def</span> <span class="nf">matching</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.ase_utils.html#myutils.ase_utils.molecules.PCAMatcher.matching">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">matching</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Finds the order of the indices of the molecule which fit with the atoms</span>
 <span class="sd">        of the reference. So, if the outcome of this function is &quot;out&quot;, then</span>

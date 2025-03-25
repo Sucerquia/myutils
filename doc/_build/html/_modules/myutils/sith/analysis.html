@@ -4,8 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>myutils.sith.analysis &mdash; myutils 1.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/thebelab.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=32ed3f93" />
 
   
   <!--[if lt IE 9]>
@@ -17,6 +21,18 @@
         <script src="../../../_static/documentation_options.js?v=61243dd2"></script>
         <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+        <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+        <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+        <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -44,7 +60,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/myutils.html">myutils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/tutorials.html">Tutorials</a></li>
 </ul>
 
         </div>
@@ -72,20 +90,20 @@
            <div itemprop="articleBody">
              
   <h1>Source code for myutils.sith.analysis</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">SITH.SITH</span> <span class="kn">import</span> <span class="n">SITH</span>
-<span class="kn">from</span> <span class="nn">myutils.peptides</span> <span class="kn">import</span> <span class="n">PepSetter</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">f_oneway</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">myutils.plotters</span> <span class="kn">import</span> <span class="n">StandardPlotter</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">SITH.SITH</span><span class="w"> </span><span class="kn">import</span> <span class="n">SITH</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">myutils.peptides</span><span class="w"> </span><span class="kn">import</span> <span class="n">PepSetter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">f_oneway</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">myutils.plotters</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardPlotter</span>
 
 
 <span class="c1"># region AnalyseData</span>
 <div class="viewcode-block" id="closest_indices">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.closest_indices">[docs]</a>
-<span class="k">def</span> <span class="nf">closest_indices</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.closest_indices">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">closest_indices</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find the indexes of the points after and before certain value</span>
 
@@ -110,8 +128,8 @@
 
 
 <div class="viewcode-block" id="cross_val">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.cross_val">[docs]</a>
-<span class="k">def</span> <span class="nf">cross_val</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.cross_val">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cross_val</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Finds the crossing of a linearly interpolated curve with certain value in</span>
 <span class="sd">    the y data (horizontal line).</span>
@@ -145,8 +163,8 @@
 
 
 <div class="viewcode-block" id="pep_per_x">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.pep_per_x">[docs]</a>
-<span class="k">def</span> <span class="nf">pep_per_x</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">dsa</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.pep_per_x">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">pep_per_x</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">dsa</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Separate the value of x in which y crosses a certain value, identifying it</span>
 <span class="sd">    with an specific peptide.</span>
@@ -182,8 +200,8 @@
 
 
 <div class="viewcode-block" id="reduce_data">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.reduce_data">[docs]</a>
-<span class="k">def</span> <span class="nf">reduce_data</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">defmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span> <span class="n">defmax</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.reduce_data">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">reduce_data</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">defmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span> <span class="n">defmax</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reduces the data to the range of maximum minimum xs (highest of the lowest)</span>
 <span class="sd">    and minumim maximum xs (lowest of the highest). Returns a new list of xs</span>
@@ -239,8 +257,8 @@
 
 
 <div class="viewcode-block" id="construct_neigh_dic">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.construct_neigh_dic">[docs]</a>
-<span class="k">def</span> <span class="nf">construct_neigh_dic</span><span class="p">(</span><span class="n">dsa</span><span class="p">,</span> <span class="n">es</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.construct_neigh_dic">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">construct_neigh_dic</span><span class="p">(</span><span class="n">dsa</span><span class="p">,</span> <span class="n">es</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a dictionary with all the combination of two amino acids and stores</span>
 <span class="sd">    in each combitation, a list of energies of the peptides with the first</span>
@@ -280,8 +298,8 @@
 
 
 <div class="viewcode-block" id="separate_by_position">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.separate_by_position">[docs]</a>
-<span class="k">def</span> <span class="nf">separate_by_position</span><span class="p">(</span><span class="n">dsa</span><span class="p">,</span> <span class="n">es</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.separate_by_position">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">separate_by_position</span><span class="p">(</span><span class="n">dsa</span><span class="p">,</span> <span class="n">es</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Stores the last values of &quot;es&quot; that correspond to an amino acid in a</span>
 <span class="sd">    specific position.</span>
@@ -314,8 +332,8 @@
 
 
 <div class="viewcode-block" id="mean_n_std">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.mean_n_std">[docs]</a>
-<span class="k">def</span> <span class="nf">mean_n_std</span><span class="p">(</span><span class="n">distri</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.mean_n_std">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">mean_n_std</span><span class="p">(</span><span class="n">distri</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extract the mean and standard deviation of a set of values associated to an</span>
 <span class="sd">    amino acid in distri.</span>
@@ -346,8 +364,8 @@
 
 
 <div class="viewcode-block" id="analysis_energy_dof">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.analysis_energy_dof">[docs]</a>
-<span class="k">def</span> <span class="nf">analysis_energy_dof</span><span class="p">(</span><span class="n">dsa</span><span class="p">,</span> <span class="n">es</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.analysis_energy_dof">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">analysis_energy_dof</span><span class="p">(</span><span class="n">dsa</span><span class="p">,</span> <span class="n">es</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a list of distributions per each one of the positions.</span>
 
@@ -383,8 +401,8 @@
 
 
 <div class="viewcode-block" id="statistics">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.statistics">[docs]</a>
-<span class="k">def</span> <span class="nf">statistics</span><span class="p">(</span><span class="n">ener_per_pos</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">aminos</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.statistics">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">statistics</span><span class="p">(</span><span class="n">ener_per_pos</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">aminos</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the p-value and F-statistic between distributions of the amino</span>
 <span class="sd">    acids in the dataset for a given position.</span>
@@ -425,8 +443,8 @@
 
 
 <div class="viewcode-block" id="dof_classificator_all">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.dof_classificator_all">[docs]</a>
-<span class="k">def</span> <span class="nf">dof_classificator_all</span><span class="p">(</span><span class="n">dofs_indexes</span><span class="p">,</span> <span class="n">atoms_per_aminoacids</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.dof_classificator_all">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">dof_classificator_all</span><span class="p">(</span><span class="n">dofs_indexes</span><span class="p">,</span> <span class="n">atoms_per_aminoacids</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Separates all degrees of freedom defined by atoms (all) of a residue.</span>
 
@@ -462,8 +480,8 @@
 
 
 <div class="viewcode-block" id="dof_classificator_one">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.dof_classificator_one">[docs]</a>
-<span class="k">def</span> <span class="nf">dof_classificator_one</span><span class="p">(</span><span class="n">dofs_indexes</span><span class="p">,</span> <span class="n">atoms_per_aminoacids</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.dof_classificator_one">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">dof_classificator_one</span><span class="p">(</span><span class="n">dofs_indexes</span><span class="p">,</span> <span class="n">atoms_per_aminoacids</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Separates all degrees of freedom defined by atoms (at least one) of a</span>
 <span class="sd">    residue.</span>
@@ -502,8 +520,8 @@
 
 <span class="c1"># Deprecated</span>
 <div class="viewcode-block" id="length_energy">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.length_energy">[docs]</a>
-<span class="k">def</span> <span class="nf">length_energy</span><span class="p">(</span><span class="n">sith</span><span class="p">,</span> <span class="n">aminos_info</span><span class="p">,</span> <span class="n">atom_types</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.length_energy">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">length_energy</span><span class="p">(</span><span class="n">sith</span><span class="p">,</span> <span class="n">aminos_info</span><span class="p">,</span> <span class="n">atom_types</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return distances between two atom types in one amino acid and the</span>
 <span class="sd">    energy associated with this DOF as the molecule is stretched.</span>
@@ -549,8 +567,8 @@
 
 <span class="c1"># Deprecated</span>
 <div class="viewcode-block" id="le_same_aminoacids">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.le_same_aminoacids">[docs]</a>
-<span class="k">def</span> <span class="nf">le_same_aminoacids</span><span class="p">(</span><span class="n">sith</span><span class="p">,</span> <span class="n">peptides_info</span><span class="p">,</span> <span class="n">atom_types</span><span class="p">,</span> <span class="n">kind_amino</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.le_same_aminoacids">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">le_same_aminoacids</span><span class="p">(</span><span class="n">sith</span><span class="p">,</span> <span class="n">peptides_info</span><span class="p">,</span> <span class="n">atom_types</span><span class="p">,</span> <span class="n">kind_amino</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return distances between two atom types in the same type of amino acid and</span>
 <span class="sd">    the energy associated with these DOF as the molecule is stretched.</span>
@@ -593,8 +611,8 @@
 
 
 <div class="viewcode-block" id="SithAnalysis">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.SithAnalysis">[docs]</a>
-<span class="k">class</span> <span class="nc">SithAnalysis</span><span class="p">:</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.SithAnalysis">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SithAnalysis</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set of tools to anayze the data extracted from SITH.</span>
 
@@ -606,13 +624,13 @@
 <span class="sd">        Information of the peptide. Like amino acids, atoms, and so. It is an</span>
 <span class="sd">        attribute of myutils.peptides.PepSetter.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sith</span><span class="p">,</span> <span class="n">pepinfo</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sith</span><span class="p">,</span> <span class="n">pepinfo</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sith</span> <span class="o">=</span> <span class="n">sith</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pep_info</span> <span class="o">=</span> <span class="n">pepinfo</span>
 
 <div class="viewcode-block" id="SithAnalysis.le_dof_amino">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.SithAnalysis.le_dof_amino">[docs]</a>
-    <span class="k">def</span> <span class="nf">le_dof_amino</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a_names</span><span class="p">,</span> <span class="n">aminos</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.SithAnalysis.le_dof_amino">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">le_dof_amino</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a_names</span><span class="p">,</span> <span class="n">aminos</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Value and the change of the energy of a DOF.</span>
 
@@ -653,8 +671,8 @@
 
 
 <div class="viewcode-block" id="SithAnalysis.index_dof">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.SithAnalysis.index_dof">[docs]</a>
-    <span class="k">def</span> <span class="nf">index_dof</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.SithAnalysis.index_dof">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">index_dof</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Search the index of a specific dof.</span>
 
@@ -683,8 +701,8 @@
 
 
 <div class="viewcode-block" id="set_hes_from_ref">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.set_hes_from_ref">[docs]</a>
-<span class="k">def</span> <span class="nf">set_hes_from_ref</span><span class="p">(</span><span class="n">geo_ref</span><span class="p">,</span> <span class="n">sith_tar</span><span class="p">,</span> <span class="n">structure</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.set_hes_from_ref">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_hes_from_ref</span><span class="p">(</span><span class="n">geo_ref</span><span class="p">,</span> <span class="n">sith_tar</span><span class="p">,</span> <span class="n">structure</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set the hessian in in a target sith taken from a geometry of reference.</span>
 
@@ -734,8 +752,8 @@
 
 
 <div class="viewcode-block" id="DataSetAnalysis">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis">[docs]</a>
-<span class="k">class</span> <span class="nc">DataSetAnalysis</span><span class="p">:</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataSetAnalysis</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates the objects of to do the analysis of a bunch of peptides in a</span>
 <span class="sd">    data set.</span>
@@ -776,7 +794,7 @@
 <span class="sd">    **kwargs for initializing sith</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inner_steps</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;./&#39;</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inner_steps</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;./&#39;</span><span class="p">,</span>
                  <span class="n">subdir</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
                  <span class="n">exclude_prolines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -788,6 +806,7 @@
         <span class="k">assert</span> <span class="n">path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(),</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_dir</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span>
 
         <span class="n">peptides</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*/&#39;</span><span class="p">))</span>
+        <span class="n">peptides</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">peptides</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;There are not directories in </span><span class="si">{</span><span class="n">data_dir</span><span class="si">}</span><span class="s2">&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pep_infos</span> <span class="o">=</span> <span class="p">[]</span>
@@ -867,8 +886,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
 
 <div class="viewcode-block" id="DataSetAnalysis.test">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.test">[docs]</a>
-    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.test">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        check that the first sith has the basic variables. It assumes that</span>
 <span class="sd">        the rest also has it</span>
@@ -885,7 +904,7 @@
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outcomes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">structures</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_populate_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_populate_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method creates the attributes used fot the analysis extracting the</span>
 <span class="sd">        values from the sith_objects.</span>
@@ -906,8 +925,8 @@
         <span class="k">return</span> <span class="bp">self</span>
 
 <div class="viewcode-block" id="DataSetAnalysis.dof_vs_energy">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.dof_vs_energy">[docs]</a>
-    <span class="k">def</span> <span class="nf">dof_vs_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aa_names</span><span class="p">,</span> <span class="n">naas</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.dof_vs_energy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dof_vs_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aa_names</span><span class="p">,</span> <span class="n">naas</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Extract the values of the dofs and the associated dofs energies</span>
 <span class="sd">        for a set all the molecules of data set. Check</span>
@@ -945,8 +964,8 @@
 
 
 <div class="viewcode-block" id="DataSetAnalysis.dof_vs_energy_rescaled">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.dof_vs_energy_rescaled">[docs]</a>
-    <span class="k">def</span> <span class="nf">dof_vs_energy_rescaled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aa_names</span><span class="p">,</span> <span class="n">naas</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.dof_vs_energy_rescaled">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dof_vs_energy_rescaled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aa_names</span><span class="p">,</span> <span class="n">naas</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Extract the values of the delta dofs in respect to the optimized</span>
 <span class="sd">        configuration and the associated dofs energies for a set all the</span>
@@ -979,8 +998,8 @@
 
 
 <div class="viewcode-block" id="DataSetAnalysis.plot_DFT_ener">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.plot_DFT_ener">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_DFT_ener</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">sp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.plot_DFT_ener">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_DFT_ener</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">sp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plots the DFT energy of the extension process</span>
@@ -1035,8 +1054,8 @@
 
 
 <div class="viewcode-block" id="DataSetAnalysis.amino_freq">
-<a class="viewcode-back" href="../../../modules/modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.amino_freq">[docs]</a>
-    <span class="k">def</span> <span class="nf">amino_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a class="viewcode-back" href="../../../modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.amino_freq">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">amino_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Extract the name of the peptides in one-letter-convention for</span>
 <span class="sd">        the amino acids.</span>
