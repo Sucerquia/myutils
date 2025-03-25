@@ -25,6 +25,12 @@ extensions = ["sphinx.ext.autosummary",
               "sphinx.ext.viewcode",
               'sphinx.ext.napoleon',
               'sphinx.ext.intersphinx',
+              'nbsphinx',
+              'sphinx.ext.mathjax',
+              'jupyter_sphinx',
+              'IPython.sphinxext.ipython_console_highlighting',
+              'matplotlib.sphinxext.plot_directive',
+              'sphinx.ext.githubpages',
               "sphinxcontrib.mermaid"]
 
 templates_path = ['_templates']
