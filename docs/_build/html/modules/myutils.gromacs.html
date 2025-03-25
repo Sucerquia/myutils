@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myutils.gromacs package &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=32ed3f93" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=61243dd2"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="constraint_run" href="bash_rsts_doc/constraint_run.html" />
+    <link rel="prev" title="Script of myutils generate_main" href="bash_rsts_scripts/generate_main.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="myutils.html">myutils package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="myutils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.second_version.html">myutils.sith.from_extreme.second_version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.second_version.html#continuous-path">continuous_path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.second_version.html#workflow-from-extreme2">workflow_from_extreme2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html">myutils.g_values.basic_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html#gval-workflow">gval_workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html#submit">submit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html#clean-directories">clean_directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html#create-g09-bdes">create_g09_BDEs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.analysis.html">myutils.g_values.analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.analysis.html#gval-postpro">gval_postpro</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.analysis.html#extract-eprspec">extract_EPRspec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.bash_scripts.html">myutils.bash_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.bash_scripts.html#single-g09">single_g09</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.bash_scripts.html#bash-template">bash-template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.bash_scripts.html#find-blocks">find_blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html">myutils.cli.pkg_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#files-tree">files_tree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#add-python-doc">add_python_doc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#bash-style">bash_style</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#doc-modules">doc_modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#check-structure">check_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#python-doc-fixer">python_doc_fixer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#doc-pythonfile">doc_pythonfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#bash-basic-structure">bash_basic_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html">myutils.ase_utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.html">myutils.cli package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">myutils.gromacs package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-myutils.gromacs">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html">myutils.sith package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.html#module-myutils.jupyter">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.html#module-myutils">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="myutils.html">myutils package</a></li>
+      <li class="breadcrumb-item active">myutils.gromacs package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/myutils.gromacs.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="myutils-gromacs-package">
+<h1>myutils.gromacs package<a class="headerlink" href="#myutils-gromacs-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-myutils.gromacs">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-myutils.gromacs" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+</div>
+<section id="extract-distance">
+<h3>extract_distance<a class="headerlink" href="#extract-distance" title="Link to this heading"></a></h3>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/extract_distance.html#extract-distance"><span class="std std-ref">[script]</span></a> <strong>myutils/gromacs/extract_distance.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Extract distance between two atoms from gromacs trajectory.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-r  &lt;res1,res2&gt;, residues indexes of the atoms to compute the distance.</div>
+<div class="line">-a  &lt;a1, a2&gt;, names of the atoms to compute the distance.</div>
+<div class="line">-t  &lt;traj file&gt; path to the trajectory file to extract the distance.</div>
+<div class="line">-o  &lt;output&gt; name of the output without extension (.dat)</div>
+<div class="line">-g  &lt;gro_file&gt; gro file used to create the trajectory.</div>
+<div class="line"><br /></div>
+<div class="line">-v  verbose.</div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+</section>
+<section id="classical-energies">
+<h3>classical_energies<a class="headerlink" href="#classical-energies" title="Link to this heading"></a></h3>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/classical_energies.html#classical-energies"><span class="std std-ref">[script]</span></a> <strong>myutils/gromacs/classical_energies.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Tool that computes the classical energy from a set of pdb files in the</div>
+<div class="line">executing directory.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-l  log file of the gromacs outputs. Default /dev/null</div>
+<div class="line">-n  use this flag to NOT transform all xyz files into pdbs. In this case is</div>
+<div class="line-block">
+<div class="line">assumed that the pdbs already exist.</div>
+<div class="line"><br /></div>
+</div>
+<div class="line">-v  verbose.</div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+</section>
+<section id="analysis">
+<h3>analysis<a class="headerlink" href="#analysis" title="Link to this heading"></a></h3>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/analysis.html#analysis"><span class="std std-ref">[script]</span></a> <strong>myutils/gromacs/analysis.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">This tool helps you to extract information from a gromacs trajectory. You have</div>
+<div class="line">to give the name of the file, the gromacs binary and the flag of the function</div>
+<div class="line">you want to compute considering the next options:</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-a  computes all the properties available in this tool and merges them.</div>
+<div class="line">-c  extract the last configuration of the trajectory.</div>
+<div class="line">-d  computes distance between the atoms specified ‘distance’ in the index</div>
+<div class="line-block">
+<div class="line">file.</div>
+</div>
+<div class="line">-e  computes potential energy.</div>
+<div class="line">-f  name of the file without extension. edr, trr and gro file have to have</div>
+<div class="line-block">
+<div class="line">the same name.</div>
+</div>
+<div class="line">-g  gromacs binary. usualy gmx.</div>
+<div class="line">-k  keeps the copies of the files with the same name. Default: false.</div>
+<div class="line">-L  extracts the largest configuration.</div>
+<div class="line">-l  log file of the gromacs outputs.</div>
+<div class="line">-m  merges all data in one file.</div>
+<div class="line">-r  computes ramachandran angles.</div>
+<div class="line">-s  computes the energy of the subsystem in the trajectory, in this case,</div>
+<div class="line-block">
+<div class="line">the protein.</div>
+<div class="line"><br /></div>
+</div>
+<div class="line">-v  verbose.</div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+</section>
+<section id="classical-minimization">
+<h3>classical_minimization<a class="headerlink" href="#classical-minimization" title="Link to this heading"></a></h3>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/classical_minimization.html#classical-minimization"><span class="std std-ref">[script]</span></a> <strong>myutils/gromacs/classical_minimization.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">This tool optimizes a configuration from an initial pdb file, which must be the</div>
+<div class="line">first argument.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-f  pdb file with the configuration to be minimized.</div>
+<div class="line">-o  name of the output file with the optimized structure. Default same</div>
+<div class="line-block">
+<div class="line">input (replaces the pdb of the input).</div>
+</div>
+<div class="line">-l  log file of the gromacs outputs. Default /dev/null</div>
+<div class="line"><br /></div>
+<div class="line">-v  verbose.</div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+</section>
+<section id="pulling">
+<h3>pulling<a class="headerlink" href="#pulling" title="Link to this heading"></a></h3>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/pulling.html#pulling"><span class="std std-ref">[script]</span></a> <strong>myutils/gromacs/pulling.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">This code executes the pulling adding an external force along the x axis to the</div>
+<div class="line">carbon atoms of the NME and ACE caps. Consider the next options:</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-f  forces to stretch the peptide in [kJ mol^-1 nm^-1].</div>
+<div class="line">-g  gromacs binary. For example gmx or gmx_mpi. Default gmx.</div>
+<div class="line">-l  log file of the gromacs outputs. Set it as /dev/tty to print the gromacs</div>
+<div class="line-block">
+<div class="line">output on the terminal. Default /dev/null</div>
+</div>
+<div class="line">-s  steps in the MD pulling. Default: 10000</div>
+<div class="line"><br /></div>
+<div class="line">-v  verbose.</div>
+<div class="line">-h  prints this message.</div>
+<div class="line"><br /></div>
+</div>
+<div class="line">Note that the file equilibration must exist.</div>
+</div>
+</div>
+</section>
+<section id="equilibrate-pdb">
+<h3>equilibrate_pdb<a class="headerlink" href="#equilibrate-pdb" title="Link to this heading"></a></h3>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/equilibrate_pdb.html#equilibrate-pdb"><span class="std std-ref">[script]</span></a> <strong>myutils/gromacs/equilibrate_pdb.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Use this template to create your scripts with a standard structure</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-f  &lt;file&gt; pdb file of the molecule to be pulled.</div>
+<div class="line">-G  &lt;name of the environment&gt;Use it to use grappa in your simulations.</div>
+<div class="line"><br /></div>
+<div class="line">-v  verbose.</div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+</section>
+<section id="pulling-with-ff">
+<h3>pulling_with_ff<a class="headerlink" href="#pulling-with-ff" title="Link to this heading"></a></h3>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/pulling_with_ff.html#pulling-with-ff"><span class="std std-ref">[script]</span></a> <strong>myutils/gromacs/pulling_with_ff.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">This code submits an equilibration and run a pulling simulation using</div>
+<div class="line">grappa and amber99.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-f  &lt;pdb_file&gt; pdb file of the molecule that you want to pull.</div>
+<div class="line">-c  run in a cluster.</div>
+<div class="line"><br /></div>
+<div class="line">-v  verbose.</div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+</section>
+<section id="peptide-pulling">
+<h3>peptide_pulling<a class="headerlink" href="#peptide-pulling" title="Link to this heading"></a></h3>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/peptide_pulling.html#peptide-pulling"><span class="std std-ref">[script]</span></a> <strong>myutils/gromacs/peptide_pulling.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">This tool creates the trajectory of a given peptide pulled by an external force.</div>
+<div class="line">Consider the next options:</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-a  properties you want to analyse. For example “-d -r”. Default “-d -L”.</div>
+<div class="line-block">
+<div class="line">For more information, check: myutils analysis -h</div>
+</div>
+<div class="line">-f  forces to stretch the peptide in [kJ mol^-1 nm^-1]. eg 100,200.</div>
+<div class="line-block">
+<div class="line">Default 200</div>
+</div>
+<div class="line">-g  gromacs binary. For example gmx or gmx_mpi. Default gmx.</div>
+<div class="line">-o  pepgen flags</div>
+<div class="line">-p  peptide.</div>
+<div class="line"><br /></div>
+<div class="line">-v  verbose.</div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+</section>
+<section id="constraint-run">
+<h3>constraint_run<a class="headerlink" href="#constraint-run" title="Link to this heading"></a></h3>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/constraint_run.html#constraint-run"><span class="std std-ref">[script]</span></a> <strong>myutils/gromacs/constraint_run.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Use this template to create your scripts with a standard structure</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-d  &lt;variable&gt; add the description of the variable.</div>
+<div class="line">-c  usually used when submitted in a cluster to import modules.</div>
+<div class="line"><br /></div>
+<div class="line">-v  verbose.</div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="bash_rsts_scripts/generate_main.html" class="btn btn-neutral float-left" title="Script of myutils generate_main" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="bash_rsts_doc/constraint_run.html" class="btn btn-neutral float-right" title="constraint_run" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Script of myutils extract_distance &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=32ed3f93" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=61243dd2"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="myutils.sith package" href="../myutils.sith.html" />
+    <link rel="prev" title="extract_distance" href="../bash_rsts_doc/extract_distance.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../myutils.html">myutils package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../myutils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../myutils.sith.from_extreme.second_version.html">myutils.sith.from_extreme.second_version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.sith.from_extreme.second_version.html#continuous-path">continuous_path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.sith.from_extreme.second_version.html#workflow-from-extreme2">workflow_from_extreme2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.basic_scripts.html">myutils.g_values.basic_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.basic_scripts.html#gval-workflow">gval_workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.basic_scripts.html#submit">submit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.basic_scripts.html#clean-directories">clean_directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.basic_scripts.html#create-g09-bdes">create_g09_BDEs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.analysis.html">myutils.g_values.analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.analysis.html#gval-postpro">gval_postpro</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.g_values.analysis.html#extract-eprspec">extract_EPRspec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.bash_scripts.html">myutils.bash_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.bash_scripts.html#single-g09">single_g09</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.bash_scripts.html#bash-template">bash-template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.bash_scripts.html#find-blocks">find_blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html">myutils.cli.pkg_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#files-tree">files_tree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#add-python-doc">add_python_doc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#bash-style">bash_style</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#doc-modules">doc_modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#check-structure">check_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#python-doc-fixer">python_doc_fixer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#doc-pythonfile">doc_pythonfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.pkg_structure.html#bash-basic-structure">bash_basic_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.ase_utils.html">myutils.ase_utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.cli.html">myutils.cli package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../myutils.gromacs.html">myutils.gromacs package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../myutils.gromacs.html#submodules">Submodules</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../myutils.gromacs.html#module-myutils.gromacs">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../myutils.sith.html">myutils.sith package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../myutils.html#module-myutils.jupyter">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../myutils.html#module-myutils">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../myutils.html">myutils package</a></li>
+          <li class="breadcrumb-item"><a href="../myutils.gromacs.html">myutils.gromacs package</a></li>
+      <li class="breadcrumb-item active">Script of myutils extract_distance</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/modules/bash_rsts_scripts/extract_distance.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="script-of-myutils-extract-distance">
+<span id="extract-distance"></span><h1>Script of myutils extract_distance<a class="headerlink" href="#script-of-myutils-extract-distance" title="Link to this heading"></a></h1>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="c1">#SBATCH -N 1                   # number of nodes</span>
+<span class="c1">#SBATCH -n 9</span>
+<span class="c1">#SBATCH --cpus-per-task=1</span>
+<span class="c1">#SBATCH -t 24:00:00</span>
+<span class="c1">#SBATCH --output=%x-%j.o</span>
+<span class="c1">#SBATCH --error=%x-%j.e</span>
+<span class="c1">#SBATCH --exclusive</span>
+
+
+<span class="c1"># ----- definition of functions -----------------------------------------------</span>
+print_help<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span>
+<span class="s2">Extract distance between two atoms from gromacs trajectory.</span>
+
+<span class="s2">  -r  &lt;res1,res2&gt;, residues indexes of the atoms to compute the distance.</span>
+<span class="s2">  -a  &lt;a1, a2&gt;, names of the atoms to compute the distance.</span>
+<span class="s2">  -t  &lt;traj file&gt; path to the trajectory file to extract the distance.</span>
+<span class="s2">  -o  &lt;output&gt; name of the output without extension (.dat)</span>
+<span class="s2">  -g  &lt;gro_file&gt; gro file used to create the trajectory.</span>
+
+<span class="s2">  -v  verbose.</span>
+<span class="s2">  -h  prints this message.</span>
+<span class="s2">&quot;</span>
+<span class="nb">exit</span><span class="w"> </span><span class="m">0</span>
+<span class="o">}</span>
+
+<span class="c1"># ----- set up starts ---------------------------------------------------------</span>
+<span class="c1"># General variables</span>
+<span class="nv">r1</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+<span class="nv">r2</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+<span class="nv">a1</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+<span class="nv">cascade</span><span class="o">=</span><span class="s1">&#39;false&#39;</span>
+<span class="nv">verbose</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+<span class="nv">stream</span><span class="o">=</span><span class="s1">&#39;/dev/null&#39;</span>
+<span class="k">while</span><span class="w"> </span><span class="nb">getopts</span><span class="w"> </span><span class="s1">&#39;r:a:t:o:g:cs:vh&#39;</span><span class="w"> </span>flag<span class="p">;</span>
+<span class="k">do</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">flag</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">in</span>
+<span class="w">    </span>r<span class="o">)</span><span class="w"> </span><span class="nv">res</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>a<span class="o">)</span><span class="w"> </span><span class="nv">atoms</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>t<span class="o">)</span><span class="w"> </span><span class="nv">traj</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>o<span class="o">)</span><span class="w"> </span><span class="nv">out</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>g<span class="o">)</span><span class="w"> </span><span class="nv">gro</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>c<span class="o">)</span><span class="w"> </span><span class="nv">cascade</span><span class="o">=</span><span class="s1">&#39;true&#39;</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>s<span class="o">)</span><span class="w"> </span><span class="nv">stream</span><span class="o">=</span><span class="si">${</span><span class="nv">OPTARG</span><span class="si">}</span><span class="w"> </span><span class="p">;;</span>
+
+<span class="w">    </span>v<span class="o">)</span><span class="w"> </span><span class="nv">verbose</span><span class="o">=</span><span class="s1">&#39;-v&#39;</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>h<span class="o">)</span><span class="w"> </span>print_help<span class="w"> </span><span class="p">;;</span>
+<span class="w">    </span>*<span class="o">)</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;for usage check: myutils &lt;function&gt; -h&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">  </span><span class="k">esac</span>
+<span class="k">done</span>
+
+<span class="nb">source</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>myutils<span class="w"> </span>basics<span class="w"> </span>-path<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>ExtDistance<span class="w"> </span><span class="nv">$verbose</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$verbose</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;-v&#39;</span><span class="w"> </span><span class="o">]</span>
+<span class="k">then</span>
+<span class="w">  </span><span class="nv">stream</span><span class="o">=</span><span class="s1">&#39;/dev/tty&#39;</span>
+<span class="k">fi</span>
+
+<span class="c1"># starting information</span>
+verbose<span class="w"> </span><span class="s2">&quot; Command: &quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$0</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
+
+<span class="c1"># load modules</span>
+<span class="k">if</span><span class="w"> </span><span class="nv">$cascade</span>
+<span class="k">then</span>
+<span class="w">  </span><span class="c1"># Add flags to restart if necessary (and if you added a restart function before)</span>
+<span class="w">  </span>load_modules<span class="w"> </span>
+<span class="k">fi</span>
+
+<span class="nv">r1</span><span class="o">=</span><span class="k">$(</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$res</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;,&#39;</span><span class="w"> </span>-f<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="k">)</span>
+<span class="nv">r2</span><span class="o">=</span><span class="k">$(</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$res</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;,&#39;</span><span class="w"> </span>-f<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="k">)</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$r1</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="o">]</span>
+<span class="k">then</span>
+<span class="w">  </span>fail<span class="w"> </span><span class="s2">&quot;define residues using the flag -r res1_index,res2_index. E.g. -r 1,2&quot;</span>
+<span class="k">fi</span>
+
+<span class="nv">a1</span><span class="o">=</span><span class="k">$(</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$atoms</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;,&#39;</span><span class="w"> </span>-f<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="k">)</span>
+<span class="nv">a2</span><span class="o">=</span><span class="k">$(</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$atoms</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;,&#39;</span><span class="w"> </span>-f<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="k">)</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$a1</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="o">]</span>
+<span class="k">then</span>
+<span class="w">  </span>fail<span class="w"> </span><span class="s2">&quot;define atoms using the flag -a atom1_name,atom2_name. E.g. -a Ca,C&quot;</span>
+<span class="k">fi</span>
+
+<span class="c1"># ---- BODY -------------------------------------------------------------------</span>
+verbose<span class="w"> </span><span class="s2">&quot;Create index file (</span><span class="si">${</span><span class="nv">a1</span><span class="si">}${</span><span class="nv">r1</span><span class="si">}</span><span class="s2">_</span><span class="si">${</span><span class="nv">a2</span><span class="si">}${</span><span class="nv">r2</span><span class="si">}</span><span class="s2">.ndx)&quot;</span>
+
+<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;ri </span><span class="nv">$r1</span><span class="s2"> &amp; a </span><span class="nv">$a1</span><span class="s2"> \n ri </span><span class="nv">$r2</span><span class="s2"> &amp; a </span><span class="nv">$a2</span><span class="s2"> \n \&quot;r_</span><span class="si">${</span><span class="nv">r1</span><span class="si">}</span><span class="s2">_&amp;_</span><span class="si">${</span><span class="nv">a1</span><span class="si">}</span><span class="s2">\&quot; | \&quot;r_</span><span class="si">${</span><span class="nv">r2</span><span class="si">}</span><span class="s2">_&amp;_</span><span class="si">${</span><span class="nv">a2</span><span class="si">}</span><span class="s2">\&quot; \n q \n&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>gmx<span class="w"> </span>make_ndx<span class="w"> </span>-f<span class="w"> </span><span class="nv">$gro</span><span class="w"> </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">a1</span><span class="si">}${</span><span class="nv">r1</span><span class="si">}</span>_<span class="si">${</span><span class="nv">a2</span><span class="si">}${</span><span class="nv">r2</span><span class="si">}</span>.ndx<span class="w"> </span>&gt;<span class="w"> </span><span class="nv">$stream</span><span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>fail<span class="w"> </span><span class="s2">&quot;make index&quot;</span>
+
+<span class="nv">name</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">r1</span><span class="si">}${</span><span class="nv">a1</span><span class="si">}</span><span class="s2">_</span><span class="si">${</span><span class="nv">r2</span><span class="si">}${</span><span class="nv">a2</span><span class="si">}</span><span class="s2">&quot;</span>
+sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/r_</span><span class="si">${</span><span class="nv">r1</span><span class="si">}</span><span class="s2">_&amp;_</span><span class="si">${</span><span class="nv">a1</span><span class="si">}</span><span class="s2">_r_</span><span class="si">${</span><span class="nv">r2</span><span class="si">}</span><span class="s2">_&amp;_</span><span class="si">${</span><span class="nv">a2</span><span class="si">}</span><span class="s2">/</span><span class="nv">$name</span><span class="s2">/g&quot;</span><span class="w"> </span><span class="si">${</span><span class="nv">a1</span><span class="si">}${</span><span class="nv">r1</span><span class="si">}</span>_<span class="si">${</span><span class="nv">a2</span><span class="si">}${</span><span class="nv">r2</span><span class="si">}</span>.ndx<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>fail<span class="w"> </span><span class="s2">&quot;renaming group in index file&quot;</span>
+
+verbose<span class="w"> </span><span class="s2">&quot;compute distance&quot;</span>
+
+<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;\&quot;</span><span class="nv">$name</span><span class="s2">\&quot;\n&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>gmx<span class="w"> </span>distance<span class="w"> </span>-f<span class="w"> </span><span class="nv">$traj</span><span class="w"> </span>-s<span class="w"> </span><span class="nv">$gro</span><span class="w"> </span>-n<span class="w"> </span><span class="si">${</span><span class="nv">a1</span><span class="si">}${</span><span class="nv">r1</span><span class="si">}</span>_<span class="si">${</span><span class="nv">a2</span><span class="si">}${</span><span class="nv">r2</span><span class="si">}</span>.ndx<span class="w"> </span>-oall<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$out</span><span class="s2">.xvg&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">$stream</span><span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>fail<span class="w"> </span><span class="s2">&quot;computation of distance&quot;</span>
+grep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;^#&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$out</span><span class="s2">.xvg&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>tmp.dat
+grep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;^@&quot;</span><span class="w"> </span>tmp.dat<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$out</span><span class="s2">.dat&quot;</span>
+sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;1i # time[ns] distance[nm]&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$out</span><span class="s2">.dat&quot;</span>
+
+finish
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../bash_rsts_doc/extract_distance.html" class="btn btn-neutral float-left" title="extract_distance" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../myutils.sith.html" class="btn btn-neutral float-right" title="myutils.sith package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

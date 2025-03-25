@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myutils.cli.pkg_structure &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=32ed3f93" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=61243dd2"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="bash_basic_structure" href="bash_rsts_doc/bash_basic_structure.html" />
+    <link rel="prev" title="Script of myutils single_g09" href="bash_rsts_scripts/single_g09.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="myutils.html">myutils package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="myutils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.second_version.html">myutils.sith.from_extreme.second_version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.second_version.html#continuous-path">continuous_path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.second_version.html#workflow-from-extreme2">workflow_from_extreme2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html">myutils.g_values.basic_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html#gval-workflow">gval_workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html#submit">submit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html#clean-directories">clean_directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html#create-g09-bdes">create_g09_BDEs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.analysis.html">myutils.g_values.analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.analysis.html#gval-postpro">gval_postpro</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.analysis.html#extract-eprspec">extract_EPRspec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.bash_scripts.html">myutils.bash_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.bash_scripts.html#single-g09">single_g09</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.bash_scripts.html#bash-template">bash-template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.bash_scripts.html#find-blocks">find_blocks</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">myutils.cli.pkg_structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_doc/bash_basic_structure.html">bash_basic_structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_scripts/bash_basic_structure.html">Script of myutils bash_basic_structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_doc/doc_pythonfile.html">doc_pythonfile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_scripts/doc_pythonfile.html">Script of myutils doc_pythonfile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_doc/python_doc_fixer.html">python_doc_fixer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_scripts/python_doc_fixer.html">Script of myutils python_doc_fixer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_doc/check_structure.html">check_structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_scripts/check_structure.html">Script of myutils check_structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_doc/doc_modules.html">doc_modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_scripts/doc_modules.html">Script of myutils doc_modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_doc/bash_style.html">bash_style</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_scripts/bash_style.html">Script of myutils bash_style</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_doc/add_python_doc.html">add_python_doc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_scripts/add_python_doc.html">Script of myutils add_python_doc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_doc/files_tree.html">files_tree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_scripts/files_tree.html">Script of myutils files_tree</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#files-tree">files_tree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add-python-doc">add_python_doc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bash-style">bash_style</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#doc-modules">doc_modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#check-structure">check_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-doc-fixer">python_doc_fixer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#doc-pythonfile">doc_pythonfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bash-basic-structure">bash_basic_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html">myutils.ase_utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.html">myutils.cli package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html">myutils.gromacs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html">myutils.sith package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.html#module-myutils.jupyter">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.html#module-myutils">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="myutils.html">myutils package</a></li>
+      <li class="breadcrumb-item active">myutils.cli.pkg_structure</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/myutils.cli.pkg_structure.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="myutils-cli-pkg-structure">
+<h1>myutils.cli.pkg_structure<a class="headerlink" href="#myutils-cli-pkg-structure" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="files-tree">
+<h1>files_tree<a class="headerlink" href="#files-tree" title="Link to this heading"></a></h1>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/files_tree.html#files-tree"><span class="std std-ref">[script]</span></a> <strong>myutils/cli/pkg_structure/files_tree.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Function that creates a mermaid map of a directory structure.</div>
+<div class="line"><br /></div>
+<div class="line">Usage: myutils files_tree &lt;path to dir to be mapped&gt; [ &lt;ignoring patters&gt; … ]</div>
+<div class="line"><br /></div>
+<div class="line">The output is the string that you have to locate in an rst file in order to</div>
+<div class="line">render your map. In principle, the output can be used in markdown files</div>
+<div class="line">changing the corresponding keywords.</div>
+</div>
+</div>
+</section>
+<section id="add-python-doc">
+<h1>add_python_doc<a class="headerlink" href="#add-python-doc" title="Link to this heading"></a></h1>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/add_python_doc.html#add-python-doc"><span class="std std-ref">[script]</span></a> <strong>myutils/cli/pkg_structure/add_python_doc.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Code that explores the files in the package and automatically creates the</div>
+<div class="line">documentation of all classes and functions that finds in it.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-d  &lt;dir1,dir2…&gt; directories to be ignored.</div>
+<div class="line-block">
+<div class="line">Default: ‘pycache,tests,tutorials,pre-deprected’</div>
+</div>
+<div class="line">-f  &lt;fil1,fil2…&gt; files to be ignored. Default: ‘__init__’</div>
+<div class="line">-n  &lt;name&gt; pkg name. Default: myutils</div>
+<div class="line">-p  &lt;absolute_path&gt; path directory to be checked (no relative path).</div>
+<div class="line-block">
+<div class="line">Default: “$myutils path”</div>
+<div class="line"><br /></div>
+</div>
+<div class="line">-v  verbose.</div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+</section>
+<section id="bash-style">
+<h1>bash_style<a class="headerlink" href="#bash-style" title="Link to this heading"></a></h1>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/bash_style.html#bash-style"><span class="std std-ref">[script]</span></a> <strong>myutils/cli/pkg_structure/bash_style.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Check bash style of all bash files in a directory, and its subdirectories.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-d  directory. Default: “$myutils -path”</div>
+<div class="line"><br /></div>
+<div class="line">-v  verbose.</div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+</section>
+<section id="doc-modules">
+<h1>doc_modules<a class="headerlink" href="#doc-modules" title="Link to this heading"></a></h1>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/doc_modules.html#doc-modules"><span class="std std-ref">[script]</span></a> <strong>myutils/cli/pkg_structure/doc_modules.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Code that explores the files in the package and automatically create the</div>
+<div class="line">documentation of all classes and functions that finds in it.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-d   &lt;dir1,dir2…&gt; directories to be ignored. Default: ‘tests,cli’</div>
+<div class="line">-f   &lt;fil1,fil2…&gt; files to be ignored. Default: ‘__init__’</div>
+<div class="line">-p   &lt;relative_path&gt; relative path directory to be checked. Relative in</div>
+<div class="line-block">
+<div class="line">respect to the directory that stores the modules documentation (see the</div>
+<div class="line">flag -m). Default=../../src/myutils</div>
+</div>
+<div class="line">-m   &lt;absolute_path&gt; absolute path to the directory that stores the modules</div>
+<div class="line-block">
+<div class="line">documentation. Default: $(myutils path)/../../doc/modules</div>
+</div>
+<div class="line">-n   &lt;name&gt; pakage name. Default: myutils</div>
+<div class="line"><br /></div>
+<div class="line">-h   prints this message.</div>
+</div>
+</div>
+</div>
+</section>
+<section id="check-structure">
+<h1>check_structure<a class="headerlink" href="#check-structure" title="Link to this heading"></a></h1>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/check_structure.html#check-structure"><span class="std std-ref">[script]</span></a> <strong>myutils/cli/pkg_structure/check_structure.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Check the structure of a package. All checkers run by default.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-d  src directory of the package. Defatul: “$myutils -path”</div>
+<div class="line">-p  pep8 convention in all python scripts.</div>
+<div class="line">-s  ShellCheck in all bash scripts.</div>
+<div class="line">-t  check tests.</div>
+<div class="line"><br /></div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+</section>
+<section id="python-doc-fixer">
+<h1>python_doc_fixer<a class="headerlink" href="#python-doc-fixer" title="Link to this heading"></a></h1>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/python_doc_fixer.html#python-doc-fixer"><span class="std std-ref">[script]</span></a> <strong>myutils/cli/pkg_structure/python_doc_fixer.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Code takes the documentation of a function and checks the documentation adding</div>
+<div class="line">TODOs in the missing parts. The output is stored in a file called</div>
+<div class="line">final_&lt;method&gt;_doc.txt</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-f  &lt;method&gt; Function to be checked</div>
+<div class="line">-m  &lt;module&gt; Module that contains the Function</div>
+<div class="line">-s  &lt;n_spaces&gt; number of leading spaces.</div>
+<div class="line"><br /></div>
+<div class="line">-v  verbose.</div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+</section>
+<section id="doc-pythonfile">
+<h1>doc_pythonfile<a class="headerlink" href="#doc-pythonfile" title="Link to this heading"></a></h1>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/doc_pythonfile.html#doc-pythonfile"><span class="std std-ref">[script]</span></a> <strong>myutils/cli/pkg_structure/doc_pythonfile.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Code that automatically creates or update the ‘.rst’ file for the documentation</div>
+<div class="line">of all python classes and functions that finds in a python file. Also add the</div>
+<div class="line">file to &lt;path_to_doc&gt;/modules.rst if it does not exist.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-f  &lt;file&gt; file name with the stem relative to the directory that contains</div>
+<div class="line-block">
+<div class="line">all the python codes to be documented (pkg_path, see -p below).</div>
+</div>
+<div class="line">-m  &lt;mod_doc_path&gt; path to the directory that stores the modules</div>
+<div class="line-block">
+<div class="line">documentation.</div>
+</div>
+<div class="line">-n  &lt;pkg_name&gt; name of the package to be documented.</div>
+<div class="line">-p  &lt;pkg_path&gt; path to directory that contains all the python codes to be</div>
+<div class="line-block">
+<div class="line">documented. Usually src directory.</div>
+</div>
+<div class="line">-h  prints this message.</div>
+<div class="line"><br /></div>
+</div>
+<div class="line">Note: This documentation is used in doc_modules.sh</div>
+</div>
+</div>
+</section>
+<section id="bash-basic-structure">
+<h1>bash_basic_structure<a class="headerlink" href="#bash-basic-structure" title="Link to this heading"></a></h1>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/bash_basic_structure.html#bash-basic-structure"><span class="std std-ref">[script]</span></a> <strong>myutils/cli/pkg_structure/bash_basic_structure.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Check the basic structure of all the given files as arguments.</div>
+<div class="line"><br /></div>
+<div class="line">It checks that all the bash scripts have flags support, verbose and help.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-v  verbose.</div>
+<div class="line">-c  run in a cluster.</div>
+</div>
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="bash_rsts_scripts/single_g09.html" class="btn btn-neutral float-left" title="Script of myutils single_g09" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="bash_rsts_doc/bash_basic_structure.html" class="btn btn-neutral float-right" title="bash_basic_structure" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

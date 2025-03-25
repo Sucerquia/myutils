@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myutils.plotters &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=32ed3f93" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=61243dd2"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+        <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+        <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+        <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/myutils.html">myutils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">myutils.plotters</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for myutils.plotters</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.ticker</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mticker</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">Bbox</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.lines</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line2D</span>
+
+
+<div class="viewcode-block" id="StandardPlotter">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.StandardPlotter">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StandardPlotter</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creator of standard scientific plots.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    x: list or array. Default=None</span>
+<span class="sd">        data to be plotted. It will correspond to the data in the y axis if</span>
+<span class="sd">        no y is given, or x data in case y is given.</span>
+<span class="sd">    y: list or array. Default=None</span>
+<span class="sd">        data to be plotted. It will correspond to the data in the y. It has</span>
+<span class="sd">        to have the same dimension than the x list.</span>
+<span class="sd">    ax: axes. Default=None</span>
+<span class="sd">        plt.axes object. In case it is not given, a new one will be</span>
+<span class="sd">        created.</span>
+<span class="sd">    fig: figure. Default=None</span>
+<span class="sd">        plt.figure object. In case it is not given, a new one will be</span>
+<span class="sd">        created.</span>
+<span class="sd">    figwidth: int. Default=8.57</span>
+<span class="sd">        width of the figure in centimeters.</span>
+<span class="sd">    figheight: int. Default=11.43</span>
+<span class="sd">        height of the figure in centimeters.</span>
+<span class="sd">    ax_pref: dict. Default=None</span>
+<span class="sd">        argument preferences for &#39;axis_setter&#39;. For more details about</span>
+<span class="sd">        options, check StandardPlotter.change_ax_defaults</span>
+<span class="sd">    plot_pref: dict. Default=None</span>
+<span class="sd">        argument preferences for &#39;plot_data&#39;. For more details about</span>
+<span class="sd">        options, check StandardPlotter.plot_data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">y</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">fig</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Figure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">figwidth</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">8.9</span><span class="p">,</span> <span class="n">figheight</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
+                 <span class="n">ax_pref</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span> <span class="n">plot_pref</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}):</span>
+        <span class="c1"># ==== Default ====</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax_pref</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;ticks_scale&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
+                        <span class="s1">&#39;xticks&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;yticks&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;xticklabels&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;xpad&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+                        <span class="s1">&#39;yticklabels&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;ypad&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+                        <span class="s1">&#39;labels_scale&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="s1">&#39;xlim&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;ylim&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;color_labels&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                        <span class="s1">&#39;xminor&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;yminor&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s1">&#39;grid&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                        <span class="s1">&#39;mingrid&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                        <span class="s1">&#39;color_grid&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span>
+                        <span class="s1">&#39;sci_not&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                        <span class="s1">&#39;lw_spines&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+                        <span class="s1">&#39;color_spines&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
+                        <span class="s1">&#39;l_ticks&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax_pref_bck</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax_pref</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># ==== Axis and Figure setup ====</span>
+        <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">fig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fig</span> <span class="o">=</span> <span class="n">fig</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">ax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ax</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">figure</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fig</span> <span class="o">=</span> <span class="n">fig</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="n">figwidth</span> <span class="o">/</span> <span class="mf">2.54</span><span class="p">,</span> <span class="n">figheight</span> <span class="o">/</span> <span class="mf">2.54</span><span class="p">),</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">set_dpi</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+
+        <span class="c1"># TODO: add change of layer per axis.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_space</span><span class="p">(</span><span class="n">borders</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layer</span> <span class="o">+=</span> <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_zorder</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">plots</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">ax_pref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">change_ax_defaults</span><span class="p">(</span><span class="o">**</span><span class="n">ax_pref</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axis_setter</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">ax_pref</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_pref</span><span class="p">)</span>
+
+<div class="viewcode-block" id="StandardPlotter.change_ax_defaults">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.StandardPlotter.change_ax_defaults">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">change_ax_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Changes the values of StandardPlot.ax_pref dictionary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        reset: bool. Default=False</span>
+<span class="sd">            besides of the changes given in the kwargs, reset the other values</span>
+<span class="sd">            to the default.</span>
+<span class="sd">        **kwargs of the defaults you want to change. The options are</span>
+<span class="sd">            StandardPlot.ax_pref.keys()</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (dict) new set of defaults.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ====</span>
+<span class="sd">        The defaults showed before only represent the initial state. If you</span>
+<span class="sd">        change one of the parameters in some point, it will keep that value</span>
+<span class="sd">        even after calling this function if you do not specify that parameter.</span>
+<span class="sd">        For restoring those values, use reset=True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">reset</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax_pref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax_pref_bck</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax_pref</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax_pref</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_change_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dictio</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Changes the values of the keys given in the arguments. The other values</span>
+<span class="sd">        of the dictionary remain the same.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        dictio: dict</span>
+<span class="sd">            dictionary that you want to change the values.</span>
+<span class="sd">        **kwargs of the parameters you want to change.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (dict) modified dictio.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">        =====</span>
+<span class="sd">        This function does not allow to set new keys.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">parameter</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">parameter</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dictio</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">parameter</span><span class="si">}</span><span class="s1"> is not part of the dictionary&#39;</span><span class="p">)</span>
+            <span class="n">dictio</span><span class="p">[</span><span class="n">parameter</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="n">dictio</span>
+
+<div class="viewcode-block" id="StandardPlotter.change_general_pars">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.StandardPlotter.change_general_pars">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">change_general_pars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_pars</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Changes the values of values of matplotlib.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        new_pars: dict. Default={}</span>
+<span class="sd">            dictionary with the matplotlib parameters keywords as dictionary</span>
+<span class="sd">            keys and the new values as dictionary values. For more information,</span>
+<span class="sd">            check mpl.rcParams.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (dict) New mpl.rcParams</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">parameter</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">new_pars</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">parameter</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">parameter</span><span class="si">}</span><span class="s1"> is not part of mpl.rcParams&#39;</span><span class="p">)</span>
+            <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="n">parameter</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span></div>
+
+
+<div class="viewcode-block" id="StandardPlotter.add_space">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.StandardPlotter.add_space">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a subspace of reference to adjust the positions of the</span>
+<span class="sd">        graphics.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        **kwargs of myutils.plotters.Space</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (myutils.plotters.Space) subspace of reference.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">space</span> <span class="o">=</span> <span class="n">Space</span><span class="p">(</span><span class="n">sp</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">space</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">preferences</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax_pref_bck</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span> <span class="o">+=</span> <span class="p">[</span><span class="n">space</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">space</span></div>
+
+
+<div class="viewcode-block" id="StandardPlotter.add_axes">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.StandardPlotter.add_axes">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">space</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a new axes in the figure.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        space: bool. Default=False</span>
+<span class="sd">            True if the axes is the frame of a space.</span>
+<span class="sd">        **kwargs for plt.Figure.add_subplots</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (plt.Axes) Created axes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">newax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">newax</span><span class="o">.</span><span class="n">preferences</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax_pref</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">space</span><span class="p">:</span>
+            <span class="n">newax</span><span class="o">.</span><span class="n">set_zorder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layer</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">newax</span><span class="o">.</span><span class="n">set_zorder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layer</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="n">newax</span><span class="p">)</span>
+        <span class="c1"># TODO: update space[0] such that takes into account new axes.</span>
+
+        <span class="k">return</span> <span class="n">newax</span></div>
+
+
+<div class="viewcode-block" id="StandardPlotter.axis_setter">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.StandardPlotter.axis_setter">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">axis_setter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="n">reset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="n">general_pars</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span>
+                    <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adjust the most common parameters of an axes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        ax: int or axes. Default=0</span>
+<span class="sd">            plt.axes object or index of the axis in StandardPlotter.</span>
+<span class="sd">        reset: Default=False</span>
+<span class="sd">            True to change the value of the other options for the default</span>
+<span class="sd">            values.</span>
+<span class="sd">        general_pars: Default={}</span>
+<span class="sd">            general parameters to change with</span>
+<span class="sd">            StandardPlotter.change_general_pars.</span>
+<span class="sd">        **kwargs of the preferences you want to change. For further details,</span>
+<span class="sd">            take a look in ax.preferences, where ax is the previous argument.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (plt.Axes) Objects used in the plotting.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ====</span>
+<span class="sd">        StandardPlotter.ax_pref do not contain all the possibilities to adjust</span>
+<span class="sd">        in a plot using matplotlib. You can use the axis of the output to do</span>
+<span class="sd">        further changes. myutils does not pretend to replace matplotlib but</span>
+<span class="sd">        making it more accesible for scientific proposals.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># General parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">change_general_pars</span><span class="p">(</span><span class="n">general_pars</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="n">ax</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">reset</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">preferences</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax_pref_bck</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="s1">&#39;preferences&#39;</span><span class="p">):</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">preferences</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax_pref</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_dict</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">preferences</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">pref</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">preferences</span>
+
+        <span class="c1"># ==== axis setup ====</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span>
+                       <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span>
+                       <span class="n">length</span><span class="o">=</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;l_ticks&#39;</span><span class="p">],</span>
+                       <span class="n">width</span><span class="o">=</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;lw_spines&#39;</span><span class="p">],</span>
+                       <span class="n">labelsize</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span>
+                       <span class="o">*</span> <span class="n">pref</span><span class="p">[</span><span class="s1">&#39;ticks_scale&#39;</span><span class="p">])</span>
+
+        <span class="c1"># == major ticks</span>
+        <span class="k">if</span> <span class="n">pref</span><span class="p">[</span><span class="s1">&#39;xticks&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;xticks&#39;</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;xticklabels&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">pref</span><span class="p">[</span><span class="s1">&#39;yticks&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;yticks&#39;</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;yticklabels&#39;</span><span class="p">])</span>
+
+        <span class="c1"># == minor ticks</span>
+        <span class="k">if</span> <span class="n">pref</span><span class="p">[</span><span class="s1">&#39;xminor&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;xminor&#39;</span><span class="p">],</span> <span class="n">minor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pref</span><span class="p">[</span><span class="s1">&#39;yminor&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;yminor&#39;</span><span class="p">],</span> <span class="n">minor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">side</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">]:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">side</span><span class="p">]</span><span class="o">.</span><span class="n">set_linewidth</span><span class="p">(</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;lw_spines&#39;</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">side</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;color_spines&#39;</span><span class="p">])</span>
+
+        <span class="c1"># === Grids</span>
+        <span class="c1"># == major grids</span>
+        <span class="k">if</span> <span class="n">pref</span><span class="p">[</span><span class="s1">&#39;grid&#39;</span><span class="p">]:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;color_grid&#39;</span><span class="p">])</span>
+        <span class="c1"># == minor grids</span>
+        <span class="k">if</span> <span class="n">pref</span><span class="p">[</span><span class="s1">&#39;mingrid&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;xminor&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;yminor&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;To add min grid you have to define &quot;</span>
+                                 <span class="s2">&quot;xminticks or yminticks&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;minor&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;color_grid&#39;</span><span class="p">])</span>
+
+        <span class="c1"># == axis labels</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;xlabel&#39;</span><span class="p">],</span>
+                      <span class="n">fontsize</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span>
+                      <span class="o">*</span> <span class="n">pref</span><span class="p">[</span><span class="s1">&#39;labels_scale&#39;</span><span class="p">],</span>
+                      <span class="n">color</span><span class="o">=</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;color_labels&#39;</span><span class="p">],</span>
+                      <span class="n">labelpad</span><span class="o">=</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;xpad&#39;</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;ylabel&#39;</span><span class="p">],</span>
+                      <span class="n">fontsize</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span>
+                      <span class="o">*</span> <span class="n">pref</span><span class="p">[</span><span class="s1">&#39;labels_scale&#39;</span><span class="p">],</span>
+                      <span class="n">color</span><span class="o">=</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;color_labels&#39;</span><span class="p">],</span>
+                      <span class="n">labelpad</span><span class="o">=</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;ypad&#39;</span><span class="p">])</span>
+        <span class="c1"># == scientific notation for numbers with more than 2 decimals</span>
+        <span class="k">if</span> <span class="n">pref</span><span class="p">[</span><span class="s1">&#39;sci_not&#39;</span><span class="p">]:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">offsetText</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span>
+                                             <span class="o">*</span> <span class="n">pref</span><span class="p">[</span><span class="s1">&#39;ticks_scale&#39;</span><span class="p">])</span>
+            <span class="n">formatter</span> <span class="o">=</span> <span class="n">mticker</span><span class="o">.</span><span class="n">ScalarFormatter</span><span class="p">(</span><span class="n">useMathText</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">formatter</span><span class="o">.</span><span class="n">set_powerlimits</span><span class="p">((</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">formatter</span> <span class="o">=</span> <span class="n">mticker</span><span class="o">.</span><span class="n">ScalarFormatter</span><span class="p">(</span><span class="n">useMathText</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">ticklabel_format</span><span class="p">(</span><span class="n">useOffset</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pref</span><span class="p">[</span><span class="s1">&#39;xlim&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;xlim&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">pref</span><span class="p">[</span><span class="s1">&#39;ylim&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;ylim&#39;</span><span class="p">])</span>
+        
+        <span class="c1"># legend</span>
+        <span class="k">if</span> <span class="n">legend</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">pref</span><span class="p">[</span><span class="s1">&#39;ticks_scale&#39;</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">ax</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_plot_one_curve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                        <span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">],</span>
+                        <span class="n">y</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">data_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">pstyle</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span>
+                        <span class="n">color_plot</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">lw</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Line2D</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a curve to a plot.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        x: list or array. Default=None</span>
+<span class="sd">            data to be plotted. It will correspond to the data in the y axis if</span>
+<span class="sd">            no y is given, or x data in case y is given.</span>
+<span class="sd">        y: list or array. Default=None</span>
+<span class="sd">            data to be plotted. It will correspond to the data in the y. It has</span>
+<span class="sd">            to have the same dimension than the x list.</span>
+<span class="sd">        ax: axes. Default=0</span>
+<span class="sd">            plt.axes object or index of the axis in StandardPlotter. In case it</span>
+<span class="sd">            is not given, a new one will be created.</span>
+<span class="sd">        data_label: str. Default=None</span>
+<span class="sd">            label of the curve</span>
+<span class="sd">        pstyle: str. Default=&#39;-&#39;</span>
+<span class="sd">            matplotlib line style.</span>
+<span class="sd">        color_plot: RGB array or matplotlib colors. Default=matplotlib palette</span>
+<span class="sd">            color of the curve</span>
+<span class="sd">        lw: float. Default=3</span>
+<span class="sd">            thickness of the line.</span>
+<span class="sd">        **kwargs of plt.plot</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (mpl.lines.Line2d) output of plt.plot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;the function _plot_one_curve requieres a &quot;</span>
+                             <span class="s2">&quot;predefined axis&quot;</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">pstyle</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">data_label</span><span class="p">,</span>
+                    <span class="n">color</span><span class="o">=</span><span class="n">color_plot</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">p</span>
+
+<div class="viewcode-block" id="StandardPlotter.plot_data">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.StandardPlotter.plot_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">],</span>
+                  <span class="n">y</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">ax</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                  <span class="n">data_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">pstyle</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;-o&#39;</span><span class="p">,</span>
+                  <span class="n">color_plot</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">lw</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                  <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add data to a curve.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        x: list or array. Default=None</span>
+<span class="sd">            data to be plotted. It will correspond to the data in the y axis if</span>
+<span class="sd">            no y is given, or x data in case y is given.</span>
+<span class="sd">        y: list or array. Default=None</span>
+<span class="sd">            data to be plotted. It will correspond to the data in the y. It has</span>
+<span class="sd">            to have the same dimension than the x list.</span>
+<span class="sd">        color_plot: color format. Default None (namely matplotlib palette)</span>
+<span class="sd">            define the color of the data you want to plot</span>
+<span class="sd">        ax: axes. Default=0</span>
+<span class="sd">            plt.axes object or index of the axis in StandardPlotter. In case it</span>
+<span class="sd">            is not given, a new one will be created.</span>
+<span class="sd">        data_label: str. Default=None</span>
+<span class="sd">            label of the curve</span>
+<span class="sd">        pstyle: str. Default=&#39;-&#39;</span>
+<span class="sd">            matplotlib line style.</span>
+<span class="sd">        color_plot: RGB array or matplotlib colors. Default=matplotlib palette</span>
+<span class="sd">            color of the curve</span>
+<span class="sd">        lw: float. Default=3</span>
+<span class="sd">            thickness of the line.</span>
+<span class="sd">        **kwargs of plt.plot</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (list) set of added matplotlib.lines.Line2d.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="n">ax</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># in case of several curves</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">x</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]</span>
+            <span class="c1"># in case of only one curve</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+                <span class="c1"># in case a set of xs for each set of ys</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+                    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="s2">&quot;x and y has to have the same &quot;</span> <span class="o">+</span>\
+                        <span class="sa">f</span><span class="s2">&quot;number of data, but x has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2"> sets and y has&quot;</span> <span class="o">+</span>\
+                        <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="si">}</span><span class="s2"> sets&quot;</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+                        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="s2">&quot;The amount of data &quot;</span> <span class="o">+</span>\
+                            <span class="s2">&quot;of each subset of x-y data has to be the same,&quot;</span> <span class="o">+</span>\
+                            <span class="sa">f</span><span class="s2">&quot; but in this case, the </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> set of x has &quot;</span> <span class="o">+</span>\
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="si">}</span><span class="s2"> and y has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="c1"># x one list of data, y a list of lists</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="s2">&quot;if you give a &quot;</span> <span class="o">+</span>\
+                        <span class="s2">&quot;set of list in y and only one list in x, all the &quot;</span> <span class="o">+</span>\
+                        <span class="s2">&quot;sublist in y has to have the same length than x&quot;</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]</span>
+            <span class="c1"># In case of one list of data in x and one list of data in y</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="s2">&quot;x and y have to have the same &quot;</span> <span class="o">+</span>\
+                    <span class="sa">f</span><span class="s2">&quot;length, but in this case the length of x is </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="o">+</span>\
+                    <span class="sa">f</span><span class="s2">&quot;an the length of y is </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
+
+        <span class="n">data_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expand_argument</span><span class="p">(</span><span class="n">data_label</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">pstyle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expand_argument</span><span class="p">(</span><span class="n">pstyle</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">color_plot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expand_argument</span><span class="p">(</span><span class="n">color_plot</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">lw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expand_argument</span><span class="p">(</span><span class="n">lw</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+        <span class="n">new_kwargs</span> <span class="o">=</span> <span class="p">[{}</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">all_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expand_argument</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="n">arg</span><span class="p">],</span> <span class="n">x</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">new_arg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">all_args</span><span class="p">):</span>
+                <span class="n">new_kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">arg</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_arg</span>
+
+        <span class="n">plots</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_plot_one_curve</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                                     <span class="n">data_label</span><span class="o">=</span><span class="n">data_label</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                     <span class="n">pstyle</span><span class="o">=</span><span class="n">pstyle</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                     <span class="n">color_plot</span><span class="o">=</span><span class="n">color_plot</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                     <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                     <span class="o">**</span><span class="n">new_kwargs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">plots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">plots</span> <span class="o">=</span> <span class="n">plots</span>  <span class="c1"># 2COMPLETE change for extend</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">plots</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_expand_argument</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        becomes value in list with a given len</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        value:</span>
+<span class="sd">            value to be extruded</span>
+<span class="sd">        array:</span>
+<span class="sd">            array of reference.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (np.array) Array with the value extruded.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="ow">and</span> \
+           <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">array</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">values</span>
+
+<div class="viewcode-block" id="StandardPlotter.raxis">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.StandardPlotter.raxis">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">raxis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+              <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">,</span>
+              <span class="n">rax_color</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+              <span class="n">lax_color</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+              <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates an axis on the right, such that your plot can have two set of</span>
+<span class="sd">        data for the same x values. You will be plotting in a figure as follows</span>
+<span class="sd">                |</span>
+<span class="sd">                | y-right</span>
+<span class="sd">                |</span>
+<span class="sd">        --------</span>
+<span class="sd">           x</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        ax: int or axes. Default=0</span>
+<span class="sd">            plt.axes object or index of the axis in StandardPlotter. In case it</span>
+<span class="sd">            is not given, a new one will be created.</span>
+<span class="sd">        ylabel: str. Default=&#39;&#39;</span>
+<span class="sd">            label for the y right axis.</span>
+<span class="sd">        yticks: array. Default=automatic</span>
+<span class="sd">            numbers to show up in the y right axis.</span>
+<span class="sd">        rax_color: RGB array or matplotlib colors. Default=[0.4, 0.4, 0.4]</span>
+<span class="sd">            color of the y-right labels</span>
+<span class="sd">        lax_color: RGB array or matplotlib colors. Default=[0.4, 0.4, 0.4]</span>
+<span class="sd">            color of the y-left labels</span>
+<span class="sd">        yminor: array. Default=None</span>
+<span class="sd">            minor ticks to add to the y right axis.</span>
+<span class="sd">        grid: bool. Default=False</span>
+<span class="sd">            True to grid regarding the main ticks (major)</span>
+<span class="sd">        mingrid: bool. Default=False</span>
+<span class="sd">            True to grid regarding the secundary ticks (minor)</span>
+<span class="sd">        **kwargs for axis_setter for the new axis.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (Axes) overlaped axes with the y axis on the right</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">rax_color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">rax_color</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">lax_color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lax_color</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="n">ax</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="s1">&#39;preferences&#39;</span><span class="p">):</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">preferences</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax_pref</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_change_dict</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">preferences</span><span class="p">)</span>
+        <span class="n">pref</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">preferences</span>
+
+        <span class="c1"># left axis</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">lax_color</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="n">lax_color</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;ylabel&#39;</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span>
+                      <span class="o">*</span> <span class="n">pref</span><span class="p">[</span><span class="s1">&#39;labels_scale&#39;</span><span class="p">],</span>
+                      <span class="n">color</span><span class="o">=</span><span class="n">lax_color</span><span class="p">,</span>
+                      <span class="n">labelpad</span><span class="o">=</span><span class="n">pref</span><span class="p">[</span><span class="s1">&#39;ypad&#39;</span><span class="p">])</span>
+
+        <span class="c1"># Right Axis</span>
+        <span class="n">ax2</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">ax2</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">rax_color</span><span class="p">)</span>
+        <span class="p">[</span><span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">side</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">side</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;bottom&#39;</span><span class="p">]]</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;color_spines&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rax_color</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;color_labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rax_color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axis_setter</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ax</span></div>
+
+
+<div class="viewcode-block" id="StandardPlotter.set_polar">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.StandardPlotter.set_polar">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_polar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="n">ax</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+                  <span class="n">r_lims</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">r_ticks</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">add_center</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                  <span class="n">add_border</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Changes and set the axes as a polar plot.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        ax: plt.Axes, int</span>
+<span class="sd">            Axes to transform and set as a polar plot. integer, the index to</span>
+<span class="sd">            one of the sp.ax</span>
+<span class="sd">        r_ticks: array. Default=None (&lt;automatic&gt;)</span>
+<span class="sd">            radius of the ticks you want to add. That also includes add the</span>
+<span class="sd">            numbers.</span>
+<span class="sd">        r_lims: list. Default=None</span>
+<span class="sd">            minimum or maximum value of the data. Defaults as predicted by</span>
+<span class="sd">            matplotlib.</span>
+<span class="sd">        add_center: float. Default=0</span>
+<span class="sd">            shift the minimum value of r limits to this radius.</span>
+<span class="sd">        add_border: float. Default=0</span>
+<span class="sd">            add this value to the maximum value of r limits.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (plt.Axes) polar Axes.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ====</span>
+<span class="sd">        add_center and add_border value only makes sense when r_lim is defined.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">ax</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="n">ax</span><span class="p">]</span>
+
+        <span class="c1"># Extract original Axes properties</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_position</span><span class="p">()</span><span class="o">.</span><span class="n">get_points</span><span class="p">()</span>
+        <span class="n">zorder</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_zorder</span><span class="p">()</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+
+        <span class="c1"># create and replace axes</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;polar&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spaces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">locate_ax</span><span class="p">(</span><span class="n">borders</span><span class="o">=</span><span class="n">borders</span><span class="p">,</span>
+                                 <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_zorder</span><span class="p">(</span><span class="n">zorder</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">ax</span>
+
+        <span class="c1"># Set up axes</span>
+        <span class="k">if</span> <span class="n">r_ticks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_rticks</span><span class="p">(</span><span class="n">r_ticks</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">r_lims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">r_lims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">add_center</span><span class="p">,</span> <span class="n">r_lims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">add_border</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">ax</span></div>
+
+
+    <span class="c1"># Annotations</span>
+<div class="viewcode-block" id="StandardPlotter.draw_brace">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.StandardPlotter.draw_brace">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw_brace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xspan</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">yspan</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">beta_factor</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                   <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                   <span class="n">resolution_factor</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draws an annotated horizontal brace on the axes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        xspan: array-like</span>
+<span class="sd">            lower and higher boundary of the brace.</span>
+<span class="sd">        yy: float</span>
+<span class="sd">            y-position of the base of the brace.</span>
+<span class="sd">        text: str.</span>
+<span class="sd">            text to annotate over the brace.</span>
+<span class="sd">        ax: plt.Axes, int</span>
+<span class="sd">            Axes to add the brace. Integer, the index to one of the sp.ax.</span>
+<span class="sd">        yspan: float. Default=1.</span>
+<span class="sd">            y height of the brace from the basis.</span>
+<span class="sd">        beta_factor: float. Default=300.</span>
+<span class="sd">            factor that regulates the curvature of the brace.</span>
+<span class="sd">        pad: float. Default=0</span>
+<span class="sd">            distance from the tip of the brace to the text.</span>
+<span class="sd">        color: mpl.color. Default=[0.3, 0.3, 0.3]</span>
+<span class="sd">            color of the annotation (brace and text).</span>
+<span class="sd">        resolution_factor: float. Default=100</span>
+<span class="sd">            scale to define the number of points to define the function of</span>
+<span class="sd">            the brace.</span>
+<span class="sd">        kwargs for plt.plot.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (numpy.Array) y points of the brace.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: add the option to be also a vertical line</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="n">ax</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]</span>
+        
+        <span class="n">pref</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">preferences</span>
+        <span class="k">if</span> <span class="n">fontsize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fontsize</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">pref</span><span class="p">[</span><span class="s1">&#39;ticks_scale&#39;</span><span class="p">]</span>
+
+        <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="n">xspan</span>
+        <span class="n">xspan</span> <span class="o">=</span> <span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span>
+        <span class="n">ax_xmin</span><span class="p">,</span> <span class="n">ax_xmax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
+        <span class="n">xax_span</span> <span class="o">=</span> <span class="n">ax_xmax</span> <span class="o">-</span> <span class="n">ax_xmin</span>
+
+        <span class="c1"># intermedia points in the x axis</span>
+        <span class="n">resolution</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xspan</span> <span class="o">/</span> <span class="n">xax_span</span> <span class="o">*</span> <span class="n">resolution_factor</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">resolution</span><span class="p">)</span>
+
+        <span class="c1"># curvature of the brackets: the higher this is, the smaller the</span>
+        <span class="c1"># radius</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="n">beta_factor</span> <span class="o">/</span> <span class="n">xax_span</span>
+        <span class="n">x_half</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="n">resolution</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">y_half_brace</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="n">x_half</span> <span class="o">-</span> <span class="n">x_half</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+                        <span class="o">+</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="n">x_half</span> <span class="o">-</span> <span class="n">x_half</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">y_half_brace</span><span class="p">,</span> <span class="n">y_half_brace</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">yspan</span>
+
+        <span class="c1"># move the bottom of the brackets to zero and then fix it in yy</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">+=</span> <span class="n">yy</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="n">xmax</span> <span class="o">+</span> <span class="n">xmin</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="n">pad</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+                <span class="n">va</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span></div>
+
+
+<div class="viewcode-block" id="StandardPlotter.arrow">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.StandardPlotter.arrow">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">arrow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xy</span><span class="p">,</span> <span class="n">dxdy</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hl</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+              <span class="n">fontsize</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draws an annotated arrow on the axes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        xy: array-like</span>
+<span class="sd">            x, y coordinate of the tail of the arrow.</span>
+<span class="sd">        dxdy: array-like</span>
+<span class="sd">            dx, dy values of the arrow from the (x, y) coordinate.</span>
+<span class="sd">        text: str</span>
+<span class="sd">            text to annotate on the base of the arrow.</span>
+<span class="sd">        color: mpl.color. Default=[0.3, 0.3, 0.3]</span>
+<span class="sd">            color of the arrow and the text.</span>
+<span class="sd">        pad: float. Default=0</span>
+<span class="sd">            vertical distance from the base of the arrow to the base of the</span>
+<span class="sd">            text.</span>
+<span class="sd">        ax: plt.Axes or int. default=0</span>
+<span class="sd">            Axes to add the arrow. Integer, the index to one of the sp.ax.</span>
+<span class="sd">        hw: float. Default=1</span>
+<span class="sd">            head width.</span>
+<span class="sd">        hl: float. Default=1</span>
+<span class="sd">            head length.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (None)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="n">ax</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]</span>
+        
+        <span class="n">pref</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">preferences</span>
+        <span class="k">if</span> <span class="n">fontsize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fontsize</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">pref</span><span class="p">[</span><span class="s1">&#39;ticks_scale&#39;</span><span class="p">]</span>
+
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">dxdy</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">xy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span>
+                         <span class="n">fc</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                         <span class="n">head_width</span><span class="o">=</span><span class="n">hw</span><span class="p">,</span> <span class="n">head_length</span><span class="o">=</span><span class="n">hl</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">pad</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span>
+                <span class="n">va</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="StandardPlotter.show">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.StandardPlotter.show">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shows the Figure.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        # TODO: add return information</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="StandardPlotter.save">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.StandardPlotter.save">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save figure with proper resolution.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        name: str.</span>
+<span class="sd">            name of the file to store the figure.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (None)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Space">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.Space">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Space</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Section of a figure that will be used to separate the complete figure</span>
+<span class="sd">    in squares. You will be able to define all the parameters respect to</span>
+<span class="sd">    the space of reference. And, to have an idea of which values to use,</span>
+<span class="sd">    you can use the method show_frame and create a kind of meassure ruler.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    sp: myutils.plotters.StandardPlotter. Default=None</span>
+<span class="sd">        object StandarPlotter. Set it before creating an space. In case of</span>
+<span class="sd">        being None, a new StandardPlotter is created.</span>
+<span class="sd">    borders: list. Default=[[0, 0], [1, 1]]</span>
+<span class="sd">        [[left, bottom], [right, top]] list defining the borders of the</span>
+<span class="sd">        space respect to the figure frame. Use sp.spaces[0].showframe() to</span>
+<span class="sd">        define the values easily.</span>
+<span class="sd">    axes: plt.Axes. Default=sp.ax</span>
+<span class="sd">        axes to be added to the Space.</span>
+<span class="sd">    show_frame: bool. Default=False</span>
+<span class="sd">        show the frame of the space.</span>
+<span class="sd">    **kwargs: Space.show_frame arguments.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">sp</span><span class="p">:</span> <span class="n">StandardPlotter</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">borders</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">axes</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">show_frame</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">StandardPlotter</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">borders</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">borders</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+
+        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">ax</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes</span> <span class="o">=</span> <span class="p">[</span><span class="n">axes</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Non-supported axes structure, please, provide &quot;</span>
+                             <span class="s2">&quot;interable axes or a plt.Axes object&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">borders</span> <span class="o">=</span> <span class="n">borders</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp</span> <span class="o">=</span> <span class="n">sp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sp</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">space</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">set_position</span><span class="p">(</span><span class="n">Bbox</span><span class="p">(</span><span class="n">borders</span><span class="p">),</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">show_frame</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_frame</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+            <span class="k">for</span> <span class="n">side</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="n">side</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Space.show_frame">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.Space.show_frame">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">show_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                   <span class="n">majordelta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+                   <span class="n">minordelta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.02</span><span class="p">,</span>
+                   <span class="n">color</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                   <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;top&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shows the frame of the space with the metrics you choose for the</span>
+<span class="sd">        measurement ruler.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        majordelta: float. Default=0.1</span>
+<span class="sd">            value to space the mayor ticks and add the numbers to the ruler.</span>
+<span class="sd">        minordelta: float. Default=0.02</span>
+<span class="sd">            value to space the mayor ticks. these numbers are not added to the</span>
+<span class="sd">            ruler.</span>
+<span class="sd">        color: RGB array or matplotlib colors. Default=[1, 0, 0]</span>
+<span class="sd">            color of the grid and frame.</span>
+<span class="sd">        layer: str. Default=&quot;top&quot;</span>
+<span class="sd">            &#39;top&#39; or &#39;bottom&#39;, if you want to see the frame in the front or in</span>
+<span class="sd">            the back.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (plt.Axes) frame of the space.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ====</span>
+<span class="sd">        Each side of the frame is always going from zero to one</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># == Default</span>
+        <span class="k">if</span> <span class="n">color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">majorticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.00001</span><span class="p">,</span> <span class="n">majordelta</span><span class="p">)</span>
+        <span class="n">minorticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.00001</span><span class="p">,</span> <span class="n">minordelta</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp</span><span class="o">.</span><span class="n">axis_setter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">,</span>
+                            <span class="n">xticks</span><span class="o">=</span><span class="n">majorticks</span><span class="p">,</span>
+                            <span class="n">yticks</span><span class="o">=</span><span class="n">majorticks</span><span class="p">,</span>
+                            <span class="n">xminor</span><span class="o">=</span><span class="n">minorticks</span><span class="p">,</span>
+                            <span class="n">yminor</span><span class="o">=</span><span class="n">minorticks</span><span class="p">,</span>
+                            <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">mingrid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">color_grid</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                            <span class="n">color_spines</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">colors</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">layer</span> <span class="o">==</span> <span class="s1">&#39;front&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">set_zorder</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sp</span><span class="o">.</span><span class="n">ax</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">layer</span> <span class="o">==</span> <span class="s1">&#39;back&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">set_zorder</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span></div>
+
+
+<div class="viewcode-block" id="Space.add_axes">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.Space.add_axes">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add an axes to the space.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        ax: plt.Axes</span>
+<span class="sd">            Axes to  be added to the frame.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (array) all the axes belonging to the space.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="s1">&#39;preferences&#39;</span><span class="p">):</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">preferences</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sp</span><span class="o">.</span><span class="n">ax_pref</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span></div>
+
+
+<div class="viewcode-block" id="Space.locate_ax">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.Space.locate_ax">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">locate_ax</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="n">borders</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        set the location of an axes respect to the ruler of the space.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        borders: list. Default=None</span>
+<span class="sd">            positions respect to the space coordinates specified as</span>
+<span class="sd">            [[left, bottom], [top, right]]</span>
+<span class="sd">        ax: plt.Axes. Default=Space.axes[0]</span>
+<span class="sd">            axis to locate.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (plt.Axes) already relocated axes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: change ax None for 0. default</span>
+        <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;To locate an axis, you have to provide an axis&quot;</span>
+                             <span class="s2">&quot; or add at least one axis to the space&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">borders</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;You have to provide the coordinates of the&quot;</span>
+                             <span class="s2">&quot;corners repect the space you are using.&quot;</span><span class="p">)</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_space2fig</span><span class="p">(</span><span class="n">borders</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_position</span><span class="p">(</span><span class="n">Bbox</span><span class="p">(</span><span class="n">borders</span><span class="p">),</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ax</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_space2fig</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                   <span class="n">borders</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        change the borders reference from the space to the figure.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        borders: list</span>
+<span class="sd">            positions respect to the space coordinates specified as</span>
+<span class="sd">            [[left, bottom], [top, right]]</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (list) borders respect to the figure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="p">[[</span><span class="n">left</span><span class="p">,</span> <span class="n">bottom</span><span class="p">],</span> <span class="p">[</span><span class="n">right</span><span class="p">,</span> <span class="n">top</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">borders</span>
+
+        <span class="n">borders</span> <span class="o">=</span> <span class="p">[[</span><span class="n">left</span> <span class="o">+</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">*</span> <span class="n">borders</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">bottom</span> <span class="o">+</span> <span class="p">(</span><span class="n">top</span> <span class="o">-</span> <span class="n">bottom</span><span class="p">)</span> <span class="o">*</span> <span class="n">borders</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]],</span>
+                   <span class="p">[</span><span class="n">left</span> <span class="o">+</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">*</span> <span class="n">borders</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">bottom</span> <span class="o">+</span> <span class="p">(</span><span class="n">top</span> <span class="o">-</span> <span class="n">bottom</span><span class="p">)</span> <span class="o">*</span> <span class="n">borders</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]]]</span>
+
+        <span class="k">return</span> <span class="n">borders</span>
+
+<div class="viewcode-block" id="Space.set_axis">
+<a class="viewcode-back" href="../../modules/myutils.html#myutils.plotters.Space.set_axis">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">axes</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">rows_cols</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">borders</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">spaces</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Arrange the spaces in the axis of the space. It is assumed that the</span>
+<span class="sd">        number of axis is equal to rows x columns and they are ordered in</span>
+<span class="sd">        ascendent order from left to right and from top to bottom.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        axes: list. Default=None</span>
+<span class="sd">            list of Axes to the adjusted according to the defined parameters.</span>
+<span class="sd">            In case of None, all the axes in the space are taken.</span>
+<span class="sd">        rows_cols: tuple. Default=(1, 1)</span>
+<span class="sd">            number of rows and cols. the number of axes must be rows x cols.</span>
+<span class="sd">        borders: list. Default=None</span>
+<span class="sd">            positions respect to the space coordinates specified as</span>
+<span class="sd">            [[left, bottom], [top, right]]</span>
+<span class="sd">        spaces: tuple. Default=(0.03, 0.03)</span>
+<span class="sd">            horizontal and vertical separation of the axes.</span>
+<span class="sd">        rows_cols: tuple. Default=(1, 1)</span>
+<span class="sd">            number of rows and columns.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (list) list of relocated axes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">borders</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">borders</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.99</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">spaces</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">spaces</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;there are not axes to set up&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span>
+
+        <span class="p">[[</span><span class="n">left</span><span class="p">,</span> <span class="n">bottom</span><span class="p">],</span> <span class="p">[</span><span class="n">right</span><span class="p">,</span> <span class="n">top</span><span class="p">]]</span> <span class="o">=</span> <span class="n">borders</span>
+        <span class="p">[</span><span class="n">hspace</span><span class="p">,</span> <span class="n">vspace</span><span class="p">]</span> <span class="o">=</span> <span class="n">spaces</span>
+
+        <span class="k">if</span> <span class="n">rows_cols</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Adjust number of rows/cols by minimizing perimeter</span>
+            <span class="n">sum_side</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">%</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">/</span> <span class="n">i</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">sum_side</span><span class="p">:</span>
+                    <span class="n">sum_side</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">/</span> <span class="n">i</span><span class="p">)</span>
+                    <span class="n">rows_cols</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">/</span> <span class="n">i</span><span class="p">))</span>
+            <span class="n">n_rows</span><span class="p">,</span> <span class="n">n_cols</span> <span class="o">=</span> <span class="n">rows_cols</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">n_rows</span><span class="p">,</span> <span class="n">n_cols</span> <span class="o">=</span> <span class="n">rows_cols</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_rows</span> <span class="o">*</span> <span class="n">n_cols</span><span class="p">,</span> \
+                   <span class="sa">f</span><span class="s2">&quot;axes has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span><span class="si">}</span><span class="s2"> axes &quot;</span> <span class="o">+</span> \
+                   <span class="sa">f</span><span class="s2">&quot;and rows x cols is </span><span class="si">{</span><span class="n">n_rows</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n_cols</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="n">l_horiz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measure_size</span><span class="p">(</span><span class="n">n_cols</span><span class="p">,</span> <span class="n">hspace</span><span class="p">,</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span>
+        <span class="n">l_verti</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measure_size</span><span class="p">(</span><span class="n">n_rows</span><span class="p">,</span> <span class="n">vspace</span><span class="p">,</span> <span class="n">top</span> <span class="o">-</span> <span class="n">bottom</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">axes</span><span class="p">):</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_rows</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">i</span> <span class="o">//</span> <span class="n">n_cols</span><span class="p">)</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="n">n_cols</span><span class="p">)</span>
+
+            <span class="n">borders</span> <span class="o">=</span> <span class="p">[[</span><span class="n">col</span> <span class="o">*</span> <span class="p">(</span><span class="n">l_horiz</span> <span class="o">+</span> <span class="n">hspace</span><span class="p">)</span> <span class="o">+</span> <span class="n">left</span><span class="p">,</span>
+                        <span class="n">row</span> <span class="o">*</span> <span class="p">(</span><span class="n">l_verti</span> <span class="o">+</span> <span class="n">vspace</span><span class="p">)</span> <span class="o">+</span> <span class="n">bottom</span><span class="p">],</span>
+                       <span class="p">[</span><span class="n">col</span> <span class="o">*</span> <span class="p">(</span><span class="n">l_horiz</span> <span class="o">+</span> <span class="n">hspace</span><span class="p">)</span> <span class="o">+</span> <span class="n">left</span> <span class="o">+</span> <span class="n">l_horiz</span><span class="p">,</span>
+                        <span class="n">row</span> <span class="o">*</span> <span class="p">(</span><span class="n">l_verti</span> <span class="o">+</span> <span class="n">vspace</span><span class="p">)</span> <span class="o">+</span> <span class="n">bottom</span> <span class="o">+</span> <span class="n">l_verti</span><span class="p">]]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">locate_ax</span><span class="p">(</span><span class="n">borders</span><span class="o">=</span><span class="n">borders</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">axes</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_measure_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                      <span class="n">n_elements</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                      <span class="n">space_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.03</span><span class="p">,</span>
+                      <span class="n">partial_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method computes the length of each axis side such that they end up</span>
+<span class="sd">        separated by space_size.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ==========</span>
+<span class="sd">        n_elements: int. Default=1</span>
+<span class="sd">            number of axes per side.</span>
+<span class="sd">        space_size: float. Default=0.03</span>
+<span class="sd">            space between the axes.</span>
+<span class="sd">        partial_size: float. Default=1</span>
+<span class="sd">            size of the side in the space in which you are going to fit your</span>
+<span class="sd">            plots.</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ======</span>
+<span class="sd">        (float) length of the side of each plot.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">l_side</span> <span class="o">=</span> <span class="p">(</span><span class="n">partial_size</span> <span class="o">-</span> <span class="p">(</span><span class="n">n_elements</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">space_size</span><span class="p">)</span> <span class="o">/</span> <span class="n">n_elements</span>
+        <span class="k">assert</span> <span class="n">l_side</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;It is impossible to fit </span><span class="si">{</span><span class="n">n_elements</span><span class="si">}</span><span class="s2"> plots in &quot;</span> <span class="o">+</span>\
+                           <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">partial_size</span><span class="si">}</span><span class="s2"> side with </span><span class="si">{</span><span class="n">space_size</span><span class="si">}</span><span class="s2"> separation&quot;</span>
+        <span class="k">return</span> <span class="n">l_side</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

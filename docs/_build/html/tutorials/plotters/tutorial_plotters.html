@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plotter &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=32ed3f93" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=61243dd2"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Standard" href="StandardPlotter.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/myutils.html">myutils package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="StandardPlotter.html">Standard</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Plotter</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#A-tool-of-myutils-(YourUtils)-to-make-plots-in-a-simpler-way.">A tool of myutils (YourUtils) to make plots in a simpler way.</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Created-by-Daniel-Sucerquia-(daniel.sucerquia&#64;h-its.org)">Created by Daniel Sucerquia (daniel.sucerquia&#64;h-its.org)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Setting-the-plot-before-adding-data.">Setting the plot before adding data.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Figure-Adjust">Figure Adjust</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../tutorials.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Plotter</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/tutorials/plotters/tutorial_plotters.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> widget
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ipywidgets</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">widgets</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">init_freq</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">init_freq</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">line</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">freq</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="n">line</span><span class="o">.</span><span class="n">set_ydata</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">freq</span> <span class="o">*</span> <span class="n">x</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw_idle</span><span class="p">()</span>
+
+<span class="n">widgets</span><span class="o">.</span><span class="n">interact</span><span class="p">(</span><span class="n">update</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="n">widgets</span><span class="o">.</span><span class="n">FloatSlider</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">))</span>
+<br/><br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d9e6bcd9c60343249ce5e1962de6a366", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;function __main__.update(freq=1.0)&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "2a61a8f4305b476b9bd6453791405941", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">myutils.plotters</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardPlotter</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+<section id="Plotter">
+<h1>Plotter<a class="headerlink" href="#Plotter" title="Link to this heading"></a></h1>
+<section id="A-tool-of-myutils-(YourUtils)-to-make-plots-in-a-simpler-way.">
+<h2>A tool of myutils (YourUtils) to make plots in a simpler way.<a class="headerlink" href="#A-tool-of-myutils-(YourUtils)-to-make-plots-in-a-simpler-way." title="Link to this heading"></a></h2>
+<section id="Created-by-Daniel-Sucerquia-(daniel.sucerquia&#64;h-its.org)">
+<h3>Created by Daniel Sucerquia (<a class="reference external" href="mailto:daniel&#46;sucerquia&#37;&#52;&#48;h-its&#46;org">daniel<span>&#46;</span>sucerquia<span>&#64;</span>h-its<span>&#46;</span>org</a>)<a class="headerlink" href="#Created-by-Daniel-Sucerquia-(daniel.sucerquia@h-its.org)" title="Link to this heading"></a></h3>
+<p>In science, <a class="reference external" href="../../modules/myutils.html#myutils.plotters.StandardPlotter">myutils.plotters.StandardPlotter</a> we have to make plots all the time. One of the most used plotters in python is matplotlib, which is a very powerful tool to manipulate all the details you could set in your plots. However, many of those settings require long explanations and very specific keywords that are really easy to forget (because of the amount). Besides, the default plots of matplotlib are not the best and each
+time we create a plot, it is necessary to change the settings again and again.</p>
+<p>This tutorial does not aim to replace the whole advantajes of matplotlib but to make it faster and at least define the basics in a very accesible way to any user.</p>
+</section>
+</section>
+</section>
+<section id="Setting-the-plot-before-adding-data.">
+<h1>Setting the plot before adding data.<a class="headerlink" href="#Setting-the-plot-before-adding-data." title="Link to this heading"></a></h1>
+<p>Before adding the data we can adjust the basic settings of the plot. The next are the options used in StandardPlotter:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">Javascript</span>
+
+<span class="c1"># Define the initial Python variable</span>
+<span class="n">checkbox_state</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1"># HTML code with JavaScript for a checkbox</span>
+<span class="n">html_code</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">&lt;label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;checkbox&quot;&gt; Check me!&lt;/label&gt;</span>
+<span class="s2">&lt;p id=&quot;checkbox_state&quot;&gt;Checkbox is unchecked&lt;/p&gt;</span>
+
+<span class="s2">&lt;script&gt;</span>
+<span class="s2">    // JavaScript to update Python variable based on checkbox state</span>
+<span class="s2">    document.getElementById(&quot;checkbox&quot;).addEventListener(&quot;change&quot;, function() {</span>
+<span class="s2">        var checkboxChecked = this.checked;</span>
+
+<span class="s2">        // Update the displayed state</span>
+<span class="s2">        if (checkboxChecked) {</span>
+<span class="s2">            document.getElementById(&quot;checkbox_state&quot;).innerHTML = &quot;Checkbox is checked!&quot;;</span>
+<span class="s2">        } else {</span>
+<span class="s2">            document.getElementById(&quot;checkbox_state&quot;).innerHTML = &quot;Checkbox is unchecked&quot;;</span>
+<span class="s2">        }</span>
+
+<span class="s2">        // Send the checkbox state to Python</span>
+<span class="s2">        var kernel = IPython.notebook.kernel;</span>
+<span class="s2">        kernel.execute(&quot;checkbox_state = &quot; + checkboxChecked);</span>
+<span class="s2">    });</span>
+<span class="s2">&lt;/script&gt;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="c1"># Display the HTML</span>
+<span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="n">html_code</span><span class="p">))</span>
+
+<span class="c1"># To check the value of checkbox_state after interacting with the checkbox, you can run:</span>
+<span class="c1"># print(checkbox_state)  # Will show the updated value (True or False) after interaction.</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sp</span> <span class="o">=</span> <span class="n">StandardPlotter</span><span class="p">()</span> <span class="p">;</span> <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">axis_setter</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>You can define your preferences as a dictionary with the setting options and initialize data directly (useful for “homogeneous setting”, namely, all axis of a figure with the same settings)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">myutils.plotters</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardPlotter</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax_pref</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="s1">&#39;x [arbitrary units]&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="s1">&#39;y [arbitrary units]&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+           <span class="s1">&#39;xticks&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mf">10.1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+           <span class="s1">&#39;yticks&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mf">10.1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+           <span class="s1">&#39;xminor&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mf">10.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+           <span class="s1">&#39;color_labels&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+           <span class="s1">&#39;yminor&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mf">10.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+           <span class="s1">&#39;grid&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+           <span class="s1">&#39;mingrid&#39;</span><span class="p">:</span>  <span class="kc">True</span><span class="p">}</span>
+
+<span class="n">sp</span> <span class="o">=</span> <span class="n">StandardPlotter</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span>
+                     <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span>
+                     <span class="n">ax_pref</span><span class="o">=</span><span class="n">ax_pref</span><span class="p">)</span>
+
+<span class="n">sp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<p>Another option to define your preferences is using the method axes_setter (useful for individual setting of axes)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">myutils.plotters</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardPlotter</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">sp</span> <span class="o">=</span> <span class="n">StandardPlotter</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span>
+                     <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">)</span>
+<span class="c1"># Setting Axis1</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">axis_setter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+               <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;x [arbitrary units]&#39;</span><span class="p">,</span>
+               <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;y [arbitrary units]&#39;</span><span class="p">,</span>
+               <span class="n">factor</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+               <span class="n">xticks</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mf">10.1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+               <span class="n">yticks</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mf">10.1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+               <span class="n">xminor</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mf">10.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="n">color_labels</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+               <span class="n">yminor</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mf">10.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+               <span class="n">mingrid</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Setting Axis2</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">axis_setter</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+               <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;SecX [arbitrary units]&#39;</span><span class="p">,</span>
+               <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;SecY [arbitrary units]&#39;</span><span class="p">,</span>
+               <span class="n">factor</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+               <span class="n">xticks</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mf">10.1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+               <span class="n">yticks</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mf">10.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="n">xminor</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mf">10.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="n">color_labels</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+               <span class="n">yminor</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mf">10.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">sp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Figure-Adjust">
+<h1>Figure Adjust<a class="headerlink" href="#Figure-Adjust" title="Link to this heading"></a></h1>
+<p>Sometimes, matplotlib uses a weird way to locate axes such that when you save the figure, something is cut off. For example, the next cell creates a plot that cuts the labels when you save the figure althought the visualization shows the figure complete.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">myutils.plotters</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardPlotter</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax_pref</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="s1">&#39;x </span><span class="se">\n</span><span class="s1">[arbitrary units]&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="s1">&#39;y [arbitrary units]&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+
+<span class="n">sp</span> <span class="o">=</span> <span class="n">StandardPlotter</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span>
+                     <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span>
+                     <span class="n">ax_pref</span><span class="o">=</span><span class="n">ax_pref</span><span class="p">)</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;remove.png&#39;</span><span class="p">)</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<p>As you see, in the previous output, the x labels of the figures at the top are cut and the x labels of the bottom seems to be ok. However, when we check the figure that we just saved from it, we see that the labels of the bottom are also cut:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">display</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;remove.png&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<p>Adjusting the location of your axis never was as easy. You can use the method “setting_borders” in StandardPlot</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">myutils.plotters</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardPlotter</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax_pref</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="s1">&#39;x </span><span class="se">\n</span><span class="s1">[arbitrary units]&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="s1">&#39;y [arbitrary units]&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+
+<span class="n">sp</span> <span class="o">=</span> <span class="n">StandardPlotter</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span>
+                     <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span>
+                     <span class="n">ax_pref</span><span class="o">=</span><span class="n">ax_pref</span><span class="p">)</span>
+
+<span class="c1">#axtmp = sp.setting_borders(showframe=True) # shows the frame</span>
+<span class="c1"># axtmp = sp.setting_borders(showframe=True, majordelta=0.1) # shows the limits</span>
+<span class="c1">#axtmp = sp.setting_borders(borders={&#39;right&#39;: 0.9}, showframe=True, majordelta=0.1) # moves the right side to the border</span>
+<span class="c1">#axtmp = sp.setting_borders(borders={&#39;right&#39;:0.9, &#39;top&#39;:0.9, &#39;left&#39;:0.1, &#39;bottom&#39;:0.1}, showframe=True, majordelta=0.1) # center the figure</span>
+<span class="c1">#axtmp = sp.setting_borders(borders={&#39;right&#39;:0.9, &#39;top&#39;:0.9, &#39;left&#39;:0.1, &#39;bottom&#39;:0.1}, showframe=True, majordelta=0.01) # mess up the numbers</span>
+<span class="n">axtmp</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">setting_borders</span><span class="p">(</span><span class="n">borders</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;right&#39;</span><span class="p">:</span><span class="mf">0.9</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">:</span><span class="mf">0.9</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span> <span class="s1">&#39;bottom&#39;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">},</span> <span class="n">showframe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">majordelta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">minordelta</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span> <span class="c1"># mess up the numbers</span>
+<span class="c1">#axtmp = sp.setting_borders(borders={&#39;right&#39;:0.98, &#39;top&#39;:0.98, &#39;left&#39;:0.08, &#39;bottom&#39;:0.12, &#39;hspace&#39;: 0.3, &#39;wspace&#39;: 0.2}) # center the figure</span>
+
+<span class="n">axtmp</span><span class="o">.</span><span class="n">set_zorder</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;remove.png&#39;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">myutils.plotters</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardPlotter</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax_pref</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="s1">&#39;x </span><span class="se">\n</span><span class="s1">[arbitrary units]&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="s1">&#39;y [arbitrary units]&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;factor&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+
+<span class="n">sp</span> <span class="o">=</span> <span class="n">StandardPlotter</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span>
+                     <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">,</span>
+                     <span class="n">ax_pref</span><span class="o">=</span><span class="n">ax_pref</span><span class="p">)</span>
+
+<span class="n">axtmp</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">setting_borders</span><span class="p">(</span><span class="n">borders</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;right&#39;</span><span class="p">:</span><span class="mf">0.98</span><span class="p">,</span>
+                                    <span class="s1">&#39;top&#39;</span><span class="p">:</span><span class="mf">0.98</span><span class="p">,</span>
+                                    <span class="s1">&#39;left&#39;</span><span class="p">:</span><span class="mf">0.08</span><span class="p">,</span>
+                                    <span class="s1">&#39;bottom&#39;</span><span class="p">:</span><span class="mf">0.12</span><span class="p">,</span>
+                                    <span class="s1">&#39;hspace&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+                                    <span class="s1">&#39;wspace&#39;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">})</span>
+
+<span class="c1"># sp.plot_data(np.random.random(10)) # one list of data</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span> <span class="c1"># one list of data</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<br/><br/></pre></div>
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="StandardPlotter.html" class="btn btn-neutral float-left" title="Standard" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

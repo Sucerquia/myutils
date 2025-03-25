@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myutils.bash_scripts &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=32ed3f93" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=61243dd2"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="find_blocks" href="bash_rsts_doc/find_blocks.html" />
+    <link rel="prev" title="Script of myutils after_optimization" href="bash_rsts_scripts/after_optimization.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="myutils.html">myutils package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="myutils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.second_version.html">myutils.sith.from_extreme.second_version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.second_version.html#continuous-path">continuous_path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.second_version.html#workflow-from-extreme2">workflow_from_extreme2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html">myutils.g_values.basic_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html#gval-workflow">gval_workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html#submit">submit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html#clean-directories">clean_directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.basic_scripts.html#create-g09-bdes">create_g09_BDEs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.analysis.html">myutils.g_values.analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.analysis.html#gval-postpro">gval_postpro</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.g_values.analysis.html#extract-eprspec">extract_EPRspec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">myutils.bash_scripts</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_doc/find_blocks.html">find_blocks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_scripts/find_blocks.html">Script of myutils find_blocks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_doc/bash-template.html">bash-template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_scripts/bash-template.html">Script of myutils bash-template</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_doc/single_g09.html">single_g09</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bash_rsts_scripts/single_g09.html">Script of myutils single_g09</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#single-g09">single_g09</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bash-template">bash-template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#find-blocks">find_blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html">myutils.cli.pkg_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#files-tree">files_tree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#add-python-doc">add_python_doc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#bash-style">bash_style</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#doc-modules">doc_modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#check-structure">check_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#python-doc-fixer">python_doc_fixer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#doc-pythonfile">doc_pythonfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.pkg_structure.html#bash-basic-structure">bash_basic_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.ase_utils.html">myutils.ase_utils package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.cli.html">myutils.cli package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.gromacs.html">myutils.gromacs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="myutils.sith.html">myutils.sith package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.html#module-myutils.jupyter">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="myutils.html#module-myutils">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="myutils.html">myutils package</a></li>
+      <li class="breadcrumb-item active">myutils.bash_scripts</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/myutils.bash_scripts.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="myutils-bash-scripts">
+<h1>myutils.bash_scripts<a class="headerlink" href="#myutils-bash-scripts" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="single-g09">
+<h1>single_g09<a class="headerlink" href="#single-g09" title="Link to this heading"></a></h1>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/single_g09.html#single-g09"><span class="std std-ref">[script]</span></a> <strong>myutils/bash_scripts/single_g09.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">This code runs one optimization using gaussian in one of the clusters. You</div>
+<div class="line">have to create the input file and give it (without .com extension) as first</div>
+<div class="line">argument when run this code.</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-f  &lt;com file&gt; name if the gaussian input file without extension (.com).</div>
+<div class="line">-c  run in server.</div>
+<div class="line"><br /></div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+</section>
+<section id="bash-template">
+<h1>bash-template<a class="headerlink" href="#bash-template" title="Link to this heading"></a></h1>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/bash-template.html#bash-template"><span class="std std-ref">[script]</span></a> <strong>myutils/bash_scripts/bash-template.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">Use this template to create your scripts with a standard structure</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-d  &lt;variable&gt; add the description of the variable.</div>
+<div class="line">-c  usually used when submitted in a cluster to import modules.</div>
+<div class="line"><br /></div>
+<div class="line">-v  verbose.</div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+</section>
+<section id="find-blocks">
+<h1>find_blocks<a class="headerlink" href="#find-blocks" title="Link to this heading"></a></h1>
+<div class="bash-script-title docutils container">
+<p><a class="reference internal" href="bash_rsts_scripts/find_blocks.html#find-blocks"><span class="std std-ref">[script]</span></a> <strong>myutils/bash_scripts/find_blocks.sh</strong></p>
+</div>
+<div class="bash-script-doc docutils container">
+<div class="line-block">
+<div class="line">This code extracts the sections in a file starting and finishing with specific</div>
+<div class="line">patterns without including the lines containing those patterns. Check the next</div>
+<div class="line">options:</div>
+<div class="line"><br /></div>
+<div class="line-block">
+<div class="line">-f  &lt;file&gt; file that shows</div>
+<div class="line">-s  &lt;pattern&gt; pattern that defines the beginning of the block. This line</div>
+<div class="line-block">
+<div class="line">is not included in the block.</div>
+</div>
+<div class="line">-e  &lt;pattern&gt; pattern that defines the end of the block. This line is not</div>
+<div class="line-block">
+<div class="line">included in the block.</div>
+</div>
+<div class="line">-i  use this flag if the start and the end are indexes</div>
+<div class="line">-o  &lt;output=’output’&gt; ‘terminal’ or the name of the output without</div>
+<div class="line-block">
+<div class="line">extension. In the later case, the output will be stored in files</div>
+<div class="line">called &lt;output&gt;_&lt;n&gt;.dat, where n is the number of appearence of the block</div>
+<div class="line">in the file with 3-digits format (leading zeros); n starts in 001.</div>
+<div class="line"><br /></div>
+</div>
+<div class="line">-v  verbose of what’s the code doing.</div>
+<div class="line">-h  prints this message.</div>
+</div>
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="bash_rsts_scripts/after_optimization.html" class="btn btn-neutral float-left" title="Script of myutils after_optimization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="bash_rsts_doc/find_blocks.html" class="btn btn-neutral float-right" title="find_blocks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

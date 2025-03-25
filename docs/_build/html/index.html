@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyUtils &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+      <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=32ed3f93" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=61243dd2"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+        <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+        <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+        <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="About" href="about.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/myutils.html">myutils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">MyUtils</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="myutils">
+<span id="id1"></span><h1>MyUtils<a class="headerlink" href="#myutils" title="Link to this heading"></a></h1>
+<p>MyUtils is a set of tools that you can use for scientific proporsals, mainly
+related with the field of simulations of molecules, although there are some
+parts that could be interesting for all the scientific community. This set of
+tools was created and it is currently maintained by Daniel Sucerquia, PhD
+student at the Heidelberg Institute for Theoretical Studies (HITS) and the
+Max Planck Institute for Polymer Research (MPIP).</p>
+<p>This is a general overview of the kind of tools you can find in this project:</p>
+<pre align="center" class="mermaid align-center">
+        graph TD
+node1[&quot;myutils&quot;]
+click node1 &quot;modules/myutils.html&quot; _self
+  node1 --&gt; node2[&quot;ase_utils&quot;]
+  click node2 &quot;modules/myutils.ase_utils.html&quot; _self
+  node1 --&gt; node3[&quot;bash_scripts&quot;]
+  click node3 &quot;modules/myutils.bash_scripts.html&quot; _self
+  node1 --&gt; node4[&quot;cli&quot;]
+  click node4 &quot;modules/myutils.cli.html&quot; _self
+    node4 --&gt; node5[&quot;pkg_structure&quot;]
+    click node5 &quot;modules/myutils.cli.pkg_structure.html&quot; _self
+  node1 --&gt; node6[&quot;gromacs&quot;]
+  click node6 &quot;modules/myutils.gromacs.html&quot; _self
+  node1 --&gt; node7[&quot;pre-deprected&quot;]
+  click node7 &quot;modules/myutils.pre-deprected.html&quot; _self
+  node1 --&gt; node8[&quot;sith&quot;]
+  click node8 &quot;modules/myutils.sith.html&quot; _self
+    node8 --&gt; node9[&quot;from_extreme&quot;]
+    click node9 &quot;modules/myutils.sith.from_extreme.html&quot; _self
+    </pre><section id="content">
+<h2>Content<a class="headerlink" href="#content" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#installation">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules/myutils.html">myutils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/myutils.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.sith.from_extreme.second_version.html">myutils.sith.from_extreme.second_version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.sith.from_extreme.second_version.html#continuous-path">continuous_path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.sith.from_extreme.second_version.html#workflow-from-extreme2">workflow_from_extreme2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.g_values.basic_scripts.html">myutils.g_values.basic_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.g_values.basic_scripts.html#gval-workflow">gval_workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.g_values.basic_scripts.html#submit">submit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.g_values.basic_scripts.html#clean-directories">clean_directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.g_values.basic_scripts.html#create-g09-bdes">create_g09_BDEs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.g_values.analysis.html">myutils.g_values.analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.g_values.analysis.html#gval-postpro">gval_postpro</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.g_values.analysis.html#extract-eprspec">extract_EPRspec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#module-myutils.sith.from_extreme.info_from_opt">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.delta_angles_continuous"><code class="docutils literal notranslate"><span class="pre">delta_angles_continuous()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.info_from_opt"><code class="docutils literal notranslate"><span class="pre">info_from_opt()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.reduce_structs"><code class="docutils literal notranslate"><span class="pre">reduce_structs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#module-myutils.sith.from_extreme">Module contents</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#after-optimization">after_optimization</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#workflow-from-extreme">workflow_from_extreme</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#rearange-files">rearange_files</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#opt-and-forces">opt_and_forces</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#resubmit-failed">resubmit_failed</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#extr-dofs">extr_dofs</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#prepare-and-submit">prepare_and_submit</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#opt-from-xyzs">opt_from_xyzs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.bash_scripts.html">myutils.bash_scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.bash_scripts.html#single-g09">single_g09</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.bash_scripts.html#bash-template">bash-template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.bash_scripts.html#find-blocks">find_blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html">myutils.cli.pkg_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html#files-tree">files_tree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html#add-python-doc">add_python_doc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html#bash-style">bash_style</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html#doc-modules">doc_modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html#check-structure">check_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html#python-doc-fixer">python_doc_fixer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html#doc-pythonfile">doc_pythonfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.cli.pkg_structure.html#bash-basic-structure">bash_basic_structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.ase_utils.html">myutils.ase_utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.ase_utils.html#module-myutils.ase_utils.molecules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment"><code class="docutils literal notranslate"><span class="pre">Alignment</span></code></a><ul>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment.align_with_components"><code class="docutils literal notranslate"><span class="pre">Alignment.align_with_components()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment.center_geo"><code class="docutils literal notranslate"><span class="pre">Alignment.center_geo()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.Alignment.pca_vectors"><code class="docutils literal notranslate"><span class="pre">Alignment.pca_vectors()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter</span></code></a><ul>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.align_axis"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.align_axis()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.align_plane"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.align_plane()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.apply_trans"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.apply_trans()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.create_gaussian_input"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.create_gaussian_input()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.increase_distance"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.increase_distance()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.increase_distance_with_constraints"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.increase_distance_with_constraints()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.rot_x"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.rot_x()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.rot_y"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.rot_y()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.rot_z"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.rot_z()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.scale_distance"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.scale_distance()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.MoleculeSetter.xy_alignment"><code class="docutils literal notranslate"><span class="pre">MoleculeSetter.xy_alignment()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.PCAMatcher"><code class="docutils literal notranslate"><span class="pre">PCAMatcher</span></code></a><ul>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.PCAMatcher.align_molecules"><code class="docutils literal notranslate"><span class="pre">PCAMatcher.align_molecules()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.molecules.PCAMatcher.matching"><code class="docutils literal notranslate"><span class="pre">PCAMatcher.matching()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.tools.F_max_stretch"><code class="docutils literal notranslate"><span class="pre">F_max_stretch()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.tools.F_stretch"><code class="docutils literal notranslate"><span class="pre">F_stretch()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.tools.all_hydrogen_atoms"><code class="docutils literal notranslate"><span class="pre">all_hydrogen_atoms()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.tools.all_xyz2pdb"><code class="docutils literal notranslate"><span class="pre">all_xyz2pdb()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.tools.change_distance"><code class="docutils literal notranslate"><span class="pre">change_distance()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.tools.conf2pdb"><code class="docutils literal notranslate"><span class="pre">conf2pdb()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.tools.diff_bonds"><code class="docutils literal notranslate"><span class="pre">diff_bonds()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.tools.distance"><code class="docutils literal notranslate"><span class="pre">distance()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.tools.extract_bonds"><code class="docutils literal notranslate"><span class="pre">extract_bonds()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.ase_utils.html#myutils.ase_utils.tools.shake_except"><code class="docutils literal notranslate"><span class="pre">shake_except()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.ase_utils.html#module-myutils.ase_utils">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.cli.html">myutils.cli package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.cli.html#module-myutils.cli.main">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.cli.html#myutils.cli.main.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.cli.html#myutils.cli.main_template.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.cli.html#module-myutils.cli">Module contents</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.cli.html#generate-main">generate_main</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.gromacs.html">myutils.gromacs package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.gromacs.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.gromacs.html#module-myutils.gromacs">Module contents</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.gromacs.html#extract-distance">extract_distance</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.gromacs.html#classical-energies">classical_energies</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.gromacs.html#analysis">analysis</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.gromacs.html#classical-minimization">classical_minimization</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.gromacs.html#pulling">pulling</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.gromacs.html#equilibrate-pdb">equilibrate_pdb</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.gromacs.html#pulling-with-ff">pulling_with_ff</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.gromacs.html#peptide-pulling">peptide_pulling</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.gromacs.html#constraint-run">constraint_run</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.sith.html">myutils.sith package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.from_extreme.html">myutils.sith.from_extreme package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#module-myutils.sith.from_extreme.info_from_opt">Submodules</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.delta_angles_continuous"><code class="docutils literal notranslate"><span class="pre">delta_angles_continuous()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.info_from_opt"><code class="docutils literal notranslate"><span class="pre">info_from_opt()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#myutils.sith.from_extreme.info_from_opt.reduce_structs"><code class="docutils literal notranslate"><span class="pre">reduce_structs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#module-myutils.sith.from_extreme">Module contents</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#after-optimization">after_optimization</a></li>
+<li class="toctree-l7"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#workflow-from-extreme">workflow_from_extreme</a></li>
+<li class="toctree-l7"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#rearange-files">rearange_files</a></li>
+<li class="toctree-l7"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#opt-and-forces">opt_and_forces</a></li>
+<li class="toctree-l7"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#resubmit-failed">resubmit_failed</a></li>
+<li class="toctree-l7"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#extr-dofs">extr_dofs</a></li>
+<li class="toctree-l7"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#prepare-and-submit">prepare_and_submit</a></li>
+<li class="toctree-l7"><a class="reference internal" href="modules/myutils.sith.from_extreme.html#opt-from-xyzs">opt_from_xyzs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.html#module-myutils.sith.analysis">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis"><code class="docutils literal notranslate"><span class="pre">DataSetAnalysis</span></code></a><ul>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.amino_freq"><code class="docutils literal notranslate"><span class="pre">DataSetAnalysis.amino_freq()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.dof_vs_energy"><code class="docutils literal notranslate"><span class="pre">DataSetAnalysis.dof_vs_energy()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.dof_vs_energy_rescaled"><code class="docutils literal notranslate"><span class="pre">DataSetAnalysis.dof_vs_energy_rescaled()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.plot_DFT_ener"><code class="docutils literal notranslate"><span class="pre">DataSetAnalysis.plot_DFT_ener()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.DataSetAnalysis.test"><code class="docutils literal notranslate"><span class="pre">DataSetAnalysis.test()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.SithAnalysis"><code class="docutils literal notranslate"><span class="pre">SithAnalysis</span></code></a><ul>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.SithAnalysis.index_dof"><code class="docutils literal notranslate"><span class="pre">SithAnalysis.index_dof()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.SithAnalysis.le_dof_amino"><code class="docutils literal notranslate"><span class="pre">SithAnalysis.le_dof_amino()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.analysis_energy_dof"><code class="docutils literal notranslate"><span class="pre">analysis_energy_dof()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.closest_indices"><code class="docutils literal notranslate"><span class="pre">closest_indices()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.construct_neigh_dic"><code class="docutils literal notranslate"><span class="pre">construct_neigh_dic()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.cross_val"><code class="docutils literal notranslate"><span class="pre">cross_val()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.dof_classificator_all"><code class="docutils literal notranslate"><span class="pre">dof_classificator_all()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.dof_classificator_one"><code class="docutils literal notranslate"><span class="pre">dof_classificator_one()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.le_same_aminoacids"><code class="docutils literal notranslate"><span class="pre">le_same_aminoacids()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.length_energy"><code class="docutils literal notranslate"><span class="pre">length_energy()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.mean_n_std"><code class="docutils literal notranslate"><span class="pre">mean_n_std()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.pep_per_x"><code class="docutils literal notranslate"><span class="pre">pep_per_x()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.reduce_data"><code class="docutils literal notranslate"><span class="pre">reduce_data()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.separate_by_position"><code class="docutils literal notranslate"><span class="pre">separate_by_position()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.set_hes_from_ref"><code class="docutils literal notranslate"><span class="pre">set_hes_from_ref()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.analysis.statistics"><code class="docutils literal notranslate"><span class="pre">statistics()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.compare_siths.extract_common"><code class="docutils literal notranslate"><span class="pre">extract_common()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.compare_siths.extract_diff"><code class="docutils literal notranslate"><span class="pre">extract_diff()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.compare_siths.index_dof"><code class="docutils literal notranslate"><span class="pre">index_dof()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.compare_siths.organize_lengths"><code class="docutils literal notranslate"><span class="pre">organize_lengths()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.g09_xyz.log2xyz"><code class="docutils literal notranslate"><span class="pre">log2xyz()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.protonate.Protonize"><code class="docutils literal notranslate"><span class="pre">Protonize</span></code></a><ul>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.protonate.Protonize.arg"><code class="docutils literal notranslate"><span class="pre">Protonize.arg()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.protonate.Protonize.asp"><code class="docutils literal notranslate"><span class="pre">Protonize.asp()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.protonate.Protonize.create_atoms"><code class="docutils literal notranslate"><span class="pre">Protonize.create_atoms()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.protonate.Protonize.glu"><code class="docutils literal notranslate"><span class="pre">Protonize.glu()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.protonate.Protonize.lys"><code class="docutils literal notranslate"><span class="pre">Protonize.lys()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.protonate.protonate"><code class="docutils literal notranslate"><span class="pre">protonate()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter"><code class="docutils literal notranslate"><span class="pre">SithPlotter</span></code></a><ul>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.add_color_per_amino"><code class="docutils literal notranslate"><span class="pre">SithPlotter.add_color_per_amino()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.create_blocks"><code class="docutils literal notranslate"><span class="pre">SithPlotter.create_blocks()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_angles"><code class="docutils literal notranslate"><span class="pre">SithPlotter.plot_angles()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_energies_in_DOFs"><code class="docutils literal notranslate"><span class="pre">SithPlotter.plot_energies_in_DOFs()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_error"><code class="docutils literal notranslate"><span class="pre">SithPlotter.plot_error()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_hessian"><code class="docutils literal notranslate"><span class="pre">SithPlotter.plot_hessian()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_ramachandran"><code class="docutils literal notranslate"><span class="pre">SithPlotter.plot_ramachandran()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.sith_plots.SithPlotter.plot_sith"><code class="docutils literal notranslate"><span class="pre">SithPlotter.plot_sith()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.sith_plots.plot_averages_per_pos"><code class="docutils literal notranslate"><span class="pre">plot_averages_per_pos()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.sith_plots.plot_matrix"><code class="docutils literal notranslate"><span class="pre">plot_matrix()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.sith_plots.plot_matrix2"><code class="docutils literal notranslate"><span class="pre">plot_matrix2()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.sith_plots.plot_matrix3"><code class="docutils literal notranslate"><span class="pre">plot_matrix3()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.sith_tools.gen_randpep"><code class="docutils literal notranslate"><span class="pre">gen_randpep()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#myutils.sith.sith_tools.proline_state"><code class="docutils literal notranslate"><span class="pre">proline_state()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.sith.html#module-myutils.sith">Module contents</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#stretching">stretching</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#extract-forces">extract_forces</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#proline-mod">proline_mod</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#clean-ds">clean_ds</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#find-forces">find_forces</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#compute-forces">compute_forces</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#workflow">workflow</a></li>
+<li class="toctree-l5"><a class="reference internal" href="modules/myutils.sith.html#swap-atoms-in-com">swap_atoms_in_com</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/myutils.html#module-myutils.jupyter">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.html#myutils.jupyter.hide_code"><code class="docutils literal notranslate"><span class="pre">hide_code()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.html#myutils.miscellaneous.args_and_defaults"><code class="docutils literal notranslate"><span class="pre">args_and_defaults()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.html#myutils.miscellaneous.function_doc"><code class="docutils literal notranslate"><span class="pre">function_doc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.html#myutils.miscellaneous.optimized_e"><code class="docutils literal notranslate"><span class="pre">optimized_e()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.html#myutils.miscellaneous.output_terminal"><code class="docutils literal notranslate"><span class="pre">output_terminal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.html#myutils.miscellaneous.time_g09"><code class="docutils literal notranslate"><span class="pre">time_g09()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.html#myutils.peptides.PepSetter"><code class="docutils literal notranslate"><span class="pre">PepSetter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.peptides.PepSetter.build_proline_state"><code class="docutils literal notranslate"><span class="pre">PepSetter.build_proline_state()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.peptides.PepSetter.compute_angle"><code class="docutils literal notranslate"><span class="pre">PepSetter.compute_angle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.peptides.PepSetter.compute_dihedrals"><code class="docutils literal notranslate"><span class="pre">PepSetter.compute_dihedrals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.peptides.PepSetter.endo_exo_proline"><code class="docutils literal notranslate"><span class="pre">PepSetter.endo_exo_proline()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.peptides.PepSetter.rama_phi_psi"><code class="docutils literal notranslate"><span class="pre">PepSetter.rama_phi_psi()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.html#myutils.plotters.Space"><code class="docutils literal notranslate"><span class="pre">Space</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.plotters.Space.add_axes"><code class="docutils literal notranslate"><span class="pre">Space.add_axes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.plotters.Space.locate_ax"><code class="docutils literal notranslate"><span class="pre">Space.locate_ax()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.plotters.Space.set_axis"><code class="docutils literal notranslate"><span class="pre">Space.set_axis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.plotters.Space.show_frame"><code class="docutils literal notranslate"><span class="pre">Space.show_frame()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.html#myutils.plotters.StandardPlotter"><code class="docutils literal notranslate"><span class="pre">StandardPlotter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.plotters.StandardPlotter.add_axes"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.add_axes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.plotters.StandardPlotter.add_space"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.add_space()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.plotters.StandardPlotter.arrow"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.arrow()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.plotters.StandardPlotter.axis_setter"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.axis_setter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.plotters.StandardPlotter.change_ax_defaults"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.change_ax_defaults()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.plotters.StandardPlotter.change_general_pars"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.change_general_pars()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.plotters.StandardPlotter.draw_brace"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.draw_brace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.plotters.StandardPlotter.plot_data"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.plot_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.plotters.StandardPlotter.raxis"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.raxis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.plotters.StandardPlotter.save"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.plotters.StandardPlotter.set_polar"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.set_polar()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/myutils.html#myutils.plotters.StandardPlotter.show"><code class="docutils literal notranslate"><span class="pre">StandardPlotter.show()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/myutils.html#module-myutils">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.html#basics">basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="modules/myutils.html#pkges-installer">pkges_installer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tutorials.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/plotters/StandardPlotter.html">Standard</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tutorials/plotters/StandardPlotter.html#data">Data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tutorials/plotters/StandardPlotter.html#one-list-array">one list (array)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tutorials/plotters/StandardPlotter.html#two-lists-arrays">two lists (arrays)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tutorials/plotters/StandardPlotter.html#adding-several-curves-to-the-same-plot">Adding several curves to the same plot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/plotters/tutorial_plotters.html">Plotter</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tutorials/plotters/tutorial_plotters.html#A-tool-of-myutils-(YourUtils)-to-make-plots-in-a-simpler-way.">A tool of myutils (YourUtils) to make plots in a simpler way.</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tutorials/plotters/tutorial_plotters.html#Created-by-Daniel-Sucerquia-(daniel.sucerquia&#64;h-its.org)">Created by Daniel Sucerquia (daniel.sucerquia&#64;h-its.org)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/plotters/tutorial_plotters.html#Setting-the-plot-before-adding-data.">Setting the plot before adding data.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/plotters/tutorial_plotters.html#Figure-Adjust">Figure Adjust</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="about.html" class="btn btn-neutral float-right" title="About" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
