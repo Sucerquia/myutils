@@ -46,6 +46,7 @@ $subline
 <div align="center">
   <img src="./opt_EPRII.png"  width="500">
 </div>
+
 EOF
 }
 
@@ -54,7 +55,6 @@ EOF
 orca_output="EPRII_i.out"
 MicroWaveExper=179.813
 ndpoints=501
-hyperfine='false'
 output="spectrum_wo_hyFiCorr.dat"
 experiment=''
 verbose='false'
@@ -84,12 +84,6 @@ then
   fail "You have to provide a the name of a molecule that is a candidate. Use
         the flag -c for this proporsal"
 fi
-cd $mol_cand
-
-if [[ ${#exper_values} -eq 0 ]]
-then
-  fail "You have to provide tempted experimental gvals, f.e. '[2.0062, 2.0055, 2.0022]'"
-fi
 
 if [ ! -f $experiment ]
 then
@@ -106,15 +100,16 @@ date
 echo " * Command:"
 echo "$0" "$@"
 
-
 # ---- BODY --------------- ----------------------------------------------------
 reference=$(myutils gval_workflow -path)
 reference=${reference%/basic_scripts*}
 
 # Creates gvalues_table.md and gvalues.png
 verbose "create gvalues_table.md and gvalues.png"
-myutils extract_system_info './' "$exper_values"
+myutils extract_system_info "$mol_cand" "$exper_values"
+cd $mol_cand
 
+# Radicals
 for candidate in *-*/
 do
   cd $candidate
@@ -125,7 +120,7 @@ do
   rm create_mol_png.tcl
   
   verbose "Compute the spectrum with easyspin"
-  $(myutils extract_EPRspec -path) -e $experiment $hyperfine -O $orca_output \
+  $(myutils extract_EPRspec -path) -e "$experiment" $hyperfine -O $orca_output \
                                    -o $output -m $MicroWaveExper -n $ndpoints \
                                    -v || fail \
                                    "error extracting spectrum of $candidate"
@@ -147,4 +142,29 @@ do
 EOF
   done
   cd ../
+done
+
+# Visualization of molecules where frequencies where computed but not radicals
+
+cd ../ # goes completely out, to where the molecules are.
+
+mapfile -t frequencies < <(find . -name 'freq.out' | sort )
+
+ori=$(pwd)
+for freq in ${frequencies[@]};
+do
+  if [[ "$freq" != *"-"* ]];
+  then
+    name=${freq%/*}
+
+    cd $name
+    verbose "Render image of the non-rad molecule $name"
+    cp $reference/analysis/create_mol_png.tcl .
+    vmd -e create_mol_png.tcl -args opt_EPRII.xyz opt_EPRII.png
+    rm create_mol_png.tcl
+  
+    # Create vmd_image.md
+    create_vmd_image_md $name
+    cd $ori
+  fi
 done
