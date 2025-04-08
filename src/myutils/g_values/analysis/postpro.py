@@ -231,11 +231,13 @@ def extract_system_info(sys_path: str, exp_values: str):
     ====
     It assumes that the ORCA output is called EPR_i.out
     """
-    experiment = np.array(eval(exp_values))
+    if exp_values == '':
+        experiment = np.zeros(3)
+    else:
+        experiment = np.array(eval(exp_values))
 
     # Create table
-    subsystems = [subsys for subsys in glob(f'{sys_path}/*/')
-                  if '/opt/' not in subsys]
+    subsystems = [subsys for subsys in glob(f'{sys_path}/*-*/')]
     subsystems.sort()
     table = create_table_per_system(experiment=experiment, systems=subsystems)
 
@@ -261,9 +263,14 @@ def extract_system_info(sys_path: str, exp_values: str):
                         ax_pref={'xticks': np.array(range(len(gvals))) + 1,
                                 'xticklabels': systems})
 
+    # experiment
+    if (experiment == np.zeros(3)).all():
+        sp.plot_data([1, len(systems)], [experiment[0], experiment[0]], pstyle='--')
+        sp.plot_data([1, len(systems)], [experiment[1], experiment[1]], pstyle='--', ax = 1)
+        sp.plot_data([1, len(systems)], [experiment[2], experiment[2]], pstyle='--', ax = 2)
+
     # gx
     sp.plot_data(gvals[:,0], pstyle='o', ms=2)
-    sp.plot_data([1, len(systems)], [experiment[0], experiment[0]], pstyle='--')
     sp.axis_setter(0,
                 xticks=np.array(range(len(systems))) + 1,
                 xticklabels= [''] * len(systems),
@@ -271,7 +278,6 @@ def extract_system_info(sys_path: str, exp_values: str):
 
     # gy
     sp.plot_data(gvals[:,1], ax = 1, pstyle='o', ms=2)
-    sp.plot_data([1, len(systems)], [experiment[1], experiment[1]], pstyle='--', ax = 1)
     sp.axis_setter(1,
                 xticks=np.array(range(len(systems))) + 1,
                 xticklabels= [''] * len(systems),
@@ -279,7 +285,6 @@ def extract_system_info(sys_path: str, exp_values: str):
 
     # gz
     sp.plot_data(gvals[:,2], ax = 2, pstyle='o', ms=2)
-    sp.plot_data([1, len(systems)], [experiment[2], experiment[2]], pstyle='--', ax = 2)
     sp.axis_setter(2,
                 ylabel=r'g$_z$')
 
