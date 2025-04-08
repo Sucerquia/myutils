@@ -4,4 +4,5 @@ Tutorials
 .. toctree::
    :maxdepth: 4
 
-   plotters
+   plotters/tutorial_plotters
+   EPRspectrum/tutorial_EPR
