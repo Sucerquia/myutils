@@ -57,8 +57,6 @@ sh_executers = {
     'pkges_installer': './pkges_installer.sh',
     'submit': './g_values/basic_scripts/submit.sh',
     'gval_workflow': './g_values/basic_scripts/gval_workflow.sh',
-    'create_g09_BDEs': './g_values/basic_scripts/create_g09_BDEs.sh',
-    'clean_directories': './g_values/basic_scripts/clean_directories.sh',
     'gval_postpro': './g_values/analysis/gval_postpro.sh',
     'extract_EPRspec': './g_values/analysis/extract_EPRspec.sh',
     'pulling_with_ff': './gromacs/pulling_with_ff.sh',
@@ -87,7 +85,6 @@ sh_executers = {
 }
 
 other_files = {
-    'EPR_abspect': './g_values/analysis/EPR_abspect.m',
     'create_mol_png': './g_values/analysis/create_mol_png.tcl',
     'pulling_temp': './gromacs/pulling_temp.mdp',
     'nvt': './gromacs/nvt.mdp',
