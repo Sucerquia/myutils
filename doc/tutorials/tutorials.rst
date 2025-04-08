@@ -6,3 +6,5 @@ Tutorials
 
    plotters/tutorial_plotters
    EPRspectrum/tutorial_EPR
+   documentation/tutorial_doc
+   sith/tutorial_SITH
