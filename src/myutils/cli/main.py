@@ -21,6 +21,8 @@ pymodules = {
     'create_table_per_system': 'myutils.g_values.analysis.postpro',
     'create_table_per_method': 'myutils.g_values.analysis.postpro',
     'extract_gvals': 'myutils.g_values.analysis.postpro',
+    'best_fit': 'myutils.g_values.analysis.best_fit',
+    'spect_w_experiment': 'myutils.g_values.analysis.best_fit',
     'create_fit_file': 'myutils.g_values.analysis.best_fit',
     'create_amber_data': 'myutils.gromacs.ff_parameters',
     'create_grappa_data': 'myutils.gromacs.ff_parameters',

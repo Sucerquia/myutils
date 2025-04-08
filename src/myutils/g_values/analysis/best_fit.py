@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.optimize import nnls
 from myutils.miscellaneous import output_terminal
+from myutils.plotters import StandardPlotter
 
 
 class TheoMatchExpe:
@@ -16,7 +17,6 @@ class TheoMatchExpe:
     basis_location: str. Default='../'
         location where to search for the files with the basis_pattern.
 
-    
     Note
     ====
     This script assumes that the basis files has a common pattern and they are all
@@ -25,12 +25,24 @@ class TheoMatchExpe:
     """
     def __init__(self,
                  files,
-                 experiment_file='../experiments/field_vs_spectrum2024.dat'):
-    
-        self.fieldexp, self.intensexp = np.loadtxt(experiment_file, unpack=True)
-        self.files = np.array(files)
+                 experiment_file='../experiments/field_vs_spectrum2024.dat',
+                 fieldrange=None):
 
+        self.fieldexp, self.intensexp = np.loadtxt(experiment_file, unpack=True)
+        
+
+        self.files = np.array(files)
         self.field = np.loadtxt(self.files[0], usecols=0)
+        if fieldrange is None:
+            # takes all the range
+            self.conditiontheo = self.field == self.field
+            self.conditionexp = self.fieldexp == self.fieldexp
+        else:
+            self.conditiontheo = np.logical_and(self.field > fieldrange[0],
+                                                self.field < fieldrange[1])
+            self.conditionexp = np.logical_and(self.fieldexp > fieldrange[0],
+                                               self.fieldexp < fieldrange[1])
+
         self.intensities = []
         for file in self.files:
             intensity = np.loadtxt(file, usecols=1)
@@ -38,9 +50,9 @@ class TheoMatchExpe:
         self.intensities = np.array(self.intensities)
 
         # Interpolate and find coeffs
-        A = np.column_stack([np.interp(self.fieldexp,
-                                       self.field, bf) for bf in self.intensities])
-        self.coeffs = nnls(A, self.intensexp)[0].reshape(len(self.intensities), 1)
+        A = np.column_stack([np.interp(self.fieldexp[self.conditionexp],
+                                       self.field[self.conditiontheo], bf[self.conditiontheo]) for bf in self.intensities])
+        self.coeffs = nnls(A, self.intensexp[self.conditionexp])[0].reshape(len(self.intensities), 1)
         self.intensfit = np.sum(self.coeffs * self.intensities, axis=0)
         self.proportions()
 
@@ -62,11 +74,33 @@ class TheoMatchExpe:
         total = np.sum(self.coeffs)
         self.percentages = 100 * self.coeffs.flatten() / total
         if print_analysis:
-            for i, name in enumerate(self.files):
-                print(name, " (%): ", self.percentages[i])
+            for i in np.argsort(-self.percentages):
+                print(self.files[i], " (%): ", self.percentages[i])
 
         return self.percentages
     
+    def gradual_cleaning(self, threshold=5, steps=0.1):
+        """
+        Removes gradually the candidates that do not weight much in the fitting
+        up to having all the candidates with a minimum percentage in the fitting.
+
+        Parameters
+        ==========
+        threshold: float. Default=50
+            minimum percentage por candidate to be considered into the fitting.
+        steps: float. Default=0.1
+            size of the steps in the filtering.
+        
+        Return
+        ======
+        (np.array) new set of intensities.
+        """
+        for intermedia in np.arange(0, threshold, steps):
+            output = self.clean_candidates(threshold=intermedia)
+        output = self.clean_candidates(threshold=threshold)
+
+        return output
+
     def clean_candidates(self, threshold=1):
         """
         Removes the candidates that are expected to be less than certain
@@ -91,10 +125,10 @@ class TheoMatchExpe:
         self.intensities = self.intensities[condition]
 
         # refitting
-        A = np.column_stack([np.interp(self.fieldexp,
-                                       self.field, bf) for bf in self.intensities])
+        A = np.column_stack([np.interp(self.fieldexp[self.conditionexp],
+                                       self.field[self.conditiontheo], bf[self.conditiontheo]) for bf in self.intensities])
         
-        self.coeffs = nnls(A, self.intensexp)[0].reshape(len(self.intensities), 1)
+        self.coeffs = nnls(A, self.intensexp[self.conditionexp])[0].reshape(len(self.intensities), 1)
         self.intensfit = np.sum(self.coeffs * self.intensities, axis=0)
         self.proportions()
         self.clean_candidates(threshold=threshold)
@@ -182,3 +216,69 @@ def create_fit_file(output,
         outfile.write('# field intensity\n')
         for f, i in zip(field, inten):
             outfile.write(f'{f} \t {i} \n')
+
+
+# add2executable
+def spect_w_experiment(experiment, theory, output):
+    """
+    Fits the peak of the theoretical spectrum into the experimental value at
+    that value of the field.
+
+    Parameters
+    ==========
+    experiment: str
+        path to the .dat file containing the experimental field and the
+        intensity.
+    theory: str
+        path to the .dat file containing the theoretical field and the
+        intensity of the given candidate.
+    output: str
+        name of the png file where the output is stored.
+    
+    Return
+    ======
+    (StandardPlotter) StandardPlotter used to plot.
+    """
+    fieldexp, intensexp = np.loadtxt(experiment, unpack=True)
+    field, intens = np.loadtxt(theory, unpack=True)
+
+    maxintensity_index = intens.argmax()
+    target_field_val = field[maxintensity_index]
+    closest_exp_index = np.abs(fieldexp - target_field_val).argmin()
+    experiment_val =intensexp[closest_exp_index]
+    intens = intens * experiment_val / intens[maxintensity_index]
+
+    sp = StandardPlotter(ax_pref={'xlabel': 'Field [T]',
+                                  'ylabel': 'Intensity [a.u]'})
+    sp.plot_data(field, intens, pstyle='-', data_label='Theory')
+    sp.plot_data(fieldexp, intensexp, pstyle='-', color_plot='black', data_label='Experiment')
+    sp.spaces[0].set_axis(borders=[[0.15, 0.15], [0.98, 0.98]])
+    sp.axis_setter(legend=True)
+    sp.save(output)
+
+
+# add2executable
+def best_fit(experiment, output, fieldrange, *argv):
+    if fieldrange == '':
+        fieldrange = None
+    else:
+        fieldrange = eval(fieldrange)
+    files = list(argv)
+    tme = TheoMatchExpe(files,
+                        experiment_file=experiment,
+                        fieldrange=fieldrange)
+    tme.gradual_cleaning(threshold=5)
+    tme.proportions(print_analysis=True)
+
+    sp = StandardPlotter(ax_pref={'xlabel': 'Field [T]',
+                                  'ylabel': 'Intensity [a.u]'},
+                     plot_pref={'pstyle': '-'})
+    sp.plot_data(tme.fieldexp, tme.intensexp, pstyle='-', color_plot='black', data_label='Experiment')
+    sp.plot_data(tme.field, tme.intensfit, pstyle='-', data_label='Fit')                     
+    sp.plot_data(tme.field, tme.coeffs * tme.intensities, pstyle='--');
+    if fieldrange is not None:
+        sp.plot_data([fieldrange[0], fieldrange[0]], [0, 1], pstyle=':', color_plot='gray');
+        sp.plot_data([fieldrange[1], fieldrange[1]], [0, 1], pstyle=':', color_plot='gray');
+    sp.spaces[0].set_axis(borders=[[0.15, 0.15], [0.98, 0.98]])
+    sp.axis_setter(legend=True)
+    sp.save(output)

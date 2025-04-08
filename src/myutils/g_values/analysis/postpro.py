@@ -225,8 +225,14 @@ def extract_system_info(sys_path: str, exp_values: str):
     Return
     ======
     (StandardPlotter) StandardPlotter used to plot the gvalues.
+
+
+    Note
+    ====
+    It assumes that the ORCA output is called EPR_i.out
     """
-    experiment = exec(exp_values)
+    experiment = np.array(eval(exp_values))
+
     # Create table
     subsystems = [subsys for subsys in glob(f'{sys_path}/*/')
                   if '/opt/' not in subsys]
@@ -241,7 +247,7 @@ def extract_system_info(sys_path: str, exp_values: str):
     gvals = []
 
     for system in subsystems:
-        gvals.append(several_gvals(names='EPRII.out', experiment=experiment,
+        gvals.append(several_gvals(names='EPRII_i.out', experiment=experiment,
                                    path=system)[0])
     gvals = np.array(gvals, dtype=float)
 
