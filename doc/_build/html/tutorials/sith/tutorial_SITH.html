@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Standard &mdash; myutils 1.2 documentation</title>
+  <title>SITH - distribution of energies &mdash; myutils 1.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
@@ -30,8 +30,7 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Plotter" href="tutorial_plotters.html" />
-    <link rel="prev" title="Tutorials" href="../tutorials.html" /> 
+    <link rel="prev" title="Create documentation" href="../documentation/tutorial_doc.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -58,18 +57,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modules/myutils.html">myutils package</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Standard</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#data">Data</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#one-list-array">one list (array)</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#two-lists-arrays">two lists (arrays)</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#adding-several-curves-to-the-same-plot">Adding several curves to the same plot</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_plotters.html">Plotter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_plotters.html#Setting-the-plot-before-adding-data.">Setting the plot before adding data.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_plotters.html#Figure-Adjust">Figure Adjust</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotters/tutorial_plotters.html">Plotter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotters/tutorial_plotters.html#Setting-the-plot-before-adding-data.">Setting the plot before adding data.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotters/tutorial_plotters.html#Figure-Adjust">Figure Adjust</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../EPRspectrum/tutorial_EPR.html">Theoretical EPR spectrum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation/tutorial_doc.html">Create documentation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">SITH - distribution of energies</a></li>
 </ul>
 </li>
 </ul>
@@ -89,9 +82,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../tutorials.html">Tutorials</a></li>
-      <li class="breadcrumb-item active">Standard</li>
+      <li class="breadcrumb-item active">SITH - distribution of energies</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/tutorials/plotters/StandardPlotter.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/tutorials/sith/tutorial_SITH.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -99,49 +92,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="standard">
-<h1>Standard<a class="headerlink" href="#standard" title="Link to this heading"></a></h1>
-<section id="data">
-<h2>Data<a class="headerlink" href="#data" title="Link to this heading"></a></h2>
-<section id="one-list-array">
-<h3>one list (array)<a class="headerlink" href="#one-list-array" title="Link to this heading"></a></h3>
-<p>If one list (or array) <a class="reference internal" href="../../modules/myutils.html#module-myutils.plotters" title="myutils.plotters"><code class="xref py py-mod docutils literal notranslate"><span class="pre">myutils.plotters</span></code></a> is the only argument, it is assumed that corresponds with
-the data in the y axis corresponding with the number label in the x axis. Then,
-in the next example, we are going to generate 200 random numbers and to pass
-that list of data as the only argument. As you can see, the y axis corresponds
-with the generated random numbers and the x axis goes from 1 to 200.</p>
-<p># .. literalinclude:: one_array.py</p>
-<p>Note: You can also concatenate several lists in one list. But we highly
-recommend to separate each of then in case it is practical. It allows you to
-have more control in your plot.</p>
-</section>
-<section id="two-lists-arrays">
-<h3>two lists (arrays)<a class="headerlink" href="#two-lists-arrays" title="Link to this heading"></a></h3>
-<p>In case of two list, it is assumed that first of them corresponds with the list
-of x-coordinates and the other corresponds with the list of y-coordinates. Of
-course, those lists must have the same lenght.</p>
-<p>As an example, let’s take a set of 200 random numbers and create a growing list
-of numbers by doing a cummulative sum. Then, let’s fit this data into an
-hypertangent function composed with a linear function with m=1/25 and b=-2.</p>
-<p># .. literalinclude:: hypertangent.py</p>
-</section>
-<section id="adding-several-curves-to-the-same-plot">
-<h3>Adding several curves to the same plot<a class="headerlink" href="#adding-several-curves-to-the-same-plot" title="Link to this heading"></a></h3>
-<p>A big advantage of plots is to compare the behavior of two set of data and the
-best way to do it is to put them at the same plot. To do so using standard, you
-only have to call
-2COMPLETE add link to function standard
-standard several times.</p>
-</section>
-</section>
+  <section id="sith-distribution-of-energies">
+<h1>SITH - distribution of energies<a class="headerlink" href="#sith-distribution-of-energies" title="Link to this heading"></a></h1>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>To use the tools of myutils that are part of this tutorial, be sure that
+Orca is well set up. Check <a class="reference internal" href="../../install.html#orca-setup"><span class="std std-ref">Orca set up</span></a> for more information.</p>
+</div>
+<p>Compute sith energy distribution analysis</p>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../tutorials.html" class="btn btn-neutral float-left" title="Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="tutorial_plotters.html" class="btn btn-neutral float-right" title="Plotter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../documentation/tutorial_doc.html" class="btn btn-neutral float-left" title="Create documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

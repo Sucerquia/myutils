@@ -33,7 +33,8 @@
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="prev" title="Standard" href="StandardPlotter.html" /> 
+    <link rel="next" title="Theoretical EPR spectrum" href="../EPRspectrum/tutorial_EPR.html" />
+    <link rel="prev" title="Tutorials" href="../tutorials.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -60,7 +61,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modules/myutils.html">myutils package</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="StandardPlotter.html">Standard</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Plotter</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#A-tool-of-myutils-(YourUtils)-to-make-plots-in-a-simpler-way.">A tool of myutils (YourUtils) to make plots in a simpler way.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Created-by-Daniel-Sucerquia-(daniel.sucerquia&#64;h-its.org)">Created by Daniel Sucerquia (daniel.sucerquia&#64;h-its.org)</a></li>
@@ -70,6 +70,9 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#Setting-the-plot-before-adding-data.">Setting the plot before adding data.</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Figure-Adjust">Figure Adjust</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../EPRspectrum/tutorial_EPR.html">Theoretical EPR spectrum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation/tutorial_doc.html">Create documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sith/tutorial_SITH.html">SITH - distribution of energies</a></li>
 </ul>
 </li>
 </ul>
@@ -99,54 +102,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="nbinput docutils container">
+  <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> widget
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">ipywidgets</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">widgets</span>
-
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
-<span class="n">init_freq</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">init_freq</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
-<span class="n">line</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">freq</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
-    <span class="n">line</span><span class="o">.</span><span class="n">set_ydata</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">freq</span> <span class="o">*</span> <span class="n">x</span><span class="p">))</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw_idle</span><span class="p">()</span>
-
-<span class="n">widgets</span><span class="o">.</span><span class="n">interact</span><span class="p">(</span><span class="n">update</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="n">widgets</span><span class="o">.</span><span class="n">FloatSlider</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">))</span>
-<br/><br/><br/></pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d9e6bcd9c60343249ce5e1962de6a366", "version_major": 2, "version_minor": 0}</script></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;function __main__.update(freq=1.0)&gt;
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "2a61a8f4305b476b9bd6453791405941", "version_major": 2, "version_minor": 0}</script></div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">myutils.plotters</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardPlotter</span>
@@ -160,8 +117,7 @@
 <h2>A tool of myutils (YourUtils) to make plots in a simpler way.<a class="headerlink" href="#A-tool-of-myutils-(YourUtils)-to-make-plots-in-a-simpler-way." title="Link to this heading"></a></h2>
 <section id="Created-by-Daniel-Sucerquia-(daniel.sucerquia&#64;h-its.org)">
 <h3>Created by Daniel Sucerquia (<a class="reference external" href="mailto:daniel&#46;sucerquia&#37;&#52;&#48;h-its&#46;org">daniel<span>&#46;</span>sucerquia<span>&#64;</span>h-its<span>&#46;</span>org</a>)<a class="headerlink" href="#Created-by-Daniel-Sucerquia-(daniel.sucerquia@h-its.org)" title="Link to this heading"></a></h3>
-<p>In science, <a class="reference external" href="../../modules/myutils.html#myutils.plotters.StandardPlotter">myutils.plotters.StandardPlotter</a> we have to make plots all the time. One of the most used plotters in python is matplotlib, which is a very powerful tool to manipulate all the details you could set in your plots. However, many of those settings require long explanations and very specific keywords that are really easy to forget (because of the amount). Besides, the default plots of matplotlib are not the best and each
-time we create a plot, it is necessary to change the settings again and again.</p>
+<p>In science, we have to make plots all the time. One of the most used plotters in python is matplotlib, which is a very powerful tool to manipulate all the details you could set in your plots. However, many of those settings require long explanations and very specific keywords that are really easy to forget (because of the amount). Besides, the default plots of matplotlib are not the best and each time we create a plot, it is necessary to change the settings again and again.</p>
 <p>This tutorial does not aim to replace the whole advantajes of matplotlib but to make it faster and at least define the basics in a very accesible way to any user.</p>
 </section>
 </section>
@@ -169,49 +125,8 @@ time we create a plot, it is necessary to change the settings again and again.</
 <section id="Setting-the-plot-before-adding-data.">
 <h1>Setting the plot before adding data.<a class="headerlink" href="#Setting-the-plot-before-adding-data." title="Link to this heading"></a></h1>
 <p>Before adding the data we can adjust the basic settings of the plot. The next are the options used in StandardPlotter:</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">Javascript</span>
-
-<span class="c1"># Define the initial Python variable</span>
-<span class="n">checkbox_state</span> <span class="o">=</span> <span class="kc">False</span>
-
-<span class="c1"># HTML code with JavaScript for a checkbox</span>
-<span class="n">html_code</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">&lt;label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;checkbox&quot;&gt; Check me!&lt;/label&gt;</span>
-<span class="s2">&lt;p id=&quot;checkbox_state&quot;&gt;Checkbox is unchecked&lt;/p&gt;</span>
-
-<span class="s2">&lt;script&gt;</span>
-<span class="s2">    // JavaScript to update Python variable based on checkbox state</span>
-<span class="s2">    document.getElementById(&quot;checkbox&quot;).addEventListener(&quot;change&quot;, function() {</span>
-<span class="s2">        var checkboxChecked = this.checked;</span>
-
-<span class="s2">        // Update the displayed state</span>
-<span class="s2">        if (checkboxChecked) {</span>
-<span class="s2">            document.getElementById(&quot;checkbox_state&quot;).innerHTML = &quot;Checkbox is checked!&quot;;</span>
-<span class="s2">        } else {</span>
-<span class="s2">            document.getElementById(&quot;checkbox_state&quot;).innerHTML = &quot;Checkbox is unchecked&quot;;</span>
-<span class="s2">        }</span>
-
-<span class="s2">        // Send the checkbox state to Python</span>
-<span class="s2">        var kernel = IPython.notebook.kernel;</span>
-<span class="s2">        kernel.execute(&quot;checkbox_state = &quot; + checkboxChecked);</span>
-<span class="s2">    });</span>
-<span class="s2">&lt;/script&gt;</span>
-<span class="s2">&quot;&quot;&quot;</span>
-
-<span class="c1"># Display the HTML</span>
-<span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="n">html_code</span><span class="p">))</span>
-
-<span class="c1"># To check the value of checkbox_state after interacting with the checkbox, you can run:</span>
-<span class="c1"># print(checkbox_state)  # Will show the updated value (True or False) after interaction.</span>
-<br/></pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sp</span> <span class="o">=</span> <span class="n">StandardPlotter</span><span class="p">()</span> <span class="p">;</span> <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -219,9 +134,49 @@ time we create a plot, it is necessary to change the settings again and again.</
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+        Parameters
+        ==========
+        ax: int or axes. default=0
+            plt.axes object or index of the axis. In case it is not given, a
+            new one will be created.
+        xlabel: str. default=&#39;&#39;
+            label for the x axis.
+        ylabel: str. default=&#39;&#39;
+            label for the y axis.
+        xticks: array. default=automatic
+            numbers to appear in the x axis.
+        yticks: array. default=automatic
+            numbers to appear in the y axis.
+        xminor: array. default=None
+            minor ticks to add to the x axis.
+        yminor: array. default=None
+            minor ticks to add to the y axis.
+        color_labels: RGB array or matplotlib colors. default [0.4, 0.4, 0.4]
+            color of the x and y labels
+        pstyle: str. default=&#39;-&#39;
+            matplotlib line style.
+        grid: bool. default False
+            grid regarding the main ticks (major)
+        mingrid: bool. default False
+            grid regarding the secundary ticks (minor)
+        color_grid: RGB array or matplotlib colors. default [0.4, 0.4, 0.4]
+            color for minor and major grid.
+
+        Output
+        ======
+        figure, axes.
+
+</pre></div></div>
+</div>
 <p>You can define your preferences as a dictionary with the setting options and initialize data directly (useful for “homogeneous setting”, namely, all axis of a figure with the same settings)</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">myutils.plotters</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardPlotter</span>
@@ -248,9 +203,16 @@ time we create a plot, it is necessary to change the settings again and again.</
 <br/></pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_plotters_tutorial_plotters_6_0.png" src="../../_images/tutorials_plotters_tutorial_plotters_6_0.png" />
+</div>
+</div>
 <p>Another option to define your preferences is using the method axes_setter (useful for individual setting of axes)</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">myutils.plotters</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardPlotter</span>
@@ -290,12 +252,19 @@ time we create a plot, it is necessary to change the settings again and again.</
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_plotters_tutorial_plotters_8_0.png" src="../../_images/tutorials_plotters_tutorial_plotters_8_0.png" />
+</div>
+</div>
 </section>
 <section id="Figure-Adjust">
 <h1>Figure Adjust<a class="headerlink" href="#Figure-Adjust" title="Link to this heading"></a></h1>
 <p>Sometimes, matplotlib uses a weird way to locate axes such that when you save the figure, something is cut off. For example, the next cell creates a plot that cuts the labels when you save the figure althought the visualization shows the figure complete.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">myutils.plotters</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardPlotter</span>
@@ -315,9 +284,16 @@ time we create a plot, it is necessary to change the settings again and again.</
 <br/></pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_plotters_tutorial_plotters_11_0.png" src="../../_images/tutorials_plotters_tutorial_plotters_11_0.png" />
+</div>
+</div>
 <p>As you see, in the previous output, the x labels of the figures at the top are cut and the x labels of the bottom seems to be ok. However, when we check the figure that we just saved from it, we see that the labels of the bottom are also cut:</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">display</span>
@@ -325,9 +301,16 @@ time we create a plot, it is necessary to change the settings again and again.</
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_plotters_tutorial_plotters_13_0.png" src="../../_images/tutorials_plotters_tutorial_plotters_13_0.png" />
+</div>
+</div>
 <p>Adjusting the location of your axis never was as easy. You can use the method “setting_borders” in StandardPlot</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">myutils.plotters</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardPlotter</span>
@@ -357,6 +340,13 @@ time we create a plot, it is necessary to change the settings again and again.</
 <br/></pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_plotters_tutorial_plotters_15_0.png" src="../../_images/tutorials_plotters_tutorial_plotters_15_0.png" />
+</div>
+</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
@@ -365,8 +355,8 @@ time we create a plot, it is necessary to change the settings again and again.</
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">myutils.plotters</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardPlotter</span>
@@ -395,13 +385,32 @@ time we create a plot, it is necessary to change the settings again and again.</
 <br/><br/></pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+x is :  [array([0.2994804 , 0.32824147, 0.56785705, 0.06823565, 0.80014458,
+       0.12097638, 0.32249061, 0.61954326, 0.65979511, 0.79239609])]
+ y is:  [array([0.22511868, 0.79350189, 0.49378224, 0.14456602, 0.3011841 ,
+       0.33893042, 0.21538083, 0.67090617, 0.32374201, 0.11304022])]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_plotters_tutorial_plotters_18_1.png" src="../../_images/tutorials_plotters_tutorial_plotters_18_1.png" />
+</div>
+</div>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="StandardPlotter.html" class="btn btn-neutral float-left" title="Standard" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../tutorials.html" class="btn btn-neutral float-left" title="Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../EPRspectrum/tutorial_EPR.html" class="btn btn-neutral float-right" title="Theoretical EPR spectrum" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

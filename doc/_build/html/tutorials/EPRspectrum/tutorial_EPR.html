@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Theoretical EPR spectrum &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=32ed3f93" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=61243dd2"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+        <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs";mermaid.registerLayoutLoaders(elkLayouts);mermaid.initialize({startOnLoad:false});</script>
+        <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+        <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.2.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Create documentation" href="../documentation/tutorial_doc.html" />
+    <link rel="prev" title="Plotter" href="../plotters/tutorial_plotters.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/myutils.html">myutils package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../plotters/tutorial_plotters.html">Plotter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotters/tutorial_plotters.html#Setting-the-plot-before-adding-data.">Setting the plot before adding data.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotters/tutorial_plotters.html#Figure-Adjust">Figure Adjust</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Theoretical EPR spectrum</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#system">System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#starting-a-new-project">Starting a new project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-a-model">Create a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#optimize-the-model">Optimize the model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-radical-models">Create radical models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compute-the-g-values">Compute the g-values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#postprocessing">Postprocessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#summarize-your-results">Summarize your results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fit">Fit</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation/tutorial_doc.html">Create documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sith/tutorial_SITH.html">SITH - distribution of energies</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../tutorials.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Theoretical EPR spectrum</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/tutorials/EPRspectrum/tutorial_EPR.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="theoretical-epr-spectrum">
+<h1>Theoretical EPR spectrum<a class="headerlink" href="#theoretical-epr-spectrum" title="Link to this heading"></a></h1>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>To use the tools of myutils that are part of this tutorial, be sure that
+Orca is well set up. Check <a class="reference internal" href="../../install.html#orca-setup"><span class="std std-ref">Orca set up</span></a> for more information.</p>
+</div>
+<div class="admonition-for-the-impatients admonition">
+<p class="admonition-title">For the impatients</p>
+<p>This tutorial builds a whole project, if you only want to compute gvalues
+of a molecule with a radical that you already know, go directly to
+<a class="reference internal" href="#gval-workflow-tutorial"><span class="std std-ref">Compute the g-values</span></a>.</p>
+</div>
+<p>Suppose that you have an EPR absorption spectrum that you got from a sample of
+collagen that looks like this:</p>
+<a class="reference internal image-reference" href="../../_images/experiment.png"><img alt="../../_images/experiment.png" class="align-center" src="../../_images/experiment.png" style="width: 80%;" />
+</a>
+<p>In this tutorial, you will learn how to discover from which radicals species
+this spectrum comes from, using
+<a class="reference external" href="https://sucerquia.github.io/myutils/">myutils</a>. This process is usually done
+by finding the best g-values that fit into the experiments by trial-and-error.
+Our procedure, in contrast, consists in computing the spectrums of some
+candidates that you expect in your sample and finding which ones fit into the
+spectrum. With the final fitting, you obtain the concentration of each radical
+specie in your sample. In this case, we are going to assume a rupture of
+trivalent crosslinks that are shown to be sacrificial bonds according to
+<a class="reference external" href="https://www.nature.com/articles/s41467-023-37726-z">Rennekamp, et al., 2023</a>.</p>
+<section id="system">
+<h2>System<a class="headerlink" href="#system" title="Link to this heading"></a></h2>
+<p>Consider the radicals in a broken trivalent crosslink, which corresponds to the
+next molecule:</p>
+<a class="reference internal image-reference" href="../../_images/molecule.png"><img alt="../../_images/molecule.png" class="align-center" src="../../_images/molecule.png" style="width: 30%;" />
+</a>
+<p>Note that the structure of this example without radicals has a total charge +1.
+The numbers 1 and 2 in the image represent the two candidates that we are
+going to consider in this tutorial. Candidate 1 results from taking out the
+hydrogen binded to the oxygen and increasing the multiplicity to 2 (radical).
+The Candidate 2 results from deprotonising the methyl group from the first
+candidate, which leads to a total change of zero. Note that the second
+candidate can also be seen as a radical in the methyl group and a negative
+charge in the oxygen; for the DFT calculation, it is exactly the same.</p>
+</section>
+<section id="starting-a-new-project">
+<h2>Starting a new project<a class="headerlink" href="#starting-a-new-project" title="Link to this heading"></a></h2>
+<p>To use all the advantages of myutils, the files should be located in a certain
+way. During the tutorial you are going to build it step by step, but you can
+have an idea of the general structure with the next flowchart:</p>
+<pre align="center" class="mermaid align-center">
+         graph TD
+ node1[&quot;Tutorial&quot;]
+   node1 --&gt; node2[&amp;lt;candidate&amp;gt;]
+   node2 --&gt; node3[opt]
+   node2 --&gt; node4[&amp;lt;i&amp;gt;-&amp;lt;candidate&amp;gt;]
+   node1 --&gt; node5[experiments]
+    </pre><p>In this case, “Tutorial” is the name of the whole project, “candidate” is the
+molecule that you use as a base to create the radical candidates and
+“&lt;i&gt;-&lt;candidate&gt;” is the i-th radical candidate with the key name that you
+choose. For this tutorial, the flowchart would look like this:</p>
+<pre align="center" class="mermaid align-center">
+         graph TD
+ node1[&quot;CollagenEPR&quot;]
+   node1 --&gt; node2[&quot;PYD&quot;]
+   node2 --&gt; node3[opt]
+   node2 --&gt; node4[1-OxygenCharged]
+   node2 --&gt; node6[2-OxygenNeutral]
+   node1 --&gt; node5[experiments]
+    </pre><p>Your task now is to create this file structure as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>CollagenEPR
+mkdir<span class="w"> </span>CollagenEPR/PYD
+mkdir<span class="w"> </span>CollagenEPR/PYD/experiments
+mkdir<span class="w"> </span>CollagenEPR/PYD/opt
+mkdir<span class="w"> </span>CollagenEPR/PYD/1-OxygenCharged
+mkdir<span class="w"> </span>CollagenEPR/PYD/2-OxygenNeutral
+</pre></div>
+</div>
+<p>Right at this point you can save your absorption spectrum in “experiments”
+directory. You can save as many meassurements as you have. They should be .dat
+files with two columns: field and intensity.</p>
+</section>
+<section id="create-a-model">
+<h2>Create a Model<a class="headerlink" href="#create-a-model" title="Link to this heading"></a></h2>
+<p>To compute radicals, an XYZ file containing the molecular coordinates is
+required. You can build it with your favorite tool. I recommend to use
+<a class="reference external" href="https://molview.org/">https://molview.org</a>, which allows you to build your
+molecule from the structural formula and download the information of the
+coordinates.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To transform the .mol file downloaded from MolView into an .xyz file, use</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>obabel<span class="w"> </span>model.mol<span class="w"> </span>-O<span class="w"> </span>CollagenEPR/PYD/opt/model.xyz
+</pre></div>
+</div>
+</div>
+<p>You might want to save an image of your molecular structure because in the end
+we are going to summarize our results in a clear and easy way. That image
+should also show the label of the candidates as the one image above. Save that
+image as <code class="code docutils literal notranslate"><span class="pre">CollagenEPR/PYD/model.png</span></code></p>
+</section>
+<section id="optimize-the-model">
+<h2>Optimize the model<a class="headerlink" href="#optimize-the-model" title="Link to this heading"></a></h2>
+<p>Depending on how you build your molecule, the model could be far from a stable
+configuration. Be aware that for computing the g-values of the candidates, we
+have to use optimized configurations. An optimization of the initial model
+might accelerate the subsequent optimization of the radical species derived
+from it. However, if you already have a good structure or if you want to
+compute the absorption spectrum of only one radical, you can continue to the
+next step by renaming your model as</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mv<span class="w"> </span>CollagenEPR/PYD/opt/model.xyz<span class="w"> </span>CollagenEPR/PYD/opt/opt_EPRII.xyz
+</pre></div>
+</div>
+<p>Otherwise, you have to optimize your structure. You can do that with MyUtils
+using</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">$(</span>myutils<span class="w"> </span>gval_workflow<span class="w"> </span>-path<span class="k">)</span><span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>-m<span class="w"> </span><span class="m">1</span><span class="w"> </span>-e<span class="w"> </span>-v
+</pre></div>
+</div>
+<div class="admonition note" id="comment-slurm-bash-tutorial">
+<p class="admonition-title">Note</p>
+<p>gval_workflow is a bash script that contains some variables to set up a
+slurm queue system, which means that you could also use this code to run it
+in a HPC cluster using <code class="code docutils literal notranslate"><span class="pre">sbatch</span> <span class="pre">$(myutils</span> <span class="pre">gval_workflow</span> <span class="pre">-path)</span> <span class="pre">...</span></code>.
+To modify those options or add the ones of your queue system, make a copy
+of this file and then submit your job. This can be done with the command
+<code class="code docutils literal notranslate"><span class="pre">cp</span> <span class="pre">$(myutils</span> <span class="pre">gval_workflow</span> <span class="pre">-path)</span> <span class="pre">./&lt;name_of_preference&gt;.sh</span></code>. You
+can also use it to understand and modify this code according to your
+preference. If you improve the project, don’t hesitate to merge your
+changes to MyUtils</p>
+</div>
+<p>where the flag -e avoids to compute gvalues and HFC in this molecule, which
+would not make sense for this case because it does not have any radical.
+Use <code class="code docutils literal notranslate"><span class="pre">myutils</span> <span class="pre">gval_workflow</span> <span class="pre">-h</span></code> to check the role of the other flags.</p>
+</section>
+<section id="create-radical-models">
+<h2>Create radical models<a class="headerlink" href="#create-radical-models" title="Link to this heading"></a></h2>
+<p>Use the optimized model to create the radical candidates. You can do that by
+removing the hydrogens that cap the radicals’ electron structure. One way to do
+that is vewing your molecule with your favorite visualization tool (VMol,
+PyMol, vmd…) to check the corresponding index of the atom and remove it. Save
+the xyz file of a modified molecule in a new directory called
+<code class="code docutils literal notranslate"><span class="pre">&lt;n&gt;-&lt;name</span> <span class="pre">of</span> <span class="pre">candidate&gt;</span></code>. In this case, we proceed to create the radical
+candidates from <code class="code docutils literal notranslate"><span class="pre">CollagenEPR/PYD/opt/opt_EPRII.xyz</span></code>. We only have to know
+that the indexes of the hydrogens to be removed are 6 and 16 (starting from 1).
+Considering that the xyz format includes two heading lines (a first line with
+the number of atoms and a second line for comments), the 6th and 16th atoms
+correspond to the 8th and 18th lines respectively. Then, we move to the
+directory called “CollagenEPR/PYD” and execute the next commands to remove
+those atoms from the optimized molecule:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sed<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;1s/.*/21/ ; 8d&quot;</span><span class="w"> </span>opt/opt_EPRII.xyz<span class="w"> </span>&gt;<span class="w"> </span><span class="m">1</span>-OxygenCharged/model.xyz
+sed<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;1s/.*/20/ ; 18d ; 8d&quot;</span><span class="w"> </span>opt/opt_EPRII.xyz<span class="w"> </span>&gt;<span class="w"> </span><span class="m">2</span>-OxygenNeutral/model.xyz
+</pre></div>
+</div>
+<p>The resulting molecules should look like the next figure (candidate 1 on the
+left, candidate 2 on the right):</p>
+<div style="display: flex; justify-content: center; gap: 10px;">
+    <div style="display: flex; justify-content: right;">
+        <img src="../../_static/OxygenCharged.png" width="45%" />
+    </div>
+    <div style="display: flex; justify-content: left;">
+        <img src="../../_static/OxygenNeutral.png" width="45%" />
+    </div>
+</div></section>
+<section id="compute-the-g-values">
+<span id="gval-workflow-tutorial"></span><h2>Compute the g-values<a class="headerlink" href="#compute-the-g-values" title="Link to this heading"></a></h2>
+<p>Once you have a file <code class="code docutils literal notranslate"><span class="pre">&lt;n&gt;-&lt;name</span> <span class="pre">of</span> <span class="pre">candidate&gt;/model.xyz</span></code> corresponding to
+the molecule with each radical, run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="m">1</span>-OxygenCharged
+<span class="k">$(</span>myutils<span class="w"> </span>gval_workflow<span class="w"> </span>-path<span class="k">)</span><span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;g[0, 4]d2&#39;</span><span class="w"> </span>-v
+<span class="nb">cd</span><span class="w"> </span>../2-OxygenNeutral
+<span class="k">$(</span>myutils<span class="w"> </span>gval_workflow<span class="w"> </span>-path<span class="k">)</span><span class="w"> </span>-c<span class="w"> </span><span class="m">0</span><span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;g[0, 4, 6]d2&#39;</span><span class="w"> </span>-v
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>gval_workflow is a bash script that you can modify. See
+<a class="reference internal" href="#comment-slurm-bash-tutorial"><span class="std std-ref">last comment</span></a> for more details.</p>
+</div>
+<p>The flag -f indicates which atoms should be included in the hyperfine
+calculation. If the argument of this flag starts with g,
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">myutils.g_values.bash_scripts.g_valsetup.HFC_relevantA</span></code>
+is used to guess the hydrogen atoms around the possible “radical locations”. If
+you use the guess util, be sure to add the depth of the neighbor. In this case,
+for the HFC, we included all the HFC_relevantA atoms in the neighborhood of the
+nitrogen, the oxygen and the carbon that can be charged (in candidate 2). For
+more information of the guess function and the other flags, use
+<code class="code docutils literal notranslate"><span class="pre">myutils</span> <span class="pre">gval_workflow</span> <span class="pre">-h</span></code>.</p>
+<p>This workflow does what is explained in the
+<a class="reference external" href="https://www.faccts.de/docs/orca/5.0/tutorials/spec/EPR.html">ORCA tutorial</a>
+and in
+<a class="reference external" href="https://wongzit.github.io/epr-prediction-with-orca-program/#2-hyperfile-coupling-constant">Zhe Wang’s tutorial</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>gval_workflow also computes frequencies by default. It includes computation
+of thermal properties. In particular, it computes the enthalpy of the
+molecule, which is useful in computation of BDEs. If you want to avoid this
+part, use the flag -b.</p>
+</div>
+</section>
+<section id="postprocessing">
+<h2>Postprocessing<a class="headerlink" href="#postprocessing" title="Link to this heading"></a></h2>
+<p>Once your calculations are complete, you can use <code class="code docutils literal notranslate"><span class="pre">myutils</span> <span class="pre">gval_postpro</span></code> to:</p>
+<ul class="simple">
+<li><p>render each model in a file called opt_EPRII.png</p></li>
+<li><p>compute the spectrum obtained theoretically with
+<a class="reference external" href="https://www.easyspin.org/">easyspin</a>.</p></li>
+<li><p>plot the gvalues of all the candidates in a file called gvalues.png</p></li>
+<li><p>create a table of the gvalues in gvalues_table.md</p></li>
+<li><p>create a file called vmd_image.md in each one of the candidate directories.</p></li>
+</ul>
+<p>You just need to move to the master folder and run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">$(</span>myutils<span class="w"> </span>gval_postpro<span class="w"> </span>-path<span class="k">)</span><span class="w"> </span>-c<span class="w"> </span>PYD/<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;../../experiment/field_intensity.dat&quot;</span><span class="w"> </span>-f
+</pre></div>
+</div>
+</section>
+<section id="summarize-your-results">
+<h2>Summarize your results<a class="headerlink" href="#summarize-your-results" title="Link to this heading"></a></h2>
+<p>With the information obtained from the postprocessing, you can write a proper
+README.md file to summarize your results. <code class="code docutils literal notranslate"><span class="pre">myutils</span> <span class="pre">gval_template</span></code> makes
+this analysis quite easy. Copy the source code in your main directory, modify
+it as you prefer according to your project. Specially, change those parts that
+have <code class="code docutils literal notranslate"><span class="pre">&lt;replace:</span></code>. Then, run it and print the outcome in your README.md
+file. In this case, we do</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span><span class="k">$(</span>myutils<span class="w"> </span>gvals_template<span class="w"> </span>-path<span class="k">)</span><span class="w"> </span>./write_readme.sh
+sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/&lt;replace: name of your candidates&gt;/PYD/g&quot;</span><span class="w"> </span>write_readme.sh
+sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/&lt;replace: experiment.dat&gt;/field_intensity.dat/g&quot;</span><span class="w"> </span>write_readme.sh
+sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/&lt;replace: fitting name&gt;/fit2exper1/g&quot;</span><span class="w"> </span>write_readme.sh
+./write_readme.sh<span class="w"> </span>&gt;<span class="w"> </span>README.md
+</pre></div>
+</div>
+<p>and this creates a proper markdown file with the summary of all the results.
+Render your project with your tool of preference. Github and gitlab render this
+kind of files automatically. Your whole project should look now like the
+repository
+<a class="reference external" href="https://github.com/Sucerquia/collagenEPR">github.com/Sucerquia/collagenEPR</a>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can transform your README.md into a webpage format using <a class="reference external" href="https://pages.github.com/">github Pages</a>.</p>
+</div>
+</section>
+<section id="fit">
+<h2>Fit<a class="headerlink" href="#fit" title="Link to this heading"></a></h2>
+<p>You will see that in the end of the repository, there is an image of the best
+Fitting possible with your candidates. In this case, it should look like this</p>
+<a class="reference internal image-reference" href="../../_images/fitting.png"><img alt="../../_images/fitting.png" class="align-center" src="../../_images/fitting.png" style="width: 80%;" />
+</a>
+<p>Also, in the end, you will find a table with the proportion of each one of the
+candidates. The outcome of this case is</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>System</p></th>
+<th class="head"><p>Percentage</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PYD/2-OxygenNeutral</p></td>
+<td><p>70.03751698946618</p></td>
+</tr>
+<tr class="row-odd"><td><p>PYD/1-OxygenCharged</p></td>
+<td><p>29.96248301053382</p></td>
+</tr>
+</tbody>
+</table>
+<p>You got a perfect description of your EPR spectrum with the candidates you took
+into account! isn’t it great? Now, you can use it with your own experimental
+data and radical candidates.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../plotters/tutorial_plotters.html" class="btn btn-neutral float-left" title="Plotter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../documentation/tutorial_doc.html" class="btn btn-neutral float-right" title="Create documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

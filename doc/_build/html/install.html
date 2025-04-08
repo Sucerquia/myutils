@@ -58,6 +58,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Install</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#orca-set-up">Orca set up</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules/myutils.html">myutils package</a></li>
@@ -110,6 +111,22 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 changes on it and use them immediately without having to reinstall the package
 again. However, you can avoid this flag and a copy of the package would be
 generated in your python packages path.</p>
+</section>
+<section id="orca-set-up">
+<span id="orca-setup"></span><h2>Orca set up<a class="headerlink" href="#orca-set-up" title="Link to this heading"></a></h2>
+<p>To use the tools of MyUtils that include the use of orca in any of the steps, you
+have to create a directory file called <code class="code docutils literal notranslate"><span class="pre">$mine/sw/orca/setup_orca.sh</span></code> containing
+at least the next lines</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">orca_path</span><span class="o">=</span><span class="s2">&quot;&lt;absolute path to the Orca directory&gt;&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">orca_path</span><span class="si">}</span>:<span class="nv">$PATH</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$LD_LIBRARY_PATH</span><span class="s2">:</span><span class="nv">$orca_path</span><span class="s2">&quot;</span>
+
+<span class="nv">orca</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$orca_path</span><span class="s2">/orca&quot;</span>
+</pre></div>
+</div>
+<p>Note that it also applies if you run orca in a cluster. In that case or if it is
+done by default (in your bash script for example), you only have to define “orca”
+variable as the binary of orca (last line in the script above).</p>
 </section>
 </section>
 

@@ -2,8 +2,9 @@ Tutorials
 ---------
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 4
 
-   plotters/StandardPlotter
    plotters/tutorial_plotters
-
+   EPRspectrum/tutorial_EPR
+   documentation/tutorial_doc
+   sith/tutorial_SITH
