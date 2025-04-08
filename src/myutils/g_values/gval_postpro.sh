@@ -102,7 +102,7 @@ echo "$0" "$@"
 
 # ---- BODY --------------- ----------------------------------------------------
 reference=$(myutils gval_workflow -path)
-reference=${reference%/basic_scripts*}
+reference=${reference%/*}
 
 # Creates gvalues_table.md and gvalues.png
 verbose "create gvalues_table.md and gvalues.png"
