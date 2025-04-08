@@ -115,7 +115,7 @@ do
   cd $candidate
 
   verbose "Render image of the candidate $candidate"
-  cp $reference/analysis/create_mol_png.tcl .
+  cp $reference/create_mol_png.tcl .
   vmd -e create_mol_png.tcl -args opt_EPRII.xyz opt_EPRII.png
   rm create_mol_png.tcl
   
@@ -159,7 +159,7 @@ do
 
     cd $name
     verbose "Render image of the non-rad molecule $name"
-    cp $reference/analysis/create_mol_png.tcl .
+    cp $reference/create_mol_png.tcl .
     vmd -e create_mol_png.tcl -args opt_EPRII.xyz opt_EPRII.png
     rm create_mol_png.tcl
   

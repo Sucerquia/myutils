@@ -54,9 +54,6 @@ done
 
 source "$(myutils basics -path)" Gvals $verbose
 
-reference=$(myutils gval_workflow -path)
-reference=${reference%/basic_scripts*}
-
 cd $directory
 
 if $optimization
