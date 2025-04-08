@@ -1,3 +1,0 @@
-! B3LYP EPR-II OPT
-%pal nprocs 16 end
-*XYZFile 0 2 model.xyz

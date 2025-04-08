@@ -49,6 +49,7 @@ done
 # ------ variables ------------------------------------------------------------
 array_bfnames=( "$1" "${array_bfnames[@]}" )
 basic_functions_name=${array_bfnames[0]}
+
 if [ ${#2} == 0 ]
 then
   eval "BASICVERBOSE_${basic_functions_name[0]}=false"

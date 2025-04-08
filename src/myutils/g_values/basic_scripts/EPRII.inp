@@ -1,8 +1,0 @@
-! B3LYP EPR-II AUTOAUX
-%pal nprocs 16 end
-*XYZFile 0 2 opt_EPRII.xyz
-%EPRNMR
-        GTENSOR   TRUE
-        NUCLEI    = ALL H {SHIFT, AISO, ADIP, AORB}
-        ORI       CenterOfElCharge
-END
