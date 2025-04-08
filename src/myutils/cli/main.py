@@ -60,6 +60,7 @@ sh_executers = {
     'gval_workflow': './g_values/basic_scripts/gval_workflow.sh',
     'create_g09_BDEs': './g_values/basic_scripts/create_g09_BDEs.sh',
     'clean_directories': './g_values/basic_scripts/clean_directories.sh',
+    'gvals_template': './g_values/analysis/gvals_template.sh',
     'gval_postpro': './g_values/analysis/gval_postpro.sh',
     'extract_EPRspec': './g_values/analysis/extract_EPRspec.sh',
     'pulling_with_ff': './gromacs/pulling_with_ff.sh',
