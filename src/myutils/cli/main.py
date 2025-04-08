@@ -16,6 +16,7 @@ pymodules = {
     'args_and_defaults': 'myutils.miscellaneous',
     'optimized_e': 'myutils.miscellaneous',
     'time_g09': 'myutils.miscellaneous',
+    'iHFC_fromxyz': 'myutils.g_values.basic_scripts.g_valsetup',
     'extract_system_info': 'myutils.g_values.analysis.postpro',
     'create_table_per_system': 'myutils.g_values.analysis.postpro',
     'create_table_per_method': 'myutils.g_values.analysis.postpro',

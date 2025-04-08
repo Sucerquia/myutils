@@ -9,8 +9,7 @@
 #SBATCH --exclusive
 
 
-source /hits/basement/mbm/sucerquia/sw/orca/setup_orca.sh
-orca="/hits/basement/mbm/sucerquia/sw/orca/orca_5_0_4_linux_x86-64_openmpi411/orca"
+source $mine/sw/orca/setup_orca.sh
 
 print_help() {
 echo "
@@ -29,56 +28,89 @@ exit 0
 directory='.'
 mult=2
 optimization='true'
-basis='both'
+epr='true'
 charge=0
+processors=16
+hyperfine=''
+bdes='true'
 
-while getopts 'c:b:d:m:oh' flag;
+while getopts 'c:d:ef:m:op:vh' flag;
 do
-    case "${flag}" in
-      c) charge=${OPTARG} ;;
-      b) basis=${OPTARG} ;;
-      d) directory=${OPTARG} ;;
-      m) mult=${OPTARG} ;;
-      o) optimization='false' ;;
+  case "${flag}" in
+    b) bdes='false' ;;
+    c) charge=${OPTARG} ;;
+    d) directory=${OPTARG} ;;
+    e) epr='false' ;;
+    f) hyperfine=${OPTARG} ;;
+    m) mult=${OPTARG} ;;
+    o) optimization='false' ;;
+    p) processors=${OPTARG} ;;
 
-      h) print_help ;;
-      *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
-    esac
+    v) verbose='true' ;;
+    h) print_help ;;
+    *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
+  esac
 done
+
+source "$(myutils basics -path)" Gvals $verbose
 
 reference=$(myutils gval_workflow -path)
 reference=${reference%/basic_scripts*}
 
 cd $directory
-cp $reference/basic_scripts/*.inp .
 
-for inp in *.inp
-do
-  sed -i "s/XYZFile 0 2/XYZFile $charge $mult/g" $inp
-done
-
-if [ "$basis" == "both" ]
+if $optimization
 then
-  basis=( "EPRII" "cc-pVDZ" )
+  verbose Optimization
+  cat << EOF > opt_EPRII.inp
+! B3LYP EPR-II OPT
+%pal nprocs $processors end
+*XYZFile $charge $mult model.xyz
+EOF
+  $orca opt_EPRII.inp  > opt_EPRII.out
 else
-  basis=( $basis )
+  [ -f opt_EPRII.xyz ] || $orca opt_EPRII.inp  > opt_EPRII.out
 fi
 
+if [[ ${hyperfine: 0: 1} == 'g' ]]
+then
+  nog=${hyperfine: 1}
+  radicals="${nog%d*}"
+  depth=${nog#*d}
+  tmp_var=$(myutils iHFC_fromxyz opt_EPRII.xyz "$radicals" "$depth")
+  hyperfine="$(echo $tmp_var |\
+             sed -E "s/\[//g ; s/\]//g; s/^ *//g ; s/ *$//g ; s/ +/,/g")"
+fi
 
-for base in ${basis[@]}
-do
-  if $optimization
+if $epr
+then
+  verbose g-values
+  cat <<EOF > EPRII_i.inp
+! B3LYP EPR-II AUTOAUX
+%pal nprocs $processors end
+*XYZFile $charge $mult opt_EPRII.xyz
+%EPRNMR
+        GTENSOR   TRUE
+        ORI       GIAO
+END
+EOF
+  # add necleous for hyperfine corrections
+  if [[ $hyperfine != '' ]]
   then
-    $orca opt_$base.inp  > opt_$base.out
-  else
-    [ -f opt_$base.xyz ] || $orca opt_$base.inp > opt_$base.out
+    sed -i "/GTENSOR   TRUE/a        NUCLEI    = $hyperfine {SHIFT, AISO, ADIP, AORB}" EPRII_i.inp
   fi
+  $orca EPRII_i.inp  > EPRII_i.out
+fi
 
-  # Next line changed to delete base calculation and leave only base_i. Before: methods=( "${base}_i" "$base" )
-  methods=( "${base}_i" )
-
-  for met in ${methods[@]}
-  do
-      sbatch -J ${SLURM_JOB_NAME}_${met} $reference/basic_scripts/submit.sh "$met".inp "$met".out
-  done
-done
+if $bdes
+then
+  verbose BDES
+  myutils orca_epr_inp '' '' $processors $mult $charge 'opt_EPRII.xyz' "$hyperfine" > EPRII_i.inp
+  cat << EOF > freq.inp
+! M062X def2-TZVP OPT FREQ
+%pal nprocs $processors end
+*XYZFile $charge $mult opt_EPRII.xyz
+EOF
+  $orca freq.inp  > freq.out
+fi
+finish
