@@ -108,13 +108,16 @@ window.addEventListener("load", () => mermaid.run());
     <span class="s1">&#39;args_and_defaults&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.miscellaneous&#39;</span><span class="p">,</span>
     <span class="s1">&#39;optimized_e&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.miscellaneous&#39;</span><span class="p">,</span>
     <span class="s1">&#39;time_g09&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.miscellaneous&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;extract_system_info&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.analysis.postpro&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;create_table_per_system&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.analysis.postpro&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;create_table_per_method&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.analysis.postpro&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;extract_gvals&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.analysis.postpro&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;best_fit&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.analysis.best_fit&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;spect_w_experiment&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.analysis.best_fit&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;create_fit_file&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.analysis.best_fit&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;extract_system_info&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.postpro&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;create_table_per_system&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.postpro&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;create_table_per_method&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.postpro&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;extract_gvals&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.postpro&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;iHFC_fromxyz&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.g_valsetup&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;rad_loc&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.g_valsetup&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;mat2dat&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.best_fit&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;best_fit&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.best_fit&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;spect_w_experiment&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.best_fit&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;create_fit_file&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.g_values.best_fit&#39;</span><span class="p">,</span>
     <span class="s1">&#39;create_amber_data&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.gromacs.ff_parameters&#39;</span><span class="p">,</span>
     <span class="s1">&#39;create_grappa_data&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.gromacs.ff_parameters&#39;</span><span class="p">,</span>
     <span class="s1">&#39;methods_in_class&#39;</span><span class="p">:</span> <span class="s1">&#39;myutils.cli.pkg_structure.documentation_tools&#39;</span><span class="p">,</span>
@@ -148,12 +151,10 @@ window.addEventListener("load", () => mermaid.run());
     <span class="s1">&#39;compute_forces&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/compute_forces.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;clean_ds&#39;</span><span class="p">:</span> <span class="s1">&#39;./sith/clean_ds.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;pkges_installer&#39;</span><span class="p">:</span> <span class="s1">&#39;./pkges_installer.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;submit&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/basic_scripts/submit.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;gval_workflow&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/basic_scripts/gval_workflow.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;create_g09_BDEs&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/basic_scripts/create_g09_BDEs.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;clean_directories&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/basic_scripts/clean_directories.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;gval_postpro&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/analysis/gval_postpro.sh&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;extract_EPRspec&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/analysis/extract_EPRspec.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;gval_workflow&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/gval_workflow.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;gvals_template&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/gvals_template.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;gval_postpro&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/gval_postpro.sh&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;extract_EPRspec&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/extract_EPRspec.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;pulling_with_ff&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/pulling_with_ff.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;pulling&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/pulling.sh&#39;</span><span class="p">,</span>
     <span class="s1">&#39;peptide_pulling&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/peptide_pulling.sh&#39;</span><span class="p">,</span>
@@ -180,8 +181,7 @@ window.addEventListener("load", () => mermaid.run());
 <span class="p">}</span>
 
 <span class="n">other_files</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;EPR_abspect&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/analysis/EPR_abspect.m&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;create_mol_png&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/analysis/create_mol_png.tcl&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;create_mol_png&#39;</span><span class="p">:</span> <span class="s1">&#39;./g_values/create_mol_png.tcl&#39;</span><span class="p">,</span>
     <span class="s1">&#39;pulling_temp&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/pulling_temp.mdp&#39;</span><span class="p">,</span>
     <span class="s1">&#39;nvt&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/nvt.mdp&#39;</span><span class="p">,</span>
     <span class="s1">&#39;npt&#39;</span><span class="p">:</span> <span class="s1">&#39;./gromacs/npt.mdp&#39;</span><span class="p">,</span>

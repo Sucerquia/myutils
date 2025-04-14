@@ -143,21 +143,21 @@ trivalent crosslinks that are shown to be sacrificial bonds according to
 <h2>System<a class="headerlink" href="#system" title="Link to this heading"></a></h2>
 <p>Consider the radicals in a broken trivalent crosslink, which corresponds to the
 next molecule:</p>
-<a class="reference internal image-reference" href="../../_images/molecule.png"><img alt="../../_images/molecule.png" class="align-center" src="../../_images/molecule.png" style="width: 30%;" />
+<a class="reference internal image-reference" href="../../_images/molecule.png"><img alt="../../_images/molecule.png" class="align-center" src="../../_images/molecule.png" style="width: 40%;" />
 </a>
 <p>Note that the structure of this example without radicals has a total charge +1.
 The numbers 1 and 2 in the image represent the two candidates that we are
 going to consider in this tutorial. Candidate 1 results from taking out the
 hydrogen binded to the oxygen and increasing the multiplicity to 2 (radical).
 The Candidate 2 results from deprotonising the methyl group from the first
-candidate, which leads to a total change of zero. Note that the second
-candidate can also be seen as a radical in the methyl group and a negative
-charge in the oxygen; for the DFT calculation, it is exactly the same.</p>
+candidate, which leads to a total change of zero. Considering that the
+distribution of charges is found by the DFT step, the second candidate can also
+be seen as a radical in the methyl group and a negative charge in the oxygen.</p>
 </section>
 <section id="starting-a-new-project">
 <h2>Starting a new project<a class="headerlink" href="#starting-a-new-project" title="Link to this heading"></a></h2>
 <p>To use all the advantages of myutils, the files should be located in a certain
-way. During the tutorial you are going to build it step by step, but you can
+way. During the tutorial you are going to build it step by step. You can
 have an idea of the general structure with the next flowchart:</p>
 <pre align="center" class="mermaid align-center">
          graph TD
@@ -187,9 +187,10 @@ mkdir<span class="w"> </span>CollagenEPR/PYD/1-OxygenCharged
 mkdir<span class="w"> </span>CollagenEPR/PYD/2-OxygenNeutral
 </pre></div>
 </div>
-<p>Right at this point you can save your absorption spectrum in “experiments”
-directory. You can save as many meassurements as you have. They should be .dat
-files with two columns: field and intensity.</p>
+<p>Right at this point you can save your
+<a class="reference external" href="https://raw.githubusercontent.com/Sucerquia/collagenEPR/refs/heads/main/experiments/field_intensity2.dat">absorption spectrum</a>
+in “experiments” directory. You can save as many meassurements as you have.
+They should be .dat files with two columns: field and intensity.</p>
 </section>
 <section id="create-a-model">
 <h2>Create a Model<a class="headerlink" href="#create-a-model" title="Link to this heading"></a></h2>
@@ -207,7 +208,7 @@ coordinates.</p>
 </div>
 <p>You might want to save an image of your molecular structure because in the end
 we are going to summarize our results in a clear and easy way. That image
-should also show the label of the candidates as the one image above. Save that
+should also show the label of the candidates as the image above. Save that
 image as <code class="code docutils literal notranslate"><span class="pre">CollagenEPR/PYD/model.png</span></code></p>
 </section>
 <section id="optimize-the-model">
@@ -219,7 +220,7 @@ might accelerate the subsequent optimization of the radical species derived
 from it. However, if you already have a good structure or if you want to
 compute the absorption spectrum of only one radical, you can continue to the
 next step by renaming your model as</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mv<span class="w"> </span>CollagenEPR/PYD/opt/model.xyz<span class="w"> </span>CollagenEPR/PYD/opt/opt_EPRII.xyz
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mv<span class="w"> </span>CollagenEPR/PYD/opt/model.xyz<span class="w"> </span>CollagenEPR/PYD/opt/opt.xyz
 </pre></div>
 </div>
 <p>Otherwise, you have to optimize your structure. You can do that with MyUtils
@@ -227,6 +228,9 @@ using</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">$(</span>myutils<span class="w"> </span>gval_workflow<span class="w"> </span>-path<span class="k">)</span><span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>-m<span class="w"> </span><span class="m">1</span><span class="w"> </span>-e<span class="w"> </span>-v
 </pre></div>
 </div>
+<p>where the flag -e avoids to compute gvalues and HFC in this molecule, which
+would not make sense for this case because it does not have any radical.
+Use <code class="code docutils literal notranslate"><span class="pre">myutils</span> <span class="pre">gval_workflow</span> <span class="pre">-h</span></code> to check the role of the other flags.</p>
 <div class="admonition note" id="comment-slurm-bash-tutorial">
 <p class="admonition-title">Note</p>
 <p>gval_workflow is a bash script that contains some variables to set up a
@@ -236,72 +240,68 @@ To modify those options or add the ones of your queue system, make a copy
 of this file and then submit your job. This can be done with the command
 <code class="code docutils literal notranslate"><span class="pre">cp</span> <span class="pre">$(myutils</span> <span class="pre">gval_workflow</span> <span class="pre">-path)</span> <span class="pre">./&lt;name_of_preference&gt;.sh</span></code>. You
 can also use it to understand and modify this code according to your
-preference. If you improve the project, don’t hesitate to merge your
+style. If you improve the project, don’t hesitate to merge your
 changes to MyUtils</p>
 </div>
-<p>where the flag -e avoids to compute gvalues and HFC in this molecule, which
-would not make sense for this case because it does not have any radical.
-Use <code class="code docutils literal notranslate"><span class="pre">myutils</span> <span class="pre">gval_workflow</span> <span class="pre">-h</span></code> to check the role of the other flags.</p>
 </section>
 <section id="create-radical-models">
 <h2>Create radical models<a class="headerlink" href="#create-radical-models" title="Link to this heading"></a></h2>
 <p>Use the optimized model to create the radical candidates. You can do that by
-removing the hydrogens that cap the radicals’ electron structure. One way to do
+removing the hydrogen that cap the radicals’ electron structure. One way to do
 that is vewing your molecule with your favorite visualization tool (VMol,
 PyMol, vmd…) to check the corresponding index of the atom and remove it. Save
 the xyz file of a modified molecule in a new directory called
 <code class="code docutils literal notranslate"><span class="pre">&lt;n&gt;-&lt;name</span> <span class="pre">of</span> <span class="pre">candidate&gt;</span></code>. In this case, we proceed to create the radical
-candidates from <code class="code docutils literal notranslate"><span class="pre">CollagenEPR/PYD/opt/opt_EPRII.xyz</span></code>. We only have to know
+candidates from <code class="code docutils literal notranslate"><span class="pre">CollagenEPR/PYD/opt/opt.xyz</span></code>. We only have to know
 that the indexes of the hydrogens to be removed are 6 and 16 (starting from 1).
 Considering that the xyz format includes two heading lines (a first line with
 the number of atoms and a second line for comments), the 6th and 16th atoms
-correspond to the 8th and 18th lines respectively. Then, we move to the
-directory called “CollagenEPR/PYD” and execute the next commands to remove
-those atoms from the optimized molecule:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sed<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;1s/.*/21/ ; 8d&quot;</span><span class="w"> </span>opt/opt_EPRII.xyz<span class="w"> </span>&gt;<span class="w"> </span><span class="m">1</span>-OxygenCharged/model.xyz
-sed<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;1s/.*/20/ ; 18d ; 8d&quot;</span><span class="w"> </span>opt/opt_EPRII.xyz<span class="w"> </span>&gt;<span class="w"> </span><span class="m">2</span>-OxygenNeutral/model.xyz
+correspond to the 8th and 18th lines respectively. Then, located at
+“CollagenEPR/PYD”, we execute the next commands to remove those atoms from the
+optimized molecule and save the outcome in the proper directly:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sed<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;1s/.*/21/ ; 8d&quot;</span><span class="w"> </span>opt/opt.xyz<span class="w"> </span>&gt;<span class="w"> </span><span class="m">1</span>-OxygenCharged/model.xyz
+sed<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;1s/.*/20/ ; 18d ; 8d&quot;</span><span class="w"> </span>opt/opt.xyz<span class="w"> </span>&gt;<span class="w"> </span><span class="m">2</span>-OxygenNeutral/model.xyz
 </pre></div>
 </div>
 <p>The resulting molecules should look like the next figure (candidate 1 on the
 left, candidate 2 on the right):</p>
 <div style="display: flex; justify-content: center; gap: 10px;">
     <div style="display: flex; justify-content: right;">
-        <img src="../../_static/OxygenCharged.png" width="45%" />
+        <img src="../../_static/OxygenCharged.png" width="60%" />
     </div>
     <div style="display: flex; justify-content: left;">
-        <img src="../../_static/OxygenNeutral.png" width="45%" />
+        <img src="../../_static/OxygenNeutral.png" width="60%" />
     </div>
 </div></section>
 <section id="compute-the-g-values">
 <span id="gval-workflow-tutorial"></span><h2>Compute the g-values<a class="headerlink" href="#compute-the-g-values" title="Link to this heading"></a></h2>
-<p>Once you have a file <code class="code docutils literal notranslate"><span class="pre">&lt;n&gt;-&lt;name</span> <span class="pre">of</span> <span class="pre">candidate&gt;/model.xyz</span></code> corresponding to
-the molecule with each radical, run</p>
+<p>Once you have the files called <code class="code docutils literal notranslate"><span class="pre">&lt;n&gt;-&lt;name</span> <span class="pre">of</span> <span class="pre">candidate&gt;/model.xyz</span></code>
+corresponding to each radical, run</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="m">1</span>-OxygenCharged
-<span class="k">$(</span>myutils<span class="w"> </span>gval_workflow<span class="w"> </span>-path<span class="k">)</span><span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;g[0, 4]d2&#39;</span><span class="w"> </span>-v
+<span class="k">$(</span>myutils<span class="w"> </span>gval_workflow<span class="w"> </span>-path<span class="k">)</span><span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;g0,4d2&#39;</span><span class="w"> </span>-v
 <span class="nb">cd</span><span class="w"> </span>../2-OxygenNeutral
-<span class="k">$(</span>myutils<span class="w"> </span>gval_workflow<span class="w"> </span>-path<span class="k">)</span><span class="w"> </span>-c<span class="w"> </span><span class="m">0</span><span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;g[0, 4, 6]d2&#39;</span><span class="w"> </span>-v
+<span class="k">$(</span>myutils<span class="w"> </span>gval_workflow<span class="w"> </span>-path<span class="k">)</span><span class="w"> </span>-c<span class="w"> </span><span class="m">0</span><span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;g0,4,6d2&#39;</span><span class="w"> </span>-v
 </pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>gval_workflow is a bash script that you can modify. See
-<a class="reference internal" href="#comment-slurm-bash-tutorial"><span class="std std-ref">last comment</span></a> for more details.</p>
 </div>
 <p>The flag -f indicates which atoms should be included in the hyperfine
 calculation. If the argument of this flag starts with g,
 <code class="xref py py-mod docutils literal notranslate"><span class="pre">myutils.g_values.bash_scripts.g_valsetup.HFC_relevantA</span></code>
 is used to guess the hydrogen atoms around the possible “radical locations”. If
-you use the guess util, be sure to add the depth of the neighbor. In this case,
-for the HFC, we included all the HFC_relevantA atoms in the neighborhood of the
-nitrogen, the oxygen and the carbon that can be charged (in candidate 2). For
-more information of the guess function and the other flags, use
-<code class="code docutils literal notranslate"><span class="pre">myutils</span> <span class="pre">gval_workflow</span> <span class="pre">-h</span></code>.</p>
-<p>This workflow does what is explained in the
+you use the guess util, be sure to add the depth of the neighborhood. In this
+case, for the HFC, we included all the HFC_relevantA atoms in the neighborhood
+of the nitrogen, the oxygen and the carbon that can be charged (in candidate
+2). For more information of the guess function and the other flags, use
+<code class="code docutils literal notranslate"><span class="pre">myutils</span> <span class="pre">gval_workflow</span> <span class="pre">-h</span></code>. This workflow does what is explained in the
 <a class="reference external" href="https://www.faccts.de/docs/orca/5.0/tutorials/spec/EPR.html">ORCA tutorial</a>
 and in
 <a class="reference external" href="https://wongzit.github.io/epr-prediction-with-orca-program/#2-hyperfile-coupling-constant">Zhe Wang’s tutorial</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
+<p>gval_workflow is a bash script that you can modify. See
+<a class="reference internal" href="#comment-slurm-bash-tutorial"><span class="std std-ref">last comment</span></a> for more details.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
 <p>gval_workflow also computes frequencies by default. It includes computation
 of thermal properties. In particular, it computes the enthalpy of the
 molecule, which is useful in computation of BDEs. If you want to avoid this
@@ -312,12 +312,12 @@ part, use the flag -b.</p>
 <h2>Postprocessing<a class="headerlink" href="#postprocessing" title="Link to this heading"></a></h2>
 <p>Once your calculations are complete, you can use <code class="code docutils literal notranslate"><span class="pre">myutils</span> <span class="pre">gval_postpro</span></code> to:</p>
 <ul class="simple">
-<li><p>render each model in a file called opt_EPRII.png</p></li>
-<li><p>compute the spectrum obtained theoretically with
+<li><p>Render each model in a file called opt.png</p></li>
+<li><p>Compute the spectrum obtained theoretically with
 <a class="reference external" href="https://www.easyspin.org/">easyspin</a>.</p></li>
-<li><p>plot the gvalues of all the candidates in a file called gvalues.png</p></li>
-<li><p>create a table of the gvalues in gvalues_table.md</p></li>
-<li><p>create a file called vmd_image.md in each one of the candidate directories.</p></li>
+<li><p>Plot the gvalues of all the candidates in a file called gvalues.png</p></li>
+<li><p>Create a table of the gvalues in gvalues_table.md</p></li>
+<li><p>Create a file called vmd_image.md in each one of the candidate directories.</p></li>
 </ul>
 <p>You just need to move to the master folder and run</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">$(</span>myutils<span class="w"> </span>gval_postpro<span class="w"> </span>-path<span class="k">)</span><span class="w"> </span>-c<span class="w"> </span>PYD/<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;../../experiment/field_intensity.dat&quot;</span><span class="w"> </span>-f
@@ -328,9 +328,11 @@ part, use the flag -b.</p>
 <h2>Summarize your results<a class="headerlink" href="#summarize-your-results" title="Link to this heading"></a></h2>
 <p>With the information obtained from the postprocessing, you can write a proper
 README.md file to summarize your results. <code class="code docutils literal notranslate"><span class="pre">myutils</span> <span class="pre">gval_template</span></code> makes
-this analysis quite easy. Copy the source code in your main directory, modify
-it as you prefer according to your project. Specially, change those parts that
-have <code class="code docutils literal notranslate"><span class="pre">&lt;replace:</span></code>. Then, run it and print the outcome in your README.md
+this analysis quite easy. Copy the source code in your main directory using
+<code class="code docutils literal notranslate"><span class="pre">cp</span> <span class="pre">$(myutils</span> <span class="pre">gvals_template</span> <span class="pre">-path)</span> <span class="pre">./write_readme.sh</span></code>. This remplate
+creates the README. To addapt it to your own project, modify the blocks
+delimited by <code class="code docutils literal notranslate"><span class="pre">EOF</span></code> with the correcponding information. Also, change
+those parts that have <code class="code docutils literal notranslate"><span class="pre">&lt;replace:</span></code>. Then, run it and print the outcome in your README.md
 file. In this case, we do</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span><span class="k">$(</span>myutils<span class="w"> </span>gvals_template<span class="w"> </span>-path<span class="k">)</span><span class="w"> </span>./write_readme.sh
 sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/&lt;replace: name of your candidates&gt;/PYD/g&quot;</span><span class="w"> </span>write_readme.sh
@@ -351,12 +353,13 @@ repository
 </section>
 <section id="fit">
 <h2>Fit<a class="headerlink" href="#fit" title="Link to this heading"></a></h2>
-<p>You will see that in the end of the repository, there is an image of the best
+<p>You will see that in the end of the summary, there is an image of the best
 Fitting possible with your candidates. In this case, it should look like this</p>
 <a class="reference internal image-reference" href="../../_images/fitting.png"><img alt="../../_images/fitting.png" class="align-center" src="../../_images/fitting.png" style="width: 80%;" />
 </a>
-<p>Also, in the end, you will find a table with the proportion of each one of the
-candidates. The outcome of this case is</p>
+<p>Great fit, isn’t it?! Now the question is how much of the spectrum comes from
+one of the candidates and how much from the other. The answer of this question
+is found in a table in the end of the document. The outcome in this case is</p>
 <table class="docutils align-center">
 <colgroup>
 <col style="width: 50.0%" />
@@ -377,8 +380,8 @@ candidates. The outcome of this case is</p>
 </tbody>
 </table>
 <p>You got a perfect description of your EPR spectrum with the candidates you took
-into account! isn’t it great? Now, you can use it with your own experimental
-data and radical candidates.</p>
+into account! Now, you can use it with your own experimental data and radical
+candidates.</p>
 </section>
 </section>
 

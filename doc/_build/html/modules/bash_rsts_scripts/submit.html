@@ -134,22 +134,6 @@
              
   <section id="script-of-myutils-submit">
 <span id="submit"></span><h1>Script of myutils submit<a class="headerlink" href="#script-of-myutils-submit" title="Link to this heading"></a></h1>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
-
-<span class="c1">#SBATCH -N 1                   # number of nodes</span>
-<span class="c1">#SBATCH -n 16</span>
-<span class="c1">#SBATCH --cpus-per-task=1</span>
-<span class="c1">#SBATCH -t 24:00:00</span>
-<span class="c1">#SBATCH --output=%x-%j.o</span>
-<span class="c1">#SBATCH --error=%x-%j.e</span>
-<span class="c1">#SBATCH --exclusive</span>
-
-
-<span class="nb">source</span><span class="w"> </span>/hits/basement/mbm/sucerquia/sw/orca/setup_orca.sh
-
-/hits/basement/mbm/sucerquia/sw/orca/orca_5_0_4_linux_x86-64_openmpi411/orca<span class="w"> </span><span class="nv">$1</span><span class="w"> </span>&gt;<span class="w"> </span><span class="nv">$2</span>
-</pre></div>
-</div>
 </section>
 
 

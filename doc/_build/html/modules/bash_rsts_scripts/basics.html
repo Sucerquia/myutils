@@ -151,6 +151,7 @@ print_help<span class="o">()</span><span class="w"> </span><span class="o">{</sp
 <span class="c1"># ------ variables ------------------------------------------------------------</span>
 <span class="nv">array_bfnames</span><span class="o">=(</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">array_bfnames</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">)</span>
 <span class="nv">basic_functions_name</span><span class="o">=</span><span class="si">${</span><span class="nv">array_bfnames</span><span class="p">[0]</span><span class="si">}</span>
+
 <span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="si">${#</span><span class="nv">2</span><span class="si">}</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span>
 <span class="k">then</span>
 <span class="w">  </span><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;BASICVERBOSE_</span><span class="si">${</span><span class="nv">basic_functions_name</span><span class="p">[0]</span><span class="si">}</span><span class="s2">=false&quot;</span>
