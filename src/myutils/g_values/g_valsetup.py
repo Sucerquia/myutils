@@ -51,21 +51,21 @@ def HFC_relevantA(atoms, radicals, depth=2):
         Atoms object containing the molecule.
     radicals: list
         posible positions of the radicals, implying that that neighborhood is
-        important for the HFC.
+        important for the HFC. Indexes starting from 1.
     depth: int. Default=2
         number of times that it searches the neighbors of the neighbors.
 
     Return
     ======
     (np.array) Indexes of the H atoms belonging to the neighborhood of the
-    radicals and the indexes of the N and O atoms. The indixes start with 1.
+    radicals and the indexes of the N and O atoms. The indices start with 1.
     """
-    centers = radicals
+    centers = np.array(radicals) - 1
     elements = np.array(atoms.get_chemical_symbols())
     ana = Analysis(atoms)
     relevant = []
     
-    for j in range(depth):
+    for _ in range(depth):
         new_neighbors = []
         for i in centers:
             neighbors = np.array(ana.all_bonds[0][i])
@@ -79,7 +79,16 @@ def HFC_relevantA(atoms, radicals, depth=2):
             relevant.append(neighbors[condition])
             new_neighbors.append(neighbors[e_neighbors != 'H'])
         centers = [index for sublist in new_neighbors for index in sublist]
+    
+    # Add last hydrogens
+    centers = np.array([index for sublist in relevant for index in sublist])
+    for i in centers:
+        neighbors = np.array(ana.all_bonds[0][i])
+        e_neighbors = elements[neighbors]
+        hydrogens = e_neighbors == 'H'
+        relevant.append(neighbors[hydrogens])
     relevant = np.array([index for sublist in relevant for index in sublist])
+
     return np.unique(relevant) + 1
 
 
