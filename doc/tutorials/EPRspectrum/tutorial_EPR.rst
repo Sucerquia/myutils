@@ -189,10 +189,10 @@ left, candidate 2 on the right):
 
     <div style="display: flex; justify-content: center; gap: 10px;">
         <div style="display: flex; justify-content: right;">
-            <img src="../../_static/OxygenCharged.png" width="45%" />
+            <img src="../../_static/OxygenCharged.png" width="60%" />
         </div>
         <div style="display: flex; justify-content: left;">
-            <img src="../../_static/OxygenNeutral.png" width="45%" />
+            <img src="../../_static/OxygenNeutral.png" width="60%" />
         </div>
     </div>
 
@@ -207,9 +207,9 @@ the molecule with each radical, run
 .. code-block:: bash
 
     cd 1-OxygenCharged
-    $(myutils gval_workflow -path) -c 1 -f 'g[0, 4]d2' -v
+    $(myutils gval_workflow -path) -c 1 -f 'g0,4d2' -v
     cd ../2-OxygenNeutral
-    $(myutils gval_workflow -path) -c 0 -f 'g[0, 4, 6]d2' -v
+    $(myutils gval_workflow -path) -c 0 -f 'g0,4,6d2' -v
 
 .. note::
 
