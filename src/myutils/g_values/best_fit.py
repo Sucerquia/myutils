@@ -2,6 +2,7 @@ import numpy as np
 from scipy.optimize import nnls
 from myutils.miscellaneous import output_terminal
 from myutils.plotters import StandardPlotter
+from scipy.io import loadmat
 
 
 class TheoMatchExpe:
@@ -282,3 +283,21 @@ def best_fit(experiment, output, fieldrange, *argv):
     sp.spaces[0].set_axis(borders=[[0.15, 0.15], [0.98, 0.98]])
     sp.axis_setter(legend=True)
     sp.save(output)
+
+
+# add2executable
+def mat2dat(file_field: str, file_spectrum: str, output: str):
+    try:
+        data = loadmat(file_field)
+        field = data['fieldexp'].flatten()
+        data = loadmat(file_spectrum)
+        spectrum = data['specexp'].flatten()
+    except:
+        raise ValueError("error reading matlab data, be sure that the name of" +
+                         "the data is fieldexp and specexp")
+    
+    rows = np.append([field], [spectrum], axis=0).T
+    with open(output, 'w') as fil:
+        fil.write("# field spectrum\n")
+        for row in rows:
+            fil.write(f"{row[0]} \t {row[1]}\n")
