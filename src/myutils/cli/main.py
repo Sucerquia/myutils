@@ -21,6 +21,8 @@ pymodules = {
     'create_table_per_method': 'myutils.g_values.postpro',
     'extract_gvals': 'myutils.g_values.postpro',
     'iHFC_fromxyz': 'myutils.g_values.g_valsetup',
+    'rad_loc': 'myutils.g_values.g_valsetup',
+    'mat2dat': 'myutils.g_values.best_fit',
     'best_fit': 'myutils.g_values.best_fit',
     'spect_w_experiment': 'myutils.g_values.best_fit',
     'create_fit_file': 'myutils.g_values.best_fit',
