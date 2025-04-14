@@ -3,6 +3,43 @@ from ase.geometry.analysis import Analysis
 import numpy as np
 
 
+# add2executable
+def rad_loc(ref_mol: str, radical: str) -> np.ndarray:
+    """
+    Find the index of the atom where a hydrogen atom was attached.
+
+    Parametes
+    =========
+    ref_mol: str
+        path to the file describing the molecule with the hydrogen included.
+    redical: str
+        path to the file describing the molecule without the hydrogen.
+
+    Return
+    ======
+    (int) index of the atom where the hydrogen was attached. Index counting
+    starting from 1.
+    """
+    withrad = read(radical)
+    ana_rad = Analysis(withrad)
+    cone_rad = ana_rad.all_bonds
+    reference = read(ref_mol)
+    Hs = np.where(np.array(reference.get_chemical_symbols()) == 'H')[0]
+
+    for h in Hs:
+        reference = read(ref_mol)
+        del reference[h]
+
+        ana = Analysis(reference)
+        cone = ana.all_bonds
+
+        if cone == cone_rad:
+            reference = read(ref_mol)
+            ana = Analysis(reference)
+            cone = ana.all_bonds
+            return cone[0][h][0] + 1
+
+
 def HFC_relevantA(atoms, radicals, depth=2):
     """
     Extract the H atoms of the neighbors up to certain depth (neighbors of
