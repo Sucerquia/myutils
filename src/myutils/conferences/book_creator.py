@@ -1,208 +1,7 @@
 import pandas as pd
 from myutils.miscellaneous import output_terminal
 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# def title_contri(title):
-#     """
-#     Title of the contribution which could be a talk, a poster or whatever
-#     with title, author and abstract.
-#     
-#     Parameters
-#     ==========
-#     title: str
-#         title of the contribution.
-# 
-#     Return
-#     ======
-#     (str) text in latex format for the title of the contribution.
-#     """
-#     text =f"""
-# 
-# \\begin{{center}}
-#     \\textbf{{\\Large \\color{{hitsblue}}{{ {costume_title(title)} }} }}
-# \\end{{center}}
-# 
-# """
-#     return text
-# 
-# def author_line(authors_info, affiliation):
-#     """
-#     Add author name, and affiliation.
-# 
-#     Parameters
-#     ==========
-#     authors_info: str
-#         name and e-mail.
-#     affiliation: str
-#         institution, city, country.
-#     
-#     Return
-#     ======
-#     (str) text in LaTeX formatwith author information adding some space
-#     before and after.
-#     """
-#     text =f"""
-# 
-# \\begin{{center}}
-#     \\vspace{{0.5cm}}
-#     \\textbf{{\\bf{{ {authors_info} }} }}\\\\
-#     {affiliation}
-#     \\vspace{{0.5cm}}
-# \\end{{center}}
-# 
-# """
-#     return text
-# 
-# def costume_title(text):
-#     """
-#     Transform to title format.
-# 
-#     Parameters
-#     ==========
-#     text: str
-#         title as provided by the authors.
-#     
-#     Return
-#     ======
-#     (str) modified text in title style.
-# 
-#     Note
-#     ----
-#     Inside of the script, there are exceptions of articles (a, the, and ..) and
-#     words that should not be transformed such as acronyms. Access and modify
-#     according to your preferences. 
-#     """
-#     exceptions = {"a", "an", "and", "as", "at", "but", "by", "for", "in",
-#                   "nor", "of", "on", "or", "so", "the", "to", "up", "yet",
-#                   "with", "through", "into"}
-#     acronyms = {"ART-SM:", "ML-based", "MACE", "ML/MM", "QM/MM", "OF-DFT",
-#                 "LHCII", "AI"}
-#     words = text.split()
-#     titled = [words[0] if words[0] in acronyms else
-#               words[0].capitalize()]  # Always capitalize the first word
-#     for word in words[1:]:
-#         word = word if ((word in exceptions) or (word in acronyms)) \
-#                         else word.capitalize()
-#         # capitalize also after -
-#         if '-' in word and word not in acronyms:
-#             start = [word[0]]
-#             word = ''.join(start + [word[i].upper() if word[i - 1] == '-'
-#                                     else word[i] for i in range(1, len(word))])
-#         titled.append(word)
-#     return ' '.join(titled)
-# 
-# 
-# def contribution(row, kind, stand=None):
-#     """
-#     Create the whole page of the contribution.
-# 
-#     Parameters
-#     ==========
-#     row: DataFrame
-#         Information about the contribution.
-#     
-#     Return
-#     ======
-#     (str) text in LaTeX format of the contribution.
-#     """
-#     if kind == 'talk':
-#         text = title_contri(costume_title(row["Oral title"]))
-#     elif kind == 'poster':
-#         text = title_contri(costume_title(row["Poster title"]))
-#     else:
-#         raise ValueError("Wrong type of contribution")
-# 
-#     name = row["firstName"].title()
-#     lastname = row["lastName"].title()
-#     email = row["email"]
-#     complete_name = name + " " + lastname + " (" + email + ')'
-#     if row['title'] == 'Dr.' or row['title'] == 'Dr':
-#         complete_name = 'Dr. ' + complete_name
-#     affiliation = row["institute"] + ', ' + row["city"] + ', ' + row['country']
-#     text += author_line(complete_name, affiliation)
-#             
-# 
-#     if kind == 'talk':
-#         text += row["oral abstract"] + '\n\n'
-#     if kind == 'poster':
-#         text += row["Poster abstract"] + '\n\n'
-#         text += '\\begin{flushright}\n' + \
-#                 f'    Stand \\Ntag {stand}\n' + \
-#                 '\\end{flushright}\n'
-# 
-#     text += '\\newpage\n\n'
-#     return text
-# 
-# 
-# # add2executable
-# def abstract_book(excel_file, output):
-#     """
-#     Write the whole abstract book in a file, usually a .tex because it is
-#     LaTeX formated.
-# 
-#     Parameters
-#     ==========
-#     excel_file: str, path
-#         excel file with the information of the abstracts, titles and others.
-#     output: str, path
-#         output file.
-#     
-#     Parameters
-#     ==========
-#     (str) text added to the file.
-#     """
-# 
-#     text = """
-# \\documentclass{article}
-# \\usepackage{xcolor}
-# \\usepackage{setspace}
-# \\usepackage{graphicx} % Required for inserting images
-# 
-# \\definecolor{hitsblue}{HTML}{1f4a87}
-# 
-# \\title{abstract book simplaix}
-# \\author{dsucerg }
-# \\date{April 2025}
-# 
-# \\def\\Ntag{%
-#   \\leavevmode
-#   \\hbox{%
-#     $\\rm N^{\\mkern0.8mu\\underline{\\mkern-0.8mu o\\mkern-0.8mu}\\mkern0.8mu}$%
-#   } \\hspace{0mm}
-# }
-# 
-# \\begin{document}
-# 
-# """
-#     text += section_separation('Program')
-#     text += add_program()
-# 
-#     df = pd.read_excel(excel_file)
-#     # Display the first few rows
-#     posters = df.dropna(subset=['Poster'])
-#     talks = df.dropna(subset=['Oral contribution'])
-# 
-#     text += section_separation('Talks')
-#     for index, contri in talks.iterrows():
-#         text += contribution(contri, 'talk')
-#     
-#     text += section_separation('Posters')
-#     
-#     for index, contri in posters.iterrows():
-#         text += contribution(contri, 'poster', stand=index + 1)
-#     
-#     text += '\n\\end{document}\n'
-#     
-#     with open(output, 'w') as outfile:
-#         outfile.write(text)
-# 
-# 
+
 # ==== General ================================================================
 def section_separation(title):
     """
@@ -231,6 +30,41 @@ def section_separation(title):
 """
     return text
 
+
+# add2executable
+def simplaix_main(subfiles, output):
+    text = """
+\\documentclass{article}
+\\usepackage{xcolor}
+\\usepackage{setspace}
+\\usepackage{graphicx} % Required for inserting images
+
+\\definecolor{hitsblue}{HTML}{1f4a87}
+
+\\title{abstract book simplaix}
+\\author{dsucerg }
+\\date{April 2025}
+
+\\def\\Ntag{%
+  \\leavevmode
+  \\hbox{%
+    $\\rm N^{\\mkern0.8mu\\underline{\\mkern-0.8mu o\\mkern-0.8mu}\\mkern0.8mu}$%
+  } \\hspace{0mm}
+}
+
+\\begin{document}
+
+"""
+
+    for subfile in subfiles.split(','):
+        text += f"\\input{{ {subfile} }}\n"
+    
+    text += "\n\\end{document}\n"
+
+    with open(output, 'w') as outfile:
+        outfile.write(text)
+    
+    return text
 
 # ==== Program ================================================================
 def add_date(day):
@@ -296,7 +130,7 @@ def add_item(event, timespace=1, titlespace=10.5):
 
 
 # add2executable
-def simplaix_program(link):
+def simplaix_program(link, output):
     """
     Copy the schedule from the webpage and create the program.
 
@@ -359,5 +193,190 @@ def simplaix_program(link):
                 text += "\n\\vspace{0.25 cm}\n"
                 text += add_item(event)
         text += "\n}\n"
+    
+    with open(output, 'w') as outfile:
+        outfile.write(text)
+
+    return text
+
+
+# ==== Abstracts ==============================================================
+
+def costume_title(text):
+    """
+    Transform to title format.
+
+    Parameters
+    ==========
+    text: str
+        title as provided by the authors.
+    
+    Return
+    ======
+    (str) modified text in title style.
+
+    Note
+    ----
+    Inside of the script, there are exceptions of articles (a, the, and ..) and
+    words that should not be transformed such as acronyms. Access and modify
+    according to your preferences. 
+    """
+    exceptions = {"a", "an", "and", "as", "at", "but", "by", "for", "in",
+                  "nor", "of", "on", "or", "so", "the", "to", "up", "yet",
+                  "with", "through", "into", "is"}
+    acronyms = {"ART-SM:", "ML-based", "MACE", "ML/MM", "QM/MM", "OF-DFT",
+                "LHCII", "AI", "CGsmiles", "GNNs", "EMLE:", "AlphaFold",
+                "g-xTB:", "DFT"}
+    words = text.split()
+    titled = [words[0] if words[0] in acronyms else
+              words[0].capitalize()]  # Always capitalize the first word
+    for word in words[1:]:
+        word = word if ((word in exceptions) or (word in acronyms)) \
+                        else word.capitalize()
+        # capitalize also after -
+        if '-' in word and word not in acronyms:
+            start = [word[0]]
+            word = ''.join(start + [word[i].upper() if word[i - 1] == '-'
+                                    else word[i] for i in range(1, len(word))])
+        titled.append(word)
+    return ' '.join(titled)
+
+def title_contri(title):
+    """
+    Title of the contribution which could be a talk, a poster or whatever
+    with title, author and abstract.
+    
+    Parameters
+    ==========
+    title: str
+        title of the contribution.
+
+    Return
+    ======
+    (str) text in latex format for the title of the contribution.
+    """
+    text =f"""
+
+\\begin{{center}}
+    \\textbf{{\\Large \\color{{hitsblue}}{{ {costume_title(title)} }} }}
+\\end{{center}}
+
+"""
+    return text
+
+
+def author_line(authors_info, affiliation):
+    """
+    Add author name, and affiliation.
+
+    Parameters
+    ==========
+    authors_info: str
+        name and e-mail.
+    affiliation: str
+        institution, city, country.
+    
+    Return
+    ======
+    (str) text in LaTeX formatwith author information adding some space
+    before and after.
+    """
+    text =f"""
+
+\\begin{{center}}
+    \\vspace{{0.5cm}}
+    \\textbf{{\\bf{{ {authors_info} }} }}\\\\
+    {affiliation}
+    \\vspace{{0.5cm}}
+\\end{{center}}
+
+"""
+    return text
+
+def contribution(row, kind, stand, setter):
+    """
+    Create the whole page of the contribution.
+
+    Parameters
+    ==========
+    row: DataFrame
+        Information about the contribution.
+    
+    Return
+    ======
+    (str) text in LaTeX format of the contribution.
+    """
+    name_label = f"{kind}:" + row["firstName"].replace(" ", "") + \
+                 row["lastName"].replace(" ", "")
+    title = costume_title(row[setter["contri-title"]]) + \
+                   f'\\label{{{name_label}}}'
+    text = title_contri(title)
+
+    name = row["firstName"].title()
+    lastname = row["lastName"].title()
+    email = row["email"]
+    complete_name = name + " " + lastname + " (" + email + ')'
+    accepted_titles = {'Dr.': 'Dr. ',
+                       'Dr': 'Dr. ',
+                       'Prof. Dr.': 'Prof. Dr. ',
+                       'Professor': 'Prof. ',
+                       'Prof.': 'Prof. '}
+
+    if row['title'] in accepted_titles.keys():
+        complete_name = accepted_titles[row['title']] + complete_name
+    affiliation = row["institute"] + ', ' + row["city"] + ', ' + row['country']
+    text += author_line(complete_name, affiliation)
+
+    text += row[setter["contri-abstract"]] + '\n\n'
+    if kind == 'Posters':
+        text += '\\begin{flushright}\n' + \
+                f'    Stand \\Ntag {stand}\n' + \
+                '\\end{flushright}\n'
+    text += '\\newpage\n\n'
+
+    return text
+
+# add2executable
+def abstracts(section, excel_file, output):
+    """
+    Write the whole abstract book in a file, usually a .tex because it is
+    LaTeX formated.
+
+    Parameters
+    ==========
+    excel_file: str, path
+        excel file with the information of the abstracts, titles and others.
+    output: str, path
+        output file.
+    
+    Parameters
+    ==========
+    (str) text added to the file.
+    """
+
+    df = pd.read_excel(excel_file)
+
+    # Separate by sections: So far only Posters and Talks are configured
+    if section == 'Posters':
+        setter = {'selector': 'Poster', # Na in pandas if not a poster
+                  "contri-title" : "Poster title", # title of the contribution
+                  "contri-abstract" : "Poster abstract"}
+
+    elif section == 'Talks':
+        setter = {'selector': 'Oral contribution', # Na not a talk
+                  "contri-title" : "Title", # title of the contribution
+                  "contri-abstract" : "Abstract"}
+
+    else:
+        raise ValueError("So far, section only accepts 'Talks' or 'Posters'")
+
+    subset = df.dropna(subset=[setter["selector"]])
+
+    text = section_separation(section)
+    for index, contri in subset.iterrows():
+        text += contribution(contri, section, index + 1, setter)
+    
+    with open(output, 'w') as outfile:
+        outfile.write(text)
     
     return text
