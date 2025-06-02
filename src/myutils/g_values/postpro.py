@@ -38,7 +38,7 @@ def several_gvals(names: str, experiment: np.ndarray, path: str = './'):
     ==========
     names: str
         names of the orca output files separated by commas.
-        Eg: 'cc-pVDZ.out,EPRII_i.out'
+        Eg: 'cc-pVDZ.out,epr_info.out'
     experiment: str
         expected values according to the experiment
     path: str. Default='./'
@@ -141,7 +141,7 @@ def create_table_per_system(experiment: list,
     # extract data
     data = []
     for subsys in systems:
-        gvals = several_gvals(names='EPRII_i.out',
+        gvals = several_gvals(names='epr_info.out',
                             experiment=experiment,
                             path=subsys)
         data.append(gvals[0])
@@ -229,7 +229,7 @@ def extract_system_info(sys_path: str, exp_values: str):
 
     Note
     ====
-    It assumes that the ORCA output is called EPR_i.out
+    It assumes that the ORCA output is called epr_info.out
     """
     if exp_values == '':
         experiment = np.zeros(3)
@@ -249,7 +249,7 @@ def extract_system_info(sys_path: str, exp_values: str):
     gvals = []
 
     for system in subsystems:
-        gvals.append(several_gvals(names='EPRII_i.out', experiment=experiment,
+        gvals.append(several_gvals(names='epr_info.out', experiment=experiment,
                                    path=system)[0])
     gvals = np.array(gvals, dtype=float)
 

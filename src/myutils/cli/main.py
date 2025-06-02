@@ -29,6 +29,7 @@ pymodules = {
     'create_fit_file': 'myutils.g_values.best_fit',
     'create_amber_data': 'myutils.gromacs.ff_parameters',
     'create_grappa_data': 'myutils.gromacs.ff_parameters',
+    'abstract_book': 'myutils.conferences.book_creator',
     'methods_in_class': 'myutils.cli.pkg_structure.documentation_tools',
     'F_max_stretch': 'myutils.ase_utils.tools',
     'distance': 'myutils.ase_utils.tools',

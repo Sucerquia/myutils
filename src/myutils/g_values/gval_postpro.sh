@@ -13,19 +13,19 @@ Create all the files after complete the computation of the gvalues with Orca.
   -e  <file.dat> experimental field vs absorption file.
   -f  Use this flag to take into account hyperfine corrections. This uses a lot
       of RAM memory. Be sure that you have enough memory or that you filtered.
-  -O  <file.out='EPRII_i.o'> orca output file with computed EPR quantities.
+  -O  <file.out='epr_info.out'> orca output file with computed EPR quantities.
   -o  <output.dat='spectrum_wo_hyFiCorr.dat'> dat output file where you want to
       save the field vs spectrum.
   -m  <float=179.813> experimental value of the microwave frequency. The
       default value corresponds to G-band experiments.
-  -n  <int=501> number of data points used to predict the absorption spectrum
+  -n  <int=401> number of data points used to predict the absorption spectrum
 
   -v  verbose.
   -h  prints this message.
 
 This code should produce:
 
- - A render of each model called opt_EPRII.png
+ - A render of each model called opt.png
  - The computed spectrum obtained by easyspin in a file called spectrum_wo_hyFiCorr.dat
  - A plot of the gvalues of all the candidates called gvalues.png
  - A table of the gvalues in gvalues_table.md
@@ -44,7 +44,7 @@ $name
 $subline
 
 <div align="center">
-  <img src="./opt_EPRII.png"  width="500">
+  <img src="./opt.png"  width="500">
 </div>
 
 EOF
@@ -52,7 +52,7 @@ EOF
 
 # ----- set up starts ---------------------------------------------------------
 # General variables
-orca_output="EPRII_i.out"
+orca_output="epr_info.out"
 MicroWaveExper=179.813
 ndpoints=401
 output="spectrum_wo_hyFiCorr.dat"
@@ -116,7 +116,7 @@ do
 
   verbose "Render image of the candidate $candidate"
   cp $reference/create_mol_png.tcl .
-  vmd -e create_mol_png.tcl -args opt_EPRII.xyz opt_EPRII.png
+  vmd -e create_mol_png.tcl -args opt.xyz opt.png
   rm create_mol_png.tcl
   
   verbose "Compute the spectrum with easyspin"
@@ -160,7 +160,7 @@ do
     cd $name
     verbose "Render image of the non-rad molecule $name"
     cp $reference/create_mol_png.tcl .
-    vmd -e create_mol_png.tcl -args opt_EPRII.xyz opt_EPRII.png
+    vmd -e create_mol_png.tcl -args opt.xyz opt.png
     rm create_mol_png.tcl
   
     # Create vmd_image.md

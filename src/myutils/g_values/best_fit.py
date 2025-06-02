@@ -30,30 +30,27 @@ class TheoMatchExpe:
                  fieldrange=None):
 
         self.fieldexp, self.intensexp = np.loadtxt(experiment_file, unpack=True)
-        
-
-        self.files = np.array(files)
-        self.field = np.loadtxt(self.files[0], usecols=0)
         if fieldrange is None:
             # takes all the range
-            self.conditiontheo = self.field == self.field
-            self.conditionexp = self.fieldexp == self.fieldexp
+            self.condition = self.fieldexp == self.fieldexp
         else:
-            self.conditiontheo = np.logical_and(self.field > fieldrange[0],
-                                                self.field < fieldrange[1])
-            self.conditionexp = np.logical_and(self.fieldexp > fieldrange[0],
-                                               self.fieldexp < fieldrange[1])
+            self.condition = np.logical_and(self.fieldexp > fieldrange[0],
+                                            self.fieldexp < fieldrange[1])
 
+        self.files = np.array(files)
         self.intensities = []
         for file in self.files:
-            intensity = np.loadtxt(file, usecols=1)
+            field_p = np.loadtxt(file, usecols=0)
+            intensity_p = np.loadtxt(file, usecols=1)
+            intensity = np.interp(self.fieldexp, field_p, intensity_p)
             self.intensities.append(intensity)
         self.intensities = np.array(self.intensities)
 
         # Interpolate and find coeffs
-        A = np.column_stack([np.interp(self.fieldexp[self.conditionexp],
-                                       self.field[self.conditiontheo], bf[self.conditiontheo]) for bf in self.intensities])
-        self.coeffs = nnls(A, self.intensexp[self.conditionexp])[0].reshape(len(self.intensities), 1)
+        A = np.column_stack([bf[self.condition] for bf in self.intensities])
+        self.coeffs = nnls(A,
+                           self.intensexp[self.condition]
+                           )[0].reshape(len(self.intensities), 1)
         self.intensfit = np.sum(self.coeffs * self.intensities, axis=0)
         self.proportions()
 
@@ -80,7 +77,7 @@ class TheoMatchExpe:
 
         return self.percentages
     
-    def gradual_cleaning(self, threshold=5, steps=0.1):
+    def gradual_cleaning(self, threshold=1, steps=0.1):
         """
         Removes gradually the candidates that do not weight much in the fitting
         up to having all the candidates with a minimum percentage in the fitting.
@@ -126,10 +123,11 @@ class TheoMatchExpe:
         self.intensities = self.intensities[condition]
 
         # refitting
-        A = np.column_stack([np.interp(self.fieldexp[self.conditionexp],
-                                       self.field[self.conditiontheo], bf[self.conditiontheo]) for bf in self.intensities])
+        A = np.column_stack([bf[self.condition] for bf in self.intensities])
         
-        self.coeffs = nnls(A, self.intensexp[self.conditionexp])[0].reshape(len(self.intensities), 1)
+        self.coeffs = nnls(A,
+                           self.intensexp[self.condition]
+                           )[0].reshape(len(self.intensities), 1)
         self.intensfit = np.sum(self.coeffs * self.intensities, axis=0)
         self.proportions()
         self.clean_candidates(threshold=threshold)
@@ -158,7 +156,8 @@ def fit_experiment(experiment_file='../experiments/field_vs_spectrum.dat',
     the values of the computed intensities are defined for the same values of the field.
     """
     fieldexp, intensexp = np.loadtxt(experiment_file, unpack=True)
-    files = output_terminal(f"find ../ -name '${basis_pattern}' | sort", print_output=False)
+    files = output_terminal(f"find ../ -name '${basis_pattern}' | sort",
+                            print_output=False)
     files = files.split('\n')[:-1]
 
     field = np.loadtxt(files[0], usecols=0)
@@ -275,8 +274,8 @@ def best_fit(experiment, output, fieldrange, *argv):
                                   'ylabel': 'Intensity [a.u]'},
                      plot_pref={'pstyle': '-'})
     sp.plot_data(tme.fieldexp, tme.intensexp, pstyle='-', color_plot='black', data_label='Experiment')
-    sp.plot_data(tme.field, tme.intensfit, pstyle='-', data_label='Fit')                     
-    sp.plot_data(tme.field, tme.coeffs * tme.intensities, pstyle='--');
+    sp.plot_data(tme.fieldexp, tme.intensfit, pstyle='-', data_label='Fit')                     
+    sp.plot_data(tme.fieldexp, tme.coeffs * tme.intensities, pstyle='--');
     if fieldrange is not None:
         sp.plot_data([fieldrange[0], fieldrange[0]], [0, 1], pstyle=':', color_plot='gray');
         sp.plot_data([fieldrange[1], fieldrange[1]], [0, 1], pstyle=':', color_plot='gray');
