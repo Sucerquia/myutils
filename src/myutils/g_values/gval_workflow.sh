@@ -9,7 +9,7 @@
 #SBATCH --exclusive
 
 
-#source $mine/sw/orca/setup_orca.sh
+source $mine/sw/orca/setup_orca.sh
 
 print_help() {
 echo "
@@ -40,7 +40,7 @@ flags:
 exit 0
 }
 
-
+bdes='true'
 charge=0
 directory='.'
 mult=2
@@ -48,9 +48,9 @@ optimization='true'
 epr='true'
 processors=16
 hyperfine=''
-bdes='true'
+prior_name='model'
 
-while getopts 'bc:d:ef:g:m:op:vh' flag;
+while getopts 'bc:d:ef:m:n:op:r:vh' flag;
 do
   case "${flag}" in
     b) bdes='false' ;;
@@ -58,10 +58,11 @@ do
     d) directory=${OPTARG} ;;
     e) epr='false' ;;
     f) hyperfine=${OPTARG} ;;
-    g) guess_rad_loc=${OPTARG} ;;
     m) mult=${OPTARG} ;;
+    n) prior_name=${OPTARG} ;;
     o) optimization='false' ;;
     p) processors=${OPTARG} ;;
+    r) reference_mol=${OPTARG} ;;
 
     v) verbose='true' ;;
     h) print_help ;;
@@ -73,25 +74,28 @@ source "$(myutils basics -path)" Gvals $verbose
 
 cd $directory
 
+# ==== optimization ===========================================================
 if $optimization
 then
   verbose Optimization
-  cat << EOF > opt.inp
+  cat << EOF > ${prior_name}_opt.inp
 ! B3LYP EPR-II OPT
 %pal nprocs $processors end
-*XYZFile $charge $mult model.xyz
+*XYZFile $charge $mult ${prior_name}.xyz
 EOF
-  $orca opt.inp  > opt.out
+  $orca ${prior_name}_opt.inp  > ${prior_name}_opt.out
 else
-  [ -f opt.xyz ] || $orca opt.inp  > opt.out
+  [ -f ${prior_name}_opt.xyz ] || $orca ${prior_name}_opt.inp  > \
+    ${prior_name}_opt.out
 fi
 
+# ==== epr ====================================================================
 if $epr
 then
   rad_loc=""
-  if [[ "$guess_rad_loc" != "" ]]
+  if [[ "$reference_mol" != "" ]]
   then
-    location=$(myutils rad_loc $guess_rad_loc opt.xyz)
+    location=$(myutils rad_loc $reference_mol ${prior_name}_opt.xyz)
     rad_loc="$location,"
   fi
 
@@ -106,10 +110,10 @@ then
   fi
 
   verbose g-values
-  cat <<EOF > epr_info.inp
+  cat <<EOF > ${prior_name}_epr.inp
 ! B3LYP EPR-II AUTOAUX
 %pal nprocs $processors end
-*XYZFile $charge $mult opt.xyz
+*XYZFile $charge $mult ${prior_name}_opt.xyz
 %EPRNMR
         GTENSOR   TRUE
         ORI       GIAO
@@ -118,20 +122,26 @@ EOF
   # add necleous for hyperfine corrections
   if [[ $hyperfine != '' ]]
   then
-    sed -i "/GTENSOR   TRUE/a\ \ \ \ \ \ \  NUCLEI\ \ \ \ = $hyperfine {SHIFT, AISO, ADIP, AORB}" epr_info.inp
+    verbose hyperfine
+    for sublist in "${hyperfine[@]}"
+    do
+      sed -i "/GTENSOR   TRUE/a\ \ \ \ \ \ \  NUCLEI\ \ \ \ = \
+        $sublist {SHIFT, AISO, ADIP, AORB}" ${prior_name}_epr.inp
+    done
   fi
-  $orca epr_info.inp  > epr_info.out
+  $orca ${prior_name}_epr.inp  > ${prior_name}_epr.out
 fi
 
+# ==== BDEs ===================================================================
 if $bdes
 then
   verbose BDES
-  myutils orca_epr_inp '' '' $processors $mult $charge 'opt.xyz' "$hyperfine" > epr_info.inp
-  cat << EOF > freq.inp
+  cat << EOF > ${prior_name}_freq.inp
 ! M062X def2-TZVP OPT FREQ
 %pal nprocs $processors end
-*XYZFile $charge $mult opt.xyz
+*XYZFile $charge $mult ${prior_name}_opt.xyz
 EOF
-  $orca freq.inp  > freq.out
+  $orca ${prior_name}_freq.inp  > ${prior_name}_freq.out
 fi
+
 finish
