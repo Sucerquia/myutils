@@ -100,9 +100,9 @@ then
     nog=${hyperfine: 1}           # remove g
     radicals="$rad_loc${nog%d*}"  # list of radicals
     depth=${nog#*d}               # depth
-    tmp_var=$(myutils iHFC_fromxyz opt.xyz "[$radicals]" "$depth")
-    hyperfine="$(echo $tmp_var |\
-               sed -E "s/\[//g ; s/\]//g; s/^ *//g ; s/ *$//g ; s/ +/,/g")"
+    tmp_var=$(myutils iHFC_fromxyz ${prior_name}_opt.xyz "[$radicals]" \
+      "$depth")
+    mapfile -t hyperfine < <(echo $tmp_var |  grep -oP '\[\K[^\]]+')
   fi
 
   verbose g-values

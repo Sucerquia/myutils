@@ -1,5 +1,6 @@
-from ase.io import read
+from ase.io import read, write
 from ase.geometry.analysis import Analysis
+from ase import Atoms
 import numpy as np
 
 
@@ -38,6 +39,7 @@ def rad_loc(ref_mol: str, radical: str) -> np.ndarray:
             ana = Analysis(reference)
             cone = ana.all_bonds
             return cone[0][h][0] + 1
+    raise ValueError("Conection to H not found")
 
 
 def HFC_relevantA(atoms, radicals, depth=2):
@@ -75,7 +77,7 @@ def HFC_relevantA(atoms, radicals, depth=2):
             nitrogens = e_neighbors == 'N'
             condition = np.logical_or(np.logical_or(hydrogens,
                                                     oxygens),
-                                      nitrogens)
+                                                    nitrogens)
             relevant.append(neighbors[condition])
             new_neighbors.append(neighbors[e_neighbors != 'H'])
         centers = [index for sublist in new_neighbors for index in sublist]
@@ -88,8 +90,14 @@ def HFC_relevantA(atoms, radicals, depth=2):
         hydrogens = e_neighbors == 'H'
         relevant.append(neighbors[hydrogens])
     relevant = np.array([index for sublist in relevant for index in sublist])
+    relevant = np.unique(relevant)
+    separated_relevant = {}
+    for i, element  in enumerate(elements[relevant]):
+        if element not in list(separated_relevant.keys()):
+            separated_relevant[str(element)] = []
+        separated_relevant[element].append(int(relevant[i] + 1))
 
-    return np.unique(relevant) + 1
+    return separated_relevant
 
 
 # add2executable
