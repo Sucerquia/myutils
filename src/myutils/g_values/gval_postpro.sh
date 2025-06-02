@@ -54,7 +54,7 @@ EOF
 # General variables
 orca_output="EPRII_i.out"
 MicroWaveExper=179.813
-ndpoints=501
+ndpoints=401
 output="spectrum_wo_hyFiCorr.dat"
 experiment=''
 verbose='false'
