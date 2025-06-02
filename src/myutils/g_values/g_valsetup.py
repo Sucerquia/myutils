@@ -131,3 +131,31 @@ def iHFC_fromxyz(file, radicals, depth):
     depth = int(depth)
 
     return HFC_relevantA(atoms, radicals, depth)
+
+
+# add2executable
+def ext_xyz_from_npz(npz_file):
+    data = np.load(npz_file)
+
+    for i, xyz in enumerate(data['xyz']):
+        atoms = Atoms(numbers=data['atomic_numbers'][i],
+                      positions=xyz)
+        name = npz_file[:-4] + f'_{i:03}' + '.xyz'
+
+        comment = f'total_charge: {data["total_charge"]}; ' + \
+                   f'multiplicity: 2; ' + \
+                   f'heavy_atom_missing_idxs: ' + \
+                   f'{data["heavy_atom_missing_idxs"][i]}'
+        if 'atom_chargerelevant_idx' in data and len(data["atom_chargerelevant_idx"][i]) != 0:
+            charged = ', '.join([str(j) for j in
+                                 data["atom_chargerelevant_idx"][i]])
+            comment += '; atom_chargerelevant_idx: ' + \
+                       f'{charged}'
+        if 'source_names' in data:
+            comment += f'; source_name: {data["source_names"][i]}'
+        write(name, atoms, comment=comment)
+    
+    info = {key: data[key] for key in data.files if key != 'original_xyz'}
+    data.close()
+    return info
+   
