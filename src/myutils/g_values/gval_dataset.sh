@@ -3,9 +3,12 @@
 # ----- definition of functions -----------------------------------------------
 print_help() {
 echo "
-Use this template to create your scripts with a standard structure
+This script goes through a set of molecules stored in npz files, optimizes them
+and then computes the g-values and A-matrices (HFC) of the atoms in the second
+degree neighborhood of the relevant atoms defined in the npz files, which are
+marked as 'heavy_atom_missing_idxs' and 'atom_chargerelevant_idx'.
   
-  -f  <file> npz file containing radicals information.
+  -d  <directory> location of the dataset containing all the npz files.
 
   -v  verbose.
   -h  prints this message.
@@ -15,12 +18,12 @@ exit 0
 
 # ----- set up starts ---------------------------------------------------------
 # General variables
-npz_file=''
+directory='./'
 verbose='false'
-while getopts 'f:vh' flag;
+while getopts 'd:vh' flag;
 do
   case "${flag}" in
-    f) file=${OPTARG} ;;
+    d) directory=${OPTARG} ;;
   
     v) verbose='true' ;;
     h) print_help ;;
@@ -38,23 +41,36 @@ echo " * Command:"
 echo "$0" "$@"
 
 # ---- BODY -------------------------------------------------------------------
+cd $directory
+# finds all the npz files in the directory and subdirectories
+mapfile -t all_files < <(find . -name *.npz)
 
-myutils ext_xyz_from_npz $file > /dev/null
+if [[ ${#all_files[@]} -eq 0 ]]
+then
+  fail "There are not npz files in this directory: $(pwd)"
+fi
 
-for xyz_file in ${file%.npz}_*.xyz
+for file in ${all_files[@]}
 do
-  info=$(sed -n "2p" $xyz_file | sed "s/;/\n/g")
-  charge=$(echo "$info" | grep 'total_charge' | awk '{print $2}')
-  multi=$(echo "$info" | grep 'multiplicity' | awk '{print $2}')
-  radical=$(echo "$info" | grep 'heavy_atom_missing_idxs' | awk '{print $2}')
-  charged_a=$(echo "$info" | grep 'atom_chargerelevant_idx' | awk '{print $2}')
+  verbose $file
+  myutils ext_xyz_from_npz $file > /dev/null
   
-  sbatch --partition=cpu-single -J ${xyz_file%.xyz} \
-        $(myutils gval_workflow -path) -c $charge \
-                                       -m $multi \
-                                       -f "g$radical,${charged_a}d3" \
-                                       -n ${xyz_file%.xyz} \
-                                       -v
+  for xyz_file in ${file%.npz}_*.xyz
+  do
+    echo "\ \ - $xyz_file"
+    info=$(sed -n "2p" $xyz_file | sed "s/;/\n/g")
+    charge=$(echo "$info" | grep 'total_charge' | awk '{print $2}')
+    multi=$(echo "$info" | grep 'multiplicity' | awk '{print $2}')
+    radical=$(echo "$info" | grep 'heavy_atom_missing_idxs' | awk '{print $2}')
+    charged_a=$(echo "$info" | grep 'atom_chargerelevant_idx' | awk '{print $2}')
+    
+    sbatch --partition=cpu-single -J ${xyz_file%.xyz} \
+      $(myutils gval_workflow -path) -c $charge \
+                                     -m $multi \
+                                     -f "g$radical,${charged_a}d3" \
+                                     -n ${xyz_file%.xyz} \
+                                     -b -v
+  done
 done
 
 finish "message to finish"
