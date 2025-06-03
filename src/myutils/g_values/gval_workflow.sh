@@ -50,7 +50,7 @@ processors=16
 hyperfine=''
 prior_name='model'
 
-while getopts 'bc:d:ef:m:n:op:r:vh' flag;
+while getopts 'bc:d:ef:m:n:op:r:svh' flag;
 do
   case "${flag}" in
     b) bdes='false' ;;
@@ -63,6 +63,7 @@ do
     o) optimization='false' ;;
     p) processors=${OPTARG} ;;
     r) reference_mol=${OPTARG} ;;
+    s) sweep='true' ;;
 
     v) verbose='true' ;;
     h) print_help ;;
@@ -87,6 +88,18 @@ EOF
 else
   [ -f ${prior_name}_opt.xyz ] || $orca ${prior_name}_opt.inp  > \
     ${prior_name}_opt.out
+fi
+
+if grep -q "ORCA TERMINATED NORMALLY" ${prior_name}_opt.out && $sweep
+then
+  rm ${xyz_file%.xyz}_opt.densities
+  rm ${xyz_file%.xyz}_opt.engrad
+  rm ${xyz_file%.xyz}_opt.gbw
+  rm ${xyz_file%.xyz}_opt.inp
+  rm ${xyz_file%.xyz}_opt.opt
+  rm ${xyz_file%.xyz}_opt_property.txt
+  rm ${xyz_file%.xyz}_opt_trj.xyz
+  rm ${xyz_file%.xyz}_opt.gori.xyz
 fi
 
 # ==== epr ====================================================================
@@ -130,6 +143,18 @@ EOF
     done
   fi
   $orca ${prior_name}_epr.inp  > ${prior_name}_epr.out
+fi
+
+if grep -q "ORCA TERMINATED NORMALLY" ${prior_name}_epr.out && $sweep
+then
+  rm ${xyz_file%.xyz}_epr.densities
+  rm ${xyz_file%.xyz}_epr.engrad
+  rm ${xyz_file%.xyz}_epr.gbw
+  rm ${xyz_file%.xyz}_epr.inp
+  rm ${xyz_file%.xyz}_epr.opt
+  rm ${xyz_file%.xyz}_epr_property.txt
+  rm ${xyz_file%.xyz}_epr_trj.xyz
+  rm ${xyz_file%.xyz}_epr.gori.xyz
 fi
 
 # ==== BDEs ===================================================================
