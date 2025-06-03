@@ -43,7 +43,7 @@ echo "$0" "$@"
 # ---- BODY -------------------------------------------------------------------
 cd $directory
 # finds all the npz files in the directory and subdirectories
-mapfile -t all_files < <(find . -name *.npz)
+mapfile -t all_files < <(find . -name '*.npz')
 
 if [[ ${#all_files[@]} -eq 0 ]]
 then
@@ -69,7 +69,7 @@ do
                                      -m $multi \
                                      -f "g$radical,${charged_a}d3" \
                                      -n ${xyz_file%.xyz} \
-                                     -b -v
+                                     -b -v -s
   done
 done
 
