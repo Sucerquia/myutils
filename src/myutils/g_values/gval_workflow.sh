@@ -9,8 +9,6 @@
 #SBATCH --exclusive
 
 
-#source $mine/sw/orca/setup_orca.sh
-
 print_help() {
 echo "
 This tool runs all the necessary steps to get the g-values. It works with some
@@ -70,6 +68,7 @@ do
 done
 
 source "$(myutils basics -path)" Gvals $verbose
+load_modules
 
 cd $directory
 
