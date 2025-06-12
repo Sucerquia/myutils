@@ -27,34 +27,69 @@ class TheoMatchExpe:
     def __init__(self,
                  files,
                  experiment_file='../experiments/field_vs_spectrum2024.dat',
-                 fieldrange=None):
+                 fieldrange=None,
+                 shifting_width=0):
 
+        self.shifting_width = shifting_width
+        self.shift = 0
         self.fieldexp, self.intensexp = np.loadtxt(experiment_file, unpack=True)
-        if fieldrange is None:
-            # takes all the range
-            self.condition = self.fieldexp == self.fieldexp
-        else:
-            self.condition = np.logical_and(self.fieldexp > fieldrange[0],
-                                            self.fieldexp < fieldrange[1])
+        self.intensexp = self.intensexp / max(self.intensexp) 
 
         self.files = np.array(files)
-        self.intensities = []
-        for file in self.files:
-            field_p = np.loadtxt(file, usecols=0)
-            intensity_p = np.loadtxt(file, usecols=1)
-            intensity = np.interp(self.fieldexp, field_p, intensity_p)
-            self.intensities.append(intensity)
-        self.intensities = np.array(self.intensities)
+        theoretical = self.fit_theoretical(self.files,
+                                           self.fieldexp,
+                                           fieldrange)
+        self.coeffs, self.intensities, self.intensfit, self.error = theoretical
 
-        # Interpolate and find coeffs
-        A = np.column_stack([bf[self.condition] for bf in self.intensities])
-        self.coeffs = nnls(A,
-                           self.intensexp[self.condition]
-                           )[0].reshape(len(self.intensities), 1)
-        self.intensfit = np.sum(self.coeffs * self.intensities, axis=0)
         self.proportions()
 
+
+    def fit_theoretical(self, files, fieldexp, fieldrange=None):
+        if fieldrange is None:
+            # takes all the range
+            self.condition = fieldexp == fieldexp
+        else:
+            self.condition = np.logical_and(fieldexp > fieldrange[0],
+                                            fieldexp < fieldrange[1])
+
+        intensities = []
+        for file in files:
+            field_p = np.loadtxt(file, usecols=0)
+            intensity_p = np.loadtxt(file, usecols=1)
+            intensity = np.interp(fieldexp, field_p, intensity_p)
+            intensities.append(intensity)
+        intensities = np.array(intensities)
+
+        # Interpolate and find coeffs
+        A = np.column_stack([bf[self.condition] for bf in intensities])
+        coeffs, error = nnls(A, self.intensexp[self.condition])
+        coeffs = coeffs.reshape(len(intensities), 1)
+        intensfit = np.sum(coeffs * intensities, axis=0)
+
+        return coeffs, intensities, intensfit, error
     
+    def fit_shifting(self, files, shifting_width=None, **kwargs):
+        min_error = float('inf')
+        if shifting_width is not None:
+            self.shifting_width = shifting_width
+        if self.shifting_width == 0:
+            self.shifting_width = 0.1
+
+        for shift in np.arange(-self.shifting_width, self.shifting_width, 0.2):
+            exp_intensity = self.fieldexp + shift
+            fitting = self.fit_theoretical(files, exp_intensity, **kwargs)
+            coeffs, intensities, intensfit, error = fitting
+            if error < min_error:
+                min_error = error
+                self.intensities = intensities
+                self.coeffs = coeffs
+                self.intensfit = intensfit
+                self.shift = shift
+        self.proportions()
+
+        return self.coeffs, self.intensities, self.intensfit, self.shift
+
+
     def proportions(self, print_analysis=False):
         """
         Computes the percentage of each one of the candidates that fit better
@@ -99,7 +134,7 @@ class TheoMatchExpe:
 
         return output
 
-    def clean_candidates(self, threshold=1):
+    def clean_candidates(self, threshold=1, **kwargs):
         """
         Removes the candidates that are expected to be less than certain
         percentage. It means, TheoFitExpe.intensities and TheoFitExpe.files
@@ -120,18 +155,12 @@ class TheoMatchExpe:
             return self.intensities
 
         self.files = self.files[condition]
-        self.intensities = self.intensities[condition]
-
-        # refitting
-        A = np.column_stack([bf[self.condition] for bf in self.intensities])
-        
-        self.coeffs = nnls(A,
-                           self.intensexp[self.condition]
-                           )[0].reshape(len(self.intensities), 1)
-        self.intensfit = np.sum(self.coeffs * self.intensities, axis=0)
-        self.proportions()
+        fitting =  self.fit_shifting(self.files, **kwargs)
+        self.coeffs, self.intensities, self.intensfit, self.shift = fitting
         self.clean_candidates(threshold=threshold)
 
+
+# The subsequente functions were not addapted to shifting.
 
 def fit_experiment(experiment_file='../experiments/field_vs_spectrum.dat',
                    basis_pattern='spectrum_wo_hyFiCorr.dat'):
