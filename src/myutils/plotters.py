@@ -41,7 +41,8 @@ class StandardPlotter:
                  y: Union[list, tuple, np.ndarray] = None,
                  ax: plt.Axes = None, fig: plt.Figure = None,
                  figwidth: float = 8.9, figheight: float = 8,
-                 ax_pref: dict = {}, plot_pref: dict = {}):
+                 ax_pref: dict = {}, plot_pref: dict = {},
+                 set_default=False):
         # ==== Default ====
         self.ax_pref = {'xlabel': '',
                         'ylabel': '',
@@ -89,9 +90,6 @@ class StandardPlotter:
         else:
             self.ax = np.array([self.ax])
 
-        self.fig.set_size_inches(figwidth / 2.54, figheight / 2.54),
-        self.fig.set_dpi(300)
-
         # TODO: add change of layer per axis.
         self.layer = [0]
         self.spaces = []
@@ -106,7 +104,10 @@ class StandardPlotter:
             self.change_ax_defaults(**ax_pref)
 
         for ax in self.ax:
-            self.axis_setter(ax, **self.ax_pref)
+            if set_default:
+                self.axis_setter(ax, **self.ax_pref)
+                self.fig.set_size_inches(figwidth / 2.54, figheight / 2.54),
+                self.fig.set_dpi(300)
 
         if x is not None:
             self.plot_data(x, y=y, **plot_pref)
@@ -721,7 +722,7 @@ class StandardPlotter:
         return y
 
     def arrow(self, xy, dxdy, text, color=None, pad=0, ax=0, hw=1, hl=1,
-              fontsize=None):
+              fontsize=None, **kwargs):
         """
         Draws an annotated arrow on the axes.
 
@@ -761,12 +762,12 @@ class StandardPlotter:
 
         dx, dy = dxdy
         x, y = xy
-        self.ax[0].arrow(x, y, dx, dy,
+        ax.arrow(x, y, dx, dy,
                          fc=color, ec=color,
                          head_width=hw, head_length=hl)
         ax.text(x, y + pad, text,
                 va='bottom', ha='center', fontsize=fontsize,
-                color=color)
+                color=color, **kwargs)
 
     def show(self):
         """
