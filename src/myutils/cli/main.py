@@ -30,6 +30,7 @@ pymodules = {
     'create_grappa_data': 'myutils.gromacs.ff_parameters',
     'abstract_book': 'myutils.conferences.book_creator',
     'methods_in_class': 'myutils.cli.pkg_structure.documentation_tools',
+    'h_link2': 'myutils.ase_utils.tools',
     'F_max_stretch': 'myutils.ase_utils.tools',
     'distance': 'myutils.ase_utils.tools',
     'all_xyz2pdb': 'myutils.ase_utils.tools',
