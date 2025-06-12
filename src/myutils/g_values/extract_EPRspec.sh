@@ -1,5 +1,13 @@
 #!/bin/bash
 
+#SBATCH -N 1                   # number of nodes
+#SBATCH -n 4
+#SBATCH --cpus-per-task=1
+#SBATCH -t 24:00:00
+#SBATCH --output=%x-%j.o
+#SBATCH --error=%x-%j.e
+#SBATCH --exclusive
+
 # ----- definition of functions -----------------------------------------------
 print_help() {
 echo "
@@ -30,15 +38,19 @@ ndpoints=401
 hyperfine='false'
 output="spectrum_wo_hyFiCorr.dat"
 experiment=''
+lwpp=0.5
+disturb='[ 0 0 0 ]'
 verbose='false'
-while getopts 'e:fO:o:m:n:vh' flag;
+while getopts 'd:e:fO:o:l:m:n:vh' flag;
 do
   case "${flag}" in
+    d) disturb=${OPTARG} ;;
     e) experiment=${OPTARG} ;;
     f) hyperfine='true' ;;
     O) orca_output=${OPTARG} ;;
     o) output=${OPTARG} ;;
     m) MicroWaveExper=${OPTARG} ;;
+    l) lwpp=${OPTARG} ;;
     n) ndpoints=${OPTARG} ;;
 
     v) verbose='true' ;;
@@ -54,7 +66,7 @@ then
 fi
 
 source "$(myutils basics -path)" ExtGVals $verbose
-alias matlab="/usr/local/MATLAB/R2024b/bin/matlab -softwareopengl"
+load_modules
 
 # starting information
 verbose "JOB information"
@@ -80,7 +92,9 @@ Sys = orca2easyspin('$orca_output');
 Sys = rmfield(Sys, 'Nucs');
 Sys = rmfield(Sys, 'A');
 Sys = rmfield(Sys, 'AFrame');
-Sys.lwpp = 0.5
+Sys.lwpp = $lwpp ;
+
+Sys.g = Sys.g + $disturb ;
 
 [ field, spec ] = pepper(Sys, Exp);
 data = [field(:), spec(:) ];
@@ -92,7 +106,7 @@ then
   sed -i "/rmfield(/d" matlab_file_extract_spect.m
 fi
 
-/usr/local/MATLAB/R2024b/bin/matlab -softwareopengl -batch "run('matlab_file_extract_spect.m')" || fail "extracting spectrum"
+matlab -softwareopengl -batch "run('matlab_file_extract_spect.m')" || fail "extracting spectrum"
 
 rm matlab_file_extract_spect.m
 finish "finished"
