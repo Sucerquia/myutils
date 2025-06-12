@@ -38,7 +38,7 @@ flags:
 exit 0
 }
 
-
+bdes='true'
 charge=0
 directory='.'
 mult=2
@@ -46,9 +46,9 @@ optimization='true'
 epr='true'
 processors=16
 hyperfine=''
-bdes='true'
+prior_name='model'
 
-while getopts 'bc:d:ef:g:m:op:vh' flag;
+while getopts 'bc:d:ef:m:n:op:r:svh' flag;
 do
   case "${flag}" in
     b) bdes='false' ;;
@@ -56,10 +56,12 @@ do
     d) directory=${OPTARG} ;;
     e) epr='false' ;;
     f) hyperfine=${OPTARG} ;;
-    g) guess_rad_loc=${OPTARG} ;;
     m) mult=${OPTARG} ;;
+    n) prior_name=${OPTARG} ;;
     o) optimization='false' ;;
     p) processors=${OPTARG} ;;
+    r) reference_mol=${OPTARG} ;;
+    s) sweep='true' ;;
 
     v) verbose='true' ;;
     h) print_help ;;
@@ -72,25 +74,40 @@ load_modules
 
 cd $directory
 
+# ==== optimization ===========================================================
 if $optimization
 then
   verbose Optimization
-  cat << EOF > opt.inp
+  cat << EOF > ${prior_name}_opt.inp
 ! B3LYP EPR-II OPT
 %pal nprocs $processors end
-*XYZFile $charge $mult model.xyz
+*XYZFile $charge $mult ${prior_name}.xyz
 EOF
-  $orca opt.inp  > opt.out
+  $orca ${prior_name}_opt.inp  > ${prior_name}_opt.out
 else
-  [ -f opt.xyz ] || $orca opt.inp  > opt.out
+  [ -f ${prior_name}_opt.xyz ] || $orca ${prior_name}_opt.inp  > \
+    ${prior_name}_opt.out
 fi
 
+if grep -q "ORCA TERMINATED NORMALLY" ${prior_name}_opt.out && $sweep
+then
+  rm ${xyz_file%.xyz}_opt.densities
+  rm ${xyz_file%.xyz}_opt.engrad
+  rm ${xyz_file%.xyz}_opt.gbw
+  rm ${xyz_file%.xyz}_opt.inp
+  rm ${xyz_file%.xyz}_opt.opt
+  rm ${xyz_file%.xyz}_opt_property.txt
+  rm ${xyz_file%.xyz}_opt_trj.xyz
+  rm ${xyz_file%.xyz}_opt.gori.xyz
+fi
+
+# ==== epr ====================================================================
 if $epr
 then
   rad_loc=""
-  if [[ "$guess_rad_loc" != "" ]]
+  if [[ "$reference_mol" != "" ]]
   then
-    location=$(myutils rad_loc $guess_rad_loc opt.xyz)
+    location=$(myutils rad_loc $reference_mol ${prior_name}_opt.xyz)
     rad_loc="$location,"
   fi
 
@@ -99,16 +116,16 @@ then
     nog=${hyperfine: 1}           # remove g
     radicals="$rad_loc${nog%d*}"  # list of radicals
     depth=${nog#*d}               # depth
-    tmp_var=$(myutils iHFC_fromxyz opt.xyz "[$radicals]" "$depth")
-    hyperfine="$(echo $tmp_var |\
-               sed -E "s/\[//g ; s/\]//g; s/^ *//g ; s/ *$//g ; s/ +/,/g")"
+    tmp_var=$(myutils iHFC_fromxyz ${prior_name}_opt.xyz "[$radicals]" \
+      "$depth")
+    mapfile -t hyperfine < <(echo $tmp_var |  grep -oP '\[\K[^\]]+')
   fi
 
   verbose g-values
-  cat <<EOF > epr_info.inp
+  cat <<EOF > ${prior_name}_epr.inp
 ! B3LYP EPR-II AUTOAUX
 %pal nprocs $processors end
-*XYZFile $charge $mult opt.xyz
+*XYZFile $charge $mult ${prior_name}_opt.xyz
 %EPRNMR
         GTENSOR   TRUE
         ORI       GIAO
@@ -117,20 +134,38 @@ EOF
   # add necleous for hyperfine corrections
   if [[ $hyperfine != '' ]]
   then
-    sed -i "/GTENSOR   TRUE/a\ \ \ \ \ \ \  NUCLEI\ \ \ \ = $hyperfine {SHIFT, AISO, ADIP, AORB}" epr_info.inp
+    verbose hyperfine
+    for sublist in "${hyperfine[@]}"
+    do
+      sed -i "/GTENSOR   TRUE/a\ \ \ \ \ \ \  NUCLEI\ \ \ \ = \
+        $sublist {SHIFT, AISO, ADIP, AORB}" ${prior_name}_epr.inp
+    done
   fi
-  $orca epr_info.inp  > epr_info.out
+  $orca ${prior_name}_epr.inp  > ${prior_name}_epr.out
 fi
 
+if grep -q "ORCA TERMINATED NORMALLY" ${prior_name}_epr.out && $sweep
+then
+  rm ${xyz_file%.xyz}_epr.densities
+  rm ${xyz_file%.xyz}_epr.engrad
+  rm ${xyz_file%.xyz}_epr.gbw
+  rm ${xyz_file%.xyz}_epr.inp
+  rm ${xyz_file%.xyz}_epr.opt
+  rm ${xyz_file%.xyz}_epr_property.txt
+  rm ${xyz_file%.xyz}_epr_trj.xyz
+  rm ${xyz_file%.xyz}_epr.gori.xyz
+fi
+
+# ==== BDEs ===================================================================
 if $bdes
 then
   verbose BDES
-  myutils orca_epr_inp '' '' $processors $mult $charge 'opt.xyz' "$hyperfine" > epr_info.inp
-  cat << EOF > freq.inp
+  cat << EOF > ${prior_name}_freq.inp
 ! M062X def2-TZVP OPT FREQ
 %pal nprocs $processors end
-*XYZFile $charge $mult opt.xyz
+*XYZFile $charge $mult ${prior_name}_opt.xyz
 EOF
-  $orca freq.inp  > freq.out
+  $orca ${prior_name}_freq.inp  > ${prior_name}_freq.out
 fi
+
 finish

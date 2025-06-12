@@ -1,8 +1,7 @@
-# %%
-from ase.io import read
+from ase.io import read, write
 from ase.geometry.analysis import Analysis
+from ase import Atoms
 import numpy as np
-
 import networkx as nx
 
 
@@ -41,7 +40,7 @@ def HFC_relevantA(atoms, radicals, depth=2):
             nitrogens = e_neighbors == 'N'
             condition = np.logical_or(np.logical_or(hydrogens,
                                                     oxygens),
-                                      nitrogens)
+                                                    nitrogens)
             relevant.append(neighbors[condition])
             new_neighbors.append(neighbors[e_neighbors != 'H'])
         centers = [index for sublist in new_neighbors for index in sublist]
@@ -54,8 +53,14 @@ def HFC_relevantA(atoms, radicals, depth=2):
         hydrogens = e_neighbors == 'H'
         relevant.append(neighbors[hydrogens])
     relevant = np.array([index for sublist in relevant for index in sublist])
+    relevant = np.unique(relevant)
+    separated_relevant = {}
+    for i, element  in enumerate(elements[relevant]):
+        if element not in list(separated_relevant.keys()):
+            separated_relevant[str(element)] = []
+        separated_relevant[element].append(int(relevant[i] + 1))
 
-    return np.unique(relevant) + 1
+    return separated_relevant
 
 
 # add2executable
@@ -284,3 +289,30 @@ def rad_loc_deprecated(ref_mol: str, radical: str) -> np.ndarray:
             ana = Analysis(reference)
             cone = ana.all_bonds
             return cone[0][h][0] + 1
+
+
+# add2executable
+def ext_xyz_from_npz(npz_file):
+    data = np.load(npz_file)
+
+    for i, xyz in enumerate(data['xyz']):
+        atoms = Atoms(numbers=data['atomic_numbers'][i],
+                      positions=xyz)
+        name = npz_file[:-4] + f'_{i:03}' + '.xyz'
+
+        comment = f'total_charge: {data["total_charge"]}; ' + \
+                   f'multiplicity: 2; ' + \
+                   f'heavy_atom_missing_idxs: ' + \
+                   f'{data["heavy_atom_missing_idxs"][i]}'
+        if 'atom_chargerelevant_idx' in data and len(data["atom_chargerelevant_idx"][i]) != 0:
+            charged = ', '.join([str(j) for j in
+                                 data["atom_chargerelevant_idx"][i]])
+            comment += '; atom_chargerelevant_idx: ' + \
+                       f'{charged}'
+        if 'source_names' in data:
+            comment += f'; source_name: {data["source_names"][i]}'
+        write(name, atoms, comment=comment)
+    
+    info = {key: data[key] for key in data.files if key != 'original_xyz'}
+    data.close()
+    return info
