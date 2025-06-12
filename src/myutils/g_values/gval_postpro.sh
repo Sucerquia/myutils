@@ -52,7 +52,7 @@ EOF
 
 # ----- set up starts ---------------------------------------------------------
 # General variables
-orca_output="epr_info.out"
+orca_output="model_epr.out"
 MicroWaveExper=179.813
 ndpoints=401
 output="spectrum_wo_hyFiCorr.dat"
@@ -116,14 +116,15 @@ do
 
   verbose "Render image of the candidate $candidate"
   cp $reference/create_mol_png.tcl .
-  vmd -e create_mol_png.tcl -args opt.xyz opt.png
+  vmd -e create_mol_png.tcl -args model_opt.xyz opt.png
   rm create_mol_png.tcl
   
   verbose "Compute the spectrum with easyspin"
-  $(myutils extract_EPRspec -path) -e "$experiment" $hyperfine -O $orca_output \
-                                   -o $output -m $MicroWaveExper -n $ndpoints \
-                                   -v || fail \
-                                   "error extracting spectrum of $candidate"
+  if [ -f $output ]
+  then
+    fail "$output does not exist in $(pwd). Execute 'myutils extract_EPRspec'
+      first."
+  fi
   
   # Create vmd_image.md
   name=$mol_cand/$candidate
@@ -148,7 +149,7 @@ done
 
 cd ../ # goes completely out, to where the molecules are.
 
-mapfile -t frequencies < <(find . -name 'freq.out' | sort )
+mapfile -t frequencies < <(find . -name 'model_freq.out' | sort )
 
 ori=$(pwd)
 for freq in ${frequencies[@]};
@@ -160,7 +161,7 @@ do
     cd $name
     verbose "Render image of the non-rad molecule $name"
     cp $reference/create_mol_png.tcl .
-    vmd -e create_mol_png.tcl -args opt.xyz opt.png
+    vmd -e create_mol_png.tcl -args model_opt.xyz opt.png
     rm create_mol_png.tcl
   
     # Create vmd_image.md
