@@ -64,6 +64,7 @@ sh_executers = {
     'gvals_template': './g_values/gvals_template.sh',
     'gval_postpro': './g_values/gval_postpro.sh',
     'extract_EPRspec': './g_values/extract_EPRspec.sh',
+    'extract_bonds_vmd': './g_values/extract_bonds_vmd.sh',
     'pulling_with_ff': './gromacs/pulling_with_ff.sh',
     'pulling': './gromacs/pulling.sh',
     'peptide_pulling': './gromacs/peptide_pulling.sh',
