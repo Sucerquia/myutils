@@ -53,7 +53,7 @@ myutils best_fit './experiments/<replace: experiment>.dat' \
 cat <<EOF
 
 <div style="display: flex;">
-  <img src="/best_fit_images/<replace: fitting name>.png" alt="Image 1" width="50%">
+  <img src="best_fit_images/<replace: fitting name>.png" alt="Image 1" width="50%">
 </div>
 
 EOF
