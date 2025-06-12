@@ -845,10 +845,20 @@ class Space:
         if show_frame:
             self.show_frame(**kwargs)
         else:
-            self.frame.set_yticks([])
-            self.frame.set_xticks([])
-            for side in ['bottom', 'right', 'top', 'left']:
-                self.frame.spines[side].set_color('none')
+            self.hide_frame()
+
+    def hide_frame(self):
+        self.frame.grid(False)
+        self.sp.axis_setter(ax=self.frame,
+                            xticks=[],
+                            yticks=[],
+                            xminor=[],
+                            yminor=[],
+                            grid=False,
+                            mingrid=False)
+        for side in ['bottom', 'right', 'top', 'left']:
+            self.frame.spines[side].set_color('none')
+        return self.frame
 
     def show_frame(self,
                    majordelta: float = 0.1,
