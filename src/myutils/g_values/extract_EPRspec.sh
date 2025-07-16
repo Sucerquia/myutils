@@ -13,6 +13,9 @@ print_help() {
 echo "
 Extract the EPR absorption spectrum from an orca output file.
 
+  -d  <disturb g-tensor='[ 0 0 0 ]'> disturbance to the g-tensor. It can vary
+      because of thermal effects or interactions not considered in the QM
+      calculations (like solvent).
   -e  <file.dat> experimental field vs absorption file.
   -f  Use this flag to take into account hyperfine corrections. This uses a lot
       of RAM memory. Be sure that you have enough memory or that you filtered
@@ -20,6 +23,7 @@ Extract the EPR absorption spectrum from an orca output file.
   -O  <file.out='epr_info.out'> orca output file with computed EPR quantities. 
   -o  <output.dat='spectrum_wo_hyFiCorr.dat'> dat output file where you want to
       save the field vs spectrum.
+  -l  <lwpp=1> linewidth
   -m  <float=179.813> experimental value of the microwave frequency. The
       default value corresponds to G-band experiments.
   -n  <int=401> number of data points used to predict the absorption spectrum. 
@@ -38,7 +42,7 @@ ndpoints=401
 hyperfine='false'
 output="spectrum_wo_hyFiCorr.dat"
 experiment=''
-lwpp=0.5
+lwpp=1
 disturb='[ 0 0 0 ]'
 verbose='false'
 while getopts 'd:e:fO:o:l:m:n:vh' flag;
@@ -98,7 +102,17 @@ Sys.g = Sys.g + $disturb ;
 
 [ field, spec ] = pepper(Sys, Exp);
 data = [field(:), spec(:) ];
-writematrix(data, '$output', 'Delimiter', 'tab');
+
+% ==== create file
+fid = fopen('$output', 'w');
+fprintf(fid, ['# Theoretical spectrum\n' ...
+              '# file: $(pwd)/$orca_output\n' ...
+              '# mwFreq=$MicroWaveExper\n' ...
+              '# lwpp=$lwpp\n' ...
+              '# Field [mT] Intensity [A.U]\n']); % write header
+fclose(fid);
+writematrix(data, '$output', 'Delimiter', 'tab', 'WriteMode', 'append');
+
 EOF
 
 if [ "$hyperfine" == "true" ]
