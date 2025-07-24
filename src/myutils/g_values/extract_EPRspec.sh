@@ -81,7 +81,7 @@ echo "$0" "$@"
 
 
 # ---- BODY --------------- ----------------------------------------------------
-cat << EOF > matlab_file_extract_spect.m
+cat << EOF > ${output%.dat}.m
 clear, clf, clc
 data = readmatrix('${experiment}');
 field = data(:,1)
@@ -117,10 +117,10 @@ EOF
 
 if [ "$hyperfine" == "true" ]
 then
-  sed -i "/rmfield(/d" matlab_file_extract_spect.m
+  sed -i "/rmfield(/d" ${output%.dat}.m
 fi
 
-matlab -softwareopengl -batch "run('matlab_file_extract_spect.m')" || fail "extracting spectrum"
+matlab -softwareopengl -batch "run('${output%.dat}.m')" || fail "extracting spectrum"
 
-rm matlab_file_extract_spect.m
+rm ${output%.dat}.m
 finish "finished"
