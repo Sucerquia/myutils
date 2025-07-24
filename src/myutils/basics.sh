@@ -177,13 +177,13 @@ load_modules() {
     source $(ws_find sw)/gaussian/load_g09.sh
     module purge
     module load chem/gromacs/2022.2-cuda-11.6
-  elif [[ "$(hostname)" == "raven"* ]]
+  elif [[ "$(hostname)" == "rav"* ]]
   then
     module load vmd/1.9.3
     module load matlab/R2024bU1
     source /nexus/posix0/bmm/home/sucerqdl/sw/g09/load_g09.sh
     source /nexus/posix0/bmm/home/sucerqdl/sw/orca/setup_orca.sh
-  elif [[ "$(hostname)" == "slurm-orbit" ]]
+  elif [[ "$(hostname)" == "slurm-orbit"* ]]
   then
     source /nexus/posix0/bmm/home/sucerqdl/sw/g09/load_g09.sh
     source /nexus/posix0/bmm/home/sucerqdl/sw/orca/setup_orca.sh
