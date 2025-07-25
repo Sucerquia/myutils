@@ -177,7 +177,7 @@ load_modules() {
     source $(ws_find sw)/gaussian/load_g09.sh
     module purge
     module load chem/gromacs/2022.2-cuda-11.6
-  elif [[ "$(hostname)" == "rav"* ]]
+  elif [[ "$(hostname)" == "rav"* ]] || [[ "$(hostname)" == "vip"* ]]
   then
     module load vmd/1.9.3
     module load matlab/R2024bU1
