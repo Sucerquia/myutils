@@ -3,6 +3,7 @@ from scipy.optimize import nnls
 from myutils.miscellaneous import output_terminal
 from myutils.plotters import StandardPlotter
 from scipy.io import loadmat
+from scipy.stats import pearsonr
 
 
 class TheoMatchExpe:
@@ -27,24 +28,24 @@ class TheoMatchExpe:
     def __init__(self,
                  files,
                  experiment_file='../experiments/field_vs_spectrum2024.dat',
-                 fieldrange=None,
-                 shifting_width=0):
-
-        self.shifting_width = shifting_width
+                 **kwargs):
+        self.shifting_width = 0
         self.shift = 0
         self.fieldexp, self.intensexp = np.loadtxt(experiment_file, unpack=True)
         self.intensexp = self.intensexp / max(self.intensexp) 
 
         self.files = np.array(files)
-        theoretical = self.fit_theoretical(self.files,
-                                           self.fieldexp,
-                                           fieldrange)
-        self.coeffs, self.intensities, self.intensfit, self.error = theoretical
+
+        theoretical = self.fit_shifting(self.files, **kwargs)
+        self.coeffs, self.intensities, \
+            self.intensfit, self.error, self.corr = theoretical
 
         self.proportions()
 
 
-    def fit_theoretical(self, files, fieldexp, fieldrange=None):
+    def fit_theoretical(self, files, fieldexp=None, fieldrange=None):
+        if fieldexp is None:
+            fieldexp=self.fieldexp
         if fieldrange is None:
             # takes all the range
             self.condition = fieldexp == fieldexp
@@ -65,29 +66,46 @@ class TheoMatchExpe:
         coeffs, error = nnls(A, self.intensexp[self.condition])
         coeffs = coeffs.reshape(len(intensities), 1)
         intensfit = np.sum(coeffs * intensities, axis=0)
+        corr = pearsonr(intensfit[self.condition],
+                        self.intensexp[self.condition])[0]
 
-        return coeffs, intensities, intensfit, error
-    
-    def fit_shifting(self, files, shifting_width=None, **kwargs):
+        return coeffs, intensities, intensfit, error, corr
+
+    def fit_shifting(self, files, shifting_width=None, shift_step=0.2,
+                     **kwargs):
         min_error = float('inf')
         if shifting_width is not None:
             self.shifting_width = shifting_width
         if self.shifting_width == 0:
-            self.shifting_width = 0.1
+            shift_interval = [0]
+        else:
+            shift_interval = np.arange(-self.shifting_width,
+                                       self.shifting_width + shift_step,
+                                       shift_step)
+        if 'fieldrange' in kwargs.keys():
+            interval = np.array(kwargs['fieldrange'])
+            del kwargs['fieldrange']
+        else:
+            interval = np.array([min(self.fieldexp),
+                                 max(self.fieldexp)])
 
-        for shift in np.arange(-self.shifting_width, self.shifting_width, 0.2):
+        for shift in shift_interval:
             exp_intensity = self.fieldexp + shift
-            fitting = self.fit_theoretical(files, exp_intensity, **kwargs)
-            coeffs, intensities, intensfit, error = fitting
-            if error < min_error:
+            fitting = self.fit_theoretical(files, exp_intensity,
+                                           fieldrange=interval + shift,
+                                           **kwargs)
+            coeffs, intensities, intensfit, error, corr = fitting
+            if error <= min_error:
                 min_error = error
                 self.intensities = intensities
                 self.coeffs = coeffs
                 self.intensfit = intensfit
                 self.shift = shift
+                self.corr = corr
         self.proportions()
 
-        return self.coeffs, self.intensities, self.intensfit, self.shift
+        return self.coeffs, self.intensities, self.intensfit, min_error, \
+            self.corr
 
 
     def proportions(self, print_analysis=False):
@@ -295,14 +313,15 @@ def best_fit(experiment, output, fieldrange, *argv):
     files = list(argv)
     tme = TheoMatchExpe(files,
                         experiment_file=experiment,
-                        fieldrange=fieldrange)
+                        fieldrange=fieldrange,
+                        shifting_width=10)
     tme.gradual_cleaning(threshold=5)
     tme.proportions(print_analysis=True)
 
     sp = StandardPlotter(ax_pref={'xlabel': 'Field [T]',
                                   'ylabel': 'Intensity [a.u]'},
                      plot_pref={'pstyle': '-'})
-    sp.plot_data(tme.fieldexp, tme.intensexp, pstyle='-', color_plot='black', data_label='Experiment')
+    sp.plot_data(tme.fieldexp + tme.shift, tme.intensexp, pstyle='-', color_plot='black', data_label='Experiment')
     sp.plot_data(tme.fieldexp, tme.intensfit, pstyle='-', data_label='Fit')                     
     sp.plot_data(tme.fieldexp, tme.coeffs * tme.intensities, pstyle='--');
     if fieldrange is not None:
@@ -311,6 +330,7 @@ def best_fit(experiment, output, fieldrange, *argv):
     sp.spaces[0].set_axis(borders=[[0.15, 0.15], [0.98, 0.98]])
     sp.axis_setter(legend=True)
     sp.save(output)
+    print('shifting of: ', tme.shift)
 
 
 # add2executable
