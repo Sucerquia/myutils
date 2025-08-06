@@ -4,6 +4,7 @@ from ase.io import read, write
 import numpy as np
 import glob
 from ase.constraints import FixAtoms
+from myutils.g_values.g_valsetup import get_connectivity
 
 
 # add2executable
@@ -376,3 +377,28 @@ def F_stretch(logfile, index):
 
     return force_mag * 960 # KJmol-1/nm
     # return force_mag / (6.242E8)
+
+
+# add2executable
+def h_link2(mol_file, index):
+    """
+    Parameters
+    ==========
+    mol_file: str
+        file of the molecule to be checked.
+    index: int
+        index of the atom that might have a hydrogen linked.
+    """
+    index = int(index) - 1
+    mol = read(mol_file)
+    elements = np.array(mol.get_chemical_symbols()).copy()
+    connectivity = get_connectivity(mol, 'vmd')[index]
+    Hs = [i for i in connectivity if elements[i] == 'H']
+    if len(Hs) != 1:
+        raise ValueError("None or more than one Hydrogen attached")
+    else:
+        Hs = Hs[0]
+    
+    return Hs + 1
+
+

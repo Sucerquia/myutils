@@ -173,12 +173,24 @@ load_modules() {
   if [[ "$(whoami)" == "hits_"* ]]
   then
     # shellcheck disable=SC1091
+    source $(ws_find sw)/orca/setup_orca.sh
     source $(ws_find sw)/gaussian/load_g09.sh
     module purge
     module load chem/gromacs/2022.2-cuda-11.6
+  elif [[ "$(hostname)" == "rav"* ]] || [[ "$(hostname)" == "vip"* ]]
+  then
+    module load vmd/1.9.3
+    module load matlab/R2024bU1
+    source /nexus/posix0/bmm/home/sucerqdl/sw/g09/load_g09.sh
+    source /nexus/posix0/bmm/home/sucerqdl/sw/orca/setup_orca.sh
+  elif [[ "$(hostname)" == "slurm-orbit"* ]]
+  then
+    source /nexus/posix0/bmm/home/sucerqdl/sw/g09/load_g09.sh
+    source /nexus/posix0/bmm/home/sucerqdl/sw/orca/setup_orca.sh
   else
     source "$HOME/.bashrc"
     # shellcheck disable=SC1091
+    source /hits/basement/mbm/sucerquia/sw/orca/setup_orca.sh
     source /hits/basement/mbm/sucerquia/sw/g09/load_g09.sh
     conda activate sith
     module purge
