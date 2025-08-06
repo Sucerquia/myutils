@@ -161,6 +161,7 @@ then
   verbose BDES
   cat << EOF > ${prior_name}_freq.inp
 ! M062X def2-TZVP OPT FREQ
+%maxcore 1200
 %pal nprocs $processors end
 *XYZFile $charge $mult ${prior_name}_opt.xyz
 EOF

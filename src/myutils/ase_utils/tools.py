@@ -382,6 +382,12 @@ def F_stretch(logfile, index):
 # add2executable
 def h_link2(mol_file, index):
     """
+    Parameters
+    ==========
+    mol_file: str
+        file of the molecule to be checked.
+    index: int
+        index of the atom that might have a hydrogen linked.
     """
     index = int(index) - 1
     mol = read(mol_file)
