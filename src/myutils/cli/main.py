@@ -63,6 +63,7 @@ sh_executers = {
     'compute_forces': './sith/compute_forces.sh',
     'clean_ds': './sith/clean_ds.sh',
     'pkges_installer': './pkges_installer.sh',
+    'spectrum_from_gval': './g_values/spectrum_from_gval.sh',
     'gval_workflow': './g_values/gval_workflow.sh',
     'gvals_template': './g_values/gvals_template.sh',
     'gval_postpro': './g_values/gval_postpro.sh',
