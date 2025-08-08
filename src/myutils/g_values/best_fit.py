@@ -130,7 +130,7 @@ class TheoMatchExpe:
 
         return self.percentages
     
-    def gradual_cleaning(self, threshold=1, steps=0.1):
+    def gradual_cleaning(self, threshold=1, steps=0.1, **kwargs):
         """
         Removes gradually the candidates that do not weight much in the fitting
         up to having all the candidates with a minimum percentage in the fitting.
@@ -147,8 +147,8 @@ class TheoMatchExpe:
         (np.array) new set of intensities.
         """
         for intermedia in np.arange(0, threshold, steps):
-            output = self.clean_candidates(threshold=intermedia)
-        output = self.clean_candidates(threshold=threshold)
+            output = self.clean_candidates(threshold=intermedia, **kwargs)
+        output = self.clean_candidates(threshold=threshold, **kwargs)
 
         return output
 
@@ -174,12 +174,10 @@ class TheoMatchExpe:
 
         self.files = self.files[condition]
         fitting =  self.fit_shifting(self.files, **kwargs)
-        self.coeffs, self.intensities, self.intensfit, self.shift = fitting
         self.clean_candidates(threshold=threshold)
 
 
-# The subsequente functions were not addapted to shifting.
-
+# The subsequent functions were not addapted to shifting.
 def fit_experiment(experiment_file='../experiments/field_vs_spectrum.dat',
                    basis_pattern='spectrum_wo_hyFiCorr.dat'):
     """
