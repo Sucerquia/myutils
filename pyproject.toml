@@ -1,0 +1,37 @@
+[project]
+name = "myutils"
+version = "0.2.0"
+description = "My own utils (I am Daniel Sucerquia, PhD student at HITS -January 2023)"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    { name = "Hits_mbm", email = "daniel.sucerquia@h-its.org" }
+]
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License (GPL)",
+    "Operating System :: OS Independent"
+]
+#dependencies = [
+#    "ase",
+#    "MDAnalysis",
+#    "pytest",
+#    "pepgen"
+#]
+
+[project.optional-dependencies]
+# If you want to separate dev dependencies or extras, add here
+
+[project.scripts]
+myutils = "myutils.cli.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["*.sh", "*.mdp"]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
