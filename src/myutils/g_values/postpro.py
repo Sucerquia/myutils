@@ -1,9 +1,12 @@
 from myutils.plotters import StandardPlotter
 import matplotlib.pyplot as plt
-import numpy as np
 from glob import glob
 from myutils.miscellaneous import output_terminal
 import numpy as np
+from myutils.g_values.best_fit import TheoMatchExpe
+import pandas as pd
+from scipy.stats import pearsonr
+from scipy.optimize import minimize
 
 
 # add2executable
@@ -292,3 +295,93 @@ def extract_system_info(sys_path: str, exp_values: str):
     sp.spaces[0].set_axis(rows_cols=(3,1), borders=[[0.2, 0.15], [0.99,0.99]])
     sp.save(f'{sys_path}/gvalues.png')
     return sp
+
+
+class GvalComparison:
+    def __init__(self, molecules):
+        self.tme = None
+        self.df = pd.DataFrame({'molecule': molecules})
+
+    def add_gvals(self, output_files):
+        if isinstance(output_files, str):
+            output_files = [i + '/' + output_files
+                            for i in self.df['molecule']]
+
+        gvals = [extract_gvals(out_file) for out_file in output_files]
+
+        self.df['gval'] = gvals
+
+        return gvals
+
+    def d_target_gval(self, gval_ref, column_name):
+        delta_fuction = lambda x: np.linalg.norm(np.array(x) - gval_ref)
+        self.df[column_name] = self.df['gval'].apply(delta_fuction)
+        
+        return self.df
+
+    def add_spectra(self, spect_files, experiment=None):
+        if isinstance(spect_files, str):
+            spect_files = [i + '/' + spect_files
+                           for i in self.df['molecule']]
+        
+        self.tme = TheoMatchExpe(files=spect_files, experiment_file=experiment)
+        self.df['spectrum'] = [np.array(row) for row in self.tme.intensities]
+        self.add_peak_loc()
+
+        return self.tme.intensities
+
+    def add_peak_loc(self): 
+        ds = []
+        for spec in self.df['spectrum']:
+            ipeak, _ = self.peak_loc(self.tme.fieldexp, spec)
+            ds.append(ipeak)
+        self.df['peak_loc'] = ds
+
+        return ds
+    
+    def fit_to(self, experiment_file, **kwargs):
+        self.tme.fieldexp, self.tme.intensexp = np.loadtxt(experiment_file,
+                                                           unpack=True)
+        self.tme.intensexp = self.tme.intensexp / max(self.tme.intensexp)
+
+        self.tme.gradual_cleaning(**kwargs)
+
+        return self.tme.files, self.tme.percentages
+    
+    def lc_max_corr(self, experiment, column_name):
+        def lc_corr(coefs, functions, experiment):
+            linear_combination = np.sum(coefs * functions, axis=0)
+            return -pearsonr(linear_combination, experiment)[0]
+        x0 = np.random.rand(len(self.df['spectrum']))
+        result = minimize(lc_corr, x0, args=(self.df['spectrum'].to_numpy(),
+                                             experiment))
+        self.df[column_name] = result.x
+
+        return result.x, -result.fun
+    
+    def individual_corr(self, experiment, column_name):
+        corr = []
+        for spec in self.df['spectrum']:
+            intensity = np.interp(experiment[0], self.tme.fieldexp, spec)
+            corr.append(pearsonr(intensity, experiment[1])[0])
+
+        self.df[column_name] = corr
+
+        return corr
+    
+    def peak_loc(self, x, y):
+        ymax = np.max(y)
+        i = np.where(y == ymax)[0][0]
+
+        return x[i], ymax
+
+    def pp_dist(self, reference, column_name): 
+        if isinstance(reference, str):
+            reference = np.loadtxt(reference, unpack=True)
+        if len(np.array(reference).shape) != 0:
+            reference, _ = self.peak_loc(reference[0], reference[1])
+
+        self.df[column_name] = self.df['peak_loc'].apply(lambda x: x - reference)
+
+        return self.df[column_name]
+    
