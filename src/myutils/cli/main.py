@@ -2,6 +2,7 @@ from importlib import import_module
 from myutils.miscellaneous import output_terminal
 from pathlib import Path
 import sys
+import numpy as np
 
 
 pymodules = {
@@ -20,6 +21,7 @@ pymodules = {
     'create_table_per_system': 'myutils.g_values.postpro',
     'create_table_per_method': 'myutils.g_values.postpro',
     'extract_gvals': 'myutils.g_values.postpro',
+    'nrand_rad': 'myutils.g_values.g_valsetup',
     'ext_xyz_from_npz': 'myutils.g_values.g_valsetup',
     'heavya_idx_from_ref': 'myutils.g_values.g_valsetup',
     'rad_loc': 'myutils.g_values.g_valsetup',
@@ -32,6 +34,7 @@ pymodules = {
     'create_grappa_data': 'myutils.gromacs.ff_parameters',
     'abstracts': 'myutils.conferences.book_creator',
     'methods_in_class': 'myutils.cli.pkg_structure.documentation_tools',
+    'nh_neighs': 'myutils.ase_utils.tools',
     'h_link2': 'myutils.ase_utils.tools',
     'F_max_stretch': 'myutils.ase_utils.tools',
     'distance': 'myutils.ase_utils.tools',
@@ -41,6 +44,7 @@ pymodules = {
     'extract_bonds': 'myutils.ase_utils.tools',
     'change_distance': 'myutils.ase_utils.tools',
     'shake_except': 'myutils.ase_utils.tools',
+    'vmd_connectivity': 'myutils.ase_utils.molecules',
 }
 
 sh_executers = {
@@ -105,6 +109,43 @@ other_files = {
     'constraint': './gromacs/constraint.mdp',
 }
 
+def _read_arguments():
+    """
+    Function that reads args and kwargs.
+
+    Return
+    ======
+    (tuple) args
+    """
+    if len(sys.argv) == 1:
+        return ((), {})
+    argument = '_reader_args'
+    values = ''
+    args_dict = {}
+    for entry in np.array(sys.argv[1:]):
+        if '--' == entry[:2]:
+            if argument == '_reader_args':
+                args_dict[argument] = values.split(" ")[2:]
+                argument = entry.replace('--', '')
+                values = ''
+            else:
+                args_dict[argument] = eval(values)
+                argument = entry.replace('--', '')
+                values = ''
+        else:
+            values += ' ' + entry
+    if argument == '_reader_args':
+        args_dict[argument] = values.split(" ")[2:]
+    else:
+        args_dict[argument] = eval(values)
+    args = args_dict['_reader_args']
+    del args_dict['_reader_args']
+    
+    if '--' == sys.argv[1][:2]:
+        args = ()
+
+    return (args, args_dict)
+
 
 def main():
     """
@@ -144,9 +185,11 @@ def main():
 
         if '-h' in sys.argv:
             print(method.__doc__)
-
+        elif '-path' in sys.argv:
+            print(pymodules[sys.argv[1]])
         else:
-            output = method(*sys.argv[2:])
+            arguments = _read_arguments()
+            output = method(*arguments[0], **arguments[1])
             if output is not None:
                 print(output)
 

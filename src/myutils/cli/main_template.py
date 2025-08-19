@@ -2,6 +2,7 @@ from importlib import import_module
 from myutils.miscellaneous import output_terminal
 from pathlib import Path
 import sys
+import numpy as np
 
 
 pymodules = {
@@ -12,6 +13,43 @@ sh_executers = {
 
 other_files = {
 }
+
+def _read_arguments():
+    """
+    Function that reads args and kwargs.
+
+    Return
+    ======
+    (tuple) args
+    """
+    if len(sys.argv) == 1:
+        return ((), {})
+    argument = '_reader_args'
+    values = ''
+    args_dict = {}
+    for entry in np.array(sys.argv[1:]):
+        if '--' == entry[:2]:
+            if argument == '_reader_args':
+                args_dict[argument] = values.split(" ")[2:]
+                argument = entry.replace('--', '')
+                values = ''
+            else:
+                args_dict[argument] = eval(values)
+                argument = entry.replace('--', '')
+                values = ''
+        else:
+            values += ' ' + entry
+    if argument == '_reader_args':
+        args_dict[argument] = values.split(" ")[2:]
+    else:
+        args_dict[argument] = eval(values)
+    args = args_dict['_reader_args']
+    del args_dict['_reader_args']
+    
+    if '--' == sys.argv[1][:2]:
+        args = ()
+
+    return (args, args_dict)
 
 
 def main():
@@ -52,9 +90,11 @@ def main():
 
         if '-h' in sys.argv:
             print(method.__doc__)
-
+        elif '-path' in sys.argv:
+            print(pymodules[sys.argv[1]])
         else:
-            output = method(*sys.argv[2:])
+            arguments = _read_arguments()
+            output = method(*arguments[0], **arguments[1])
             if output is not None:
                 print(output)
 
