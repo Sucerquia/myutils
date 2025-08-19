@@ -27,31 +27,41 @@ class TheoMatchExpe:
     """
     def __init__(self,
                  files,
-                 experiment_file='../experiments/field_vs_spectrum2024.dat',
+                 experiment_file=None,
                  **kwargs):
         self.shifting_width = 0
         self.shift = 0
-        self.fieldexp, self.intensexp = np.loadtxt(experiment_file, unpack=True)
-        self.intensexp = self.intensexp / max(self.intensexp) 
+        if experiment_file is None:
+            self.fieldexp, self.intensexp = np.loadtxt(files[0], unpack=True)
+            self.intensexp = self.intensexp / max(self.intensexp) 
+        else:
+            self.fieldexp, self.intensexp = np.loadtxt(experiment_file,
+                                                       unpack=True)
+            self.intensexp = self.intensexp / max(self.intensexp) 
 
         self.files = np.array(files)
+        self.files_bck = self.files.copy()
 
-        theoretical = self.fit_shifting(self.files, **kwargs)
+        theoretical = self.fit_shifting(**kwargs)
         self.coeffs, self.intensities, \
             self.intensfit, self.error, self.corr = theoretical
 
         self.proportions()
 
 
-    def fit_theoretical(self, files, fieldexp=None, fieldrange=None):
+    def fit_theoretical(self, files=None, fieldexp=None, fieldrange=None):
+        if files is None:
+            files = self.files
         if fieldexp is None:
             fieldexp=self.fieldexp
         if fieldrange is None:
             # takes all the range
-            self.condition = fieldexp == fieldexp
+            self.condition = np.logical_not(fieldexp == fieldexp)
         else:
-            self.condition = np.logical_and(fieldexp > fieldrange[0],
-                                            fieldexp < fieldrange[1])
+            self.condition = np.logical_or(fieldexp < fieldrange[0] + self.shift,
+                                           fieldexp > fieldrange[1] + self.shift)
+        tmp_inten = self.intensexp.copy()
+        tmp_inten[self.condition] = 0
 
         intensities = []
         for file in files:
@@ -62,17 +72,19 @@ class TheoMatchExpe:
         intensities = np.array(intensities)
 
         # Interpolate and find coeffs
-        A = np.column_stack([bf[self.condition] for bf in intensities])
-        coeffs, error = nnls(A, self.intensexp[self.condition])
+        A = np.column_stack([bf for bf in intensities])
+        coeffs, error = nnls(A, tmp_inten)
         coeffs = coeffs.reshape(len(intensities), 1)
         intensfit = np.sum(coeffs * intensities, axis=0)
-        corr = pearsonr(intensfit[self.condition],
-                        self.intensexp[self.condition])[0]
+        corr = pearsonr(intensfit,
+                        self.intensexp)[0]
 
         return coeffs, intensities, intensfit, error, corr
 
-    def fit_shifting(self, files, shifting_width=None, shift_step=0.2,
+    def fit_shifting(self, files=None, shifting_width=None, shift_step=0.2,
                      **kwargs):
+        if files is None:
+            files = self.files
         min_error = float('inf')
         if shifting_width is not None:
             self.shifting_width = shifting_width
@@ -146,7 +158,9 @@ class TheoMatchExpe:
         ======
         (np.array) new set of intensities.
         """
-        for intermedia in np.arange(0, threshold, steps):
+        self.files = self.files_bck
+        self.fit_shifting(self.files, **kwargs)
+        for intermedia in np.arange(steps, threshold, steps):
             output = self.clean_candidates(threshold=intermedia, **kwargs)
         output = self.clean_candidates(threshold=threshold, **kwargs)
 
