@@ -319,3 +319,39 @@ def ext_xyz_from_npz(npz_file, selection=None):
     info = {key: data[key] for key in data.files if key != 'original_xyz'}
     data.close()
     return info
+
+# add2executable
+def nrand_rad(npz_file, n=None, Nmin=None, entry='energy_MACE'):
+    """
+    Extracts a random subset of radical structures from a given npz file.
+
+    Parameters
+    ==========
+    npz_file: str
+        file containing the radicals.
+    n: int. Default=None
+        number if radical structures to extract from the subset.
+    Nmin: int. Default=None
+        number of structures in the subset that minimizes the entry parameter.
+    entry: str. Default='energy_MACE'
+        entry of the npz file from where the Nmin are selected.
+    
+    Return
+    ======
+    (list) indexes of the selected entries in the npz file.
+    """
+    confs_info = np.load(npz_file)
+    if Nmin is None:
+        Nmin = len(confs_info['xyz'])
+
+    sorted_entries = np.unique(confs_info[entry])[:Nmin]
+    if n is None:
+        n = len(sorted_entries)
+    selected_entries = np.random.choice(sorted_entries, size=n, replace=False)
+    selected_idx = []
+    for value in selected_entries:
+        indexes = np.where(confs_info[entry] == value)[0]
+        index = np.random.choice(indexes)
+        selected_idx.append(index)
+
+    return selected_idx
