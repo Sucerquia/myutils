@@ -401,4 +401,26 @@ def h_link2(mol_file, index):
     
     return Hs + 1
 
+# add2executable
+def nh_neighs(mol_file):
+    """
+    This function returns the number of neighbor atoms of each hydrogen atom in
+    a molecule.
 
+    Parameters
+    ==========
+    mol_file: str
+        file of the molecule to be checked.
+    index: int
+        index of the atom that might have a hydrogen linked.
+
+    Return
+    ======
+    (np.array) Number of neighbor atoms of each hydrogen atom.
+    """
+    mol = read(mol_file)
+    elements = np.array(mol.get_chemical_symbols()).copy()
+    connectivity = get_connectivity(mol, 'vmd')
+    n_bonds_i = [len(b_atom_i) for b_atom_i in connectivity]
+
+    return np.array(n_bonds_i)[elements == 'H']
