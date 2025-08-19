@@ -98,6 +98,7 @@ fi
 
 for (( i=0; i<${#nsta[@]}; i++ ))
 do
+  w=$(printf "%03d" $i)
   if [[ "$starts" == "$ends" ]]
   then
     end_line=2
