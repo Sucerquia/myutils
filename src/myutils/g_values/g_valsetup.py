@@ -292,12 +292,15 @@ def rad_loc_deprecated(ref_mol: str, radical: str) -> np.ndarray:
 
 
 # add2executable
-def ext_xyz_from_npz(npz_file):
+def ext_xyz_from_npz(npz_file, selection=None):
     data = np.load(npz_file)
 
-    for i, xyz in enumerate(data['xyz']):
+    if selection is None:
+        selection = np.arange(len(data['xyz']))
+
+    for i in selection:
         atoms = Atoms(numbers=data['atomic_numbers'][i],
-                      positions=xyz)
+                      positions=data['xyz'][i])
         name = npz_file[:-4] + f'_{i:03}' + '.xyz'
 
         comment = f'total_charge: {data["total_charge"]}; ' + \
