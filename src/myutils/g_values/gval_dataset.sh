@@ -3,12 +3,19 @@
 # ----- definition of functions -----------------------------------------------
 print_help() {
 echo "
-This script goes through a set of molecules stored in npz files, optimizes them
-and then computes the g-values and A-matrices (HFC) of the atoms in the second
-degree neighborhood of the relevant atoms defined in the npz files, which are
-marked as 'heavy_atom_missing_idxs' and 'atom_chargerelevant_idx'.
+This script select n molecules, out of N molecules that minimizes one of the
+entries in the npz dile. Then, it goes through the selected molecules,
+optimizes them and then computes the g-values and A-matrices (HFC) of the atoms
+in the second degree neighborhood of the relevant atoms defined in the npz
+files, which are marked as 'heavy_atom_missing_idxs' and
+'atom_chargerelevant_idx'.
   
   -d  <directory> location of the dataset containing all the npz files.
+  -n  <n=1> number of radicals to be selected from each npz file.
+  -N  <N=3> number of radicals in the subset that minimizes the entry
+      parameter.
+  -e  <entry='energy_MACE'> entry of the npz file from where the Nmin are
+      selected.
 
   -v  verbose.
   -h  prints this message.
@@ -19,11 +26,19 @@ exit 0
 # ----- set up starts ---------------------------------------------------------
 # General variables
 directory='./'
+n=None
+N=None
+entry='energy_MACE'
 verbose='false'
-while getopts 'd:vh' flag;
+priority=''
+while getopts 'd:e:n:N:pvh' flag;
 do
   case "${flag}" in
     d) directory=${OPTARG} ;;
+    e) entry=${OPTARG} ;;
+    n) n=${OPTARG} ;;
+    N) N=${OPTARG} ;;
+    p) priority='--nice' ;;
   
     v) verbose='true' ;;
     h) print_help ;;
@@ -53,7 +68,8 @@ fi
 for file in ${all_files[@]}
 do
   verbose $file
-  myutils ext_xyz_from_npz $file > /dev/null
+  selection=$(myutils g_valsetup nrand_rad $file --n $n --Nmin $N)
+  myutils ext_xyz_from_npz $file --selection "$selection" > /dev/null
   
   for xyz_file in ${file%.npz}_*.xyz
   do
@@ -64,7 +80,7 @@ do
     radical=$(echo "$info" | grep 'heavy_atom_missing_idxs' | awk '{print $2}')
     charged_a=$(echo "$info" | grep 'atom_chargerelevant_idx' | awk '{print $2}')
     
-    sbatch --partition=cpu-single -J ${xyz_file%.xyz} \
+    sbatch --partition=cpu $priority -J ${xyz_file%.xyz} \
       $(myutils gval_workflow -path) -c $charge \
                                      -m $multi \
                                      -f "g$radical,${charged_a}d3" \
@@ -73,4 +89,5 @@ do
   done
 done
 
-finish "message to finish"
+finish "submitted jobs for the radicals in the npz files in this directory:
+  $(pwd)"
