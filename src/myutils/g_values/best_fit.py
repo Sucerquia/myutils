@@ -12,7 +12,7 @@ class TheoMatchExpe:
 
     Parameters
     ==========
-    experiment_file: str. Default='../experiments/field_vs_spectrum.dat'
+    experiment_file: str. Default=None
         .dat field vs intensity of the experiment.
     basis_pattern: str. Default='spectrum_wo_hyFiCorr.dat'
         pattern of the .dat files containing the spectrum of the computed spectrum.
@@ -109,6 +109,7 @@ class TheoMatchExpe:
             coeffs, intensities, intensfit, error, corr = fitting
             if error <= min_error:
                 min_error = error
+                self.error = error
                 self.intensities = intensities
                 self.coeffs = coeffs
                 self.intensfit = intensfit
@@ -187,7 +188,7 @@ class TheoMatchExpe:
             return self.intensities
 
         self.files = self.files[condition]
-        fitting =  self.fit_shifting(self.files, **kwargs)
+        self.fit_shifting(self.files, **kwargs)
         self.clean_candidates(threshold=threshold)
 
 

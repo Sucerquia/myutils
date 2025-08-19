@@ -51,7 +51,7 @@ done
 
 source "$(myutils basics -path)" FindBlocks $verbose
 
-verbose "starts: $starts ; ends: $ends ; file: $file ; output: $output"
+verbose "starts: $starts ; ends: $ends ; file: $file ; output: $output."
 
 if [ ${#file} -eq 0 ] || [ ${#starts} -eq 0 ] || [ ${#ends} -eq 0 ]
 then
