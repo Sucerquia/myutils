@@ -512,7 +512,7 @@ def vmd_connectivity(mol):
     raw = output_terminal(f'myutils extract_bonds_vmd {mol} |' +
                           ' grep -v "Info)" | tail -n +4 | head -n -1',
                           print_output=False).split('\n')
-    connectivity = [[int(i) for i in line.split()] for line in raw]
+    connectivity = [[int(i) for i in line.split()] for line in raw[:-1]]
 
     return connectivity
 
