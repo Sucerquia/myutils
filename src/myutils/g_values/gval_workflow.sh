@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#SBATCH -N 1                   # number of nodes
-#SBATCH -n 16
+#SBATCH -N 1 
 #SBATCH --cpus-per-task=1
 #SBATCH -t 24:00:00
 #SBATCH --output=%x-%j.o
@@ -46,8 +45,10 @@ epr='true'
 processors=16
 hyperfine=''
 prior_name='model'
+xc='B3LYP EPR-II'
 
-while getopts 'bc:d:ef:m:n:op:r:svh' flag;
+
+while getopts 'bc:d:ef:m:n:op:r:sx:vh' flag;
 do
   case "${flag}" in
     b) bdes='false' ;;
@@ -61,6 +62,7 @@ do
     p) processors=${OPTARG} ;;
     r) reference_mol=${OPTARG} ;;
     s) sweep='true' ;;
+    x) xc=${OPTARG} ;;
 
     v) verbose='true' ;;
     h) print_help ;;
@@ -122,7 +124,7 @@ then
 
   verbose g-values
   cat <<EOF > ${prior_name}_epr.inp
-! B3LYP EPR-II AUTOAUX
+! $xc AUTOAUX
 %pal nprocs $processors end
 *XYZFile $charge $mult ${prior_name}_opt.xyz
 %EPRNMR
