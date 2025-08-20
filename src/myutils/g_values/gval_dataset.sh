@@ -31,10 +31,10 @@ N=None
 entry='energy_MACE'
 verbose='false'
 priority=''
-while getopts 'd:e:n:N:pvh' flag;
+while getopts 'e:f:n:N:pvh' flag;
 do
   case "${flag}" in
-    d) directory=${OPTARG} ;;
+    f) npz_files=${OPTARG} ;;
     e) entry=${OPTARG} ;;
     n) n=${OPTARG} ;;
     N) N=${OPTARG} ;;
@@ -58,7 +58,8 @@ echo "$0" "$@"
 # ---- BODY -------------------------------------------------------------------
 cd $directory
 # finds all the npz files in the directory and subdirectories
-mapfile -t all_files < <(find . -name '*.npz')
+mapfile -t all_files < <(cat $npz_files)
+
 
 if [[ ${#all_files[@]} -eq 0 ]]
 then
@@ -68,19 +69,19 @@ fi
 for file in ${all_files[@]}
 do
   verbose $file
-  selection=$(myutils g_valsetup nrand_rad $file --n $n --Nmin $N)
-  myutils ext_xyz_from_npz $file --selection "$selection" > /dev/null
+  selection=$(myutils nrand_rad $file --n $n --Nmin $N)
+  myutils ext_xyz_from_npz $file --selection "$selection" > /dev/null 
   
   for xyz_file in ${file%.npz}_*.xyz
   do
-    echo "\ \ - $xyz_file"
+    echo "  - $xyz_file"
     info=$(sed -n "2p" $xyz_file | sed "s/;/\n/g")
     charge=$(echo "$info" | grep 'total_charge' | awk '{print $2}')
     multi=$(echo "$info" | grep 'multiplicity' | awk '{print $2}')
     radical=$(echo "$info" | grep 'heavy_atom_missing_idxs' | awk '{print $2}')
     charged_a=$(echo "$info" | grep 'atom_chargerelevant_idx' | awk '{print $2}')
-    
-    sbatch --partition=cpu $priority -J ${xyz_file%.xyz} \
+    name=${xyz_file##*/}
+    sbatch --partition=cpu $priority -J ${name%.xyz} \
       $(myutils gval_workflow -path) -c $charge \
                                      -m $multi \
                                      -f "g$radical,${charged_a}d3" \
