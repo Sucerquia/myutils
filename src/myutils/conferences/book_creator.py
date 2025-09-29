@@ -1,3 +1,7 @@
+# Code used to create the book of abstracts and the program.
+# Initially created by Daniel Sucerquia (dsucerg@gmail.com) for the
+# Simplaix 2025 workshop.
+
 import pandas as pd
 from myutils.miscellaneous import output_terminal
 import unicodedata
@@ -29,7 +33,7 @@ class AbstractBook:
                        "contri-title" : "", # title of the contribution
                        "contri-abstract" : ""} #abstract of the contribution
 
-    # ==== General ================================================================
+    # ==== General ============================================================
     def section_separation(self, title):
         """
         Adds a new page separating the sections.
@@ -41,7 +45,8 @@ class AbstractBook:
         
         Return
         ======
-        (str) A new page separating sections with a big title in an isolated page.
+        (str) A new page separating sections with a big title in an isolated
+        page.
         """
         text = f"""
 
@@ -128,8 +133,8 @@ class AbstractBook:
 
     def session_title(self, event):
         """
-        Add the title of the session including the chair before showing the events
-        of the session.
+        Add the title of the session including the chair before showing the
+        events of the session.
 
         Parameters
         ==========
@@ -375,7 +380,6 @@ class AbstractBook:
         text += '\\newpage\n\n'
 
         return text
-    
 
     def remove_tildes(self, text):
         normalized = unicodedata.normalize('NFD', text)
@@ -464,6 +468,3 @@ class AbstractBook:
             outfile.write(text)
         
         return text
-
-
-

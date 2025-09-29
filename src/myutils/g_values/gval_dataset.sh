@@ -63,15 +63,23 @@ mapfile -t all_files < <(cat $npz_files)
 
 if [[ ${#all_files[@]} -eq 0 ]]
 then
-  fail "There are not npz files in this directory: $(pwd)"
+  fail "There are not npz files defined in the file: $npz_files"
 fi
 
 for file in ${all_files[@]}
 do
   verbose $file
-  selection=$(myutils nrand_rad $file --n $n --Nmin $N)
+  existing_n=$(ls ${file%.npz}_*.xyz | wc -l)
+  new_n=$(( n - existing_n ))
+  if [[ $new_n -le 0 ]]
+  then
+    echo "  - $file: already has $existing_n radicals, skipping."
+    continue
+  fi
+
+  selection=$(myutils nrand_rad $file --n $new_n --Nmin $N)
   myutils ext_xyz_from_npz $file --selection "$selection" > /dev/null 
-  
+
   for xyz_file in ${file%.npz}_*.xyz
   do
     echo "  - $xyz_file"

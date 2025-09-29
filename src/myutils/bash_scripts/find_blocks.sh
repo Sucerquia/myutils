@@ -107,14 +107,11 @@ do
   fi
   nend=$(tail -n +"$(( ${nsta[$i]} + 1 ))" $file | grep -n "$ends" | \
          head -n $end_line | cut -d ":" -f 1)
-  if [[ $empty_ending_pattern == "empty_ending_pattern" ]]
-  then
-    nend=$( tail -n +"$(( ${nsta[$i]} + 1 ))" $file | wc -l )
-    nend=$(( nend + 1 ))
-  fi
 
   if [ ${#nend} -eq 0 ]
   then
+    warning "end pattern not found after start pattern anymore after line
+             $nsta."
     finish
     exit 0
   fi
