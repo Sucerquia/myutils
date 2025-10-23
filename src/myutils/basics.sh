@@ -182,11 +182,11 @@ load_modules() {
     module load vmd/1.9.3
     module load matlab/R2024bU1
     source /nexus/posix0/bmm/home/sucerqdl/sw/g09/load_g09.sh
-    source /nexus/posix0/bmm/home/sucerqdl/sw/orca/setup_orca.sh
+    source /nexus/posix0/bmm/home/sucerqdl/sw/orca_6/setup_orca.sh
   elif [[ "$(hostname)" == "slurm-orbit"* ]]
   then
     source /nexus/posix0/bmm/home/sucerqdl/sw/g09/load_g09.sh
-    source /nexus/posix0/bmm/home/sucerqdl/sw/orca/setup_orca.sh
+    source /nexus/posix0/bmm/home/sucerqdl/sw/orca_6/setup_orca.sh
   else
     source "$HOME/.bashrc"
     # shellcheck disable=SC1091
