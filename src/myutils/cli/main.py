@@ -95,7 +95,6 @@ pymodules = {
     'extract_bonds': 'myutils.ase_utils.tools',
     'change_distance': 'myutils.ase_utils.tools',
     'shake_except': 'myutils.ase_utils.tools',
-    'vmd_connectivity': 'myutils.ase_utils.molecules',
 }
 
 sh_executers = {
@@ -160,6 +159,7 @@ other_files = {
     'constraint': './gromacs/constraint.mdp',
 }
 
+
 def _read_arguments():
     """
     Function that reads args and kwargs.
@@ -213,14 +213,13 @@ def main():
         functions.sort()
 
         print("\n"
-              "This package contains a set of tools you can use for different"
-              "functions. \n To use any function from the terminal, use"
-              "    myutils <function> <arg1> <arg2> ... "
-              "where <function> can be one of the next options:")
+              "'myutils' contains the next set of tools:\n\n")
         for function in functions:
             print("    -   " + function)
 
-        print("\nFor detailed information of any function, use \"-h\" as first"
+        print("\nTo use one of the functions from the terminal, use:\n\n"
+              "  'myutils <function> <arg1> <arg2>...'\n\n"
+              "For detailed information of any function, use \"-h\" as first"
               " argument (<arg1>).")
 
     elif sys.argv[1] == 'tests':
@@ -247,8 +246,8 @@ def main():
     # bash codes
     elif sys.argv[1] in sh_executers.keys():
         if '-path' in sys.argv[2:]:
-            path = str(Path(__file__).parent)[:-3] + \
-                    sh_executers[sys.argv[1]][2:]
+            path = (str(Path(__file__).parent)[:-3]
+                    + sh_executers[sys.argv[1]][2:])
             print(path)
         else:
             command = str(Path(__file__).parent)[:-3] + \
