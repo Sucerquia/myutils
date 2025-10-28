@@ -67,6 +67,7 @@ pymodules = {
     'args_and_defaults': 'myutils.miscellaneous',
     'optimized_e': 'myutils.miscellaneous',
     'time_g09': 'myutils.miscellaneous',
+    'compute_bde': 'myutils.g_values.postpro',
     'extract_system_info': 'myutils.g_values.postpro',
     'create_table_per_system': 'myutils.g_values.postpro',
     'create_table_per_method': 'myutils.g_values.postpro',

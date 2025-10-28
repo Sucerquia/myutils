@@ -384,4 +384,67 @@ class GvalComparison:
         self.df[column_name] = self.df['peak_loc'].apply(lambda x: x - reference)
 
         return self.df[column_name]
+
+
+def _extract_enthalpy(file):
+    """
+    Extract the numeric "Total Enthalpy" value from an orca output file.
+
+    Parameters
+    ----------
+    file : str
+        Path to an orca output file to search for a line containing
+        'Total Enthalpy'.
+
+    Returns
+    -------
+    (float) The enthalpy value parsed from the fourth whitespace-separated
+    field on the matching line.
+    """
+    e = output_terminal(f"grep 'Total Enthalpy' {file}" +
+                        " | awk '{print $4}' ", print_output=False)
+    return float(e)
+
+
+# add2executable
+def compute_bde(reactants=None, products=None):
+    """
+    Compute the bond dissociation enthalpy (BDE) for a reaction as the
+    difference between the total enthalpy of products (P) and reactants (R),
+    such that BDE = H_P - H_R.
+
+    Parameters
+    ----------
+    reactants : iterable
+        An iterable (e.g., list or tuple) of reactant species. Each element
+        should be an orca output file path with computed enthalpy.
+    products : iterable
+        An iterable (e.g., list or tuple) of product species. Each element
+        should be an orca output file path with computed enthalpy.
+
+    Returns
+    -------
+    (float) The BDE computed. The units are the same as in the orca outputs.
+    """
+    if reactants is None:
+        raise ValueError("Non reactant recognized. See the documentation of" +
+            "this function (compute_bde).")
     
+    if products is None:
+        raise ValueError("Non products recognized. See the documentation of" +
+            "this function (compute_bde).")
+    
+    e_react = 0
+    for react in reactants:
+        e_react += _extract_enthalpy(react)
+    
+    e_produ = 0
+    for produ in products:
+        e_produ += _extract_enthalpy(produ)
+    
+    return e_produ - e_react
+
+
+
+
+
