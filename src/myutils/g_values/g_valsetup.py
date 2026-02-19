@@ -292,12 +292,30 @@ def rad_loc_deprecated(ref_mol: str, radical: str) -> np.ndarray:
 
 
 # add2executable
-def ext_xyz_from_npz(npz_file, selection=None):
+def ext_xyz_from_npz(npz_file, selection=None, create_xyz_files=True):
+    """
+    Extracts structures in xyz files from a given npz file.
+
+    Parameters
+    ==========
+    npz_file: str
+        file containing the structures.
+    selection: list. Default=None
+        list of indexes of the structures to extract. If None, all structures
+        are extracted.
+    create_xyz_files: bool. Default=True
+        whether to create xyz files for the extracted structures or not.
+
+    Return
+    ======
+    (list) list of ASE Atoms objects corresponding to the extracted structures.
+    """
     data = np.load(npz_file)
 
     if selection is None:
         selection = np.arange(len(data['xyz']))
 
+    a2ret = []
     for i in selection:
         atoms = Atoms(numbers=data['atomic_numbers'][i],
                       positions=data['xyz'][i])
@@ -314,14 +332,17 @@ def ext_xyz_from_npz(npz_file, selection=None):
                        f'{charged}'
         if 'source_names' in data:
             comment += f'; source_name: {data["source_names"][i]}'
-        write(name, atoms, comment=comment)
-    
-    info = {key: data[key] for key in data.files if key != 'original_xyz'}
+        if create_xyz_files:
+            write(name, atoms, comment=comment)
+        a2ret.append(atoms)
+
     data.close()
-    return info
+    return a2ret
+
 
 # add2executable
-def nrand_rad(npz_file, n=None, Nmin=None, entry='energy_MACE'):
+def nrand_rad(npz_file, n=None, Nmin=None, entry='energy_MACE',
+              exclude=None):
     """
     Extracts a random subset of radical structures from a given npz file.
 
@@ -335,23 +356,35 @@ def nrand_rad(npz_file, n=None, Nmin=None, entry='energy_MACE'):
         number of structures in the subset that minimizes the entry parameter.
     entry: str. Default='energy_MACE'
         entry of the npz file from where the Nmin are selected.
-    
+
     Return
     ======
     (list) indexes of the selected entries in the npz file.
     """
     confs_info = np.load(npz_file)
-    if Nmin is None:
+    if Nmin is None or Nmin > len(confs_info['xyz']):
         Nmin = len(confs_info['xyz'])
 
-    sorted_entries = np.unique(confs_info[entry])[:Nmin]
+    if exclude is None:
+        exclude = []
+    entry_values = np.delete(confs_info[entry], exclude, axis=0)
+
+    sorted_entries = np.unique(entry_values)[:Nmin]
     if n is None:
         n = len(sorted_entries)
+
+    if len(entry_values) < n:
+        raise ValueError("n is too large. There are only" +
+                         f" {len(entry_values)} entries available after" +
+                         " excluding the specified indices.")
+
     selected_entries = np.random.choice(sorted_entries, size=n, replace=False)
     selected_idx = []
     for value in selected_entries:
         indexes = np.where(confs_info[entry] == value)[0]
-        index = np.random.choice(indexes)
-        selected_idx.append(index)
+        result = indexes[~np.isin(indexes, exclude)]
+        assert len(result) > 0, "No available entries to select from after excluding specified indices."
+        index = np.random.choice(result)
+        selected_idx.append(int(index))
 
     return selected_idx
