@@ -61,7 +61,7 @@ def molid2npz(npz_file):
     if npz_file.endswith('.npz'):
         npz_files = [npz_file]
     else:
-        npz_files = glob(npz_file + '/*.npz')
+        npz_files = glob.glob(npz_file + '/*.npz')
     
     for npz_file in npz_files:
         data = np.load(npz_file)
