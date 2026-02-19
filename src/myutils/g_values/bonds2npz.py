@@ -21,7 +21,7 @@ def bonds2npz(npz_file):
     if npz_file.endswith('.npz'):
         npz_files = [npz_file]
     else:
-        npz_files = glob(npz_file + '/*.npz')
+        npz_files = glob.glob(npz_file + '/*.npz')
     
     for npz_file in npz_files:
         molecules = ext_xyz_from_npz(npz_file, create_xyz_files=False)
