@@ -84,6 +84,14 @@ then
   cat << EOF > ${prior_name}_opt.inp
 ! B3LYP EPR-II OPT
 %pal nprocs $processors end
+
+%basis
+  NewGTO Cl "Def2-TZVP" end
+  NewGTO Br "Def2-TZVP" end
+  NewGTO S "Def2-TZVP" end
+  NewGTO P "Def2-TZVP" end
+end
+
 *XYZFile $charge $mult ${prior_name}.xyz
 EOF
   $orca ${prior_name}_opt.inp  > ${prior_name}_opt.out
@@ -127,6 +135,14 @@ then
   verbose g-values
   cat <<EOF > ${prior_name}_epr.inp
 ! $xc AUTOAUX
+
+%basis
+  NewGTO Cl "Def2-TZVP" end
+  NewGTO Br "Def2-TZVP" end
+  NewGTO S "Def2-TZVP" end
+  NewGTO P "Def2-TZVP" end
+end
+
 %pal nprocs $processors end
 *XYZFile $charge $mult ${prior_name}_opt.xyz
 %EPRNMR
@@ -149,6 +165,7 @@ fi
 
 if grep -q "ORCA TERMINATED NORMALLY" ${prior_name}_epr.out && $sweep
 then
+  myutils add_gval2npz ${prior_name: :-4}.npz
   rm ${xyz_file%.xyz}_epr.densities
   rm ${xyz_file%.xyz}_epr.engrad
   rm ${xyz_file%.xyz}_epr.gbw

@@ -162,46 +162,15 @@ search_last_bck() {
 }
 
 load_modules() {
+  # This function load the modules softwares needed for the different
+  # calculations.
   args=$@
   if [ ${#args} -ne 0 ]
   then
     resubmit $args &
   fi
-  echo " * This JOB will be run in the Node:"
-  echo "$SLURM_JOB_NODELIST"
 
-  if [[ "$(whoami)" == "hits_"* ]]
-  then
-    # shellcheck disable=SC1091
-    source $(ws_find sw)/orca/setup_orca.sh
-    source $(ws_find sw)/gaussian/load_g09.sh
-    module purge
-    module load chem/gromacs/2022.2-cuda-11.6
-  elif [[ "$(hostname)" == "rav"* ]] || [[ "$(hostname)" == "vip"* ]]
-  then
-    module load vmd/1.9.3
-    module load matlab/R2024bU1
-    source /nexus/posix0/bmm/home/sucerqdl/sw/g09/load_g09.sh
-    source /nexus/posix0/bmm/home/sucerqdl/sw/orca_6/setup_orca.sh
-  elif [[ "$(hostname)" == "slurm-orbit"* ]]
-  then
-    source /nexus/posix0/bmm/home/sucerqdl/sw/g09/load_g09.sh
-    source /nexus/posix0/bmm/home/sucerqdl/sw/orca_6/setup_orca.sh
-  else
-    source "$HOME/.bashrc"
-    # shellcheck disable=SC1091
-    source /hits/basement/mbm/sucerquia/sw/orca/setup_orca.sh
-    source /hits/basement/mbm/sucerquia/sw/g09/load_g09.sh
-    conda activate sith
-    module purge
-    module use /hits/sw/its/doserbd/haswell/modules/all/
-    # TODO: the next line is a bug. it activates python 3.10 that is incompatible with numpy
-    # module load GROMACS/2023.1-foss-2022a
-    if [[ "$(hostname)" == *"haswell"* ]]
-    then
-      module load slurm/20.11.7-1.hits
-    fi
-  fi
+  source $HOME/sw/load_modules.sh
 }
 
 wait_until_next_file_exist() {
