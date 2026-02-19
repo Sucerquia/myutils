@@ -22,7 +22,7 @@ def bonds2npz(npz_file):
         npz_files = [npz_file]
     else:
         npz_files = glob.glob(npz_file + '/*.npz')
-        npz_files = [f[:2] for f in npz_files]
+        npz_files = [f[2:] for f in npz_files]
 
     for npz_file in npz_files:
         molecules = ext_xyz_from_npz(npz_file, create_xyz_files=False)
@@ -63,7 +63,7 @@ def molid2npz(npz_file):
         npz_files = [npz_file]
     else:
         npz_files = glob.glob(npz_file + '/*.npz')
-        npz_files = [f[:2] for f in npz_files]
+        npz_files = [f[2:] for f in npz_files]
     
     for npz_file in npz_files:
         data = np.load(npz_file)
