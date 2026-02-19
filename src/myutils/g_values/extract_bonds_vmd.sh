@@ -11,14 +11,11 @@ TMPFILE=$(mktemp)
 cat > $TMPFILE << EOF
 mol new $PDB
 
-set outfile [open bonds_from_vmd.dat w]
 set sel [atomselect top "all"]
 foreach {i} [\$sel getbonds] {
-    puts \$outfile "\$i"
     puts  "\$i"
 }
 
-close \$outfile
 quit
 EOF
 

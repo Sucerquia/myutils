@@ -317,7 +317,8 @@ def add_gval2npz(path):
         npz_files = glob(path + '/*.npz')
 
     for file in npz_files:
-        info = ext_xyz_from_npz(file)
+        info = np.load(file)
+        info = {key: info[key] for key in info.files}
         if not 'g-values' in info.keys():
             info['g-values'] = np.zeros((len(info['heavy_atom_missing_idxs']), 3))
 
