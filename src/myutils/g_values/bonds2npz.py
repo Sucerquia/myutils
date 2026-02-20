@@ -2,6 +2,7 @@ from myutils.g_values.g_valsetup import ext_xyz_from_npz, get_connectivity
 import numpy as np
 import glob
 
+
 # add2executable
 def bonds2npz(npz_file):
     """
@@ -12,7 +13,8 @@ def bonds2npz(npz_file):
     Parameters
     ==========
     npz_file : str
-        Path to the npz file or directory containing npz files.
+        Path to the npz file or directory containing npz files. It could also
+        be a path to a .dat file that contains a list of npz files.
     
     Returns
     =======
@@ -20,14 +22,17 @@ def bonds2npz(npz_file):
     """
     if npz_file.endswith('.npz'):
         npz_files = [npz_file]
+    if npz_file.endswith('.dat'):
+        npz_files = np.loadtxt(npz_file, dtype=str)
     else:
         npz_files = glob.glob(npz_file + '/*.npz')
-        npz_files = [f[2:] for f in npz_files]
 
     for npz_file in npz_files:
+        print(f'{npz_file}')
         molecules = ext_xyz_from_npz(npz_file, create_xyz_files=False)
         connectivity = []
-        for atoms in molecules:
+
+        for k, atoms in enumerate(molecules):
             con = get_connectivity(atoms, 'vmd')
             unique = []
             for i, connections in enumerate(con):
@@ -35,15 +40,30 @@ def bonds2npz(npz_file):
                     if j > i:
                         unique.append([i, j])
             connectivity.append(unique)
-        
+
+        n_bonds_per_mol = [len(b) for b in connectivity]
+        values, counts = np.unique(n_bonds_per_mol, return_counts=True)
+        mode = values[np.argmax(counts)]
+        off = []
+        for i, n in enumerate(n_bonds_per_mol):
+            if n != mode:
+                off.append(i)
+
+        for k, bonds in enumerate(connectivity):
+            with open(npz_file[:-4] + f'_{k:03d}_bonds.dat', 'w') as f:
+                if k in off:
+                    f.write(f'# This molecule has {len(bonds)} bonds, which is different from the mode of {mode} bonds.\n')
+
+                for bond in bonds:
+                    f.write(f'{bond[0]} {bond[1]}\n')
 
         data = np.load(npz_file)
         data = {key: data[key] for key in data.files}
-        data['bonds'] = np.array(connectivity)
-        np.savez(npz_file, **data)
+        #data['bonds'] = np.array(connectivity)
+        #np.savez(npz_file, **data)
 
     return connectivity
-# %%
+
 
 # add2executable
 def molid2npz(npz_file):
@@ -63,7 +83,7 @@ def molid2npz(npz_file):
         npz_files = [npz_file]
     else:
         npz_files = glob.glob(npz_file + '/*.npz')
-        npz_files = [f[2:] for f in npz_files]
+        npz_file = [f[2:] for f in npz_files]
     
     for npz_file in npz_files:
         data = np.load(npz_file)

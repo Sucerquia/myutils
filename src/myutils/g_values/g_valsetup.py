@@ -102,10 +102,11 @@ def get_connectivity(atoms, engine):
         from myutils.ase_utils.molecules import vmd_connectivity
         import os
 
-
-        write('tmp_Mview.xyz', atoms)
-        connectivity = vmd_connectivity('tmp_Mview.xyz')
-        os.remove('tmp_Mview.xyz')
+        
+        id = int(np.random.random() * 1000000)
+        write(f'tmp_Mview_{id}.xyz', atoms)
+        connectivity = vmd_connectivity(f'tmp_Mview_{id}.xyz')
+        os.remove(f'tmp_Mview_{id}.xyz')
 
     elif engine == 'ase':
         from ase.neighborlist import natural_cutoffs, NeighborList
