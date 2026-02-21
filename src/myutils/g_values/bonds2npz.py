@@ -4,6 +4,29 @@ import glob
 from ase import Atoms
 from ase.io import write
 
+# add2executable
+def addfile2npz(npz_file_ref, npz_file_add, file_name):
+    """
+    Add file information to npz files from another one
+
+    Parameters
+    ==========
+    npz_file_ref: str
+        Path to the reference npz file.
+    npz_file_add: str
+        Path to the npz file to add information.
+
+    Returns
+    =======
+    (dict) data in npz file.
+    """
+    ref = np.load(npz_file_ref)
+    add = np.load(npz_file_add)
+    add_data = {key: add[key] for key in add.files}
+    add_data[file_name] = ref[file_name]
+    np.savez(npz_file_add, **add_data)
+    return add_data
+
 
 # add2executable
 def bonds2npz(npz_file):
@@ -17,7 +40,7 @@ def bonds2npz(npz_file):
     npz_file : str
         Path to the npz file or directory containing npz files. It could also
         be a path to a .dat file that contains a list of npz files.
-    
+
     Returns
     =======
     (list) connectivity information for each molecule in the npz file(s).
@@ -30,53 +53,46 @@ def bonds2npz(npz_file):
         npz_files = glob.glob(npz_file + '/*.npz')
 
     for npz_file in npz_files:
-        print(f'{npz_file}')
-        data = np.load(npz_file)
-        H = Atoms(symbols='H', positions=[data['hydrogen_xyz'][0]])
-        radical = ext_xyz_from_npz(npz_file, create_xyz_files=False)[0]
-        molecule = radical[:data['original_hydrogen_idxs'][0]] + H + \
-            radical[data['original_hydrogen_idxs'][0]:]
-        con = get_connectivity(molecule, 'vmd')
-        if len(con[data['original_hydrogen_idxs'][0]]) != 1:
-            write(f'totest.xyz', molecule)
-            raise ValueError(f'Original hydrogen {data["original_hydrogen_idxs"][0]} ' +\
-                f'should have only one bond. Got {len(con[data["original_hydrogen_idxs"][0]])}.')
-            
-        unique = []
-        for i, connections in enumerate(con):
-            for j in connections:
-                if j > i:
-                    unique.append([i, j])
-        nb_ori = len(unique)
+        try:
+            print(f'{npz_file}')
+            data = np.load(npz_file)
+            molecule = Atoms(numbers=data['original_atomic_numbers'],
+                            positions=data['original_xyz'])
 
-        connectivity = []
-        for hi in data['original_hydrogen_idxs']:
-            unique = []
-            for i, connections in enumerate(con):
-                if i == hi:
-                    continue
-                elif i < hi:
-                    l = i
-                else:
-                    l = i - 1
-                for j in connections:
-                    if j == hi:
+            con = get_connectivity(molecule, 'vmd')
+
+            # hydrogen should have only one bond.
+            if len(con[data['original_hydrogen_idxs'][0]]) != 1:
+                raise ValueError(f'Original hydrogen {data["original_hydrogen_idxs"][0]} ' +\
+                    f'should have only one bond. Got {len(con[data["original_hydrogen_idxs"][0]])}.')
+
+            connectivity = []
+            for hi in data['original_hydrogen_idxs']:
+                unique = []
+                for i, connections in enumerate(con):
+                    if i == hi:
                         continue
-                    elif j < hi:
-                        m = j
+                    elif i < hi:
+                        l = i
                     else:
-                        m = j - 1
-                    if j > i:
-                        unique.append([l, m])
-            assert len(unique) == nb_ori - 1, f'Number of bonds for original ' + \
-                f"hydrogen {hi} is not correct. Expected {nb_ori - 1}, " +\
-                f"got {len(unique)}. {len(unique), nb_ori - 1}"
-            connectivity.append(unique)
-
-        data = np.load(npz_file)
-        data = {key: data[key] for key in data.files}
-        data['bonds'] = np.array(connectivity)
-        np.savez(npz_file, **data)
+                        l = i - 1
+                    for j in connections:
+                        if j == hi:
+                            continue
+                        elif j < hi:
+                            m = j
+                        else:
+                            m = j - 1
+                        if j > i:
+                            unique.append([l, m])
+                connectivity.append(unique)
+            data = np.load(npz_file)
+            data = {key: data[key] for key in data.files}
+            data['bonds'] = np.array(connectivity)
+            np.savez(npz_file, **data)
+        except:
+            with open('failed.dat', 'a') as f:
+                f.write(f'{npz_file}\n')
 
     return connectivity
 
