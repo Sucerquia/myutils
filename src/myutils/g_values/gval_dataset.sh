@@ -10,12 +10,16 @@ in the second degree neighborhood of the relevant atoms defined in the npz
 files, which are marked as 'heavy_atom_missing_idxs' and
 'atom_chargerelevant_idx'.
   
-  -d  <directory> location of the dataset containing all the npz files.
+  -f  <file> file with list of npz files to analyze.
   -n  <n=1> number of radicals to be selected from each npz file.
   -N  <N=3> number of radicals in the subset that minimizes the entry
       parameter.
   -e  <entry='energy_MACE'> entry of the npz file from where the Nmin are
       selected.
+  -E  <ending='_epr.out'> ending of the of the files that are excluded in the
+      selection of random radicals to compute. In the default case, it excludes
+      the radicals that already have an optimization, for example, it excludes
+      3 if <file>_003_epr.out already exists.
 
   -v  verbose.
   -h  prints this message.
@@ -26,20 +30,24 @@ exit 0
 # ----- set up starts ---------------------------------------------------------
 # General variables
 directory='./'
-n=None
-N=None
+n=1
+N=3
 entry='energy_MACE'
 verbose='false'
 priority=''
-while getopts 'e:f:n:N:pvh' flag;
+ending='_epr.out'
+restart=''
+while getopts 'e:E:f:n:N:prvh' flag;
 do
   case "${flag}" in
     f) npz_files=${OPTARG} ;;
     e) entry=${OPTARG} ;;
+    E) ending=${OPTARG} ;;
     n) n=${OPTARG} ;;
     N) N=${OPTARG} ;;
     p) priority='--nice' ;;
-  
+    r) restart='-R' ;;
+    
     v) verbose='true' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
@@ -68,8 +76,19 @@ fi
 
 for file in ${all_files[@]}
 do
+  #Continue computing gvals.
   verbose $file
-  existing_n=$(ls ${file%.npz}_*.xyz | wc -l)
+  existing_n=$(ls "${file%.npz}"_*"$ending" | wc -l 2>/dev/null)
+  exclude_indices='[]'
+  if [[ $existing_n -gt 0 ]]
+  then
+    mapfile -t list_of_prev < <(ls "${file%.npz}"_*"$ending" | \
+                                   sed "s/$ending//" | \
+                                   cut -d _ -f 2 | sed 's/^0*//')
+    exclude_indices=$(printf "%d," ${list_of_prev[@]} | sed 's/,$/]/' | \
+                      sed 's/^/[/')
+  fi
+
   new_n=$(( n - existing_n ))
   if [[ $new_n -le 0 ]]
   then
@@ -77,11 +96,15 @@ do
     continue
   fi
 
-  selection=$(myutils nrand_rad $file --n $new_n --Nmin $N)
+  selection=$(myutils nrand_rad $file --n $new_n --Nmin $N \
+              --exclude "$exclude_indices") || \
+    { warning "Error selecting the radicals for the file: $file"; continue; }
   myutils ext_xyz_from_npz $file --selection "$selection" > /dev/null 
 
-  for xyz_file in ${file%.npz}_*.xyz
+  for i in $(echo "$selection" | tr -d '[],')
   do
+    index=$(printf "%03d\n" "$i")
+    xyz_file="${file%.npz}_$index.xyz"
     echo "  - $xyz_file"
     info=$(sed -n "2p" $xyz_file | sed "s/;/\n/g")
     charge=$(echo "$info" | grep 'total_charge' | awk '{print $2}')
@@ -94,7 +117,7 @@ do
                                      -m $multi \
                                      -f "g$radical,${charged_a}d3" \
                                      -n ${xyz_file%.xyz} \
-                                     -b -v -s
+                                     -b -v -s $restart
   done
 done
 

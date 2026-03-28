@@ -7,6 +7,7 @@ from myutils.g_values.best_fit import TheoMatchExpe
 import pandas as pd
 from scipy.stats import pearsonr
 from scipy.optimize import minimize
+from myutils.g_values.g_valsetup import ext_xyz_from_npz
 
 
 # add2executable
@@ -24,7 +25,7 @@ def extract_gvals(orca_out: str) -> np.ndarray:
     (np.array) [gx, gy, gz] where the order is increasing.
     """
 
-    out = output_terminal(f'grep -A 15 "ELECTRONIC G-MATRIX" {orca_out}' +
+    out = output_terminal(f'grep -A 21 "ELECTRONIC G-MATRIX" {orca_out}' +
                           ' | grep "g(tot)"',
                           print_output=False)
     
@@ -296,6 +297,38 @@ def extract_system_info(sys_path: str, exp_values: str):
     sp.save(f'{sys_path}/gvalues.png')
     return sp
 
+
+# add2executable
+def add_gval2npz(path):
+    """
+    Add g-values to the npz files in the directory based on the files with the
+    shape <name>_<index>_epr.out, where the g-values are stored in the index
+    <index> corresponds to the element of the g-values array in the npz file.
+
+    Parameters
+    ==========
+    path: str
+        path to the directory containing the npz files and the epr.out files
+        or the npz file itself.
+    """
+    if path[-4:] == '.npz':
+        npz_files = [path]
+    else:
+        npz_files = glob(path + '/*.npz')
+
+    for file in npz_files:
+        info = np.load(file)
+        info = {key: info[key] for key in info.files}
+        if not 'g-values' in info.keys():
+            info['g-values'] = np.zeros((len(info['heavy_atom_missing_idxs']), 3))
+
+        eprs = glob(file[:-4] + '*_epr.out')
+        for epr in eprs:
+            print(epr)
+            idx = int(epr.split('_')[-2])
+            info['g-values'][idx] = extract_gvals(epr)
+
+        np.savez(file, **info)
 
 class GvalComparison:
     def __init__(self, molecules):

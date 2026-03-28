@@ -81,10 +81,10 @@ printf "4\n1\n " | $gmx pdb2gmx -f pep.pdb \
 if [[ ${#environment} -ne 0 ]]
 then
   verbose "Activate grappa and construct topology"
-  CONDA_PREFIX="/hits/basement/mbm/sucerquia/conda"
-  eval "$($CONDA_PREFIX/bin/conda shell.bash hook)"
-  conda activate $environment || fail "The environment $environment does not
-    exitst."
+  #CONDA_PREFIX="/hits/basement/mbm/sucerquia/conda"
+  #eval "$($CONDA_PREFIX/bin/conda shell.bash hook)"
+  #conda init
+  #conda activate $environment 
   grappa_gmx -h > /dev/null || fail "grappa is not installed. Be sure it is installed in
     the selected environment."
   grappa_gmx -f pep_out.top -o topology_grappa.top -t grappa-1.3.0 \

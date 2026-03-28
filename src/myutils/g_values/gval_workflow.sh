@@ -30,10 +30,23 @@ flags:
       abstraction process. Give the path of the file of the molecule before
       the abstraction.
   -m  <multiplicity=2> multiplicity of the system.
-  -o  Use this flag to AVOID the optimization step. opt.xyz must exist, then.
+  -n  <prior_name='model'> name of the input and output files. The script needs
+      at least a file called prior_name.xyz in the running directory (-d). Then,
+      it creates files called prior_name_opt., prior_name_epr., etc.
+  -o  Use this flag to AVOID the optimization step. <prior_name>_opt.xyz must
+      exist, then.
   -p  <processors=16> number of processors used in the orca calculations.
+  -r  <reference_mol=''> guess the location of the radical assuming an
+      abstraction process. Give the path of the file of the molecule before
+      the abstraction.
+  -R  Use this flag to RESTART the optimization. It uses the file
+      <prior_name>_opt.xyz as the input geometry for the optimization.
+  -s  Use this flag to delete orca files like gbw...
+  -x  <xc='B3LYP EPR-II'> functional and basis set for the g-value calculation.
+      The default is B3LYP EPR-II, which is a good choice for g-values.
 
   -h   prints this message.
+  -v   verbose.
 "
 exit 0
 }
@@ -48,9 +61,10 @@ processors=16
 hyperfine=''
 prior_name='model'
 xc='B3LYP EPR-II'
+restart='false'
 
 
-while getopts 'bc:d:ef:m:n:op:r:sx:vh' flag;
+while getopts 'bc:d:ef:m:n:op:r:Rsx:vh' flag;
 do
   case "${flag}" in
     b) bdes='false' ;;
@@ -63,6 +77,7 @@ do
     o) optimization='false' ;;
     p) processors=${OPTARG} ;;
     r) reference_mol=${OPTARG} ;;
+    R) restart='true' ;;
     s) sweep='true' ;;
     x) xc=${OPTARG} ;;
 
@@ -80,11 +95,25 @@ cd $directory
 # ==== optimization ===========================================================
 if $optimization
 then
+  if $restart
+  then
+    xyz_ref_file=${prior_name}_opt.xyz
+  else
+    xyz_ref_file=${prior_name}.xyz
+  fi
   verbose Optimization
   cat << EOF > ${prior_name}_opt.inp
 ! B3LYP EPR-II OPT
 %pal nprocs $processors end
-*XYZFile $charge $mult ${prior_name}.xyz
+
+%basis
+  NewGTO Cl "Def2-TZVP" end
+  NewGTO Br "Def2-TZVP" end
+  NewGTO S "Def2-TZVP" end
+  NewGTO P "Def2-TZVP" end
+end
+
+*XYZFile $charge $mult $xyz_ref_file
 EOF
   $orca ${prior_name}_opt.inp  > ${prior_name}_opt.out
 else
@@ -127,6 +156,14 @@ then
   verbose g-values
   cat <<EOF > ${prior_name}_epr.inp
 ! $xc AUTOAUX
+
+%basis
+  NewGTO Cl "Def2-TZVP" end
+  NewGTO Br "Def2-TZVP" end
+  NewGTO S "Def2-TZVP" end
+  NewGTO P "Def2-TZVP" end
+end
+
 %pal nprocs $processors end
 *XYZFile $charge $mult ${prior_name}_opt.xyz
 %EPRNMR
@@ -149,6 +186,7 @@ fi
 
 if grep -q "ORCA TERMINATED NORMALLY" ${prior_name}_epr.out && $sweep
 then
+  myutils add_gval2npz ${prior_name: :-4}.npz
   rm ${xyz_file%.xyz}_epr.densities
   rm ${xyz_file%.xyz}_epr.engrad
   rm ${xyz_file%.xyz}_epr.gbw
