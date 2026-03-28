@@ -509,8 +509,8 @@ class PCAMatcher:
 
 
 def vmd_connectivity(mol):
-    raw = output_terminal(f'myutils extract_bonds_vmd {mol} |' +
-                          ' grep -v "Info)" | tail -n +4 | head -n -1',
+    raw = output_terminal(f'myutils extract_bonds_vmd {mol} | ' +
+                           "awk '/atomselect0/{flag=1} /Info\)/{flag=0} flag' | tail -n +2",
                           print_output=False).split('\n')
     connectivity = [[int(i) for i in line.split()] for line in raw[:-1]]
 

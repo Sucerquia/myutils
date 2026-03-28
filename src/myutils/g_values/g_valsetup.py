@@ -44,7 +44,7 @@ def HFC_relevantA(atoms, radicals, depth=2):
             relevant.append(neighbors[condition])
             new_neighbors.append(neighbors[e_neighbors != 'H'])
         centers = [index for sublist in new_neighbors for index in sublist]
-    
+
     # Add last hydrogens
     centers = np.array([index for sublist in relevant for index in sublist])
     for i in centers:
@@ -52,6 +52,7 @@ def HFC_relevantA(atoms, radicals, depth=2):
         e_neighbors = elements[neighbors]
         hydrogens = e_neighbors == 'H'
         relevant.append(neighbors[hydrogens])
+
     relevant = np.array([index for sublist in relevant for index in sublist])
     relevant = np.unique(relevant)
     separated_relevant = {}
@@ -78,9 +79,9 @@ def iHFC_fromxyz(file, radicals, depth):
         this file.
     radicals: str
         index of the atoms of posible location of the radicals, implying that
-        that neighborhoods of this atoms are important for the HFC. It starts
-        from 0 and it should
-        have the shape of a list, f.e. '[0, 7]'.
+        that neighborhoods of this atoms are important for the HFC. 1-based
+        indexes. It should be a list of integers in string format, e.g.:
+        "[1, 5, 7]".
     depth: str
         number of times that it searches the neighbors of the neighbors.
 
@@ -102,10 +103,11 @@ def get_connectivity(atoms, engine):
         from myutils.ase_utils.molecules import vmd_connectivity
         import os
 
-
-        write('tmp_Mview.xyz', atoms)
-        connectivity = vmd_connectivity('tmp_Mview.xyz')
-        os.remove('tmp_Mview.xyz')
+        
+        id = int(np.random.random() * 1000000)
+        write(f'tmp_Mview_{id}.xyz', atoms)
+        connectivity = vmd_connectivity(f'tmp_Mview_{id}.xyz')
+        os.remove(f'tmp_Mview_{id}.xyz')
 
     elif engine == 'ase':
         from ase.neighborlist import natural_cutoffs, NeighborList
@@ -220,13 +222,15 @@ def heavya_idx_from_ref(ref_mol_xyz: str, rad_mol_xyz: str,
 
     Parametes
     =========
-    ref_mol: str
+    ref_mol_xyz: str
         path to the file describing the molecule with the hydrogen included.
-    redical: str
+    rad_mol_xyz: str
         path to the file describing the molecule without the hydrogen.
     index: int
         index of the heavy atom in the reference molecule to match in the new
         molecule. Starting from 1.
+    engine: str. Default='vmd'
+        engine to use to get the connectivity. It can be 'vmd' or 'ase'.
 
     Return
     ======

@@ -80,6 +80,7 @@ pymodules = {
     'iHFC_fromxyz': 'myutils.g_values.g_valsetup',
     'molid2npz': 'myutils.g_values.bonds2npz',
     'bonds2npz': 'myutils.g_values.bonds2npz',
+    'addfile2npz': 'myutils.g_values.bonds2npz',
     'mat2dat': 'myutils.g_values.best_fit',
     'best_fit': 'myutils.g_values.best_fit',
     'spect_w_experiment': 'myutils.g_values.best_fit',
