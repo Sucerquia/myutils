@@ -36,7 +36,8 @@ entry='energy_MACE'
 verbose='false'
 priority=''
 ending='_epr.out'
-while getopts 'e:E:f:n:N:pvh' flag;
+restart=''
+while getopts 'e:E:f:n:N:prvh' flag;
 do
   case "${flag}" in
     f) npz_files=${OPTARG} ;;
@@ -45,7 +46,8 @@ do
     n) n=${OPTARG} ;;
     N) N=${OPTARG} ;;
     p) priority='--nice' ;;
-  
+    r) restart='-R' ;;
+    
     v) verbose='true' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
@@ -74,7 +76,7 @@ fi
 
 for file in ${all_files[@]}
 do
-   #Continue computing gvals.
+  #Continue computing gvals.
   verbose $file
   existing_n=$(ls "${file%.npz}"_*"$ending" | wc -l 2>/dev/null)
   exclude_indices='[]'
@@ -115,7 +117,7 @@ do
                                      -m $multi \
                                      -f "g$radical,${charged_a}d3" \
                                      -n ${xyz_file%.xyz} \
-                                     -b -v -s
+                                     -b -v -s $restart
   done
 done
 
