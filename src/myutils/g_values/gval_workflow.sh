@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH -N 1 
-#SBATCH -n 16
+#SBATCH --threads-per-core=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=3000
 #SBATCH -t 24:00:00
@@ -57,7 +57,7 @@ directory='.'
 mult=2
 optimization='true'
 epr='true'
-processors=16
+processors=''
 hyperfine=''
 prior_name='model'
 xc='B3LYP EPR-II'
@@ -89,6 +89,23 @@ done
 
 source "$(myutils basics -path)" Gvals $verbose
 load_modules
+if [[ -z "$processors" ]] 
+then
+  if [[ -n "$SLURM_CPUS_ON_NODE" ]]
+  then
+    processors=$SLURM_CPUS_ON_NODE
+  else
+    processors=1
+  fi
+fi
+
+
+# starting information
+verbose "JOB information"
+echo " * Date:"
+date
+echo " * Command:"
+echo "$0" "$@"
 
 cd $directory
 

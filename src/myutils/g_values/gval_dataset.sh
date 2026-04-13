@@ -10,16 +10,18 @@ in the second degree neighborhood of the relevant atoms defined in the npz
 files, which are marked as 'heavy_atom_missing_idxs' and
 'atom_chargerelevant_idx'.
   
-  -f  <file> file with list of npz files to analyze.
-  -n  <n=1> number of radicals to be selected from each npz file.
-  -N  <N=3> number of radicals in the subset that minimizes the entry
-      parameter.
   -e  <entry='energy_MACE'> entry of the npz file from where the Nmin are
       selected.
   -E  <ending='_epr.out'> ending of the of the files that are excluded in the
       selection of random radicals to compute. In the default case, it excludes
       the radicals that already have an optimization, for example, it excludes
       3 if <file>_003_epr.out already exists.
+  -f  <file> file with list of npz files to analyze.
+  -j  <job_options='--nice'> joboptions. avoid to add '-n' in this string; that
+      variable enters as  the flag -n in of this script.
+  -n  <n=1> number of radicals to be selected from each npz file.
+  -N  <N=3> number of radicals in the subset that minimizes the entry
+      parameter.
 
   -v  verbose.
   -h  prints this message.
@@ -37,15 +39,18 @@ verbose='false'
 priority=''
 ending='_epr.out'
 restart=''
-while getopts 'e:E:f:n:N:prvh' flag;
+processors=8
+job_options='--nice'
+while getopts 'e:E:f:n:N:p:j:rvh' flag;
 do
   case "${flag}" in
-    f) npz_files=${OPTARG} ;;
     e) entry=${OPTARG} ;;
     E) ending=${OPTARG} ;;
+    f) npz_files=${OPTARG} ;;
+    j) job_options=${OPTARG} ;;
     n) n=${OPTARG} ;;
     N) N=${OPTARG} ;;
-    p) priority='--nice' ;;
+    p) processors=${OPTARG} ;;
     r) restart='-R' ;;
     
     v) verbose='true' ;;
@@ -88,18 +93,16 @@ do
     exclude_indices=$(printf "%d," ${list_of_prev[@]} | sed 's/,$/]/' | \
                       sed 's/^/[/')
   fi
-
   new_n=$(( n - existing_n ))
   if [[ $new_n -le 0 ]]
   then
     echo "  - $file: already has $existing_n radicals, skipping."
     continue
   fi
-
   selection=$(myutils nrand_rad $file --n $new_n --Nmin $N \
               --exclude "$exclude_indices") || \
     { warning "Error selecting the radicals for the file: $file"; continue; }
-  myutils ext_xyz_from_npz $file --selection "$selection" > /dev/null 
+  myutils ext_xyz_from_npz $file --selection "$selection" > /dev/null || failed "extracting the xyz files for the file: $file"
 
   for i in $(echo "$selection" | tr -d '[],')
   do
@@ -112,12 +115,14 @@ do
     radical=$(echo "$info" | grep 'heavy_atom_missing_idxs' | awk '{print $2}')
     charged_a=$(echo "$info" | grep 'atom_chargerelevant_idx' | awk '{print $2}')
     name=${xyz_file##*/}
-    sbatch --partition=cpu $priority -J ${name%.xyz} \
+    sbatch $job_options -J ${name%.xyz} \
+      -n $processors \
       $(myutils gval_workflow -path) -c $charge \
                                      -m $multi \
                                      -f "g$radical,${charged_a}d3" \
                                      -n ${xyz_file%.xyz} \
-                                     -b -v -s $restart
+                                     -b -v -s $restart \
+                                     -p $processors
   done
 done
 
