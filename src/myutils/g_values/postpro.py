@@ -313,8 +313,11 @@ def add_gval2npz(path):
     """
     if path[-4:] == '.npz':
         npz_files = [path]
+    elif path[-4:] == '.dat':
+        npz_files = np.loadtxt(path, dtype=str)
     else:
         npz_files = glob(path + '/*.npz')
+        npz_files.sort()
 
     for file in npz_files:
         info = np.load(file)
@@ -322,12 +325,14 @@ def add_gval2npz(path):
         if not 'g-values' in info.keys():
             info['g-values'] = np.zeros((len(info['heavy_atom_missing_idxs']), 3))
 
-        eprs = glob(file[:-4] + '*_epr.out')
+        eprs = glob(file[:-4] + '_*_epr.out')
         for epr in eprs:
-            print(epr)
-            idx = int(epr.split('_')[-2])
-            info['g-values'][idx] = extract_gvals(epr)
-
+            try:
+                idx = int(epr.split('_')[-2])
+                info['g-values'][idx] = extract_gvals(epr)
+                print(f'{epr} <--- {file} worked.')
+            except:
+                print(f'{epr} <--- {file} failed.')
         np.savez(file, **info)
 
 class GvalComparison:
