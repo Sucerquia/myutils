@@ -10,15 +10,10 @@ Create all the files after complete the computation of the gvalues with Orca.
       name.
   -E  <experimental values> guess of the gvalues obtained experimentally in
       python list format, f.e. '[2.0062, 2.0055, 2.0022]'
-  -e  <file.dat> experimental field vs absorption file.
-  -f  Use this flag to take into account hyperfine corrections. This uses a lot
-      of RAM memory. Be sure that you have enough memory or that you filtered.
-  -O  <file.out='epr_info.out'> orca output file with computed EPR quantities.
+  -e  <experiment1.dat,exp2.dat,...> experimental field vs absorption files in
+      which this candidate can play a role.
   -o  <output.dat='spectrum_wo_hyFiCorr.dat'> dat output file where you want to
       save the field vs spectrum.
-  -m  <float=179.813> experimental value of the microwave frequency. The
-      default value corresponds to G-band experiments.
-  -n  <int=401> number of data points used to predict the absorption spectrum
 
   -v  verbose.
   -h  prints this message.
@@ -31,7 +26,8 @@ This code should produce:
  - A table of the gvalues in gvalues_table.md
  - A file called vmd_image.md in each one of the directories of the candidates.
 
-This code should be executed in the folder containing the candidate.
+This code should be executed in the folder containing the candidate, not in the
+candidate directly.
 "
 exit 0
 }
@@ -52,26 +48,18 @@ EOF
 
 # ----- set up starts ---------------------------------------------------------
 # General variables
-orca_output="model_epr.out"
-MicroWaveExper=179.813
-ndpoints=401
 output="spectrum_wo_hyFiCorr.dat"
 experiment=''
 verbose='false'
 exper_values=''
-hyperfine=''
 mol_cand=''
-while getopts 'c:E:e:fO:o:m:n:vh' flag;
+while getopts 'c:E:e:fO:o:vh' flag;
 do
   case "${flag}" in
     c) mol_cand=${OPTARG} ;;
     E) exper_values=${OPTARG} ;;
     e) experiment=${OPTARG} ;;
-    f) hyperfine='-f' ;;
-    O) orca_output=${OPTARG} ;;
     o) output=${OPTARG} ;;
-    m) MicroWaveExper=${OPTARG} ;;
-    n) ndpoints=${OPTARG} ;;
 
     v) verbose='true' ;;
     h) print_help ;;
@@ -119,8 +107,7 @@ do
   vmd -e create_mol_png.tcl -args model_opt.xyz opt.png
   rm create_mol_png.tcl
   
-  verbose "Compute the spectrum with easyspin"
-  if [ -f $output ]
+  if [ ! -f $output ]
   then
     fail "$output does not exist in $(pwd). Execute 'myutils extract_EPRspec'
       first."
@@ -129,9 +116,11 @@ do
   # Create vmd_image.md
   name=$mol_cand/$candidate
   create_vmd_image_md $name
-  for exper_spect in ${experiment%/*}/*.dat
+
+  mapfile -t all_exper < <(echo -e "${experiment//,/\\n}")
+  # add fit to experimental spectrum
+  for exper_spect in ${all_exper[@]}
   do
-    # add fit to experimental spectrum
     name_w_ext=${exper_spect##*/}
     name=${name_w_ext%.dat}.png
     myutils spect_w_experiment $exper_spect $output $name
@@ -163,9 +152,11 @@ do
     cp $reference/create_mol_png.tcl .
     vmd -e create_mol_png.tcl -args model_opt.xyz opt.png
     rm create_mol_png.tcl
-  
+
     # Create vmd_image.md
     create_vmd_image_md $name
     cd $ori
   fi
 done
+
+finish "finished"

@@ -1,11 +1,10 @@
 #!/bin/bash
 
 #SBATCH -N 1                   # number of nodes
-#SBATCH -n 8
 #SBATCH -t 24:00:00
 #SBATCH --output=%x-%j.o
 #SBATCH --error=%x-%j.e
-#SBATCH --exclusive
+#SBATCH --cpus-per-task=1
 
 # ----- definition of functions -----------------------------------------------
 print_help() {

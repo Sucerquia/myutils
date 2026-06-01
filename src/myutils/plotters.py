@@ -42,7 +42,7 @@ class StandardPlotter:
                  ax: plt.Axes = None, fig: plt.Figure = None,
                  figwidth: float = 8.9, figheight: float = 8,
                  ax_pref: dict = {}, plot_pref: dict = {},
-                 set_default=False):
+                 set_default=True):
         # ==== Default ====
         self.ax_pref = {'xlabel': '',
                         'ylabel': '',

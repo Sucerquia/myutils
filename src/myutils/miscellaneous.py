@@ -156,6 +156,10 @@ def args_and_defaults(module, *args):
     Return
     ======
     (str) set of arguments and defaults.
+
+    Notes
+    -----
+    moved to pkgdeveloper
     """
     # Deprecated
     module = import_module(module)
@@ -190,6 +194,10 @@ def function_doc(module, *args):
     Return
     ======
     (str) function documentation
+
+    Notes
+    -----
+    moved to pkgdeveloper
     """
     module = import_module(module)
 

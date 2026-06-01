@@ -1,9 +1,13 @@
 from myutils.plotters import StandardPlotter
 import matplotlib.pyplot as plt
-import numpy as np
 from glob import glob
 from myutils.miscellaneous import output_terminal
 import numpy as np
+from myutils.g_values.best_fit import TheoMatchExpe
+import pandas as pd
+from scipy.stats import pearsonr
+from scipy.optimize import minimize
+from myutils.g_values.g_valsetup import ext_xyz_from_npz
 
 
 # add2executable
@@ -21,7 +25,7 @@ def extract_gvals(orca_out: str) -> np.ndarray:
     (np.array) [gx, gy, gz] where the order is increasing.
     """
 
-    out = output_terminal(f'grep -A 15 "ELECTRONIC G-MATRIX" {orca_out}' +
+    out = output_terminal(f'grep -A 21 "ELECTRONIC G-MATRIX" {orca_out}' +
                           ' | grep "g(tot)"',
                           print_output=False)
     
@@ -292,3 +296,193 @@ def extract_system_info(sys_path: str, exp_values: str):
     sp.spaces[0].set_axis(rows_cols=(3,1), borders=[[0.2, 0.15], [0.99,0.99]])
     sp.save(f'{sys_path}/gvalues.png')
     return sp
+
+
+# add2executable
+def add_gval2npz(path):
+    """
+    Add g-values to the npz files in the directory based on the files with the
+    shape <name>_<index>_epr.out, where the g-values are stored in the index
+    <index> corresponds to the element of the g-values array in the npz file.
+
+    Parameters
+    ==========
+    path: str
+        path to the directory containing the npz files and the epr.out files
+        or the npz file itself.
+    """
+    if path[-4:] == '.npz':
+        npz_files = [path]
+    elif path[-4:] == '.dat':
+        npz_files = np.loadtxt(path, dtype=str)
+    else:
+        npz_files = glob(path + '/*.npz')
+        npz_files.sort()
+
+    for file in npz_files:
+        info = np.load(file)
+        info = {key: info[key] for key in info.files}
+        if not 'g-values' in info.keys():
+            info['g-values'] = np.zeros((len(info['heavy_atom_missing_idxs']), 3))
+
+        eprs = glob(file[:-4] + '_*_epr.out')
+        for epr in eprs:
+            try:
+                idx = int(epr.split('_')[-2])
+                info['g-values'][idx] = extract_gvals(epr)
+                print(f'{epr} <--- {file} worked.')
+            except:
+                print(f'{epr} <--- {file} failed.')
+        np.savez(file, **info)
+
+class GvalComparison:
+    def __init__(self, molecules):
+        self.tme = None
+        self.df = pd.DataFrame({'molecule': molecules})
+
+    def add_gvals(self, output_files):
+        if isinstance(output_files, str):
+            output_files = [i + '/' + output_files
+                            for i in self.df['molecule']]
+
+        gvals = [extract_gvals(out_file) for out_file in output_files]
+
+        self.df['gval'] = gvals
+
+        return gvals
+
+    def d_target_gval(self, gval_ref, column_name):
+        delta_fuction = lambda x: np.linalg.norm(np.array(x) - gval_ref)
+        self.df[column_name] = self.df['gval'].apply(delta_fuction)
+        
+        return self.df
+
+    def add_spectra(self, spect_files, experiment=None):
+        if isinstance(spect_files, str):
+            spect_files = [i + '/' + spect_files
+                           for i in self.df['molecule']]
+        
+        self.tme = TheoMatchExpe(files=spect_files, experiment_file=experiment)
+        self.df['spectrum'] = [np.array(row) for row in self.tme.intensities]
+        self.add_peak_loc()
+
+        return self.tme.intensities
+
+    def add_peak_loc(self): 
+        ds = []
+        for spec in self.df['spectrum']:
+            ipeak, _ = self.peak_loc(self.tme.fieldexp, spec)
+            ds.append(ipeak)
+        self.df['peak_loc'] = ds
+
+        return ds
+    
+    def fit_to(self, experiment_file, **kwargs):
+        self.tme.fieldexp, self.tme.intensexp = np.loadtxt(experiment_file,
+                                                           unpack=True)
+        self.tme.intensexp = self.tme.intensexp / max(self.tme.intensexp)
+
+        self.tme.gradual_cleaning(**kwargs)
+
+        return self.tme.files, self.tme.percentages
+    
+    def lc_max_corr(self, experiment, column_name):
+        def lc_corr(coefs, functions, experiment):
+            linear_combination = np.sum(coefs * functions, axis=0)
+            return -pearsonr(linear_combination, experiment)[0]
+        x0 = np.random.rand(len(self.df['spectrum']))
+        result = minimize(lc_corr, x0, args=(self.df['spectrum'].to_numpy(),
+                                             experiment))
+        self.df[column_name] = result.x
+
+        return result.x, -result.fun
+    
+    def individual_corr(self, experiment, column_name):
+        corr = []
+        for spec in self.df['spectrum']:
+            intensity = np.interp(experiment[0], self.tme.fieldexp, spec)
+            corr.append(pearsonr(intensity, experiment[1])[0])
+
+        self.df[column_name] = corr
+
+        return corr
+    
+    def peak_loc(self, x, y):
+        ymax = np.max(y)
+        i = np.where(y == ymax)[0][0]
+
+        return x[i], ymax
+
+    def pp_dist(self, reference, column_name): 
+        if isinstance(reference, str):
+            reference = np.loadtxt(reference, unpack=True)
+        if len(np.array(reference).shape) != 0:
+            reference, _ = self.peak_loc(reference[0], reference[1])
+
+        self.df[column_name] = self.df['peak_loc'].apply(lambda x: x - reference)
+
+        return self.df[column_name]
+
+
+def _extract_enthalpy(file):
+    """
+    Extract the numeric "Total Enthalpy" value from an orca output file.
+
+    Parameters
+    ----------
+    file : str
+        Path to an orca output file to search for a line containing
+        'Total Enthalpy'.
+
+    Returns
+    -------
+    (float) The enthalpy value parsed from the fourth whitespace-separated
+    field on the matching line.
+    """
+    e = output_terminal(f"grep 'Total Enthalpy' {file}" +
+                        " | awk '{print $4}' ", print_output=False)
+    return float(e)
+
+
+# add2executable
+def compute_bde(reactants=None, products=None):
+    """
+    Compute the bond dissociation enthalpy (BDE) for a reaction as the
+    difference between the total enthalpy of products (P) and reactants (R),
+    such that BDE = H_P - H_R.
+
+    Parameters
+    ----------
+    reactants : iterable
+        An iterable (e.g., list or tuple) of reactant species. Each element
+        should be an orca output file path with computed enthalpy.
+    products : iterable
+        An iterable (e.g., list or tuple) of product species. Each element
+        should be an orca output file path with computed enthalpy.
+
+    Returns
+    -------
+    (float) The BDE computed. The units are the same as in the orca outputs.
+    """
+    if reactants is None:
+        raise ValueError("Non reactant recognized. See the documentation of" +
+            "this function (compute_bde).")
+    
+    if products is None:
+        raise ValueError("Non products recognized. See the documentation of" +
+            "this function (compute_bde).")
+    
+    e_react = 0
+    for react in reactants:
+        e_react += _extract_enthalpy(react)
+    
+    e_produ = 0
+    for produ in products:
+        e_produ += _extract_enthalpy(produ)
+    
+    return e_produ - e_react
+
+
+
+
+

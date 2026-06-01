@@ -44,7 +44,7 @@ def HFC_relevantA(atoms, radicals, depth=2):
             relevant.append(neighbors[condition])
             new_neighbors.append(neighbors[e_neighbors != 'H'])
         centers = [index for sublist in new_neighbors for index in sublist]
-    
+
     # Add last hydrogens
     centers = np.array([index for sublist in relevant for index in sublist])
     for i in centers:
@@ -52,6 +52,7 @@ def HFC_relevantA(atoms, radicals, depth=2):
         e_neighbors = elements[neighbors]
         hydrogens = e_neighbors == 'H'
         relevant.append(neighbors[hydrogens])
+
     relevant = np.array([index for sublist in relevant for index in sublist])
     relevant = np.unique(relevant)
     separated_relevant = {}
@@ -78,9 +79,9 @@ def iHFC_fromxyz(file, radicals, depth):
         this file.
     radicals: str
         index of the atoms of posible location of the radicals, implying that
-        that neighborhoods of this atoms are important for the HFC. It starts
-        from 0 and it should
-        have the shape of a list, f.e. '[0, 7]'.
+        that neighborhoods of this atoms are important for the HFC. 1-based
+        indexes. It should be a list of integers in string format, e.g.:
+        "[1, 5, 7]".
     depth: str
         number of times that it searches the neighbors of the neighbors.
 
@@ -102,10 +103,11 @@ def get_connectivity(atoms, engine):
         from myutils.ase_utils.molecules import vmd_connectivity
         import os
 
-
-        write('tmp_Mview.xyz', atoms)
-        connectivity = vmd_connectivity('tmp_Mview.xyz')
-        os.remove('tmp_Mview.xyz')
+        
+        id = int(np.random.random() * 1000000)
+        write(f'tmp_Mview_{id}.xyz', atoms)
+        connectivity = vmd_connectivity(f'tmp_Mview_{id}.xyz')
+        os.remove(f'tmp_Mview_{id}.xyz')
 
     elif engine == 'ase':
         from ase.neighborlist import natural_cutoffs, NeighborList
@@ -220,13 +222,15 @@ def heavya_idx_from_ref(ref_mol_xyz: str, rad_mol_xyz: str,
 
     Parametes
     =========
-    ref_mol: str
+    ref_mol_xyz: str
         path to the file describing the molecule with the hydrogen included.
-    redical: str
+    rad_mol_xyz: str
         path to the file describing the molecule without the hydrogen.
     index: int
         index of the heavy atom in the reference molecule to match in the new
         molecule. Starting from 1.
+    engine: str. Default='vmd'
+        engine to use to get the connectivity. It can be 'vmd' or 'ase'.
 
     Return
     ======
@@ -292,12 +296,33 @@ def rad_loc_deprecated(ref_mol: str, radical: str) -> np.ndarray:
 
 
 # add2executable
-def ext_xyz_from_npz(npz_file):
+def ext_xyz_from_npz(npz_file, selection=None, create_xyz_files=True):
+    """
+    Extracts structures in xyz files from a given npz file.
+
+    Parameters
+    ==========
+    npz_file: str
+        file containing the structures.
+    selection: list. Default=None
+        list of indexes of the structures to extract. If None, all structures
+        are extracted.
+    create_xyz_files: bool. Default=True
+        whether to create xyz files for the extracted structures or not.
+
+    Return
+    ======
+    (list) list of ASE Atoms objects corresponding to the extracted structures.
+    """
     data = np.load(npz_file)
 
-    for i, xyz in enumerate(data['xyz']):
+    if selection is None:
+        selection = np.arange(len(data['xyz']))
+
+    a2ret = []
+    for i in selection:
         atoms = Atoms(numbers=data['atomic_numbers'][i],
-                      positions=xyz)
+                      positions=data['xyz'][i])
         name = npz_file[:-4] + f'_{i:03}' + '.xyz'
 
         comment = f'total_charge: {data["total_charge"]}; ' + \
@@ -311,8 +336,59 @@ def ext_xyz_from_npz(npz_file):
                        f'{charged}'
         if 'source_names' in data:
             comment += f'; source_name: {data["source_names"][i]}'
-        write(name, atoms, comment=comment)
-    
-    info = {key: data[key] for key in data.files if key != 'original_xyz'}
+        if create_xyz_files:
+            write(name, atoms, comment=comment)
+        a2ret.append(atoms)
+
     data.close()
-    return info
+    return a2ret
+
+
+# add2executable
+def nrand_rad(npz_file, n=None, Nmin=None, entry='energy_MACE',
+              exclude=None):
+    """
+    Extracts a random subset of radical structures from a given npz file.
+
+    Parameters
+    ==========
+    npz_file: str
+        file containing the radicals.
+    n: int. Default=None
+        number if radical structures to extract from the subset.
+    Nmin: int. Default=None
+        number of structures in the subset that minimizes the entry parameter.
+    entry: str. Default='energy_MACE'
+        entry of the npz file from where the Nmin are selected.
+
+    Return
+    ======
+    (list) indexes of the selected entries in the npz file.
+    """
+    confs_info = np.load(npz_file)
+    if Nmin is None or Nmin > len(confs_info['xyz']):
+        Nmin = len(confs_info['xyz'])
+
+    if exclude is None:
+        exclude = []
+    entry_values = np.delete(confs_info[entry], exclude, axis=0)
+
+    sorted_entries = np.unique(entry_values)[:Nmin]
+    if n is None:
+        n = len(sorted_entries)
+
+    if len(entry_values) < n:
+        raise ValueError("n is too large. There are only" +
+                         f" {len(entry_values)} entries available after" +
+                         " excluding the specified indices.")
+
+    selected_entries = np.random.choice(sorted_entries, size=n, replace=False)
+    selected_idx = []
+    for value in selected_entries:
+        indexes = np.where(confs_info[entry] == value)[0]
+        result = indexes[~np.isin(indexes, exclude)]
+        assert len(result) > 0, "No available entries to select from after excluding specified indices."
+        index = np.random.choice(result)
+        selected_idx.append(int(index))
+
+    return selected_idx
