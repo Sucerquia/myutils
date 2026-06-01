@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quantifying the quality of a Fitting &mdash; myutils 1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css?v=572af1d6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css?v=7f9a90b1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=32ed3f93" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=61243dd2"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Create documentation" href="../documentation/tutorial_doc.html" />
+    <link rel="prev" title="Theoretical EPR spectrum" href="../EPRspectrum/tutorial_EPR.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            myutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/myutils.html">myutils package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../plotters/tutorial_plotters.html">Plotter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotters/tutorial_plotters.html#Setting-the-plot-before-adding-data.">Setting the plot before adding data.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotters/tutorial_plotters.html#Figure-Adjust">Figure Adjust</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../EPRspectrum/tutorial_EPR.html">Theoretical EPR spectrum</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Quantifying the quality of a Fitting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Best-fitting-of-a-function-as-a-linear-combination-of-another">Best fitting of a function as a linear combination of another</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Fitting-a-function-into-another-which-does-not-correspond-more-than-one-specific-part">Fitting a function into another which does not correspond more than one specific part</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Why-error-and-correlation?">Why error and correlation?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../documentation/tutorial_doc.html">Create documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sith/tutorial_SITH.html">SITH - distribution of energies</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">myutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../tutorials.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Quantifying the quality of a Fitting</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/tutorials/EPRfitter/tutorial_EPRfitter.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Quantifying-the-quality-of-a-Fitting">
+<h1>Quantifying the quality of a Fitting<a class="headerlink" href="#Quantifying-the-quality-of-a-Fitting" title="Link to this heading"></a></h1>
+<p>Importing packages</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">myutils.g_values.best_fit</span><span class="w"> </span><span class="kn">import</span> <span class="n">TheoMatchExpe</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">myutils.plotters</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardPlotter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">pearsonr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+<section id="Best-fitting-of-a-function-as-a-linear-combination-of-another">
+<h2>Best fitting of a function as a linear combination of another<a class="headerlink" href="#Best-fitting-of-a-function-as-a-linear-combination-of-another" title="Link to this heading"></a></h2>
+<p>We take two functions, f(x) and g(x) = f(x + 8). We try to automatically find a coeficient c, such that c * g(x) minimizes the error respect to f(x)</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tme</span> <span class="o">=</span> <span class="n">TheoMatchExpe</span><span class="p">([</span><span class="s1">&#39;shifted-spectrum2.dat&#39;</span><span class="p">],</span>
+                    <span class="n">experiment_file</span><span class="o">=</span><span class="s1">&#39;spectrum2.dat&#39;</span><span class="p">)</span>
+
+<span class="n">sp</span> <span class="o">=</span> <span class="n">StandardPlotter</span><span class="p">(</span><span class="n">ax_pref</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="s1">&#39;Field [T]&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="s1">&#39;Intensity [a.u]&#39;</span><span class="p">},</span>
+                     <span class="n">plot_pref</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;pstyle&#39;</span><span class="p">:</span> <span class="s1">&#39;-&#39;</span><span class="p">})</span>
+
+<span class="n">sp</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">tme</span><span class="o">.</span><span class="n">fieldexp</span><span class="p">,</span> <span class="n">tme</span><span class="o">.</span><span class="n">intensexp</span><span class="p">,</span> <span class="n">pstyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">color_plot</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">data_label</span><span class="o">=</span><span class="s1">&#39;Experiment&#39;</span><span class="p">)</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">tme</span><span class="o">.</span><span class="n">fieldexp</span><span class="p">,</span> <span class="n">tme</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tme</span><span class="o">.</span><span class="n">intensities</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pstyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">data_label</span><span class="o">=</span><span class="s2">&quot;&#39;expected&#39;&quot;</span><span class="p">);</span>
+<span class="c1">#sp.plot_data([limi[0], limi[0]], [0,1], pstyle=&#39;--&#39;, color_plot=&#39;black&#39;);</span>
+<span class="c1">#sp.plot_data([limi[1], limi[1]], [0,1], pstyle=&#39;--&#39;, color_plot=&#39;black&#39;);</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">axis_setter</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;Axes: xlabel=&#39;Field [T]&#39;, ylabel=&#39;Intensity [a.u]&#39;&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_EPRfitter_tutorial_EPRfitter_4_1.png" src="../../_images/tutorials_EPRfitter_tutorial_EPRfitter_4_1.png" />
+</div>
+</div>
+<p>In this case, tme.coeffs[0] is the expected c. and the correlation and error are:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tme</span><span class="o">.</span><span class="n">corr</span><span class="p">,</span> <span class="n">tme</span><span class="o">.</span><span class="n">error</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(0.10144641785100936, 5.418083241428031)
+</pre></div></div>
+</div>
+<p>If we assume that we don’t know the value d that maximizes the fit with f(x) fiven g(x+d). By definition, we know that it tis 8, but let’s find it automatically.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tme</span> <span class="o">=</span> <span class="n">TheoMatchExpe</span><span class="p">([</span><span class="s1">&#39;shifted-spectrum2.dat&#39;</span><span class="p">],</span>
+                    <span class="n">experiment_file</span><span class="o">=</span><span class="s1">&#39;spectrum2.dat&#39;</span><span class="p">,</span>
+
+                     <span class="n">shifting_width</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">sp</span> <span class="o">=</span> <span class="n">StandardPlotter</span><span class="p">(</span><span class="n">ax_pref</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="s1">&#39;Field [T]&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="s1">&#39;Intensity [a.u]&#39;</span><span class="p">}</span>
+                     <span class="p">)</span>
+
+<span class="n">sp</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">tme</span><span class="o">.</span><span class="n">fieldexp</span><span class="p">,</span> <span class="n">tme</span><span class="o">.</span><span class="n">intensexp</span><span class="p">,</span> <span class="n">pstyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">color_plot</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">data_label</span><span class="o">=</span><span class="s1">&#39;Experiment&#39;</span><span class="p">)</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">tme</span><span class="o">.</span><span class="n">fieldexp</span><span class="p">,</span> <span class="n">tme</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tme</span><span class="o">.</span><span class="n">intensities</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pstyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">data_label</span><span class="o">=</span><span class="s2">&quot;&#39;expected&#39;&quot;</span><span class="p">);</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">axis_setter</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;Axes: xlabel=&#39;Field [T]&#39;, ylabel=&#39;Intensity [a.u]&#39;&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_EPRfitter_tutorial_EPRfitter_8_1.png" src="../../_images/tutorials_EPRfitter_tutorial_EPRfitter_8_1.png" />
+</div>
+</div>
+<p>We can see then, that the predicted shift is quite as expected</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tme</span><span class="o">.</span><span class="n">shift</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-8.000000000000007
+</pre></div></div>
+</div>
+<p>And with this trick, we shifted the correlation</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tme</span><span class="o">.</span><span class="n">corr</span><span class="p">,</span> <span class="n">tme</span><span class="o">.</span><span class="n">error</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(1.0, 5.414848257917464e-16)
+</pre></div></div>
+</div>
+</section>
+<section id="Fitting-a-function-into-another-which-does-not-correspond-more-than-one-specific-part">
+<h2>Fitting a function into another which does not correspond more than one specific part<a class="headerlink" href="#Fitting-a-function-into-another-which-does-not-correspond-more-than-one-specific-part" title="Link to this heading"></a></h2>
+<p>Now let’s take a function g(x) wich fits to another f(x) only in a range a &lt; x &lt; b. If we have a whole spectrum, the fitting is quite bad</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tme</span> <span class="o">=</span> <span class="n">TheoMatchExpe</span><span class="p">([</span><span class="s1">&#39;spectrum2.dat&#39;</span><span class="p">],</span>
+                    <span class="n">experiment_file</span><span class="o">=</span><span class="s1">&#39;spectrum1.dat&#39;</span><span class="p">,</span>
+
+                     <span class="n">shifting_width</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">sp</span> <span class="o">=</span> <span class="n">StandardPlotter</span><span class="p">(</span><span class="n">ax_pref</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="s1">&#39;Field [T]&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="s1">&#39;Intensity [a.u]&#39;</span><span class="p">})</span>
+
+<span class="n">sp</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">tme</span><span class="o">.</span><span class="n">fieldexp</span><span class="p">,</span> <span class="n">tme</span><span class="o">.</span><span class="n">intensexp</span><span class="p">,</span> <span class="n">pstyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">color_plot</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">data_label</span><span class="o">=</span><span class="s1">&#39;Experiment&#39;</span><span class="p">)</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">tme</span><span class="o">.</span><span class="n">fieldexp</span><span class="p">,</span> <span class="n">tme</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tme</span><span class="o">.</span><span class="n">intensities</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pstyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">data_label</span><span class="o">=</span><span class="s2">&quot;&#39;expected&#39;&quot;</span><span class="p">);</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">axis_setter</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;Axes: xlabel=&#39;Field [T]&#39;, ylabel=&#39;Intensity [a.u]&#39;&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_EPRfitter_tutorial_EPRfitter_15_1.png" src="../../_images/tutorials_EPRfitter_tutorial_EPRfitter_15_1.png" />
+</div>
+</div>
+<p>In this case, tme.coeffs[0] is the expected c. and the correlation is:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tme</span><span class="o">.</span><span class="n">corr</span><span class="p">,</span> <span class="n">tme</span><span class="o">.</span><span class="n">error</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(0.6821669627127219, 3.577719112054213)
+</pre></div></div>
+</div>
+<p>Even, using the translation trick, the fitting doesn’t work so well</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tme</span> <span class="o">=</span> <span class="n">TheoMatchExpe</span><span class="p">([</span><span class="s1">&#39;spectrum2.dat&#39;</span><span class="p">],</span>
+                    <span class="n">experiment_file</span><span class="o">=</span><span class="s1">&#39;spectrum1.dat&#39;</span><span class="p">,</span>
+
+                     <span class="n">shifting_width</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">sp</span> <span class="o">=</span> <span class="n">StandardPlotter</span><span class="p">(</span><span class="n">ax_pref</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="s1">&#39;Field [T]&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="s1">&#39;Intensity [a.u]&#39;</span><span class="p">})</span>
+
+<span class="n">sp</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">tme</span><span class="o">.</span><span class="n">fieldexp</span><span class="p">,</span> <span class="n">tme</span><span class="o">.</span><span class="n">intensexp</span><span class="p">,</span> <span class="n">pstyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">color_plot</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">data_label</span><span class="o">=</span><span class="s1">&#39;Experiment&#39;</span><span class="p">)</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">tme</span><span class="o">.</span><span class="n">fieldexp</span><span class="p">,</span> <span class="n">tme</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tme</span><span class="o">.</span><span class="n">intensities</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pstyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">data_label</span><span class="o">=</span><span class="s2">&quot;&#39;expected&#39;&quot;</span><span class="p">);</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">axis_setter</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;Axes: xlabel=&#39;Field [T]&#39;, ylabel=&#39;Intensity [a.u]&#39;&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_EPRfitter_tutorial_EPRfitter_19_1.png" src="../../_images/tutorials_EPRfitter_tutorial_EPRfitter_19_1.png" />
+</div>
+</div>
+<p>the correlation improves, but not quite much:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tme</span><span class="o">.</span><span class="n">corr</span><span class="p">,</span> <span class="n">tme</span><span class="o">.</span><span class="n">error</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(0.71614135486836, 3.406189914303648)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">limi</span> <span class="o">=</span> <span class="p">[</span><span class="mi">6404</span><span class="p">,</span> <span class="mf">6407.5</span><span class="p">]</span>
+
+<span class="n">tme</span> <span class="o">=</span> <span class="n">TheoMatchExpe</span><span class="p">([</span><span class="s1">&#39;spectrum2.dat&#39;</span><span class="p">],</span>
+                    <span class="n">experiment_file</span><span class="o">=</span><span class="s1">&#39;spectrum1.dat&#39;</span><span class="p">,</span>
+                    <span class="n">fieldrange</span><span class="o">=</span><span class="n">limi</span><span class="p">,</span>
+                     <span class="n">shifting_width</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">sp</span> <span class="o">=</span> <span class="n">StandardPlotter</span><span class="p">(</span><span class="n">ax_pref</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;xlabel&#39;</span><span class="p">:</span> <span class="s1">&#39;Field [T]&#39;</span><span class="p">,</span>
+                              <span class="s1">&#39;ylabel&#39;</span><span class="p">:</span> <span class="s1">&#39;Intensity [a.u]&#39;</span><span class="p">})</span>
+
+<span class="n">sp</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">tme</span><span class="o">.</span><span class="n">fieldexp</span><span class="p">,</span> <span class="n">tme</span><span class="o">.</span><span class="n">intensexp</span><span class="p">,</span> <span class="n">pstyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">color_plot</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">data_label</span><span class="o">=</span><span class="s1">&#39;Experiment&#39;</span><span class="p">)</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">plot_data</span><span class="p">(</span><span class="n">tme</span><span class="o">.</span><span class="n">fieldexp</span><span class="p">,</span> <span class="n">tme</span><span class="o">.</span><span class="n">coeffs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tme</span><span class="o">.</span><span class="n">intensities</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pstyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">data_label</span><span class="o">=</span><span class="s2">&quot;&#39;expected&#39;&quot;</span><span class="p">);</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">plot_data</span><span class="p">([</span><span class="n">limi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">limi</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">pstyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color_plot</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">);</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">plot_data</span><span class="p">([</span><span class="n">limi</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">limi</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">pstyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color_plot</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">);</span>
+<span class="n">sp</span><span class="o">.</span><span class="n">axis_setter</span><span class="p">(</span><span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;Axes: xlabel=&#39;Field [T]&#39;, ylabel=&#39;Intensity [a.u]&#39;&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_EPRfitter_tutorial_EPRfitter_22_1.png" src="../../_images/tutorials_EPRfitter_tutorial_EPRfitter_22_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tme</span><span class="o">.</span><span class="n">corr</span><span class="p">,</span> <span class="n">tme</span><span class="o">.</span><span class="n">error</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(0.9936567996293036, 0.12915601536886243)
+</pre></div></div>
+</div>
+</section>
+<section id="Why-error-and-correlation?">
+<h2>Why error and correlation?<a class="headerlink" href="#Why-error-and-correlation?" title="Link to this heading"></a></h2>
+<p>In certain applications, we need a quantity that says which function fits better independent of the scale and the translation in the y axis. Let’s see what haappens with the error and the correlation, when we compare f(x) vs g(x) with f(x) vs a * g(x) + b</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tme</span> <span class="o">=</span> <span class="n">TheoMatchExpe</span><span class="p">([</span><span class="s1">&#39;shifted-spectrum2.dat&#39;</span><span class="p">],</span> <span class="n">experiment_file</span><span class="o">=</span><span class="s1">&#39;spectrum2.dat&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">tme</span><span class="o">.</span><span class="n">intensexp</span> <span class="o">-</span> <span class="n">tme</span><span class="o">.</span><span class="n">intensfit</span><span class="p">)</span>
+<span class="n">corr</span> <span class="o">=</span> <span class="n">pearsonr</span><span class="p">(</span><span class="n">tme</span><span class="o">.</span><span class="n">intensexp</span><span class="p">,</span> <span class="n">tme</span><span class="o">.</span><span class="n">intensfit</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;error of f(x) vs g(x): </span><span class="si">{</span><span class="n">error</span><span class="si">:</span><span class="s1">0.5f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;correlation of f(x) vs g(x): </span><span class="si">{</span><span class="n">corr</span><span class="si">:</span><span class="s1">0.5f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+error of f(x) vs g(x): 5.41808
+correlation of f(x) vs g(x): 0.10279
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">tme</span><span class="o">.</span><span class="n">intensexp</span> <span class="o">-</span> <span class="mi">7</span> <span class="o">*</span> <span class="n">tme</span><span class="o">.</span><span class="n">intensfit</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">corr</span> <span class="o">=</span> <span class="n">pearsonr</span><span class="p">(</span><span class="n">tme</span><span class="o">.</span><span class="n">intensexp</span><span class="p">,</span> <span class="mi">7</span> <span class="o">*</span> <span class="n">tme</span><span class="o">.</span><span class="n">intensfit</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;error of f(x) vs g(x): </span><span class="si">{</span><span class="n">error</span><span class="si">:</span><span class="s1">0.5f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;correlation of f(x) vs 7*g(x)+4: </span><span class="si">{</span><span class="n">corr</span><span class="si">:</span><span class="s1">0.5f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+error of f(x) vs g(x): 77.76395
+correlation of f(x) vs 7*g(x)+4: 0.10279
+</pre></div></div>
+</div>
+<p>Notice that the correlation does not depend on the scale and translation on the y axis.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../EPRspectrum/tutorial_EPR.html" class="btn btn-neutral float-left" title="Theoretical EPR spectrum" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../documentation/tutorial_doc.html" class="btn btn-neutral float-right" title="Create documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Sucerquia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
