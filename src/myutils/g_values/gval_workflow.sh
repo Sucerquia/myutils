@@ -3,10 +3,11 @@
 #SBATCH -N 1 
 #SBATCH --threads-per-core=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=3000
+#SBATCH --mem=64G
 #SBATCH -t 24:00:00
 #SBATCH --output=%x-%j.o
 #SBATCH --error=%x-%j.e
+#SBATCH --signal=B:USR1@120
 
 
 print_help() {
@@ -36,6 +37,10 @@ flags:
   -o  Use this flag to AVOID the optimization step. <prior_name>_opt.xyz must
       exist, then.
   -p  <processors=16> number of processors used in the orca calculations.
+  -P  Use this flag to ENABLE preemption. When the job is preempted (or hits
+      its time limit) it resubmits itself with the same allocation (processors,
+      nice value, job name and partition) using the -R restart option, so a
+      higher priority job can run first.
   -r  <reference_mol=''> guess the location of the radical assuming an
       abstraction process. Give the path of the file of the molecule before
       the abstraction.
@@ -62,9 +67,10 @@ hyperfine=''
 prior_name='model'
 xc='B3LYP EPR-II'
 restart='false'
+preemption='false'
+sweep='false'
 
-
-while getopts 'bc:d:ef:m:n:op:r:Rsx:vh' flag;
+while getopts 'bc:d:ef:m:n:op:Pr:Rsx:vh' flag;
 do
   case "${flag}" in
     b) bdes='false' ;;
@@ -76,12 +82,13 @@ do
     n) prior_name=${OPTARG} ;;
     o) optimization='false' ;;
     p) processors=${OPTARG} ;;
+    P) preemption='true' ;;
     r) reference_mol=${OPTARG} ;;
     R) restart='true' ;;
     s) sweep='true' ;;
     x) xc=${OPTARG} ;;
 
-    v) verbose='true' ;;
+    v) verbose='-v' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
   esac
@@ -89,7 +96,7 @@ done
 
 source "$(myutils basics -path)" Gvals $verbose
 load_modules
-if [[ -z "$processors" ]] 
+if [[ -z "$processors" ]]
 then
   if [[ -n "$SLURM_CPUS_ON_NODE" ]]
   then
@@ -98,6 +105,68 @@ then
     processors=1
   fi
 fi
+
+
+# ==== preemption =============================================================
+# Resubmits the current job with the same allocation so a higher priority job
+# can run first. Triggered by the trap set below when the job is preempted.
+restart_job() {
+  verbose "Job preempted: resubmitting with the same allocation (-R restart)."
+  # there is no SLURM env var for the nice value, so query it from scontrol
+  local nice_val
+  nice_val=$(scontrol show job "$SLURM_JOB_ID" 2>/dev/null \
+    | grep -oP 'Nice=\K-?[0-9]+')
+  : "${nice_val:=0}"
+
+  if $bdes        ; then bdes_flag=''  ; else bdes_flag='-b'; fi
+  if $epr         ; then epr_flag=''   ; else epr_flag='-e' ; fi
+  if $optimization; then opt_flag=''   ; else opt_flag='-o' ; fi
+  if $sweep       ; then swe_flag='-s' ; else swe_flag=''   ; fi
+
+  sbatch -n "$processors" \
+         --nice="$nice_val" \
+         -J "$SLURM_JOB_NAME" \
+         --partition="s.otter,c.otter" \
+         --qos=low \
+    "$(myutils gval_workflow -path)" -c "$charge" \
+                                     -d "$directory" \
+                                     -f "$hyperfine" \
+                                     -m "$mult" \
+                                     -n "$prior_name" \
+                                     -p "$processors" \
+                                     -P \
+                                     -r "$reference_mol" \
+                                     -R \
+                                     -s "$sweep" \
+                                     -x "$xc" \
+                                     $bdes_flag $epr_flag $opt_flag  $swe_flag $verbose 
+
+  exit 0
+}
+
+if [[ "$preemption" == 'true' && -n "$SLURM_JOB_ID" ]]
+then
+  qos_value=$(for i in $(scontrol show job "$SLURM_JOB_ID"); do echo $i; done  | grep -i qos)
+  echo $qos_value | grep -q "QOS=low" || fail "when preemption, qos has to be set to qos=low"
+  
+  # USR1 is delivered 120 s before the time limit / preemption thanks to the
+  # '#SBATCH --signal=B:USR1@120' directive above; SIGTERM is what SLURM sends
+  # after the configured GraceTime when preempting. Both trigger a resubmit.
+  trap restart_job SIGUSR1 SIGTERM
+else
+  # The --signal directive is static and fires on every run. Without -P we must
+  # ignore USR1, otherwise its default action would kill the job 120 s early.
+  trap '' SIGUSR1
+fi
+
+# Runs orca in the background and waits for it, so a preemption signal is
+# handled by the trap above promptly instead of being blocked by a foreground
+# orca process.
+run_orca() {
+  local inp=$1 out=$2
+  $orca "$inp" > "$out" &
+  wait $!
+}
 
 
 # starting information
@@ -132,9 +201,10 @@ end
 
 *XYZFile $charge $mult $xyz_ref_file
 EOF
-  $orca ${prior_name}_opt.inp  > ${prior_name}_opt.out
+  run_orca ${prior_name}_opt.inp ${prior_name}_opt.out
+  optimization='false'
 else
-  [ -f ${prior_name}_opt.xyz ] || $orca ${prior_name}_opt.inp  > \
+  [ -f ${prior_name}_opt.xyz ] || run_orca ${prior_name}_opt.inp \
     ${prior_name}_opt.out
 fi
 
@@ -182,6 +252,7 @@ then
 end
 
 %pal nprocs $processors end
+%maxcore 3000
 *XYZFile $charge $mult ${prior_name}_opt.xyz
 %EPRNMR
         GTENSOR   TRUE
@@ -198,7 +269,7 @@ EOF
         $sublist {SHIFT, AISO, ADIP, AORB}" ${prior_name}_epr.inp
     done
   fi
-  $orca ${prior_name}_epr.inp  > ${prior_name}_epr.out
+  run_orca ${prior_name}_epr.inp ${prior_name}_epr.out
 fi
 
 if grep -q "ORCA TERMINATED NORMALLY" ${prior_name}_epr.out && $sweep
@@ -224,7 +295,7 @@ then
 %pal nprocs $processors end
 *XYZFile $charge $mult ${prior_name}_opt.xyz
 EOF
-  $orca ${prior_name}_freq.inp  > ${prior_name}_freq.out
+  run_orca ${prior_name}_freq.inp ${prior_name}_freq.out
 fi
 
 finish
