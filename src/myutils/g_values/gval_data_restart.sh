@@ -11,7 +11,7 @@ is useful when the previous run failed or was interrupted.
   -J  <job options> additional job options, e.g., \"--partition=cpu\".
   -P  use for preemptionable jobs.
   -o  add '-R' to restart, '-o' to avoid optimization or '-b' to avoid
-      frequencies.
+      frequencies...
 
   -v  verbose.
   -h  prints this message.
@@ -29,7 +29,7 @@ do
     f) xyz_files=${OPTARG} ;;
     p) processors=${OPTARG} ;;
     J) job_options=${OPTARG} ;;
-    o) others_flags=${OPTARG} ;;
+    o) other_flags=${OPTARG} ;;
     P) preemption='-P' ;;
 
     v) verbose='true' ;;
