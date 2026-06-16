@@ -14,6 +14,8 @@ Create all the files after complete the computation of the gvalues with Orca.
       which this candidate can play a role.
   -o  <output.dat='spectrum_wo_hyFiCorr.dat'> dat output file where you want to
       save the field vs spectrum.
+  -O  <orca_output='epr_info.out'> name of the orca output file containing the
+      gvalues.
 
   -v  verbose.
   -h  prints this message.
@@ -60,6 +62,7 @@ do
     E) exper_values=${OPTARG} ;;
     e) experiment=${OPTARG} ;;
     o) output=${OPTARG} ;;
+    O) orca_output=${OPTARG} ;;
 
     v) verbose='true' ;;
     h) print_help ;;
@@ -94,7 +97,10 @@ reference=${reference%/*}
 
 # Creates gvalues_table.md and gvalues.png
 verbose "create gvalues_table.md and gvalues.png"
-myutils extract_system_info "$mol_cand" "$exper_values"
+
+myutils extract_system_info "$mol_cand" "$exper_values" \
+                            --orca_output "$orca_output"
+
 cd $mol_cand
 
 # Radicals

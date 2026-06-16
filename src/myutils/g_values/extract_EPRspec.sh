@@ -12,6 +12,7 @@ print_help() {
 echo "
 Extract the EPR absorption spectrum from an orca output file.
 
+  -a  <float> modulation amplitude in mT.
   -d  <disturb g-tensor='[ 0 0 0 ]'> disturbance to the g-tensor. It can vary
       because of thermal effects or interactions not considered in the QM
       calculations (like solvent).
@@ -26,6 +27,8 @@ Extract the EPR absorption spectrum from an orca output file.
   -m  <float=179.813> experimental value of the microwave frequency. The
       default value corresponds to G-band experiments.
   -n  <int=401> number of data points used to predict the absorption spectrum. 
+  -t  <int=0> type of spectrum. 0 for absorption, 1 for first derivative, 2 for
+      second derivative.
 
   -v  verbose.
   -h  prints this message.
@@ -44,9 +47,12 @@ experiment=''
 lwpp=1
 disturb='[ 0 0 0 ]'
 verbose='false'
-while getopts 'd:e:fO:o:l:m:n:vh' flag;
+type=0
+ModAmp=''
+while getopts 'a:d:e:fO:o:l:m:n:t:vh' flag;
 do
   case "${flag}" in
+    a) ModAmp=${OPTARG} ;;
     d) disturb=${OPTARG} ;;
     e) experiment=${OPTARG} ;;
     f) hyperfine='true' ;;
@@ -55,6 +61,7 @@ do
     m) MicroWaveExper=${OPTARG} ;;
     l) lwpp=${OPTARG} ;;
     n) ndpoints=${OPTARG} ;;
+    t) type=${OPTARG} ;;
 
     v) verbose='true' ;;
     h) print_help ;;
@@ -79,6 +86,12 @@ echo " * Command:"
 echo "$0" "$@"
 
 
+if [ -z "$ModAmp" ]
+then
+  mod_amp_info=""
+else
+  mod_amp_info="Exp.ModAmp = $ModAmp ;"
+fi
 # ---- BODY --------------- ----------------------------------------------------
 cat << EOF > ${output%.dat}.m
 clear, clf, clc
@@ -88,7 +101,8 @@ field = data(:,1)
 Exp.mwFreq = $MicroWaveExper;
 Exp.Range = [min(field) max(field)];
 Exp.nPoints = $ndpoints;
-Exp.Harmonic = 0;
+Exp.Harmonic = $type;
+$mod_amp_info
 
 % ==== Theory
 Sys = orca2easyspin('$orca_output');

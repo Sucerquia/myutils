@@ -202,7 +202,8 @@ end
 *XYZFile $charge $mult $xyz_ref_file
 EOF
   run_orca ${prior_name}_opt.inp ${prior_name}_opt.out
-  optimization='false'
+  grep -q "ORCA TERMINATED NORMALLY" ${prior_name}_opt.out \
+    && optimization='false' || fail "optimization failed, check ${prior_name}_opt.out"
 else
   [ -f ${prior_name}_opt.xyz ] || run_orca ${prior_name}_opt.inp \
     ${prior_name}_opt.out
@@ -240,20 +241,9 @@ then
     mapfile -t hyperfine < <(echo $tmp_var |  grep -oP '\[\K[^\]]+')
   fi
 
-  if $restart
-  then
-    AUTOSTART="NoAutoStart"
-    SCF_BLOCK="\n%scf\n  Guess MORead\nend\n"
-    MOINP_LINE="\n%moinp \"${prior_name}_epr.gbw\"\n"
-  else
-    AUTOSTART=""
-    SCF_BLOCK=""  
-    MOINP_LINE=""    
-  fi
-
   verbose g-values
   cat <<EOF > ${prior_name}_epr.inp
-! $xc AUTOAUX $AUTOSTART
+! $xc AUTOAUX
 
 %basis
   NewGTO Cl "Def2-TZVP" end
@@ -264,8 +254,7 @@ end
 
 %pal nprocs $processors end
 %maxcore 3000
-$(echo -e $MOINP_LINE)
-$(echo -e $SCF_BLOCK)
+
 *XYZFile $charge $mult ${prior_name}_opt.xyz
 %EPRNMR
         GTENSOR   TRUE

@@ -112,7 +112,7 @@ def create_table_per_method(data: np.ndarray,
     table_str = []
     for row in table:
         row_data = [f"{col:{width}}" for col, width in zip(row, column_widths)]
-        print(" & ".join(row_data), " \\\\ \hline")
+        print(" & ".join(row_data), " \\\\ \\hline")
         table_str.append(row_data)
     
     return "\n".join(table_str)
@@ -120,7 +120,8 @@ def create_table_per_method(data: np.ndarray,
 
 # add2executable
 def create_table_per_system(experiment: list,
-                            systems: list) -> str:
+                            systems: list,
+                            orca_file: str='epr_info.out') -> str:
     """
     For a given system, creates a table with the different systems used to
     compute the g-values.
@@ -135,6 +136,8 @@ def create_table_per_system(experiment: list,
     systems: list
         list of names of the systems used. they has to be in the same order
         than data.
+    orca_file: str. Default='epr_info.out'
+        name of the orca file containing the g-values.
 
     Return
     ======
@@ -145,9 +148,9 @@ def create_table_per_system(experiment: list,
     # extract data
     data = []
     for subsys in systems:
-        gvals = several_gvals(names='epr_info.out',
-                            experiment=experiment,
-                            path=subsys)
+        gvals = several_gvals(names=orca_file,
+                              experiment=experiment,
+                              path=subsys)
         data.append(gvals[0])
     data = np.array(data)
     
@@ -214,7 +217,8 @@ def extract_values(systems: list, orca_files: list, experiment: list):
 
 
 # add2executable
-def extract_system_info(sys_path: str, exp_values: str):
+def extract_system_info(sys_path: str, exp_values: str,
+                        orca_output: str = 'epr_info.out'):
     """
     Creates gvalues_table.md and gvalues.png
 
@@ -243,7 +247,9 @@ def extract_system_info(sys_path: str, exp_values: str):
     # Create table
     subsystems = [subsys for subsys in glob(f'{sys_path}/*-*/')]
     subsystems.sort()
-    table = create_table_per_system(experiment=experiment, systems=subsystems)
+
+    table = create_table_per_system(experiment=experiment, systems=subsystems,
+                                    orca_file=orca_output)
 
     with open(f'{sys_path}/gvalues_table.md', 'w') as table_file:
         for line in table:
@@ -253,7 +259,7 @@ def extract_system_info(sys_path: str, exp_values: str):
     gvals = []
 
     for system in subsystems:
-        gvals.append(several_gvals(names='epr_info.out', experiment=experiment,
+        gvals.append(several_gvals(names=orca_output, experiment=experiment,
                                    path=system)[0])
     gvals = np.array(gvals, dtype=float)
 
