@@ -72,7 +72,7 @@ do
                                    -m $multi \
                                    -f "g$radical,${charged_a}d3" \
                                    -n ${xyz_file%.xyz} \
-                                   -b -v -s -p $processors $preemption $other_flags
+                                   -v -s -p $processors $preemption $other_flags
 done
 
 finish "submitted jobs for the radicals in the npz files in this directory:

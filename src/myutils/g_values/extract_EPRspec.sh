@@ -3,7 +3,7 @@
 #SBATCH -N 1                   # number of nodes
 #SBATCH -n 4
 #SBATCH --cpus-per-task=1
-#SBATCH -t 24:00:00
+#SBATCH -t 48:00:00
 #SBATCH --output=%x-%j.o
 #SBATCH --error=%x-%j.e
 

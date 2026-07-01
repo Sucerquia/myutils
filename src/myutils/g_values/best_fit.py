@@ -104,7 +104,7 @@ class TheoMatchExpe:
         for shift in shift_interval:
             exp_intensity = self.fieldexp + shift
             fitting = self.fit_theoretical(files, exp_intensity,
-                                           fieldrange=interval + shift,
+                                           fieldrange= interval + shift,
                                            **kwargs)
             coeffs, intensities, intensfit, error, corr = fitting
             if error <= min_error:

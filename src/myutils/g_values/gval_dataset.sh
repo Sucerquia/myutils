@@ -18,7 +18,7 @@ files, which are marked as 'heavy_atom_missing_idxs' and
       3 if <file>_003_epr.out already exists.
   -f  <file> file with list of npz files to analyze.
   -j  <job_options='--nice'> joboptions. avoid to add '-n' in this string; that
-      variable enters as  the flag -n in of this script.
+      variable enters as  the flag -p in of this script.
   -n  <n=1> number of radicals to be selected from each npz file.
   -N  <N=3> number of radicals in the subset that minimizes the entry
       parameter.
@@ -41,7 +41,7 @@ ending='_epr.out'
 restart=''
 processors=8
 job_options='--nice'
-while getopts 'e:E:f:n:N:p:j:rvh' flag;
+while getopts 'e:E:f:n:N:o:p:j:rvh' flag;
 do
   case "${flag}" in
     e) entry=${OPTARG} ;;
@@ -50,9 +50,10 @@ do
     j) job_options=${OPTARG} ;;
     n) n=${OPTARG} ;;
     N) N=${OPTARG} ;;
+    o) other_flags=${OPTARG} ;;
     p) processors=${OPTARG} ;;
     r) restart='-R' ;;
-    
+
     v) verbose='true' ;;
     h) print_help ;;
     *) echo "for usage check: myutils <function> -h" >&2 ; exit 1 ;;
@@ -122,7 +123,7 @@ do
                                      -f "g$radical,${charged_a}d3" \
                                      -n ${xyz_file%.xyz} \
                                      -b -v -s $restart \
-                                     -p $processors
+                                     -p $processors $other_flags
   done
 done
 
