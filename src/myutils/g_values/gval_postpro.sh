@@ -13,7 +13,9 @@ Create all the files after complete the computation of the gvalues with Orca.
   -e  <experiment1.dat,exp2.dat,...> experimental field vs absorption files in
       which this candidate can play a role.
   -o  <output.dat='spectrum_wo_hyFiCorr.dat'> dat output file where you want to
-      save the field vs spectrum.
+      save the field vs spectrum. Several outputs can be given separated by
+      commas, f.e. 'out1.dat,out2.dat'. In that case, the number of outputs must
+      match the number of experiments (-e) and they are compared pairwise.
   -O  <orca_output='epr_info.out'> name of the orca output file containing the
       gvalues.
 
@@ -101,6 +103,15 @@ verbose "create gvalues_table.md and gvalues.png"
 myutils extract_system_info "$mol_cand" "$exper_values" \
                             --orca_output "$orca_output"
 
+# experiments and outputs are compared pairwise when several outputs are given
+mapfile -t all_exper < <(echo -e "${experiment//,/\\n}")
+mapfile -t all_output < <(echo -e "${output//,/\\n}")
+if [ ${#all_output[@]} -gt 1 ] && [ ${#all_output[@]} -ne ${#all_exper[@]} ]
+then
+  fail "When several outputs are given with -o, their number (${#all_output[@]})
+    must match the number of experiments given with -e (${#all_exper[@]})."
+fi
+
 cd $mol_cand
 
 # Radicals
@@ -113,23 +124,34 @@ do
   vmd -e create_mol_png.tcl -args model_opt.xyz opt.png
   rm create_mol_png.tcl
   
-  if [ ! -f $output ]
-  then
-    fail "$output does not exist in $(pwd). Execute 'myutils extract_EPRspec'
-      first."
-  fi
+  for out_dat in ${all_output[@]}
+  do
+    if [ ! -f $out_dat ]
+    then
+      fail "$out_dat does not exist in $(pwd). Execute 'myutils extract_EPRspec'
+        first."
+    fi
+  done
   
   # Create vmd_image.md
   name=$mol_cand/$candidate
   create_vmd_image_md $name
 
-  mapfile -t all_exper < <(echo -e "${experiment//,/\\n}")
   # add fit to experimental spectrum
-  for exper_spect in ${all_exper[@]}
+  for i in "${!all_exper[@]}"
   do
+    exper_spect=${all_exper[$i]}
+    # a single output is compared against every experiment; several outputs are
+    # paired one-to-one with the experiments.
+    if [ ${#all_output[@]} -eq 1 ]
+    then
+      out_dat=${all_output[0]}
+    else
+      out_dat=${all_output[$i]}
+    fi
     name_w_ext=${exper_spect##*/}
     name=${name_w_ext%.dat}.png
-    myutils spect_w_experiment $exper_spect $output $name
+    myutils spect_w_experiment $exper_spect $out_dat $name
     cat <<EOF >> ./vmd_image.md
 
 <div align="center">
