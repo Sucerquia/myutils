@@ -65,10 +65,17 @@ class TheoMatchExpe:
 
         intensities = []
         for file in files:
-            field_p = np.loadtxt(file, usecols=0)
+            try:
+                field_p = np.loadtxt(file, usecols=0)
+            except FileNotFoundError:
+                print(file)
+                field_p = None
+                intensities.append(None)
+                continue
             intensity_p = np.loadtxt(file, usecols=1)
             intensity = np.interp(fieldexp, field_p, intensity_p)
             intensities.append(intensity)
+            
         intensities = np.array(intensities)
 
         # Interpolate and find coeffs
@@ -150,8 +157,8 @@ class TheoMatchExpe:
 
         Parameters
         ==========
-        threshold: float. Default=50
-            minimum percentage por candidate to be considered into the fitting.
+        threshold: float. Default=1
+            minimum percentage per candidate to be considered into the fitting.
         steps: float. Default=0.1
             size of the steps in the filtering.
         

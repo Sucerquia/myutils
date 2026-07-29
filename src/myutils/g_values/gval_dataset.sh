@@ -22,6 +22,10 @@ files, which are marked as 'heavy_atom_missing_idxs' and
   -n  <n=1> number of radicals to be selected from each npz file.
   -N  <N=3> number of radicals in the subset that minimizes the entry
       parameter.
+  -o  <other_flags=''> extra flags passed through to 'myutils gval_workflow'.
+  -p  <processors=8> number of processors requested for each submitted job.
+  -r  Use this flag to RESTART the optimization; it is forwarded as the -R
+      flag to 'myutils gval_workflow'.
 
   -v  verbose.
   -h  prints this message.

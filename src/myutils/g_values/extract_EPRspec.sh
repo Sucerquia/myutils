@@ -69,12 +69,6 @@ do
   esac
 done
 
-if [ ! -f $experiment ]
-then
-  fail "you have to give the mat file of the field of the experiment using the
-    flag -e. Check 'myutil extract_EPRspect -h' for details."
-fi
-
 source "$(myutils basics -path)" ExtGVals $verbose
 load_modules
 
@@ -84,6 +78,12 @@ echo " * Date:"
 date
 echo " * Command:"
 echo "$0" "$@"
+
+if [ ! -f $experiment ]
+then
+  fail "you have to give the mat file of the field of the experiment using the
+    flag -e. Check 'myutil extract_EPRspect -h' for details."
+fi
 
 
 if [ -z "$ModAmp" ]
